@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		920D483E5E05884202824DE3 /* Pods_ScoreWind.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3441470A2546CDD3AD7E6C9 /* Pods_ScoreWind.framework */; };
+		B54FC1429AC896AD280E77F4 /* Pods_ScoreWindTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87352E67846310649E0B1D07 /* Pods_ScoreWindTests.framework */; };
 		C85F272A286F4C2B00D0A4E5 /* ScoreWindApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2729286F4C2B00D0A4E5 /* ScoreWindApp.swift */; };
 		C85F272C286F4C2B00D0A4E5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F272B286F4C2B00D0A4E5 /* ContentView.swift */; };
 		C85F272E286F4C2C00D0A4E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */; };
@@ -14,6 +16,36 @@
 		C85F273B286F4C2C00D0A4E5 /* ScoreWindTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F273A286F4C2C00D0A4E5 /* ScoreWindTests.swift */; };
 		C85F2745286F4C2C00D0A4E5 /* ScoreWindUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2744286F4C2C00D0A4E5 /* ScoreWindUITests.swift */; };
 		C85F2747286F4C2C00D0A4E5 /* ScoreWindUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2746286F4C2C00D0A4E5 /* ScoreWindUITestsLaunchTests.swift */; };
+		C85F2755286F4E4B00D0A4E5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C85F2754286F4E4B00D0A4E5 /* LaunchScreen.storyboard */; };
+		C85F2757286F4EE500D0A4E5 /* scorewind_ios_xml.zip in Resources */ = {isa = PBXBuildFile; fileRef = C85F2756286F4EE500D0A4E5 /* scorewind_ios_xml.zip */; };
+		C85F2759286F4EEE00D0A4E5 /* data_version.json in Resources */ = {isa = PBXBuildFile; fileRef = C85F2758286F4EEE00D0A4E5 /* data_version.json */; };
+		C85F275B286F4EF900D0A4E5 /* www in Resources */ = {isa = PBXBuildFile; fileRef = C85F275A286F4EF900D0A4E5 /* www */; };
+		C85F2772286F4F2E00D0A4E5 /* CourseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F275E286F4F2E00D0A4E5 /* CourseView.swift */; };
+		C85F2773286F4F2E00D0A4E5 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F275F286F4F2E00D0A4E5 /* HomeView.swift */; };
+		C85F2774286F4F2E00D0A4E5 /* MyCoursesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2760286F4F2E00D0A4E5 /* MyCoursesView.swift */; };
+		C85F2775286F4F2E00D0A4E5 /* LessonScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2761286F4F2E00D0A4E5 /* LessonScoreView.swift */; };
+		C85F2776286F4F2E00D0A4E5 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2762286F4F2E00D0A4E5 /* WelcomeView.swift */; };
+		C85F2777286F4F2E00D0A4E5 /* ScorewindTimestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2763286F4F2E00D0A4E5 /* ScorewindTimestamp.swift */; };
+		C85F2778286F4F2E00D0A4E5 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2764286F4F2E00D0A4E5 /* ViewModel.swift */; };
+		C85F2779286F4F2E00D0A4E5 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2765286F4F2E00D0A4E5 /* WebView.swift */; };
+		C85F277A286F4F2E00D0A4E5 /* ScorewindCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2766286F4F2E00D0A4E5 /* ScorewindCourse.swift */; };
+		C85F277B286F4F2E00D0A4E5 /* HTMLString.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2767286F4F2E00D0A4E5 /* HTMLString.swift */; };
+		C85F277C286F4F2E00D0A4E5 /* ScorewindData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2768286F4F2E00D0A4E5 /* ScorewindData.swift */; };
+		C85F277D286F4F2E00D0A4E5 /* StudentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2769286F4F2E00D0A4E5 /* StudentData.swift */; };
+		C85F277E286F4F2E00D0A4E5 /* LessonSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F276A286F4F2E00D0A4E5 /* LessonSheetView.swift */; };
+		C85F277F286F4F2E00D0A4E5 /* LessonTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F276B286F4F2E00D0A4E5 /* LessonTextView.swift */; };
+		C85F2780286F4F2E00D0A4E5 /* DownloadItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F276C286F4F2E00D0A4E5 /* DownloadItem.swift */; };
+		C85F2781286F4F2E00D0A4E5 /* MyTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F276D286F4F2E00D0A4E5 /* MyTheme.swift */; };
+		C85F2782286F4F2E00D0A4E5 /* LessonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F276E286F4F2E00D0A4E5 /* LessonView.swift */; };
+		C85F2783286F4F2E00D0A4E5 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F276F286F4F2E00D0A4E5 /* FileManager.swift */; };
+		C85F2784286F4F2E00D0A4E5 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2770286F4F2E00D0A4E5 /* DownloadManager.swift */; };
+		C85F2785286F4F2E00D0A4E5 /* WizardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2771286F4F2E00D0A4E5 /* WizardView.swift */; };
+		C85F2793286F59BC00D0A4E5 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F278E286F59BC00D0A4E5 /* Page.swift */; };
+		C85F2794286F59BC00D0A4E5 /* YesNoType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F278F286F59BC00D0A4E5 /* YesNoType.swift */; };
+		C85F2795286F59BC00D0A4E5 /* CourseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2790286F59BC00D0A4E5 /* CourseType.swift */; };
+		C85F2796286F59BC00D0A4E5 /* InstrumentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2791286F59BC00D0A4E5 /* InstrumentType.swift */; };
+		C85F2797286F59BC00D0A4E5 /* DownloadStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2792286F59BC00D0A4E5 /* DownloadStatus.swift */; };
+		C85F279A286F5B1C00D0A4E5 /* iCloudKeyValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2799286F5B1C00D0A4E5 /* iCloudKeyValue.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +66,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2309B4974A408AB06BC55CA1 /* Pods-ScoreWind.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScoreWind.release.xcconfig"; path = "Target Support Files/Pods-ScoreWind/Pods-ScoreWind.release.xcconfig"; sourceTree = "<group>"; };
+		3D113D4259B7C54A870B53F8 /* Pods-ScoreWindTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScoreWindTests.release.xcconfig"; path = "Target Support Files/Pods-ScoreWindTests/Pods-ScoreWindTests.release.xcconfig"; sourceTree = "<group>"; };
+		5019C0DCB3C67F469026BFEA /* Pods-ScoreWind.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScoreWind.debug.xcconfig"; path = "Target Support Files/Pods-ScoreWind/Pods-ScoreWind.debug.xcconfig"; sourceTree = "<group>"; };
+		87352E67846310649E0B1D07 /* Pods_ScoreWindTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScoreWindTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C85F2726286F4C2B00D0A4E5 /* ScoreWind.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScoreWind.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C85F2729286F4C2B00D0A4E5 /* ScoreWindApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreWindApp.swift; sourceTree = "<group>"; };
 		C85F272B286F4C2B00D0A4E5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -44,6 +80,39 @@
 		C85F2740286F4C2C00D0A4E5 /* ScoreWindUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScoreWindUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C85F2744286F4C2C00D0A4E5 /* ScoreWindUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreWindUITests.swift; sourceTree = "<group>"; };
 		C85F2746286F4C2C00D0A4E5 /* ScoreWindUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreWindUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		C85F2753286F4CF200D0A4E5 /* ScoreWind.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ScoreWind.entitlements; sourceTree = "<group>"; };
+		C85F2754286F4E4B00D0A4E5 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C85F2756286F4EE500D0A4E5 /* scorewind_ios_xml.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = scorewind_ios_xml.zip; sourceTree = "<group>"; };
+		C85F2758286F4EEE00D0A4E5 /* data_version.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = data_version.json; sourceTree = "<group>"; };
+		C85F275A286F4EF900D0A4E5 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
+		C85F275E286F4F2E00D0A4E5 /* CourseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseView.swift; sourceTree = "<group>"; };
+		C85F275F286F4F2E00D0A4E5 /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		C85F2760286F4F2E00D0A4E5 /* MyCoursesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCoursesView.swift; sourceTree = "<group>"; };
+		C85F2761286F4F2E00D0A4E5 /* LessonScoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LessonScoreView.swift; sourceTree = "<group>"; };
+		C85F2762286F4F2E00D0A4E5 /* WelcomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		C85F2763286F4F2E00D0A4E5 /* ScorewindTimestamp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScorewindTimestamp.swift; sourceTree = "<group>"; };
+		C85F2764286F4F2E00D0A4E5 /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		C85F2765286F4F2E00D0A4E5 /* WebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		C85F2766286F4F2E00D0A4E5 /* ScorewindCourse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScorewindCourse.swift; sourceTree = "<group>"; };
+		C85F2767286F4F2E00D0A4E5 /* HTMLString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTMLString.swift; sourceTree = "<group>"; };
+		C85F2768286F4F2E00D0A4E5 /* ScorewindData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScorewindData.swift; sourceTree = "<group>"; };
+		C85F2769286F4F2E00D0A4E5 /* StudentData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentData.swift; sourceTree = "<group>"; };
+		C85F276A286F4F2E00D0A4E5 /* LessonSheetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LessonSheetView.swift; sourceTree = "<group>"; };
+		C85F276B286F4F2E00D0A4E5 /* LessonTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LessonTextView.swift; sourceTree = "<group>"; };
+		C85F276C286F4F2E00D0A4E5 /* DownloadItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadItem.swift; sourceTree = "<group>"; };
+		C85F276D286F4F2E00D0A4E5 /* MyTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTheme.swift; sourceTree = "<group>"; };
+		C85F276E286F4F2E00D0A4E5 /* LessonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LessonView.swift; sourceTree = "<group>"; };
+		C85F276F286F4F2E00D0A4E5 /* FileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
+		C85F2770286F4F2E00D0A4E5 /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
+		C85F2771286F4F2E00D0A4E5 /* WizardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WizardView.swift; sourceTree = "<group>"; };
+		C85F278E286F59BC00D0A4E5 /* Page.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
+		C85F278F286F59BC00D0A4E5 /* YesNoType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YesNoType.swift; sourceTree = "<group>"; };
+		C85F2790286F59BC00D0A4E5 /* CourseType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseType.swift; sourceTree = "<group>"; };
+		C85F2791286F59BC00D0A4E5 /* InstrumentType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstrumentType.swift; sourceTree = "<group>"; };
+		C85F2792286F59BC00D0A4E5 /* DownloadStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadStatus.swift; sourceTree = "<group>"; };
+		C85F2799286F5B1C00D0A4E5 /* iCloudKeyValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iCloudKeyValue.swift; sourceTree = "<group>"; };
+		F3441470A2546CDD3AD7E6C9 /* Pods_ScoreWind.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScoreWind.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F5B8EA121B65003489B73002 /* Pods-ScoreWindTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScoreWindTests.debug.xcconfig"; path = "Target Support Files/Pods-ScoreWindTests/Pods-ScoreWindTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +120,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				920D483E5E05884202824DE3 /* Pods_ScoreWind.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,6 +128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B54FC1429AC896AD280E77F4 /* Pods_ScoreWindTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,13 +142,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		707F046D7345C80B759C1E27 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F3441470A2546CDD3AD7E6C9 /* Pods_ScoreWind.framework */,
+				87352E67846310649E0B1D07 /* Pods_ScoreWindTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C5F7224750A82F2E53334E49 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5019C0DCB3C67F469026BFEA /* Pods-ScoreWind.debug.xcconfig */,
+				2309B4974A408AB06BC55CA1 /* Pods-ScoreWind.release.xcconfig */,
+				F5B8EA121B65003489B73002 /* Pods-ScoreWindTests.debug.xcconfig */,
+				3D113D4259B7C54A870B53F8 /* Pods-ScoreWindTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		C85F271D286F4C2B00D0A4E5 = {
 			isa = PBXGroup;
 			children = (
+				C85F2754286F4E4B00D0A4E5 /* LaunchScreen.storyboard */,
 				C85F2728286F4C2B00D0A4E5 /* ScoreWind */,
 				C85F2739286F4C2C00D0A4E5 /* ScoreWindTests */,
 				C85F2743286F4C2C00D0A4E5 /* ScoreWindUITests */,
 				C85F2727286F4C2B00D0A4E5 /* Products */,
+				C5F7224750A82F2E53334E49 /* Pods */,
+				707F046D7345C80B759C1E27 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -94,8 +188,33 @@
 		C85F2728286F4C2B00D0A4E5 /* ScoreWind */ = {
 			isa = PBXGroup;
 			children = (
+				C85F2753286F4CF200D0A4E5 /* ScoreWind.entitlements */,
+				C85F2756286F4EE500D0A4E5 /* scorewind_ios_xml.zip */,
+				C85F2758286F4EEE00D0A4E5 /* data_version.json */,
+				C85F275A286F4EF900D0A4E5 /* www */,
+				C85F2798286F5A4E00D0A4E5 /* Types */,
 				C85F2729286F4C2B00D0A4E5 /* ScoreWindApp.swift */,
 				C85F272B286F4C2B00D0A4E5 /* ContentView.swift */,
+				C85F275E286F4F2E00D0A4E5 /* CourseView.swift */,
+				C85F276C286F4F2E00D0A4E5 /* DownloadItem.swift */,
+				C85F2770286F4F2E00D0A4E5 /* DownloadManager.swift */,
+				C85F276F286F4F2E00D0A4E5 /* FileManager.swift */,
+				C85F275F286F4F2E00D0A4E5 /* HomeView.swift */,
+				C85F2767286F4F2E00D0A4E5 /* HTMLString.swift */,
+				C85F2761286F4F2E00D0A4E5 /* LessonScoreView.swift */,
+				C85F276A286F4F2E00D0A4E5 /* LessonSheetView.swift */,
+				C85F276B286F4F2E00D0A4E5 /* LessonTextView.swift */,
+				C85F276E286F4F2E00D0A4E5 /* LessonView.swift */,
+				C85F2760286F4F2E00D0A4E5 /* MyCoursesView.swift */,
+				C85F276D286F4F2E00D0A4E5 /* MyTheme.swift */,
+				C85F2766286F4F2E00D0A4E5 /* ScorewindCourse.swift */,
+				C85F2768286F4F2E00D0A4E5 /* ScorewindData.swift */,
+				C85F2763286F4F2E00D0A4E5 /* ScorewindTimestamp.swift */,
+				C85F2769286F4F2E00D0A4E5 /* StudentData.swift */,
+				C85F2764286F4F2E00D0A4E5 /* ViewModel.swift */,
+				C85F2765286F4F2E00D0A4E5 /* WebView.swift */,
+				C85F2762286F4F2E00D0A4E5 /* WelcomeView.swift */,
+				C85F2771286F4F2E00D0A4E5 /* WizardView.swift */,
 				C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */,
 				C85F272F286F4C2C00D0A4E5 /* Preview Content */,
 			);
@@ -114,6 +233,7 @@
 			isa = PBXGroup;
 			children = (
 				C85F273A286F4C2C00D0A4E5 /* ScoreWindTests.swift */,
+				C85F2799286F5B1C00D0A4E5 /* iCloudKeyValue.swift */,
 			);
 			path = ScoreWindTests;
 			sourceTree = "<group>";
@@ -127,6 +247,18 @@
 			path = ScoreWindUITests;
 			sourceTree = "<group>";
 		};
+		C85F2798286F5A4E00D0A4E5 /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				C85F2790286F59BC00D0A4E5 /* CourseType.swift */,
+				C85F2792286F59BC00D0A4E5 /* DownloadStatus.swift */,
+				C85F2791286F59BC00D0A4E5 /* InstrumentType.swift */,
+				C85F278E286F59BC00D0A4E5 /* Page.swift */,
+				C85F278F286F59BC00D0A4E5 /* YesNoType.swift */,
+			);
+			path = Types;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -134,9 +266,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C85F274A286F4C2C00D0A4E5 /* Build configuration list for PBXNativeTarget "ScoreWind" */;
 			buildPhases = (
+				EEA51D62034848536E356B97 /* [CP] Check Pods Manifest.lock */,
 				C85F2722286F4C2B00D0A4E5 /* Sources */,
 				C85F2723286F4C2B00D0A4E5 /* Frameworks */,
 				C85F2724286F4C2B00D0A4E5 /* Resources */,
+				E39F48BA9E96875F51C9E467 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -151,6 +285,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C85F274D286F4C2C00D0A4E5 /* Build configuration list for PBXNativeTarget "ScoreWindTests" */;
 			buildPhases = (
+				6A95FECBF785CAA1BEFFA3AA /* [CP] Check Pods Manifest.lock */,
 				C85F2732286F4C2C00D0A4E5 /* Sources */,
 				C85F2733286F4C2C00D0A4E5 /* Frameworks */,
 				C85F2734286F4C2C00D0A4E5 /* Resources */,
@@ -231,8 +366,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C85F275B286F4EF900D0A4E5 /* www in Resources */,
+				C85F2755286F4E4B00D0A4E5 /* LaunchScreen.storyboard in Resources */,
 				C85F2731286F4C2C00D0A4E5 /* Preview Assets.xcassets in Resources */,
+				C85F2757286F4EE500D0A4E5 /* scorewind_ios_xml.zip in Resources */,
 				C85F272E286F4C2C00D0A4E5 /* Assets.xcassets in Resources */,
+				C85F2759286F4EEE00D0A4E5 /* data_version.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,13 +391,102 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		6A95FECBF785CAA1BEFFA3AA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ScoreWindTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E39F48BA9E96875F51C9E467 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ScoreWind/Pods-ScoreWind-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ScoreWind/Pods-ScoreWind-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ScoreWind/Pods-ScoreWind-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EEA51D62034848536E356B97 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ScoreWind-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		C85F2722286F4C2B00D0A4E5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				C85F272C286F4C2B00D0A4E5 /* ContentView.swift in Sources */,
+				C85F2779286F4F2E00D0A4E5 /* WebView.swift in Sources */,
+				C85F2782286F4F2E00D0A4E5 /* LessonView.swift in Sources */,
+				C85F277E286F4F2E00D0A4E5 /* LessonSheetView.swift in Sources */,
+				C85F2796286F59BC00D0A4E5 /* InstrumentType.swift in Sources */,
+				C85F277F286F4F2E00D0A4E5 /* LessonTextView.swift in Sources */,
+				C85F2785286F4F2E00D0A4E5 /* WizardView.swift in Sources */,
+				C85F2778286F4F2E00D0A4E5 /* ViewModel.swift in Sources */,
+				C85F2775286F4F2E00D0A4E5 /* LessonScoreView.swift in Sources */,
+				C85F2773286F4F2E00D0A4E5 /* HomeView.swift in Sources */,
+				C85F2774286F4F2E00D0A4E5 /* MyCoursesView.swift in Sources */,
+				C85F277A286F4F2E00D0A4E5 /* ScorewindCourse.swift in Sources */,
 				C85F272A286F4C2B00D0A4E5 /* ScoreWindApp.swift in Sources */,
+				C85F277C286F4F2E00D0A4E5 /* ScorewindData.swift in Sources */,
+				C85F277D286F4F2E00D0A4E5 /* StudentData.swift in Sources */,
+				C85F2784286F4F2E00D0A4E5 /* DownloadManager.swift in Sources */,
+				C85F2777286F4F2E00D0A4E5 /* ScorewindTimestamp.swift in Sources */,
+				C85F2780286F4F2E00D0A4E5 /* DownloadItem.swift in Sources */,
+				C85F2783286F4F2E00D0A4E5 /* FileManager.swift in Sources */,
+				C85F2794286F59BC00D0A4E5 /* YesNoType.swift in Sources */,
+				C85F2772286F4F2E00D0A4E5 /* CourseView.swift in Sources */,
+				C85F2795286F59BC00D0A4E5 /* CourseType.swift in Sources */,
+				C85F2793286F59BC00D0A4E5 /* Page.swift in Sources */,
+				C85F2781286F4F2E00D0A4E5 /* MyTheme.swift in Sources */,
+				C85F2776286F4F2E00D0A4E5 /* WelcomeView.swift in Sources */,
+				C85F277B286F4F2E00D0A4E5 /* HTMLString.swift in Sources */,
+				C85F2797286F59BC00D0A4E5 /* DownloadStatus.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,6 +495,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C85F273B286F4C2C00D0A4E5 /* ScoreWindTests.swift in Sources */,
+				C85F279A286F5B1C00D0A4E5 /* iCloudKeyValue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -345,7 +574,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -399,7 +628,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -411,11 +640,13 @@
 		};
 		C85F274B286F4C2C00D0A4E5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5019C0DCB3C67F469026BFEA /* Pods-ScoreWind.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ScoreWind/ScoreWind.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2.0.0;
 				DEVELOPMENT_ASSET_PATHS = "\"ScoreWind/Preview Content\"";
 				DEVELOPMENT_TEAM = 23BXR5AUUB;
 				ENABLE_PREVIEWS = YES;
@@ -423,28 +654,32 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.elosoft.ScoreWind;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		C85F274C286F4C2C00D0A4E5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2309B4974A408AB06BC55CA1 /* Pods-ScoreWind.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ScoreWind/ScoreWind.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2.0.0;
 				DEVELOPMENT_ASSET_PATHS = "\"ScoreWind/Preview Content\"";
 				DEVELOPMENT_TEAM = 23BXR5AUUB;
 				ENABLE_PREVIEWS = YES;
@@ -452,23 +687,26 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.elosoft.ScoreWind;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
 		C85F274E286F4C2C00D0A4E5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F5B8EA121B65003489B73002 /* Pods-ScoreWindTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -489,6 +727,7 @@
 		};
 		C85F274F286F4C2C00D0A4E5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3D113D4259B7C54A870B53F8 /* Pods-ScoreWindTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
