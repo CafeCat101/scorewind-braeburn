@@ -10,7 +10,6 @@
 		920D483E5E05884202824DE3 /* Pods_ScoreWind.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3441470A2546CDD3AD7E6C9 /* Pods_ScoreWind.framework */; };
 		B54FC1429AC896AD280E77F4 /* Pods_ScoreWindTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87352E67846310649E0B1D07 /* Pods_ScoreWindTests.framework */; };
 		C85F272A286F4C2B00D0A4E5 /* ScoreWindApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2729286F4C2B00D0A4E5 /* ScoreWindApp.swift */; };
-		C85F272C286F4C2B00D0A4E5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F272B286F4C2B00D0A4E5 /* ContentView.swift */; };
 		C85F272E286F4C2C00D0A4E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */; };
 		C85F2731286F4C2C00D0A4E5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C85F2730286F4C2C00D0A4E5 /* Preview Assets.xcassets */; };
 		C85F273B286F4C2C00D0A4E5 /* ScoreWindTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F273A286F4C2C00D0A4E5 /* ScoreWindTests.swift */; };
@@ -72,7 +71,6 @@
 		87352E67846310649E0B1D07 /* Pods_ScoreWindTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScoreWindTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C85F2726286F4C2B00D0A4E5 /* ScoreWind.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScoreWind.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C85F2729286F4C2B00D0A4E5 /* ScoreWindApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreWindApp.swift; sourceTree = "<group>"; };
-		C85F272B286F4C2B00D0A4E5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C85F2730286F4C2C00D0A4E5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C85F2736286F4C2C00D0A4E5 /* ScoreWindTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScoreWindTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -194,7 +192,6 @@
 				C85F275A286F4EF900D0A4E5 /* www */,
 				C85F2798286F5A4E00D0A4E5 /* Types */,
 				C85F2729286F4C2B00D0A4E5 /* ScoreWindApp.swift */,
-				C85F272B286F4C2B00D0A4E5 /* ContentView.swift */,
 				C85F275E286F4F2E00D0A4E5 /* CourseView.swift */,
 				C85F276C286F4F2E00D0A4E5 /* DownloadItem.swift */,
 				C85F2770286F4F2E00D0A4E5 /* DownloadManager.swift */,
@@ -460,7 +457,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C85F272C286F4C2B00D0A4E5 /* ContentView.swift in Sources */,
 				C85F2779286F4F2E00D0A4E5 /* WebView.swift in Sources */,
 				C85F2782286F4F2E00D0A4E5 /* LessonView.swift in Sources */,
 				C85F277E286F4F2E00D0A4E5 /* LessonSheetView.swift in Sources */,
