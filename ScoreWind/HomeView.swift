@@ -34,10 +34,22 @@ struct HomeView: View {
 							Image(systemName: "note.text")
 							Text("Course")
 						}.tag("TCourse")
+				} else {
+					BlankTabView(message: "It's time to discover courses!. When you want to check out the course you visit last time, here is the place for you.")
+						.tabItem {
+							Image(systemName: "note.text")
+							Text("Course")
+						}.tag("TCourse")
 				}
 				
 				if scorewindData.currentLesson.id > 0 {
 					LessonView(downloadManager: downloadManager)
+						.tabItem {
+							Image(systemName: "note")
+							Text("Lesson")
+						}.tag("TLesson")
+				} else {
+					BlankTabView(message: "ScoreWind remembers the lesson you visit last time in the course.\nYou can find lessons in this course from lesson list in the Course Tab. When you tab the lesson title, you'll also be able to switch lesson from the menu there.")
 						.tabItem {
 							Image(systemName: "note")
 							Text("Lesson")

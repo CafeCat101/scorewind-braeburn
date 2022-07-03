@@ -74,7 +74,7 @@ struct CourseView: View {
 									Button(action: {
 										scorewindData.currentLesson = lesson
 										scorewindData.setCurrentTimestampRecs()
-										scorewindData.currentView = Page.lesson
+										//scorewindData.currentView = Page.lesson
 										scorewindData.lastPlaybackTime = 0.0
 										self.selectedTab = "TLesson"
 									}) {

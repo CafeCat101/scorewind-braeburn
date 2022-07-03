@@ -34,36 +34,52 @@ struct LessonView: View {
 			}
 			
 			if scorewindData.currentLesson.videoMP4.isEmpty == false {
-				if scorewindData.currentView == Page.lesson {
-					VideoPlayer(player: viewModel.videoPlayer)
-						.frame(height: screenSize.height*0.35)
-						.onAppear(perform: {
-							//VideoPlayer onAppear when comeing from anohter tab view, not when the sheet disappears
-							print("[debug] VideoPlayer onAppear")
-						})
-						.onDisappear(perform: {
-							//VideoPlayer disappears when go to another tab view, not when sheet appears
-							print("[debug] VideoPlayer onDisappear")
-							viewModel.videoPlayer!.pause()
-							viewModel.videoPlayer!.replaceCurrentItem(with: nil)
-						})
-						.background(.black)
-				} else {
-					VideoPlayer(player: viewModel.videoPlayer)
-						.frame(height: screenSize.height*0.35)
-						.onAppear(perform: {
-							//VideoPlayer onAppear when comeing from anohter tab view, not when the sheet disappears
-							print("[debug] VideoPlayer onAppear")
-						})
-						.onDisappear(perform: {
-							//VideoPlayer disappears when go to another tab view, not when sheet appears
-							print("[debug] VideoPlayer onDisappear")
-							viewModel.videoPlayer!.pause()
-							viewModel.videoPlayer!.replaceCurrentItem(with: nil)
-						})
-						.background(.black)
-						.overlay(titleOverlay, alignment: .topLeading)
-				}
+				VideoPlayer(player: viewModel.videoPlayer)
+					.frame(height: screenSize.height*0.35)
+					.onAppear(perform: {
+						//VideoPlayer onAppear when comeing from anohter tab view, not when the sheet disappears
+						print("[debug] VideoPlayer onAppear")
+					})
+					.onDisappear(perform: {
+						//VideoPlayer disappears when go to another tab view, not when sheet appears
+						print("[debug] VideoPlayer onDisappear")
+						viewModel.videoPlayer!.pause()
+						viewModel.videoPlayer!.replaceCurrentItem(with: nil)
+					})
+					.background(.black)
+					.overlay(titleOverlay, alignment: .topLeading)
+				/*
+				 if scorewindData.currentView == Page.lesson {
+				 VideoPlayer(player: viewModel.videoPlayer)
+				 .frame(height: screenSize.height*0.35)
+				 .onAppear(perform: {
+				 //VideoPlayer onAppear when comeing from anohter tab view, not when the sheet disappears
+				 print("[debug] VideoPlayer onAppear")
+				 })
+				 .onDisappear(perform: {
+				 //VideoPlayer disappears when go to another tab view, not when sheet appears
+				 print("[debug] VideoPlayer onDisappear")
+				 viewModel.videoPlayer!.pause()
+				 viewModel.videoPlayer!.replaceCurrentItem(with: nil)
+				 })
+				 .background(.black)
+				 } else {
+				 VideoPlayer(player: viewModel.videoPlayer)
+				 .frame(height: screenSize.height*0.35)
+				 .onAppear(perform: {
+				 //VideoPlayer onAppear when comeing from anohter tab view, not when the sheet disappears
+				 print("[debug] VideoPlayer onAppear")
+				 })
+				 .onDisappear(perform: {
+				 //VideoPlayer disappears when go to another tab view, not when sheet appears
+				 print("[debug] VideoPlayer onDisappear")
+				 viewModel.videoPlayer!.pause()
+				 viewModel.videoPlayer!.replaceCurrentItem(with: nil)
+				 })
+				 .background(.black)
+				 .overlay(titleOverlay, alignment: .topLeading)
+				 }
+				 */
 			}
 			
 			
@@ -152,7 +168,12 @@ struct LessonView: View {
 		}
 		.onAppear(perform: {
 			print("[debug] LessonView onAppear")
-			//viewModel.score = scorewindData.currentLesson.scoreViewer
+			
+			if scorewindData.currentView != Page.lessonFullScreen {
+				scorewindData.currentView = Page.lesson
+			}
+			
+			
 			if scorewindData.lastViewAtScore == true {
 				if scorewindData.currentLesson.scoreViewer.isEmpty {
 					scorewindData.lastViewAtScore = false
@@ -166,6 +187,9 @@ struct LessonView: View {
 					viewModel.playerGoTo(timestamp: scorewindData.lastPlaybackTime)
 				}
 			}
+		})
+		.onDisappear(perform: {
+			print("[debug] LessonView onDisappear")
 		})
 		.sheet(isPresented: $showLessonSheet, onDismiss: {
 			print("[debug] lastPlaybackTime\(scorewindData.lastPlaybackTime)")
@@ -268,14 +292,17 @@ struct LessonView: View {
 	
 	private var titleOverlay: some View {
 		HStack {
-			Button(action:{
-				showLessonSheet = true
-			}) {
-				Label("\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))", systemImage: "list.bullet.circle")
-					.labelStyle(.iconOnly)
-					.font(.title2)
-					.foregroundColor(.white)
+			if scorewindData.currentView == Page.lessonFullScreen {
+				Button(action:{
+					showLessonSheet = true
+				}) {
+					Label("\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))", systemImage: "list.bullet.circle")
+						.labelStyle(.iconOnly)
+						.font(.title2)
+						.foregroundColor(.white)
+				}
 			}
+			
 		}
 	}
 }

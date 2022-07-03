@@ -29,8 +29,10 @@ struct WizardView: View {
 						Button(action: {
 							scorewindData.currentCourse = course
 							scorewindData.currentView = Page.course
-							scorewindData.currentLesson = Lesson()
 							self.selectedTab = "TCourse"
+							scorewindData.currentLesson = scorewindData.currentCourse.lessons[0]
+							scorewindData.setCurrentTimestampRecs()
+							scorewindData.lastPlaybackTime = 0.0
 						}) {
 							if course.id == scorewindData.currentCourse.id {
 								Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))

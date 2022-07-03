@@ -45,6 +45,7 @@
 		C85F2796286F59BC00D0A4E5 /* InstrumentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2791286F59BC00D0A4E5 /* InstrumentType.swift */; };
 		C85F2797286F59BC00D0A4E5 /* DownloadStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2792286F59BC00D0A4E5 /* DownloadStatus.swift */; };
 		C85F279A286F5B1C00D0A4E5 /* iCloudKeyValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2799286F5B1C00D0A4E5 /* iCloudKeyValue.swift */; };
+		C85F279C2871846200D0A4E5 /* BlankTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F279B2871846200D0A4E5 /* BlankTabView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,6 +110,7 @@
 		C85F2791286F59BC00D0A4E5 /* InstrumentType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstrumentType.swift; sourceTree = "<group>"; };
 		C85F2792286F59BC00D0A4E5 /* DownloadStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadStatus.swift; sourceTree = "<group>"; };
 		C85F2799286F5B1C00D0A4E5 /* iCloudKeyValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iCloudKeyValue.swift; sourceTree = "<group>"; };
+		C85F279B2871846200D0A4E5 /* BlankTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlankTabView.swift; sourceTree = "<group>"; };
 		F3441470A2546CDD3AD7E6C9 /* Pods_ScoreWind.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScoreWind.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5B8EA121B65003489B73002 /* Pods-ScoreWindTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScoreWindTests.debug.xcconfig"; path = "Target Support Files/Pods-ScoreWindTests/Pods-ScoreWindTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -214,6 +216,7 @@
 				C85F2771286F4F2E00D0A4E5 /* WizardView.swift */,
 				C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */,
 				C85F272F286F4C2C00D0A4E5 /* Preview Content */,
+				C85F279B2871846200D0A4E5 /* BlankTabView.swift */,
 			);
 			path = ScoreWind;
 			sourceTree = "<group>";
@@ -470,6 +473,7 @@
 				C85F277A286F4F2E00D0A4E5 /* ScorewindCourse.swift in Sources */,
 				C85F272A286F4C2B00D0A4E5 /* ScoreWindApp.swift in Sources */,
 				C85F277C286F4F2E00D0A4E5 /* ScorewindData.swift in Sources */,
+				C85F279C2871846200D0A4E5 /* BlankTabView.swift in Sources */,
 				C85F277D286F4F2E00D0A4E5 /* StudentData.swift in Sources */,
 				C85F2784286F4F2E00D0A4E5 /* DownloadManager.swift in Sources */,
 				C85F2777286F4F2E00D0A4E5 /* ScorewindTimestamp.swift in Sources */,
