@@ -29,6 +29,14 @@ class ViewModel: ObservableObject {
 		print("ViewModel playerGoTo "+String(CMTimeGetSeconds(seekTime)))
 		videoPlayer?.play()
 	}
+	
+	func playerSeek(timestamp:Double){
+		print("playerSeek()[ViewModel]")
+		let timestampCMTime:Int64 = Int64(timestamp*1000)
+		let seekTime = CMTime(value: timestampCMTime, timescale: 1000)
+		videoPlayer?.seek(to: seekTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
+		print("ViewModel playerSeek "+String(CMTimeGetSeconds(seekTime)))
+	}
 }
 
 // For identifiying WebView's forward and backward navigation

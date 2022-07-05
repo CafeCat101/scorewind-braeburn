@@ -309,15 +309,17 @@ class ScorewindData: ObservableObject {
 		let encoder = JSONEncoder()
 		do{
 			let data = try encoder.encode(currentTimestampRecs)
-			print(String(data: data, encoding: .utf8)!)
-			print("========")
+			//print(String(data: data, encoding: .utf8)!)
+			//print("========")
 			return String(data: data, encoding: .utf8)!
 		}catch let error{
 			print(error)
 			return ""
 		}
-		
 	}
+
+	
+	
 	
 	func findPreviousCourse(){
 		

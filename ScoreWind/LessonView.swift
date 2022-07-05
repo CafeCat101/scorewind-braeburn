@@ -183,8 +183,8 @@ struct LessonView: View {
 			if scorewindData.currentLesson.videoMP4.isEmpty == false {
 				setupPlayer()
 				if scorewindData.lastPlaybackTime > 0.0 {
-					print("[debug] LessonView, call viewModel.playerGoTo")
-					viewModel.playerGoTo(timestamp: scorewindData.lastPlaybackTime)
+					print("[debug] LessonView, call viewModel.playerSeek")
+					viewModel.playerSeek(timestamp: scorewindData.lastPlaybackTime)
 				}
 			}
 		})
