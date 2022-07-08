@@ -325,8 +325,61 @@ class ScorewindData: ObservableObject {
 		
 	}
 	
-	func findNextCourse(){
+	func findACourseByOrder(order:SearchParameter){
+		var findCourse = Course()
+		if currentCourse.sortValue.isEmpty == false {
+			let sortOrderArr = currentCourse.sortValue.components(separatedBy: "-")
+			print("[debug] ScorewindData, sortOrderArr \(sortOrderArr)")
+			if sortOrderArr.count > 0 {
+				let incrementNumber = (order == SearchParameter.ASC) ? 1 : -1
+				var nextSortOrderStr = ""
+				if sortOrderArr.count > 1 {
+					print("[debug] ScorewindData, increasement \((Int(sortOrderArr[1]) ?? 0) + incrementNumber)")
+					nextSortOrderStr = sortOrderArr[0]+"-"+String((Int(sortOrderArr[1]) ?? 0) + incrementNumber)
+				} else if sortOrderArr.count == 1 {
+					nextSortOrderStr = String((Int(cleanSortOrder(sortValue: sortOrderArr[0])) ?? 0) + incrementNumber)
+				}
+				print("[debug] ScorewindData, nextSortOrderStr \(nextSortOrderStr)")
+				if nextSortOrderStr.isEmpty == false {
+					findCourse = allCourses.first(where: {cleanSortOrder(sortValue: $0.sortValue) == nextSortOrderStr && $0.instrument == currentCourse.instrument && courseCategoryToString(courseCategories: $0.category) == courseCategoryToString(courseCategories: currentCourse.category)}) ?? Course()
+					if findCourse.id > 0 {
+						if order == SearchParameter.ASC {
+							nextCourse = findCourse
+						} else {
+							previousCourse = findCourse
+						}
+					}
+				}
+			}
+		}
+	}
 	
+	private func cleanSortOrder(sortValue:String) -> String {
+		let cleanNumber = sortValue.replacingOccurrences(of: "^0*", with: "", options: .regularExpression)
+		return cleanNumber
+	}
+	
+	func courseCategoryToString(courseCategories: [CourseCategory]) -> String {
+		var categoryReOrder:[String] = []
+		let rootCategory = courseCategories.first(where: {$0.parent == 0}) ?? CourseCategory()
+		if rootCategory.id > 0 {
+			categoryReOrder.append(rootCategory.name)
+			var matchCategoryId = rootCategory.id
+			var findCategory = CourseCategory()
+			for _ in 0..<courseCategories.count-1 {
+				if categoryReOrder.count < 2 {
+					//!! only look for two levels in category now
+					findCategory = courseCategories.first(where: {$0.parent == matchCategoryId}) ?? CourseCategory()
+					if findCategory.id > 0 {
+						matchCategoryId = findCategory.id
+						categoryReOrder.append(findCategory.name)
+					}
+				} else {
+					break
+				}
+			}
+		}
+		return categoryReOrder.joined(separator: ",")
 	}
 
 }

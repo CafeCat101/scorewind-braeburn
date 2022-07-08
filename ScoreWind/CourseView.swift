@@ -88,21 +88,14 @@ struct CourseView: View {
 				}
 			} else if selectedSection == courseSection.continue {
 				List {
-					Section(header: Text("Next course")) {
-						Button(action: {
-							
-						}) {
-							Text("Next course's title")
-								.foregroundColor(Color.black)
+					if scorewindData.previousCourse.id > 0 {
+						Section(header: Text("previous course")) {
+							continueCourseButton(order: SearchParameter.DESC)
 						}
 					}
-					
-					Section(header: Text("previous course")) {
-						Button(action: {
-							
-						}) {
-							Text("Previous course's title")
-								.foregroundColor(Color.black)
+					if scorewindData.nextCourse.id > 0 {
+						Section(header: Text("Next course")) {
+							continueCourseButton(order: SearchParameter.ASC)
 						}
 					}
 				}
@@ -111,8 +104,9 @@ struct CourseView: View {
 			Spacer()
 		}
 		.onAppear(perform: {
-			scorewindData.findPreviousCourse()
-			scorewindData.findNextCourse()
+			scorewindData.findACourseByOrder(order: SearchParameter.DESC)
+			scorewindData.findACourseByOrder(order: SearchParameter.ASC)
+			print(scorewindData.courseCategoryToString(courseCategories: scorewindData.currentCourse.category))
 		})
 	}
 	
@@ -205,6 +199,25 @@ struct CourseView: View {
 			return "Download course"
 		} else {
 			return "Remove download"
+		}
+	}
+	
+	@ViewBuilder
+	private func continueCourseButton(order: SearchParameter) -> some View {
+		Button(action: {
+			scorewindData.currentCourse = (order == SearchParameter.ASC) ? scorewindData.nextCourse : scorewindData.previousCourse
+			scorewindData.currentLesson = scorewindData.currentCourse.lessons[0]
+			scorewindData.setCurrentTimestampRecs()
+			scorewindData.lastPlaybackTime = 0.0
+			selectedSection = courseSection.overview
+		}) {
+			if order == SearchParameter.ASC {
+				Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.nextCourse.title))
+					.foregroundColor(Color.black)
+			} else {
+				Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.previousCourse.title))
+					.foregroundColor(Color.black)
+			}
 		}
 	}
 	
