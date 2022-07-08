@@ -341,7 +341,7 @@ class ScorewindData: ObservableObject {
 				}
 				print("[debug] ScorewindData, nextSortOrderStr \(nextSortOrderStr)")
 				if nextSortOrderStr.isEmpty == false {
-					findCourse = allCourses.first(where: {cleanSortOrder(sortValue: $0.sortValue) == nextSortOrderStr && $0.instrument == currentCourse.instrument && courseCategoryToString(courseCategories: $0.category) == courseCategoryToString(courseCategories: currentCourse.category)}) ?? Course()
+					findCourse = allCourses.first(where: {cleanSortOrder(sortValue: $0.sortValue) == nextSortOrderStr && $0.instrument == currentCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: currentCourse.category, depth: 2)}) ?? Course()
 					if findCourse.id > 0 {
 						if order == SearchParameter.ASC {
 							nextCourse = findCourse
@@ -365,15 +365,16 @@ class ScorewindData: ObservableObject {
 		return cleanNumber
 	}
 	
-	func courseCategoryToString(courseCategories: [CourseCategory]) -> String {
+	func courseCategoryToString(courseCategories: [CourseCategory], depth: Int) -> String {
 		var categoryReOrder:[String] = []
 		let rootCategory = courseCategories.first(where: {$0.parent == 0}) ?? CourseCategory()
 		if rootCategory.id > 0 {
 			categoryReOrder.append(rootCategory.name)
 			var matchCategoryId = rootCategory.id
 			var findCategory = CourseCategory()
+			let getDepth = (depth < 1) ? 1 : depth
 			for _ in 0..<courseCategories.count-1 {
-				if categoryReOrder.count < 2 {
+				if categoryReOrder.count < getDepth {
 					//!! only look for two levels in category now
 					findCategory = courseCategories.first(where: {$0.parent == matchCategoryId}) ?? CourseCategory()
 					if findCategory.id > 0 {

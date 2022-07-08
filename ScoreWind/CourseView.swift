@@ -60,6 +60,25 @@ struct CourseView: View {
 			.frame(height: screenSize.width/10)
 			
 			if selectedSection == courseSection.overview {
+				HStack {
+					Text("Category:").bold()
+					Text(scorewindData.courseCategoryToString(courseCategories: scorewindData.currentCourse.category, depth: 3))
+					Spacer()
+				}.padding(.horizontal, 8.0).padding(.bottom, 3.0)
+				
+				HStack {
+					Text("Level:").bold()
+					Text(scorewindData.currentCourse.level)
+					Spacer()
+				}
+				.padding(.horizontal, 8.0).padding(.bottom, 3.0)
+				
+				HStack {
+					Text("Duration:").bold()
+					Text(scorewindData.currentCourse.duration ?? "N/A")
+					Spacer()
+				}.padding(.horizontal, 8.0).padding(.bottom, 3.0)
+				
 				HTMLString(htmlContent: scorewindData.removeWhatsNext(Text: scorewindData.currentCourse.content))
 			} else if selectedSection == courseSection.lessons{
 				VStack {
@@ -106,7 +125,6 @@ struct CourseView: View {
 		.onAppear(perform: {
 			scorewindData.findACourseByOrder(order: SearchParameter.DESC)
 			scorewindData.findACourseByOrder(order: SearchParameter.ASC)
-			print(scorewindData.courseCategoryToString(courseCategories: scorewindData.currentCourse.category))
 		})
 	}
 	
