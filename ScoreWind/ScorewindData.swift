@@ -348,6 +348,12 @@ class ScorewindData: ObservableObject {
 						} else {
 							previousCourse = findCourse
 						}
+					} else {
+						if order == SearchParameter.ASC {
+							nextCourse = Course()
+						} else {
+							previousCourse = Course()
+						}
 					}
 				}
 			}
