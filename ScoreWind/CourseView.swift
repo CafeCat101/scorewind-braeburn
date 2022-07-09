@@ -59,27 +59,8 @@ struct CourseView: View {
 			}
 			.frame(height: screenSize.width/10)
 			
-			if selectedSection == courseSection.overview {
-				HStack {
-					Text("Category:").bold()
-					Text(scorewindData.courseCategoryToString(courseCategories: scorewindData.currentCourse.category, depth: 3))
-					Spacer()
-				}.padding(.horizontal, 8.0).padding(.bottom, 3.0)
-				
-				HStack {
-					Text("Level:").bold()
-					Text(scorewindData.currentCourse.level)
-					Spacer()
-				}
-				.padding(.horizontal, 8.0).padding(.bottom, 3.0)
-				
-				HStack {
-					Text("Duration:").bold()
-					Text(scorewindData.currentCourse.duration ?? "N/A")
-					Spacer()
-				}.padding(.horizontal, 8.0).padding(.bottom, 3.0)
-				
-				HTMLString(htmlContent: scorewindData.removeWhatsNext(Text: scorewindData.currentCourse.content))
+			if selectedSection == courseSection.overview {				
+				HTMLString(htmlContent: scorewindData.removeWhatsNext(Text: overViewContent()))
 			} else if selectedSection == courseSection.lessons{
 				VStack {
 					courseDownloadButtonView()
@@ -237,6 +218,11 @@ struct CourseView: View {
 					.foregroundColor(Color.black)
 			}
 		}
+	}
+	
+	private func overViewContent() -> String {
+		let setDuration = scorewindData.currentCourse.duration ?? "n/a"
+		return "<b>Category:</b>&nbsp;\(scorewindData.courseCategoryToString(courseCategories: scorewindData.currentCourse.category, depth: 3))<br><b>Level:&nbsp;</b>\(scorewindData.currentCourse.level)<br><b>Duration:&nbsp;</b>\(setDuration)\(scorewindData.currentCourse.content)"
 	}
 	
 }
