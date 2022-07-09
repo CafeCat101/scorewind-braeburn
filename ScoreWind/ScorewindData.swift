@@ -29,6 +29,7 @@ class ScorewindData: ObservableObject {
 	private var allTimestamps:[Timestamp] = []
 	private var userDefaults = UserDefaults.standard
 	var dataVersion = 0
+	@Published var currentTip: Tip = .default
 	
 	init() {
 		print(docsUrl!.path)
@@ -270,7 +271,7 @@ class ScorewindData: ObservableObject {
 			} catch {
 				errorMessage = errorMessage + ", " + error.localizedDescription
 			}
-
+			
 			do {
 				try FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "courses_ios", ofType: "json")!, toPath: courseURL.path)
 			} catch {
@@ -317,7 +318,7 @@ class ScorewindData: ObservableObject {
 			return ""
 		}
 	}
-
+	
 	
 	
 	
@@ -388,5 +389,5 @@ class ScorewindData: ObservableObject {
 		}
 		return categoryReOrder.joined(separator: ",")
 	}
-
+	
 }

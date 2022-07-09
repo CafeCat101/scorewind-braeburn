@@ -19,6 +19,7 @@ struct LessonView: View {
 	@GestureState var magnifyBy = 1.0
 	@State private var magnifyStep = 1
 	@ObservedObject var downloadManager:DownloadManager
+	@Binding var showTip:Bool
 	
 	var body: some View {
 		VStack {
@@ -26,10 +27,13 @@ struct LessonView: View {
 				Button(action:{
 					showLessonSheet = true
 				}) {
-					Label("\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))", systemImage: "list.bullet.circle")
-						.labelStyle(.titleAndIcon)
-						.font(.title2)
-						.foregroundColor(.black)
+					HStack {
+						Label("\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))", systemImage: "list.bullet.circle")
+							.labelStyle(.titleAndIcon)
+							.font(.title2)
+							.foregroundColor(.black)
+						Spacer()
+					}.padding(.horizontal, 8)
 				}
 			}
 			
@@ -48,38 +52,6 @@ struct LessonView: View {
 					})
 					.background(.black)
 					.overlay(titleOverlay, alignment: .topLeading)
-				/*
-				 if scorewindData.currentView == Page.lesson {
-				 VideoPlayer(player: viewModel.videoPlayer)
-				 .frame(height: screenSize.height*0.35)
-				 .onAppear(perform: {
-				 //VideoPlayer onAppear when comeing from anohter tab view, not when the sheet disappears
-				 print("[debug] VideoPlayer onAppear")
-				 })
-				 .onDisappear(perform: {
-				 //VideoPlayer disappears when go to another tab view, not when sheet appears
-				 print("[debug] VideoPlayer onDisappear")
-				 viewModel.videoPlayer!.pause()
-				 viewModel.videoPlayer!.replaceCurrentItem(with: nil)
-				 })
-				 .background(.black)
-				 } else {
-				 VideoPlayer(player: viewModel.videoPlayer)
-				 .frame(height: screenSize.height*0.35)
-				 .onAppear(perform: {
-				 //VideoPlayer onAppear when comeing from anohter tab view, not when the sheet disappears
-				 print("[debug] VideoPlayer onAppear")
-				 })
-				 .onDisappear(perform: {
-				 //VideoPlayer disappears when go to another tab view, not when sheet appears
-				 print("[debug] VideoPlayer onDisappear")
-				 viewModel.videoPlayer!.pause()
-				 viewModel.videoPlayer!.replaceCurrentItem(with: nil)
-				 })
-				 .background(.black)
-				 .overlay(titleOverlay, alignment: .topLeading)
-				 }
-				 */
 			}
 			
 			
@@ -109,8 +81,10 @@ struct LessonView: View {
 						}
 						else if self.startPos.x > gesture.location.x && yDist < xDist {
 							//left
-							withAnimation{
-								scorewindData.lastViewAtScore = true
+							if scorewindData.currentTimestampRecs.count > 0 {
+								withAnimation{
+									scorewindData.lastViewAtScore = true
+								}
 							}
 						}
 						else if self.startPos.x < gesture.location.x && yDist < xDist {
@@ -168,15 +142,18 @@ struct LessonView: View {
 		}
 		.onAppear(perform: {
 			print("[debug] LessonView onAppear")
-			
 			if scorewindData.currentView != Page.lessonFullScreen {
 				scorewindData.currentView = Page.lesson
 			}
 			
-			
 			if scorewindData.lastViewAtScore == true {
 				if scorewindData.currentLesson.scoreViewer.isEmpty {
 					scorewindData.lastViewAtScore = false
+				}
+			} else {
+				if scorewindData.currentTimestampRecs.count > 0 {
+					scorewindData.currentTip = .lessonScoreViewer
+					showTip = true
 				}
 			}
 			
@@ -207,7 +184,13 @@ struct LessonView: View {
 					if scorewindData.currentLesson.scoreViewer.isEmpty {
 						scorewindData.lastViewAtScore = false
 					}
-				}
+				} else {
+					if scorewindData.currentTimestampRecs.count > 0 {
+					 scorewindData.currentTip = .lessonScoreViewer
+					 showTip = true
+				 }
+			 }
+				
 				if scorewindData.currentLesson.videoMP4.isEmpty == false {
 					setupPlayer()
 				}
@@ -216,7 +199,6 @@ struct LessonView: View {
 			LessonSheetView(isPresented: self.$showLessonSheet)
 		}
 	}
-	
 	
 	private func decodeVideoURL(videoURL:String)->String{
 		let decodedURL = videoURL.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!
@@ -309,6 +291,6 @@ struct LessonView: View {
 
 struct LessonView_Previews: PreviewProvider {
 	static var previews: some View {
-		LessonView(downloadManager: DownloadManager()).environmentObject(ScorewindData())
+		LessonView(downloadManager: DownloadManager(),showTip: .constant(false)).environmentObject(ScorewindData())
 	}
 }

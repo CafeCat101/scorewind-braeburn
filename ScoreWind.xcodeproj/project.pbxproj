@@ -47,6 +47,7 @@
 		C85F279C2871846200D0A4E5 /* BlankTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F279B2871846200D0A4E5 /* BlankTabView.swift */; };
 		C85F279E2877DE0C00D0A4E5 /* SearchParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F279D2877DE0C00D0A4E5 /* SearchParameter.swift */; };
 		C85F27A0287800E900D0A4E5 /* scorewind_ios_xml.zip in Resources */ = {isa = PBXBuildFile; fileRef = C85F279F287800E900D0A4E5 /* scorewind_ios_xml.zip */; };
+		C85F27A228795A8E00D0A4E5 /* Tip.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F27A128795A8E00D0A4E5 /* Tip.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -113,6 +114,7 @@
 		C85F279B2871846200D0A4E5 /* BlankTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlankTabView.swift; sourceTree = "<group>"; };
 		C85F279D2877DE0C00D0A4E5 /* SearchParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchParameter.swift; sourceTree = "<group>"; };
 		C85F279F287800E900D0A4E5 /* scorewind_ios_xml.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = scorewind_ios_xml.zip; sourceTree = "<group>"; };
+		C85F27A128795A8E00D0A4E5 /* Tip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tip.swift; sourceTree = "<group>"; };
 		F3441470A2546CDD3AD7E6C9 /* Pods_ScoreWind.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScoreWind.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5B8EA121B65003489B73002 /* Pods-ScoreWindTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScoreWindTests.debug.xcconfig"; path = "Target Support Files/Pods-ScoreWindTests/Pods-ScoreWindTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -258,6 +260,7 @@
 				C85F278E286F59BC00D0A4E5 /* Page.swift */,
 				C85F278F286F59BC00D0A4E5 /* YesNoType.swift */,
 				C85F279D2877DE0C00D0A4E5 /* SearchParameter.swift */,
+				C85F27A128795A8E00D0A4E5 /* Tip.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -480,6 +483,7 @@
 				C85F277D286F4F2E00D0A4E5 /* StudentData.swift in Sources */,
 				C85F2784286F4F2E00D0A4E5 /* DownloadManager.swift in Sources */,
 				C85F2777286F4F2E00D0A4E5 /* ScorewindTimestamp.swift in Sources */,
+				C85F27A228795A8E00D0A4E5 /* Tip.swift in Sources */,
 				C85F2780286F4F2E00D0A4E5 /* DownloadItem.swift in Sources */,
 				C85F2783286F4F2E00D0A4E5 /* FileManager.swift in Sources */,
 				C85F279E2877DE0C00D0A4E5 /* SearchParameter.swift in Sources */,

@@ -12,6 +12,7 @@ struct HomeView: View {
 	@State private var selectedTab = "TWizard"
 	@ObservedObject var downloadManager: DownloadManager
 	@Environment(\.scenePhase) var scenePhase
+	@State private var showTipOverlay = false
 	
 	var body: some View {
 		if scorewindData.currentView != Page.lessonFullScreen {
@@ -43,7 +44,7 @@ struct HomeView: View {
 				}
 				
 				if scorewindData.currentLesson.id > 0 {
-					LessonView(downloadManager: downloadManager)
+					LessonView(downloadManager: downloadManager, showTip: $showTipOverlay)
 						.tabItem {
 							Image(systemName: "note")
 							Text("Lesson")
@@ -69,6 +70,7 @@ struct HomeView: View {
 				downloadManager.appState = .active
 				//<<<<==
 			}
+			.fullScreenCover(isPresented: $showTipOverlay, content: {ModalView()})
 			.onChange(of: scenePhase, perform: { newPhase in
 				if newPhase == .active {
 					print("[deubg] HomeView, app is active")
@@ -84,6 +86,12 @@ struct HomeView: View {
 					downloadManager.appState = .background
 				}
 			})
+			/*.onChange(of: selectedTab, perform: { newValue in
+				if newValue == "TLesson" && scorewindData.currentLesson.id > 0 {
+					scorewindData.currentTip = .lessonScoreViewer
+					showTipOverlay = true
+				}
+			})*/
 			.onReceive(downloadManager.downloadTaskPublisher, perform: { clonedDownloadList in
 				print("[deubg] HomeView,onRecieve, downloadTaskPublisher:\(clonedDownloadList.count)")
 				for courseID in clonedDownloadList {
@@ -103,7 +111,7 @@ struct HomeView: View {
 			})
 		} else {
 			if scorewindData.currentView == Page.lessonFullScreen {
-				LessonView(downloadManager: downloadManager)
+				LessonView(downloadManager: downloadManager, showTip: $showTipOverlay)
 					.onChange(of: scenePhase, perform: { newPhase in
 						if newPhase == .active {
 							print("[debug] LessonView, app is active")
@@ -157,6 +165,75 @@ struct HomeView: View {
 		scorewindData.launchSetup(syncData: false)
 		scorewindData.initiateTimestampsFromLocal()
 		scorewindData.initiateCoursesFromLocal()
+	}
+	
+	struct BackgroundCleanerView: UIViewRepresentable {
+		func makeUIView(context: Context) -> UIView {
+			let view = UIView()
+			DispatchQueue.main.async {
+				view.superview?.superview?.backgroundColor = .clear
+			}
+			return view
+		}
+		
+		func updateUIView(_ uiView: UIView, context: Context) {}
+	}
+	
+	struct ModalView: View {
+		@Environment(\.presentationMode) var presentationMode
+		@EnvironmentObject var scorewindData:ScorewindData
+		var body: some View {
+			VStack {
+				/*Spacer()
+				 .frame(maxWidth: .infinity, minHeight: 100)
+				 .background(Color.black)
+				 .opacity(0.3)*/
+				Button(action: {
+					presentationMode.wrappedValue.dismiss()
+				}, label: {
+					VStack {
+						/*Spacer()
+						 .frame(maxWidth: .infinity, minHeight: .infinity)
+						 .background(Color.black)
+						 .opacity(0.3)*/
+					}
+					.frame(maxWidth: .infinity, maxHeight: .infinity)
+					.background(Color.black)
+					.foregroundColor(Color.white)
+					.opacity(0.4)
+					.overlay(content: {
+						if scorewindData.currentTip == Tip.lessonScoreViewer {
+							Circle()
+								.strokeBorder(.gray,lineWidth: 1)
+								.background(Circle().foregroundColor(.white))
+								.frame(width:200,height:200)
+								.overlay(
+									Text("Swipe left to see score!").foregroundColor(.black)
+								)
+						} else {
+							Circle()
+								.strokeBorder(.gray,lineWidth: 1)
+								.background(Circle().foregroundColor(.white))
+								.frame(width:200,height:200)
+								.overlay(
+									Text("Tip is here").foregroundColor(.black)
+								)
+						}
+					})
+				})
+				/*Button("Dismiss") {
+				 presentationMode.wrappedValue.dismiss()
+				 }
+				 .frame(maxWidth: .infinity, maxHeight: 300)
+				 .background(Color.black)
+				 .foregroundColor(Color.white)
+				 Spacer()
+				 .frame(maxWidth: .infinity, minHeight: 100)
+				 .background(Color.black)
+				 .opacity(0.3)*/
+			}
+			.background(BackgroundCleanerView())
+		}
 	}
 }
 
