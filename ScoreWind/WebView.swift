@@ -51,15 +51,19 @@ struct WebView: UIViewRepresentable, WebViewHandlerDelegate {
 	
 	func makeUIView(context: Context) -> WKWebView {
 		// Enable javascript in WKWebView
-		let preferences = WKPreferences()
-		preferences.javaScriptEnabled = true
+		//let preferences = WKPreferences()
+		//preferences.javaScriptEnabled = true
+		
+		let pagePref = WKWebpagePreferences()
+		pagePref.allowsContentJavaScript = true
 		
 		let configuration = WKWebViewConfiguration()
+		configuration.defaultWebpagePreferences = pagePref
 		configuration.allowsInlineMediaPlayback = true
 		// Here "iOSNative" is our delegate name that we pushed to the website that is being loaded
 		configuration.userContentController.add(self.makeCoordinator(), name: "iOSNative")
 		configuration.setValue(true, forKey: "allowUniversalAccessFromFileURLs")
-		configuration.preferences = preferences
+		//configuration.preferences = preferences
 		
 		let webView = WKWebView(frame: CGRect.zero, configuration: configuration)
 		webView.navigationDelegate = context.coordinator

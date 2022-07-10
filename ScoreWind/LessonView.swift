@@ -197,8 +197,7 @@ struct LessonView: View {
 	}
 	
 	private func decodeVideoURL(videoURL:String)->String{
-		var decodedURL = videoURL.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!
-		//print(decodedURL)
+		let decodedURL = videoURL.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!
 		return decodedURL
 	}
 	
