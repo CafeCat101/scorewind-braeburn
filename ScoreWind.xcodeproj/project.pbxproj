@@ -48,6 +48,8 @@
 		C85F279E2877DE0C00D0A4E5 /* SearchParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F279D2877DE0C00D0A4E5 /* SearchParameter.swift */; };
 		C85F27A0287800E900D0A4E5 /* scorewind_ios_xml.zip in Resources */ = {isa = PBXBuildFile; fileRef = C85F279F287800E900D0A4E5 /* scorewind_ios_xml.zip */; };
 		C85F27A228795A8E00D0A4E5 /* Tip.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F27A128795A8E00D0A4E5 /* Tip.swift */; };
+		C85F27A42879C20400D0A4E5 /* TipModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F27A32879C20400D0A4E5 /* TipModalView.swift */; };
+		C85F27A8287A775E00D0A4E5 /* TipLimit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F27A7287A775E00D0A4E5 /* TipLimit.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +117,8 @@
 		C85F279D2877DE0C00D0A4E5 /* SearchParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchParameter.swift; sourceTree = "<group>"; };
 		C85F279F287800E900D0A4E5 /* scorewind_ios_xml.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = scorewind_ios_xml.zip; sourceTree = "<group>"; };
 		C85F27A128795A8E00D0A4E5 /* Tip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tip.swift; sourceTree = "<group>"; };
+		C85F27A32879C20400D0A4E5 /* TipModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipModalView.swift; sourceTree = "<group>"; };
+		C85F27A7287A775E00D0A4E5 /* TipLimit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipLimit.swift; sourceTree = "<group>"; };
 		F3441470A2546CDD3AD7E6C9 /* Pods_ScoreWind.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScoreWind.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5B8EA121B65003489B73002 /* Pods-ScoreWindTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScoreWindTests.debug.xcconfig"; path = "Target Support Files/Pods-ScoreWindTests/Pods-ScoreWindTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -221,6 +225,7 @@
 				C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */,
 				C85F272F286F4C2C00D0A4E5 /* Preview Content */,
 				C85F279B2871846200D0A4E5 /* BlankTabView.swift */,
+				C85F27A32879C20400D0A4E5 /* TipModalView.swift */,
 			);
 			path = ScoreWind;
 			sourceTree = "<group>";
@@ -261,6 +266,7 @@
 				C85F278F286F59BC00D0A4E5 /* YesNoType.swift */,
 				C85F279D2877DE0C00D0A4E5 /* SearchParameter.swift */,
 				C85F27A128795A8E00D0A4E5 /* Tip.swift */,
+				C85F27A7287A775E00D0A4E5 /* TipLimit.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -475,6 +481,7 @@
 				C85F2778286F4F2E00D0A4E5 /* ViewModel.swift in Sources */,
 				C85F2775286F4F2E00D0A4E5 /* LessonScoreView.swift in Sources */,
 				C85F2773286F4F2E00D0A4E5 /* HomeView.swift in Sources */,
+				C85F27A8287A775E00D0A4E5 /* TipLimit.swift in Sources */,
 				C85F2774286F4F2E00D0A4E5 /* MyCoursesView.swift in Sources */,
 				C85F277A286F4F2E00D0A4E5 /* ScorewindCourse.swift in Sources */,
 				C85F272A286F4C2B00D0A4E5 /* ScoreWindApp.swift in Sources */,
@@ -488,6 +495,7 @@
 				C85F2783286F4F2E00D0A4E5 /* FileManager.swift in Sources */,
 				C85F279E2877DE0C00D0A4E5 /* SearchParameter.swift in Sources */,
 				C85F2794286F59BC00D0A4E5 /* YesNoType.swift in Sources */,
+				C85F27A42879C20400D0A4E5 /* TipModalView.swift in Sources */,
 				C85F2772286F4F2E00D0A4E5 /* CourseView.swift in Sources */,
 				C85F2795286F59BC00D0A4E5 /* CourseType.swift in Sources */,
 				C85F2793286F59BC00D0A4E5 /* Page.swift in Sources */,

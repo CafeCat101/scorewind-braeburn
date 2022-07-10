@@ -10,6 +10,7 @@ import SwiftUI
 struct LessonSheetView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@Binding var isPresented:Bool
+	@Binding var showTip:Bool
 	
 	var body: some View {
 		VStack {
@@ -73,12 +74,21 @@ struct LessonSheetView: View {
 				}
 			}
 		}
+		.onDisappear(perform: {
+			print("[debug] LessonSheetView, onDisappear")
+			if scorewindData.lastViewAtScore == false {
+				if scorewindData.getTipCount(tipType: .lessonScoreViewer) < TipLimit.lessonScoreViewer.rawValue {
+					scorewindData.currentTip = .lessonScoreViewer
+					showTip = true
+				}
+			}
+		})
 		//.background(Color("LessonSheet"))
 	}
 }
 
 struct LessonSheetView_Previews: PreviewProvider {
 	static var previews: some View {
-		LessonSheetView(isPresented: .constant(false)).environmentObject(ScorewindData())
+		LessonSheetView(isPresented: .constant(false), showTip: .constant(false)).environmentObject(ScorewindData())
 	}
 }

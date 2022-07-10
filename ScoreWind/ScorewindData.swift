@@ -390,4 +390,12 @@ class ScorewindData: ObservableObject {
 		return categoryReOrder.joined(separator: ",")
 	}
 	
+	func getTipCount(tipType: Tip) -> Int {
+		var tipCount = 0
+		if tipType == .lessonScoreViewer {
+			tipCount = UserDefaults.standard.object(forKey: Tip.lessonScoreViewer.rawValue) as? Int ?? 0
+		}
+		return tipCount
+	}
+	
 }

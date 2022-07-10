@@ -6,7 +6,7 @@
 //
 
 import Foundation
-enum Tip {
-	case `default`
-	case lessonScoreViewer
+enum Tip:String {
+	case `default` = "tip"
+	case lessonScoreViewer = "tipLessonScoreViewer"
 }

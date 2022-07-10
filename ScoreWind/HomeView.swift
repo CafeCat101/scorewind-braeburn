@@ -70,7 +70,9 @@ struct HomeView: View {
 				downloadManager.appState = .active
 				//<<<<==
 			}
-			.fullScreenCover(isPresented: $showTipOverlay, content: {ModalView()})
+			.fullScreenCover(isPresented: $showTipOverlay, content: {
+				TipModalView()
+			})
 			.onChange(of: scenePhase, perform: { newPhase in
 				if newPhase == .active {
 					print("[deubg] HomeView, app is active")
@@ -165,75 +167,6 @@ struct HomeView: View {
 		scorewindData.launchSetup(syncData: false)
 		scorewindData.initiateTimestampsFromLocal()
 		scorewindData.initiateCoursesFromLocal()
-	}
-	
-	struct BackgroundCleanerView: UIViewRepresentable {
-		func makeUIView(context: Context) -> UIView {
-			let view = UIView()
-			DispatchQueue.main.async {
-				view.superview?.superview?.backgroundColor = .clear
-			}
-			return view
-		}
-		
-		func updateUIView(_ uiView: UIView, context: Context) {}
-	}
-	
-	struct ModalView: View {
-		@Environment(\.presentationMode) var presentationMode
-		@EnvironmentObject var scorewindData:ScorewindData
-		var body: some View {
-			VStack {
-				/*Spacer()
-				 .frame(maxWidth: .infinity, minHeight: 100)
-				 .background(Color.black)
-				 .opacity(0.3)*/
-				Button(action: {
-					presentationMode.wrappedValue.dismiss()
-				}, label: {
-					VStack {
-						/*Spacer()
-						 .frame(maxWidth: .infinity, minHeight: .infinity)
-						 .background(Color.black)
-						 .opacity(0.3)*/
-					}
-					.frame(maxWidth: .infinity, maxHeight: .infinity)
-					.background(Color.black)
-					.foregroundColor(Color.white)
-					.opacity(0.4)
-					.overlay(content: {
-						if scorewindData.currentTip == Tip.lessonScoreViewer {
-							Circle()
-								.strokeBorder(.gray,lineWidth: 1)
-								.background(Circle().foregroundColor(.white))
-								.frame(width:200,height:200)
-								.overlay(
-									Text("Swipe left to see score!").foregroundColor(.black)
-								)
-						} else {
-							Circle()
-								.strokeBorder(.gray,lineWidth: 1)
-								.background(Circle().foregroundColor(.white))
-								.frame(width:200,height:200)
-								.overlay(
-									Text("Tip is here").foregroundColor(.black)
-								)
-						}
-					})
-				})
-				/*Button("Dismiss") {
-				 presentationMode.wrappedValue.dismiss()
-				 }
-				 .frame(maxWidth: .infinity, maxHeight: 300)
-				 .background(Color.black)
-				 .foregroundColor(Color.white)
-				 Spacer()
-				 .frame(maxWidth: .infinity, minHeight: 100)
-				 .background(Color.black)
-				 .opacity(0.3)*/
-			}
-			.background(BackgroundCleanerView())
-		}
 	}
 }
 

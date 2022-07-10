@@ -152,8 +152,10 @@ struct LessonView: View {
 				}
 			} else {
 				if scorewindData.currentTimestampRecs.count > 0 {
-					scorewindData.currentTip = .lessonScoreViewer
-					showTip = true
+					if scorewindData.getTipCount(tipType: .lessonScoreViewer) < TipLimit.lessonScoreViewer.rawValue {
+						scorewindData.currentTip = .lessonScoreViewer
+						showTip = true
+					}
 				}
 			}
 			
@@ -171,7 +173,6 @@ struct LessonView: View {
 		.sheet(isPresented: $showLessonSheet, onDismiss: {
 			print("[debug] lastPlaybackTime\(scorewindData.lastPlaybackTime)")
 			if scorewindData.lastPlaybackTime == 0.0 {
-				//viewModel.score = scorewindData.currentLesson.scoreViewer
 				//viewModel.highlightBar = 1
 				magnifyStep = 1
 				
@@ -181,22 +182,17 @@ struct LessonView: View {
 				}
 				
 				if scorewindData.lastViewAtScore == true {
-					if scorewindData.currentLesson.scoreViewer.isEmpty {
+					if scorewindData.currentTimestampRecs.count == 0 {
 						scorewindData.lastViewAtScore = false
 					}
-				} else {
-					if scorewindData.currentTimestampRecs.count > 0 {
-					 scorewindData.currentTip = .lessonScoreViewer
-					 showTip = true
-				 }
-			 }
+				}
 				
 				if scorewindData.currentLesson.videoMP4.isEmpty == false {
 					setupPlayer()
 				}
 			}
 		}){
-			LessonSheetView(isPresented: self.$showLessonSheet)
+			LessonSheetView(isPresented: self.$showLessonSheet, showTip: $showTip)
 		}
 	}
 	
@@ -284,7 +280,6 @@ struct LessonView: View {
 						.foregroundColor(.white)
 				}
 			}
-			
 		}
 	}
 }

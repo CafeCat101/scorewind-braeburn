@@ -76,6 +76,9 @@ struct CourseView: View {
 										scorewindData.setCurrentTimestampRecs()
 										//scorewindData.currentView = Page.lesson
 										scorewindData.lastPlaybackTime = 0.0
+										if scorewindData.currentTimestampRecs.count == 0 {
+											scorewindData.lastViewAtScore = false
+										}
 										self.selectedTab = "TLesson"
 									}) {
 										Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
@@ -209,6 +212,8 @@ struct CourseView: View {
 			scorewindData.setCurrentTimestampRecs()
 			scorewindData.lastPlaybackTime = 0.0
 			selectedSection = courseSection.overview
+			scorewindData.findACourseByOrder(order: SearchParameter.DESC)
+			scorewindData.findACourseByOrder(order: SearchParameter.ASC)
 		}) {
 			if order == SearchParameter.ASC {
 				Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.nextCourse.title))
