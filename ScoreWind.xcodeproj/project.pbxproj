@@ -222,10 +222,10 @@
 				C85F2765286F4F2E00D0A4E5 /* WebView.swift */,
 				C85F2762286F4F2E00D0A4E5 /* WelcomeView.swift */,
 				C85F2771286F4F2E00D0A4E5 /* WizardView.swift */,
-				C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */,
-				C85F272F286F4C2C00D0A4E5 /* Preview Content */,
 				C85F279B2871846200D0A4E5 /* BlankTabView.swift */,
 				C85F27A32879C20400D0A4E5 /* TipModalView.swift */,
+				C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */,
+				C85F272F286F4C2C00D0A4E5 /* Preview Content */,
 			);
 			path = ScoreWind;
 			sourceTree = "<group>";

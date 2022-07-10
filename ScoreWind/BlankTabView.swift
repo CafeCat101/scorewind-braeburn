@@ -9,13 +9,20 @@ import SwiftUI
 
 struct BlankTabView: View {
 	@State var message = ""
-    var body: some View {
-        Text(message)
-    }
+	var body: some View {
+		VStack {
+			Label("Scorewind", systemImage: "music.note")
+				.labelStyle(.titleAndIcon)
+			Spacer()
+			Text(message)
+			Spacer()
+		}
+		
+	}
 }
 
 struct BlankTabView_Previews: PreviewProvider {
-    static var previews: some View {
-        BlankTabView()
-    }
+	static var previews: some View {
+		BlankTabView()
+	}
 }
