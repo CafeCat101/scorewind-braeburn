@@ -20,6 +20,7 @@ struct CourseView: View {
 	@State private var isSwipping = true
 	@State private var scrollOffset:CGFloat = .zero
 	@State private var dragOffset:CGFloat = .zero
+	@State private var underlineScrollOffset:CGFloat = .zero
 	
 	var body: some View {
 		VStack {
@@ -30,8 +31,9 @@ struct CourseView: View {
 				Button(action: {
 					selectedSection = courseSection.overview
 					withAnimation {
-						scrollOffset = getNewNewOffset(goToSection: selectedSection)//400
+						scrollOffset = getNewOffset(goToSection: selectedSection)//getSectionOffset(goToSection: selectedSection)//400
 						dragOffset = 0
+						//underlineScrollOffset = 0-screenSize.width/3
 					}
 					
 				}) {
@@ -48,8 +50,9 @@ struct CourseView: View {
 				Button(action: {
 					selectedSection = courseSection.lessons
 					withAnimation {
-						scrollOffset = getNewNewOffset(goToSection: selectedSection)//0
+						scrollOffset = getNewOffset(goToSection: selectedSection)//getSectionOffset(goToSection: selectedSection)//0
 						dragOffset = 0
+						//underlineScrollOffset = 0
 					}
 					
 				}) {
@@ -63,8 +66,9 @@ struct CourseView: View {
 				Button(action: {
 					selectedSection = courseSection.continue
 					withAnimation {
-						scrollOffset = getNewNewOffset(goToSection: selectedSection)//-400
+						scrollOffset = getNewOffset(goToSection: selectedSection)//getSectionOffset(goToSection: selectedSection)//-400
 						dragOffset = 0
+						//underlineScrollOffset = screenSize.width/3
 					}
 				}) {
 					Text("Continue")
@@ -75,9 +79,25 @@ struct CourseView: View {
 				.frame(width: screenSize.width/3)
 				
 			}
-			.frame(height: screenSize.width/10)
+			.frame(height:screenSize.height/30-2)
+			/*.overlay(content:{
+				HStack {
+					Rectangle()
+						.frame(width:screenSize.width/3, height: 2)
+						.foregroundColor(.yellow)
+						//.offset(x: 0, y: (screenSize.height/30)/2)
+				}
+				.frame(width:screenSize.width*3)
+				//.offset(x: 0, y: (screenSize.height/30)/2)
+			})*/
 			
-			
+			HStack {
+				Rectangle()
+					.frame(width:screenSize.width/3, height: 2)
+					.foregroundColor(.yellow)
+			}
+			.frame(width:screenSize.width*3)
+			.offset(x: underlineScrollOffset - dragOffset/3, y: 0)
 			
 			HStack {
 				HTMLString(htmlContent: scorewindData.removeWhatsNext(Text: overViewContent()))
@@ -135,7 +155,9 @@ struct CourseView: View {
 						// Scroll to where user dragged
 						scrollOffset += event.translation.width
 						dragOffset = 0
-
+						
+						underlineScrollOffset -= event.translation.width/3
+						
 						// Animate snapping
 						withAnimation {
 							scrollOffset = getNewOffset()
@@ -197,7 +219,9 @@ struct CourseView: View {
 			//Spacer()
 		}
 		.onAppear(perform: {
-			scrollOffset = getNewNewOffset(goToSection: selectedSection)//getInitialOffset()
+			print("[debug] CourseView, dragOffset \(dragOffset)")
+			underlineScrollOffset = 0-screenSize.width/3
+			scrollOffset = getSectionOffset(goToSection: selectedSection)//getInitialOffset()
 			scorewindData.findACourseByOrder(order: SearchParameter.DESC)
 			scorewindData.findACourseByOrder(order: SearchParameter.ASC)
 		})
@@ -321,27 +345,7 @@ struct CourseView: View {
 		return "<b>Category:</b>&nbsp;\(scorewindData.courseCategoryToString(courseCategories: scorewindData.currentCourse.category, depth: 3))<br><b>Level:&nbsp;</b>\(scorewindData.currentCourse.level)<br><b>Duration:&nbsp;</b>\(setDuration)\(scorewindData.currentCourse.content)"
 	}
 	
-	private func getInitialOffset() -> CGFloat{
-		let itemWidth: CGFloat = screenSize.width
-		let items = 3
-		let itemSpacing: CGFloat = 10.0
-		let contentWidth: CGFloat = CGFloat(items) * itemWidth + CGFloat(items - 1) * itemSpacing
-		let screenWidth = UIScreen.main.bounds.width
-		let scrollOffsetX = (contentWidth/2.0) - (screenWidth/2.0) + ((screenWidth - itemWidth) / 2.0)
-		
-		if selectedSection == courseSection.overview {
-			//scrollOffset = scrollOffsetX
-			print("\(scrollOffsetX):\(contentWidth):\(itemWidth)")
-			return scrollOffsetX
-		} else if selectedSection == courseSection.lessons {
-			//scrollOffset = screenWidth*2 + itemSpacing
-			return 0-(screenWidth + (screenWidth/2.0) + itemSpacing)
-		} else {
-			return scrollOffset * 3
-		}
-	}
-	
-	private func getNewOffset() -> CGFloat{
+	private func getNewOffset(goToSection:courseSection? = nil) -> CGFloat{
 		let items: Int = 3
 		let itemWidth: CGFloat = screenSize.width
 		let itemSpacing: CGFloat = 10.0
@@ -355,7 +359,7 @@ struct CourseView: View {
 		
 		// Calculate which item we are closest to using the defined size
 		var index = (center - (screenWidth / 2.0)) / (itemWidth + itemSpacing)
-		
+		print("[debug] getNewOffset, index \(index)")
 		// Should we stay at current index or are we closer to the next item...
 		if index.remainder(dividingBy: 1) > 0.5 {
 			index += 1
@@ -366,21 +370,47 @@ struct CourseView: View {
 		// Protect from scrolling out of bounds
 		index = min(index, CGFloat(items) - 1)
 		index = max(index, 0)
-		
+		print("[debug] getNewOffset, index \(index)")
 		// Set final offset (snapping to item)]
+		if goToSection != nil {
+			if goToSection == courseSection.continue {
+				index = 0.0
+				underlineScrollOffset = screenSize.width/3
+			} else if goToSection == courseSection.lessons {
+				index = 1.0
+				underlineScrollOffset = 0
+			} else {
+				index = 2.0
+				underlineScrollOffset = 0-screenSize.width/3
+			}
+		} else {
+			if index == 2.0 {
+				selectedSection = courseSection.overview
+				underlineScrollOffset = 0-screenSize.width/3
+			} else if index == 1.0 {
+				selectedSection = courseSection.lessons
+				underlineScrollOffset = 0
+			} else if index == 0.0 {
+				selectedSection = courseSection.continue
+				underlineScrollOffset = screenSize.width/3
+			}
+		}
 		return index * itemWidth + (index - 1) * itemSpacing - (contentWidth / 2.0) + (screenWidth / 2.0) - ((screenWidth - itemWidth) / 2.0) + itemSpacing
 	}
 	
-	private func getNewNewOffset(goToSection:courseSection) -> CGFloat {
+	private func getSectionOffset(goToSection:courseSection) -> CGFloat {
 		let sectionCount:Int = 3
 		let secctionWidth:CGFloat = screenSize.width
 		let itemSpacing: CGFloat = 10.0
 		let contentWidth: CGFloat = CGFloat(sectionCount) * secctionWidth + CGFloat(sectionCount - 1) * itemSpacing
 		if goToSection == courseSection.lessons {
+			underlineScrollOffset = 0
 			return .zero
 		} else if goToSection == courseSection.continue {
+			underlineScrollOffset = 0+screenSize.width/3
 			return 0-(contentWidth/CGFloat(sectionCount))
 		} else {
+			underlineScrollOffset = 0-screenSize.width/3
 			return contentWidth/CGFloat(sectionCount)
 		}
 	}
