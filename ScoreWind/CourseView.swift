@@ -80,16 +80,6 @@ struct CourseView: View {
 				
 			}
 			.frame(height:screenSize.height/30-2)
-			/*.overlay(content:{
-			 HStack {
-			 Rectangle()
-			 .frame(width:screenSize.width/3, height: 2)
-			 .foregroundColor(.yellow)
-			 //.offset(x: 0, y: (screenSize.height/30)/2)
-			 }
-			 .frame(width:screenSize.width*3)
-			 //.offset(x: 0, y: (screenSize.height/30)/2)
-			 })*/
 			
 			HStack {
 				Rectangle()
@@ -100,9 +90,11 @@ struct CourseView: View {
 			.offset(x: underlineScrollOffset - dragOffset/3, y: 0)
 			
 			HStack {
+				//Overview section
 				HTMLString(htmlContent: scorewindData.removeWhatsNext(Text: overViewContent()))
 					.frame(width:screenSize.width)
 				
+				//Lessons section
 				VStack {
 					courseDownloadButtonView()
 					ScrollView {
@@ -110,6 +102,7 @@ struct CourseView: View {
 							HStack {
 								downloadIconView(getLessonID: lesson.id)
 									.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
+									.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
 								
 								Button(action: {
 									scorewindData.currentLesson = lesson
@@ -171,20 +164,6 @@ struct CourseView: View {
 						}
 					}
 					Spacer()
-					
-					
-					/*List {
-					 if scorewindData.previousCourse.id > 0 {
-					 Section(header: Text("previous course")) {
-					 continueCourseButton(order: SearchParameter.DESC)
-					 }
-					 }
-					 if scorewindData.nextCourse.id > 0 {
-					 Section(header: Text("Next course")) {
-					 continueCourseButton(order: SearchParameter.ASC)
-					 }
-					 }
-					 }*/
 				}.frame(width:screenSize.width)
 			}
 			.offset(x: scrollOffset + dragOffset, y: 0)
@@ -207,58 +186,6 @@ struct CourseView: View {
 						}
 					})
 			)
-			//.modifier(ScrollingHStackModifier(items: 3, itemWidth: screenSize.width, itemSpacing: 10, scrollOffset: testScrollOffset))
-			
-			
-			//*****************************************************
-			/*
-			 if selectedSection == courseSection.overview {
-			 HTMLString(htmlContent: scorewindData.removeWhatsNext(Text: overViewContent()))
-			 } else if selectedSection == courseSection.lessons{
-			 VStack {
-			 courseDownloadButtonView()
-			 List {
-			 Section(header: Text("In this course...")) {
-			 ForEach(scorewindData.currentCourse.lessons){ lesson in
-			 HStack {
-			 downloadIconView(getLessonID: lesson.id)
-			 .foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
-			 
-			 Button(action: {
-			 scorewindData.currentLesson = lesson
-			 scorewindData.setCurrentTimestampRecs()
-			 //scorewindData.currentView = Page.lesson
-			 scorewindData.lastPlaybackTime = 0.0
-			 if scorewindData.currentTimestampRecs.count == 0 {
-			 scorewindData.lastViewAtScore = false
-			 }
-			 self.selectedTab = "TLesson"
-			 }) {
-			 Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
-			 .foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
-			 }
-			 }
-			 }
-			 }
-			 }
-			 }
-			 } else if selectedSection == courseSection.continue {
-			 List {
-			 if scorewindData.previousCourse.id > 0 {
-			 Section(header: Text("previous course")) {
-			 continueCourseButton(order: SearchParameter.DESC)
-			 }
-			 }
-			 if scorewindData.nextCourse.id > 0 {
-			 Section(header: Text("Next course")) {
-			 continueCourseButton(order: SearchParameter.ASC)
-			 }
-			 }
-			 }
-			 }
-			 */
-			//*****************************************************************
-			//Spacer()
 		}
 		.onAppear(perform: {
 			print("[debug] CourseView, dragOffset \(dragOffset)")
