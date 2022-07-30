@@ -81,15 +81,15 @@ struct CourseView: View {
 			}
 			.frame(height:screenSize.height/30-2)
 			/*.overlay(content:{
-				HStack {
-					Rectangle()
-						.frame(width:screenSize.width/3, height: 2)
-						.foregroundColor(.yellow)
-						//.offset(x: 0, y: (screenSize.height/30)/2)
-				}
-				.frame(width:screenSize.width*3)
-				//.offset(x: 0, y: (screenSize.height/30)/2)
-			})*/
+			 HStack {
+			 Rectangle()
+			 .frame(width:screenSize.width/3, height: 2)
+			 .foregroundColor(.yellow)
+			 //.offset(x: 0, y: (screenSize.height/30)/2)
+			 }
+			 .frame(width:screenSize.width*3)
+			 //.offset(x: 0, y: (screenSize.height/30)/2)
+			 })*/
 			
 			HStack {
 				Rectangle()
@@ -102,47 +102,89 @@ struct CourseView: View {
 			HStack {
 				HTMLString(htmlContent: scorewindData.removeWhatsNext(Text: overViewContent()))
 					.frame(width:screenSize.width)
+				
 				VStack {
 					courseDownloadButtonView()
-					List {
-						Section(header: Text("In this course...")) {
-							ForEach(scorewindData.currentCourse.lessons){ lesson in
-								HStack {
-									downloadIconView(getLessonID: lesson.id)
-										.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
-									
-									Button(action: {
-										scorewindData.currentLesson = lesson
-										scorewindData.setCurrentTimestampRecs()
-										//scorewindData.currentView = Page.lesson
-										scorewindData.lastPlaybackTime = 0.0
-										if scorewindData.currentTimestampRecs.count == 0 {
-											scorewindData.lastViewAtScore = false
-										}
-										self.selectedTab = "TLesson"
-									}) {
-										Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
-											.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
+					ScrollView {
+						ForEach(scorewindData.currentCourse.lessons){ lesson in
+							HStack {
+								downloadIconView(getLessonID: lesson.id)
+									.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
+								
+								Button(action: {
+									scorewindData.currentLesson = lesson
+									scorewindData.setCurrentTimestampRecs()
+									//scorewindData.currentView = Page.lesson
+									scorewindData.lastPlaybackTime = 0.0
+									if scorewindData.currentTimestampRecs.count == 0 {
+										scorewindData.lastViewAtScore = false
 									}
+									self.selectedTab = "TLesson"
+								}) {
+									Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
+										.multilineTextAlignment(.leading)
+										.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
 								}
+								.padding(EdgeInsets(top: 3, leading: 10, bottom: 3, trailing: 10))
+								Spacer()
 							}
+							Divider()
+								.frame(height:1)
+								.background(Color("ListDivider"))
+								.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
 						}
 					}
+					Spacer()
 				}.frame(width:screenSize.width)
 				
 				VStack {
-					List {
+					ScrollView {
 						if scorewindData.previousCourse.id > 0 {
-							Section(header: Text("previous course")) {
+							HStack {
+								Text("Previous course")
+									.foregroundColor(.gray)
+									.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+								Spacer()
+							}
+							HStack {
 								continueCourseButton(order: SearchParameter.DESC)
+									.padding(EdgeInsets(top: 3, leading: 10, bottom: 3, trailing: 10))
+								Spacer()
 							}
+							Spacer()
+								.frame(height:20)
 						}
+						
 						if scorewindData.nextCourse.id > 0 {
-							Section(header: Text("Next course")) {
-								continueCourseButton(order: SearchParameter.ASC)
+							HStack {
+								Text("Next course")
+									.foregroundColor(.gray)
+									.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+								Spacer()
 							}
+							HStack {
+								continueCourseButton(order: SearchParameter.ASC)
+									.padding(EdgeInsets(top: 3, leading: 10, bottom: 3, trailing: 10))
+								Spacer()
+							}
+							
 						}
 					}
+					Spacer()
+					
+					
+					/*List {
+					 if scorewindData.previousCourse.id > 0 {
+					 Section(header: Text("previous course")) {
+					 continueCourseButton(order: SearchParameter.DESC)
+					 }
+					 }
+					 if scorewindData.nextCourse.id > 0 {
+					 Section(header: Text("Next course")) {
+					 continueCourseButton(order: SearchParameter.ASC)
+					 }
+					 }
+					 }*/
 				}.frame(width:screenSize.width)
 			}
 			.offset(x: scrollOffset + dragOffset, y: 0)
@@ -333,9 +375,11 @@ struct CourseView: View {
 			if order == SearchParameter.ASC {
 				Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.nextCourse.title))
 					.foregroundColor(Color.black)
+					.multilineTextAlignment(.leading)
 			} else {
 				Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.previousCourse.title))
 					.foregroundColor(Color.black)
+					.multilineTextAlignment(.leading)
 			}
 		}
 	}
