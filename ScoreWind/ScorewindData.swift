@@ -387,7 +387,8 @@ class ScorewindData: ObservableObject {
 				}
 			}
 		}
-		return categoryReOrder.joined(separator: ",")
+		categoryReOrder.remove(at: 0)
+		return categoryReOrder.joined(separator: ", ")
 	}
 	
 	func getTipCount(tipType: Tip) -> Int {
