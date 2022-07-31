@@ -30,7 +30,7 @@ struct LessonView: View {
 					HStack {
 						Label("\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))", systemImage: "list.bullet.circle")
 							.labelStyle(.titleAndIcon)
-							.font(.title2)
+							.font(.title3)
 							.foregroundColor(.black)
 						Spacer()
 					}.padding(.horizontal, 8)

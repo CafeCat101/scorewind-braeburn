@@ -25,7 +25,7 @@ struct CourseView: View {
 	var body: some View {
 		VStack {
 			Text("\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentCourse.title))")
-				.font(.title2)
+				.font(.title3)
 			
 			HStack {
 				Button(action: {
@@ -81,6 +81,7 @@ struct CourseView: View {
 			}
 			.frame(height:screenSize.height/30-2)
 			
+			//Section menu underline
 			HStack {
 				Rectangle()
 					.frame(width:screenSize.width/3, height: 2)
@@ -88,6 +89,23 @@ struct CourseView: View {
 			}
 			.frame(width:screenSize.width*3)
 			.offset(x: underlineScrollOffset - dragOffset/3, y: 0)
+			
+			/*HStack{
+				Rectangle()
+					.frame(width:screenSize.width-4, height: 5)
+					.foregroundColor(.white)
+			}
+			.padding(EdgeInsets(top: 2, leading: 1, bottom: 2, trailing: 1))
+			.background{
+				Rectangle()
+					.frame(width:screenSize.width, height: 30)
+					 .foregroundColor(.gray)
+			}*/
+			HStack {
+				courseProgressView()
+				Spacer()
+			}
+			.padding(EdgeInsets(top: 3, leading: 10, bottom: 2, trailing: 10))
 			
 			HStack {
 				//Overview section
@@ -130,6 +148,7 @@ struct CourseView: View {
 					Spacer()
 				}.frame(width:screenSize.width)
 				
+				//Continue section
 				VStack {
 					ScrollView {
 						if scorewindData.previousCourse.id > 0 {
@@ -194,6 +213,19 @@ struct CourseView: View {
 			scorewindData.findACourseByOrder(order: SearchParameter.DESC)
 			scorewindData.findACourseByOrder(order: SearchParameter.ASC)
 		})
+	}
+	
+	@ViewBuilder
+	private func courseProgressView() -> some View {
+		//come back here after finish marking lesson complete
+		ForEach(0...(scorewindData.currentCourse.lessons.count-1), id:\.self){ index in
+			Circle()
+				.strokeBorder(Color.gray,lineWidth: 1)
+				.background(Circle().foregroundColor(Color.white))
+				.frame(width:10,height:10)
+		}
+		Text("0/\(scorewindData.currentCourse.lessons.count) steps")
+			.foregroundColor(.gray)
 	}
 	
 	@ViewBuilder
