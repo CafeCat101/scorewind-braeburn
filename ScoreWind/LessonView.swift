@@ -32,8 +32,11 @@ struct LessonView: View {
 							.labelStyle(.titleAndIcon)
 							.font(.title3)
 							.foregroundColor(.black)
+							.frame(width:screenSize.width*0.95, height: screenSize.height/25)
+							.truncationMode(.tail)
 						Spacer()
-					}.padding(.horizontal, 8)
+					}
+					.padding(.horizontal, 10)
 				}
 			}
 			
@@ -106,7 +109,7 @@ struct LessonView: View {
 					}
 					.onChanged() { _ in
 						magnifyStep += 1
-						if magnifyStep > 50 {
+						if magnifyStep > 1 {
 							if magnifyBy >= 1 {
 								viewModel.zoomInPublisher.send("Zoom In")
 							}

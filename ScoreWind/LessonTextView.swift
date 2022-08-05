@@ -9,9 +9,50 @@ import SwiftUI
 
 struct LessonTextView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
+	let screenSize: CGRect = UIScreen.main.bounds
+	@State private var completedToggle = false
+	@State private var completedIconName = "checkmark.bubble"
 	
 	var body: some View {
-		HTMLString(htmlContent: prepareLessonContent())
+		VStack {
+			HTMLString(htmlContent: scorewindData.currentLesson.content)
+			HStack {
+				Text("Score Available")
+					.foregroundColor(.black)
+					.padding(10)
+					.background{
+						RoundedRectangle(cornerRadius: 10)
+							.foregroundColor(Color("ScoreAvailable"))
+					}
+				Spacer()
+				Button(action: {
+					print("lesson completed")
+					withAnimation {
+						if completedToggle == false {
+							completedIconName = "checkmark.bubble.fill"
+						} else {
+							completedIconName = "checkmark.bubble"
+						}
+						
+						completedToggle.toggle()
+					}
+				}){
+					if completedToggle {
+						Image(systemName: completedIconName)
+							.foregroundColor(Color("ScoreAvailable"))
+							.font(.largeTitle)
+							.transition(.slide)
+					} else {
+						Image(systemName: completedIconName)
+							.foregroundColor(Color("ScoreAvailable"))
+							.font(.largeTitle)
+					}
+				}
+			}
+			.padding(8)
+			.background(.yellow)
+		}
+		//HTMLString(htmlContent: prepareLessonContent())
 	}
 	
 	private func prepareLessonContent() -> String {

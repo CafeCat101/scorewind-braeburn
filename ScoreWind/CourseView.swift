@@ -26,6 +26,13 @@ struct CourseView: View {
 		VStack {
 			Text("\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentCourse.title))")
 				.font(.title3)
+				.frame(width:screenSize.width*0.95, height: screenSize.height/25)
+				.truncationMode(.tail)
+				/*.contextMenu(menuItems:{
+					Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentCourse.title))
+						.font(.headline)
+						.frame(width:screenSize.width*0.9, height:screenSize.height*0.5)
+				})*/
 			
 			HStack {
 				Button(action: {
@@ -115,8 +122,8 @@ struct CourseView: View {
 				//Lessons section
 				VStack {
 					courseDownloadButtonView()
-					ScrollView {
-						ForEach(scorewindData.currentCourse.lessons){ lesson in
+					//ScrollView {
+						/*ForEach(scorewindData.currentCourse.lessons){ lesson in
 							HStack {
 								downloadIconView(getLessonID: lesson.id)
 									.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
@@ -143,8 +150,37 @@ struct CourseView: View {
 								.frame(height:1)
 								.background(Color("ListDivider"))
 								.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+						}*/
+						List {
+							Section(header: Text("In This Course...")){
+								ForEach(scorewindData.currentCourse.lessons){ lesson in
+									HStack {
+										downloadIconView(getLessonID: lesson.id)
+											.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
+											//.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
+										
+										Button(action: {
+											scorewindData.currentLesson = lesson
+											scorewindData.setCurrentTimestampRecs()
+											//scorewindData.currentView = Page.lesson
+											scorewindData.lastPlaybackTime = 0.0
+											if scorewindData.currentTimestampRecs.count == 0 {
+												scorewindData.lastViewAtScore = false
+											}
+											self.selectedTab = "TLesson"
+										}) {
+											Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
+												.multilineTextAlignment(.leading)
+												.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
+										}
+										//.padding(EdgeInsets(top: 3, leading: 10, bottom: 3, trailing: 10))
+										//Spacer()
+									}
+								}
+							}
 						}
-					}
+						.listStyle(.plain)
+					//}
 					Spacer()
 				}.frame(width:screenSize.width)
 				

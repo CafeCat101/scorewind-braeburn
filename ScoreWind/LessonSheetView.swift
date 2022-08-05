@@ -15,25 +15,25 @@ struct LessonSheetView: View {
 	var body: some View {
 		VStack {
 			/*HStack {
-				Button(action:{
-					withAnimation{
-						scorewindData.currentView = Page.lessonFullScreen
-					}
-				}){
-					RoundedRectangle(cornerRadius: 10, style: .continuous)
-						.strokeBorder(Color.gray,lineWidth: 1)
-						.background(
-							RoundedRectangle(cornerRadius: 10, style: .continuous)
-								.foregroundColor(Color.gray.opacity(0.8)))
-						.frame(height:60)
-						.overlay(
-							Text("Focus mode")
-								.foregroundColor(Color.white)
-						)
-				}.buttonStyle(PlainButtonStyle())
-				Spacer()
-			}
-			.padding(SwiftUI.EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))*/
+			 Button(action:{
+			 withAnimation{
+			 scorewindData.currentView = Page.lessonFullScreen
+			 }
+			 }){
+			 RoundedRectangle(cornerRadius: 10, style: .continuous)
+			 .strokeBorder(Color.gray,lineWidth: 1)
+			 .background(
+			 RoundedRectangle(cornerRadius: 10, style: .continuous)
+			 .foregroundColor(Color.gray.opacity(0.8)))
+			 .frame(height:60)
+			 .overlay(
+			 Text("Focus mode")
+			 .foregroundColor(Color.white)
+			 )
+			 }.buttonStyle(PlainButtonStyle())
+			 Spacer()
+			 }
+			 .padding(SwiftUI.EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))*/
 			
 			
 			List {
@@ -70,9 +70,19 @@ struct LessonSheetView: View {
 									.foregroundColor(Color.black)
 							}
 						}
+						.swipeActions {
+							Button(action: {
+								print("Awesome!")
+							}) {
+								Text("Completed")
+									.foregroundColor(.black)
+							}
+							.tint(.yellow)
+						}
 					}
 				}
 			}
+			.listStyle(.plain)
 		}
 		.onDisappear(perform: {
 			print("[debug] LessonSheetView, onDisappear")
