@@ -399,4 +399,13 @@ class ScorewindData: ObservableObject {
 		return tipCount
 	}
 	
+	func convertWPLessonText(wpContent:String) -> String {
+		var result = wpContent.replacingOccurrences(of: "<[\n]+>", with: "", options: .regularExpression, range: nil)
+		result = result.replacingOccurrences(of: "</p>", with: "\n")
+		result = result.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
+		result = result.replacingOccurrences(of: "by ScoreWind Teachers", with: "")
+		result = result.replacingOccurrences(of: "by Scorewind Teachers", with: "")
+		return result
+	}
+	
 }
