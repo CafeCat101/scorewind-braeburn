@@ -44,11 +44,15 @@ struct HomeView: View {
 				}
 				
 				if scorewindData.currentLesson.id > 0 {
-					LessonView(downloadManager: downloadManager, showTip: $showTipOverlay)
+					NavigationView {
+						LessonNowView(downloadManager: downloadManager)
+					}
 						.tabItem {
 							Image(systemName: "note")
-							Text("Lesson")
+							Text("Lessons")
 						}.tag("TLesson")
+					
+					
 				} else {
 					BlankTabView(message: "ScoreWind remembers the lesson you visit last time in the course.\nYou can find lessons in this course from lesson list in the Course Tab. When you tab the lesson title, you'll also be able to switch lesson from the menu there.")
 						.tabItem {
@@ -89,11 +93,11 @@ struct HomeView: View {
 				}
 			})
 			/*.onChange(of: selectedTab, perform: { newValue in
-				if newValue == "TLesson" && scorewindData.currentLesson.id > 0 {
-					scorewindData.currentTip = .lessonScoreViewer
-					showTipOverlay = true
-				}
-			})*/
+			 if newValue == "TLesson" && scorewindData.currentLesson.id > 0 {
+			 scorewindData.currentTip = .lessonScoreViewer
+			 showTipOverlay = true
+			 }
+			 })*/
 			.onReceive(downloadManager.downloadTaskPublisher, perform: { clonedDownloadList in
 				print("[deubg] HomeView,onRecieve, downloadTaskPublisher:\(clonedDownloadList.count)")
 				for courseID in clonedDownloadList {

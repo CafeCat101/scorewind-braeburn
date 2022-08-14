@@ -16,6 +16,7 @@ struct LessonTextView: View {
 	var body: some View {
 		VStack {
 			HTMLString(htmlContent: scorewindData.currentLesson.content)
+			/*
 			HStack {
 				Text("Score Available")
 					.foregroundColor(.black)
@@ -51,6 +52,7 @@ struct LessonTextView: View {
 			}
 			.padding(8)
 			.background(.yellow)
+			 */
 		}
 		//HTMLString(htmlContent: prepareLessonContent())
 	}
