@@ -180,10 +180,13 @@ struct CourseView: View {
 											Spacer()
 										}
 										Spacer()
-											.frame(height:5)
-										Text(scorewindData.convertWPLessonText(wpContent: lesson.content))
+											.frame(height:10)
+										HStack {
+											Text(lesson.description)
+											Spacer()
+										}
 									}
-									.padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
+									.padding(EdgeInsets(top: 15, leading: 10, bottom: 15, trailing: 10))
 									.background{
 										RoundedRectangle(cornerRadius: 10)
 											.foregroundColor(Color("LessonText"))

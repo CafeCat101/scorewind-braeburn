@@ -45,7 +45,7 @@ struct HomeView: View {
 				
 				if scorewindData.currentLesson.id > 0 {
 					NavigationView {
-						LessonNowView(downloadManager: downloadManager)
+						LessonView(downloadManager: downloadManager, showTip: $showTipOverlay)
 					}
 						.tabItem {
 							Image(systemName: "note")
