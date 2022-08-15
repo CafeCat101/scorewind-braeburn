@@ -74,24 +74,28 @@ struct Lesson: Codable, Identifiable{
 	var scorewindID: Int
 	var title: String
 	var content: String
+	var description: String
 	var composer: String
 	var video: String
 	var videoMP4: String
 	var scoreViewer: String
 	var image: String
 	var step: Int
+	var sortValue: String
 	
 	enum CodingKeys: String, CodingKey{
 		case id = "id"
 		case scorewindID = "scorewind_id"
 		case title = "lesson_title"
 		case content = "lesson_content"
+		case description = "lesson_short_description"
 		case composer = "lesson_composer"
 		case video = "lesson_mp3u8"
 		case videoMP4 = "lesson_video"
 		case scoreViewer = "lesson_score_viewer"
 		case image = "lesson_image"
 		case step = "lesson_step"
+		case sortValue = "lesson_sort_value"
 	}
 	
 	init(){
@@ -99,11 +103,13 @@ struct Lesson: Codable, Identifiable{
 		scorewindID = 0
 		title = "Scorewind Lesson"
 		content = "Self study music is a joyful journey. It fills your soul, challenges your mind and gives you a path to share your passions. Self study is one of many ways to learn to play music. It’s affordable, and offers flexible studying hours. You can learn at your own pace, and develop your learning path based on your own interests. So, why wait, let’s start playing music!"
+		description = "In the lesson, scorewind teacher prepare vidoe and score for you to learn how to play easier than ever!"
 		composer = "Scorewind Teacher"
 		video = "lesson/video"
 		videoMP4 = "lesson/videoMP4"
 		scoreViewer = "lesson/scoreViewer"
 		image = "lesson/image"
 		step = 1
+		sortValue = "1"
 	}
 }

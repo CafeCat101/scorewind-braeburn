@@ -28,11 +28,11 @@ struct CourseView: View {
 				.font(.title3)
 				.frame(width:screenSize.width*0.95, height: screenSize.height/25)
 				.truncationMode(.tail)
-				/*.contextMenu(menuItems:{
-					Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentCourse.title))
-						.font(.headline)
-						.frame(width:screenSize.width*0.9, height:screenSize.height*0.5)
-				})*/
+			/*.contextMenu(menuItems:{
+			 Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentCourse.title))
+			 .font(.headline)
+			 .frame(width:screenSize.width*0.9, height:screenSize.height*0.5)
+			 })*/
 			
 			HStack {
 				Button(action: {
@@ -98,16 +98,16 @@ struct CourseView: View {
 			.offset(x: underlineScrollOffset - dragOffset/3, y: 0)
 			
 			/*HStack{
-				Rectangle()
-					.frame(width:screenSize.width-4, height: 5)
-					.foregroundColor(.white)
-			}
-			.padding(EdgeInsets(top: 2, leading: 1, bottom: 2, trailing: 1))
-			.background{
-				Rectangle()
-					.frame(width:screenSize.width, height: 30)
-					 .foregroundColor(.gray)
-			}*/
+			 Rectangle()
+			 .frame(width:screenSize.width-4, height: 5)
+			 .foregroundColor(.white)
+			 }
+			 .padding(EdgeInsets(top: 2, leading: 1, bottom: 2, trailing: 1))
+			 .background{
+			 Rectangle()
+			 .frame(width:screenSize.width, height: 30)
+			 .foregroundColor(.gray)
+			 }*/
 			HStack {
 				courseProgressView()
 				Spacer()
@@ -123,41 +123,42 @@ struct CourseView: View {
 				VStack {
 					courseDownloadButtonView()
 					//ScrollView {
-						/*ForEach(scorewindData.currentCourse.lessons){ lesson in
-							HStack {
-								downloadIconView(getLessonID: lesson.id)
-									.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
-									.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
-								
-								Button(action: {
-									scorewindData.currentLesson = lesson
-									scorewindData.setCurrentTimestampRecs()
-									//scorewindData.currentView = Page.lesson
-									scorewindData.lastPlaybackTime = 0.0
-									if scorewindData.currentTimestampRecs.count == 0 {
-										scorewindData.lastViewAtScore = false
-									}
-									self.selectedTab = "TLesson"
-								}) {
-									Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
-										.multilineTextAlignment(.leading)
-										.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
-								}
-								.padding(EdgeInsets(top: 3, leading: 10, bottom: 3, trailing: 10))
-								Spacer()
-							}
-							Divider()
-								.frame(height:1)
-								.background(Color("ListDivider"))
-								.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
-						}*/
-						List {
-							Section(header: Text("In This Course...")){
-								ForEach(scorewindData.currentCourse.lessons){ lesson in
+					/*ForEach(scorewindData.currentCourse.lessons){ lesson in
+					 HStack {
+					 downloadIconView(getLessonID: lesson.id)
+					 .foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
+					 .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
+					 
+					 Button(action: {
+					 scorewindData.currentLesson = lesson
+					 scorewindData.setCurrentTimestampRecs()
+					 //scorewindData.currentView = Page.lesson
+					 scorewindData.lastPlaybackTime = 0.0
+					 if scorewindData.currentTimestampRecs.count == 0 {
+					 scorewindData.lastViewAtScore = false
+					 }
+					 self.selectedTab = "TLesson"
+					 }) {
+					 Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
+					 .multilineTextAlignment(.leading)
+					 .foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
+					 }
+					 .padding(EdgeInsets(top: 3, leading: 10, bottom: 3, trailing: 10))
+					 Spacer()
+					 }
+					 Divider()
+					 .frame(height:1)
+					 .background(Color("ListDivider"))
+					 .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+					 }*/
+					List {
+						Section(header: Text("In This Course...")){
+							ForEach(scorewindData.currentCourse.lessons){ lesson in
+								VStack {
 									HStack {
 										downloadIconView(getLessonID: lesson.id)
 											.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
-											//.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
+										//.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
 										
 										Button(action: {
 											scorewindData.currentLesson = lesson
@@ -172,14 +173,29 @@ struct CourseView: View {
 											Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
 												.multilineTextAlignment(.leading)
 												.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
+												.font(Font.body.bold())
+											
 										}
 										//.padding(EdgeInsets(top: 3, leading: 10, bottom: 3, trailing: 10))
-										//Spacer()
+										Spacer()
+									}
+									Spacer()
+										.frame(height:10)
+									HStack {
+										Text(lesson.description)
+										Spacer()
 									}
 								}
+								.padding(EdgeInsets(top: 15, leading: 10, bottom: 15, trailing: 10))
+								.background{
+									RoundedRectangle(cornerRadius: 10)
+										.foregroundColor(Color("LessonTextBg"))
+								}
+								
 							}
 						}
-						.listStyle(.plain)
+					}
+					.listStyle(.plain)
 					//}
 					Spacer()
 				}.frame(width:screenSize.width)
