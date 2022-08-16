@@ -165,9 +165,9 @@ struct CourseView: View {
 											scorewindData.setCurrentTimestampRecs()
 											//scorewindData.currentView = Page.lesson
 											scorewindData.lastPlaybackTime = 0.0
-											if scorewindData.currentTimestampRecs.count == 0 {
+											/*if scorewindData.currentTimestampRecs.count == 0 {
 												scorewindData.lastViewAtScore = false
-											}
+											}*/
 											self.selectedTab = "TLesson"
 										}) {
 											Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))

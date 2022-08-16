@@ -10,7 +10,7 @@ import AVKit
 
 struct LessonView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
-	@State private var showLessonSheet = false
+	//@State private var showLessonSheet = false
 	let screenSize: CGRect = UIScreen.main.bounds
 	@State private var watchTime = ""
 	@StateObject var viewModel = ViewModel()
@@ -20,24 +20,21 @@ struct LessonView: View {
 	@State private var magnifyStep = 1
 	@ObservedObject var downloadManager:DownloadManager
 	@Binding var showTip:Bool
+	@State private var lessonTextOverlay = false
 	
 	var body: some View {
 		VStack {
 			if scorewindData.currentView == Page.lesson {
-				Button(action:{
-					showLessonSheet = true
-				}) {
-					HStack {
-						Label("\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))", systemImage: "list.bullet.circle")
-							.labelStyle(.titleAndIcon)
-							.font(.title3)
-							.foregroundColor(.black)
-							.frame(width:screenSize.width*0.95, height: screenSize.height/25)
-							.truncationMode(.tail)
-						Spacer()
-					}
-					.padding(.horizontal, 10)
+				HStack {
+					Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))
+						.font(.title3)
+						.foregroundColor(.black)
+						.truncationMode(.tail)
+					
+					lessonViewMenu()
 				}
+				.frame(height: screenSize.height/25)
+				.padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 15))
 			}
 			
 			if scorewindData.currentLesson.videoMP4.isEmpty == false {
@@ -54,93 +51,107 @@ struct LessonView: View {
 						viewModel.videoPlayer!.replaceCurrentItem(with: nil)
 					})
 					.background(.black)
-					.overlay(titleOverlay, alignment: .topLeading)
+					.overlay(lessonViewMenu(), alignment: .topLeading)
 			}
 			
+			if scorewindData.currentTimestampRecs.count > 0 {
+				LessonScoreView(viewModel: viewModel)
+					.overlay {
+						if lessonTextOverlay {
+							HTMLString(htmlContent: scorewindData.currentLesson.content)
+						}
+					}
+			} else {
+				HTMLString(htmlContent: scorewindData.currentLesson.content)
+			}
 			
-			VStack {
+			/*VStack {
 				if scorewindData.lastViewAtScore == false {
 					LessonTextView()
 				}else {
 					LessonScoreView(viewModel: viewModel)
 				}
-			}
-			.simultaneousGesture(
-				DragGesture()
-					.onChanged { gesture in
-						if self.isSwipping {
-							self.startPos = gesture.location
-							self.isSwipping.toggle()
-						}
-					}
-					.onEnded { gesture in
-						let xDist =  abs(gesture.location.x - self.startPos.x)
-						let yDist =  abs(gesture.location.y - self.startPos.y)
-						if self.startPos.y <  gesture.location.y && yDist > xDist {
-							//down
-						}
-						else if self.startPos.y >  gesture.location.y && yDist > xDist {
-							//up
-						}
-						else if self.startPos.x > gesture.location.x && yDist < xDist {
-							//left
-							if scorewindData.currentTimestampRecs.count > 0 {
-								withAnimation{
-									scorewindData.lastViewAtScore = true
-								}
-							}
-						}
-						else if self.startPos.x < gesture.location.x && yDist < xDist {
-							//right
-							//viewModel.videoPlayer?.pause()
-							withAnimation{
-								scorewindData.lastViewAtScore = false
-							}
-						}
-						self.isSwipping.toggle()
-					}
-			)
-			.simultaneousGesture(
-				MagnificationGesture()
-					.updating($magnifyBy) { currentState, gestureState, transaction in
-						gestureState = currentState
-						print("step \(magnifyStep)")
-						print("magnifyBy \(magnifyBy)")
-					}
-					.onChanged() { _ in
-						magnifyStep += 1
-						if magnifyStep > 1 {
-							if magnifyBy >= 1 {
-								viewModel.zoomInPublisher.send("Zoom In")
-							}
-							
-							if magnifyBy < 1 {
-								viewModel.zoomInPublisher.send("Zoom Out")
-							}
-							
-							magnifyStep = 1
-						}
-					}
-					.onEnded { value in
-						//showScoreMenu.toggle()
-						print("maginification \(value)")
-						//maginificationStep = 1
-						/*if value>magnifyBy {
-						 viewModel.zoomInPublisher.send("Zoom In")
-						 }
-						 
-						 if value<magnifyBy {
-						 viewModel.zoomInPublisher.send("Zoom Out")
-						 }*/
-						if value >= 1 {
-							viewModel.zoomInPublisher.send("Zoom In")
-						}
-						
-						if value < 1 {
-							viewModel.zoomInPublisher.send("Zoom Out")
-						}
-					}
-			)
+			}*/
+			/*
+			 .simultaneousGesture(
+			 DragGesture()
+			 .onChanged { gesture in
+			 if self.isSwipping {
+			 self.startPos = gesture.location
+			 self.isSwipping.toggle()
+			 }
+			 }
+			 .onEnded { gesture in
+			 let xDist =  abs(gesture.location.x - self.startPos.x)
+			 let yDist =  abs(gesture.location.y - self.startPos.y)
+			 if self.startPos.y <  gesture.location.y && yDist > xDist {
+			 //down
+			 }
+			 else if self.startPos.y >  gesture.location.y && yDist > xDist {
+			 //up
+			 }
+			 else if self.startPos.x > gesture.location.x && yDist < xDist {
+			 //left
+			 if scorewindData.currentTimestampRecs.count > 0 {
+			 withAnimation{
+			 scorewindData.lastViewAtScore = true
+			 }
+			 }
+			 }
+			 else if self.startPos.x < gesture.location.x && yDist < xDist {
+			 //right
+			 //viewModel.videoPlayer?.pause()
+			 withAnimation{
+			 scorewindData.lastViewAtScore = false
+			 }
+			 }
+			 self.isSwipping.toggle()
+			 }
+			 )
+			 */
+			/*
+			 .simultaneousGesture(
+			 MagnificationGesture()
+			 .updating($magnifyBy) { currentState, gestureState, transaction in
+			 gestureState = currentState
+			 print("step \(magnifyStep)")
+			 print("magnifyBy \(magnifyBy)")
+			 }
+			 .onChanged() { _ in
+			 magnifyStep += 1
+			 if magnifyStep > 1 {
+			 if magnifyBy >= 1 {
+			 viewModel.zoomInPublisher.send("Zoom In")
+			 }
+			 
+			 if magnifyBy < 1 {
+			 viewModel.zoomInPublisher.send("Zoom Out")
+			 }
+			 
+			 magnifyStep = 1
+			 }
+			 }
+			 .onEnded { value in
+			 //showScoreMenu.toggle()
+			 print("maginification \(value)")
+			 //maginificationStep = 1
+			 /*if value>magnifyBy {
+				viewModel.zoomInPublisher.send("Zoom In")
+				}
+				
+				if value<magnifyBy {
+				viewModel.zoomInPublisher.send("Zoom Out")
+				}*/
+			 if value >= 1 {
+			 viewModel.zoomInPublisher.send("Zoom In")
+			 }
+			 
+			 if value < 1 {
+			 viewModel.zoomInPublisher.send("Zoom Out")
+			 }
+			 }
+			 )
+			 */
 			Spacer()
 		}
 		.onAppear(perform: {
@@ -149,18 +160,18 @@ struct LessonView: View {
 				scorewindData.currentView = Page.lesson
 			}
 			
-			if scorewindData.lastViewAtScore == true {
-				if scorewindData.currentLesson.scoreViewer.isEmpty {
-					scorewindData.lastViewAtScore = false
-				}
-			} else {
-				if scorewindData.currentTimestampRecs.count > 0 {
-					if scorewindData.getTipCount(tipType: .lessonScoreViewer) < TipLimit.lessonScoreViewer.rawValue {
-						scorewindData.currentTip = .lessonScoreViewer
-						showTip = true
-					}
-				}
-			}
+			//if scorewindData.lastViewAtScore == true {
+			//	if scorewindData.currentLesson.scoreViewer.isEmpty {
+			//		scorewindData.lastViewAtScore = false
+			//	}
+			//} else {
+				/*if scorewindData.currentTimestampRecs.count > 0 {
+				 if scorewindData.getTipCount(tipType: .lessonScoreViewer) < TipLimit.lessonScoreViewer.rawValue {
+				 scorewindData.currentTip = .lessonScoreViewer
+				 showTip = true
+				 }
+				 }*/
+			//}
 			
 			if scorewindData.currentLesson.videoMP4.isEmpty == false {
 				setupPlayer()
@@ -173,30 +184,31 @@ struct LessonView: View {
 		.onDisappear(perform: {
 			print("[debug] LessonView onDisappear")
 		})
-		.sheet(isPresented: $showLessonSheet, onDismiss: {
-			print("[debug] lastPlaybackTime\(scorewindData.lastPlaybackTime)")
-			if scorewindData.lastPlaybackTime == 0.0 {
-				//viewModel.highlightBar = 1
-				magnifyStep = 1
-				
-				if scorewindData.currentLesson.videoMP4.isEmpty == false {
-					viewModel.videoPlayer?.pause()
-					viewModel.videoPlayer?.replaceCurrentItem(with: nil)
-				}
-				
-				if scorewindData.lastViewAtScore == true {
-					if scorewindData.currentTimestampRecs.count == 0 {
-						scorewindData.lastViewAtScore = false
-					}
-				}
-				
-				if scorewindData.currentLesson.videoMP4.isEmpty == false {
-					setupPlayer()
-				}
-			}
-		}){
-			LessonSheetView(isPresented: self.$showLessonSheet, showTip: $showTip)
-		}
+		/*
+		 .sheet(isPresented: $showLessonSheet, onDismiss: {
+		 print("[debug] lastPlaybackTime\(scorewindData.lastPlaybackTime)")
+		 if scorewindData.lastPlaybackTime == 0.0 {
+		 //viewModel.highlightBar = 1
+		 magnifyStep = 1
+		 
+		 if scorewindData.currentLesson.videoMP4.isEmpty == false {
+		 viewModel.videoPlayer?.pause()
+		 viewModel.videoPlayer?.replaceCurrentItem(with: nil)
+		 }
+		 
+		 if scorewindData.lastViewAtScore == true {
+		 if scorewindData.currentTimestampRecs.count == 0 {
+		 scorewindData.lastViewAtScore = false
+		 }
+		 }
+		 
+		 if scorewindData.currentLesson.videoMP4.isEmpty == false {
+		 setupPlayer()
+		 }
+		 }
+		 }){
+		 LessonSheetView(isPresented: self.$showLessonSheet, showTip: $showTip)
+		 }*/
 	}
 	
 	private func decodeVideoURL(videoURL:String)->String{
@@ -274,7 +286,7 @@ struct LessonView: View {
 		HStack {
 			if scorewindData.currentView == Page.lessonFullScreen {
 				Button(action:{
-					showLessonSheet = true
+					//showLessonSheet = true
 				}) {
 					Label("\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))", systemImage: "list.bullet.circle")
 						.labelStyle(.iconOnly)
@@ -282,6 +294,101 @@ struct LessonView: View {
 						.foregroundColor(.white)
 				}
 			}
+		}
+	}
+	
+	@ViewBuilder
+	private func lessonViewMenu() -> some View {
+		Menu {
+			Button(action: {
+				if scorewindData.currentView == Page.lesson {
+					scorewindData.currentView = Page.lessonFullScreen
+				} else {
+					scorewindData.currentView = Page.lesson
+				}
+			}){
+				if scorewindData.currentView == Page.lesson {
+					Label("Focus mode", systemImage: "lightbulb.circle")
+						.labelStyle(.titleAndIcon)
+						.foregroundColor(.black)
+				} else {
+					Label("Explore mode", systemImage: "lightbulb.circle")
+						.labelStyle(.titleAndIcon)
+						.foregroundColor(.black)
+				}
+			}
+			
+			Button(action: {
+				print("completed")
+			}){
+				Label("Completed", systemImage: "checkmark.circle")
+					.labelStyle(.titleAndIcon)
+					.foregroundColor(.black)
+			}
+			
+			Button(action: {
+				
+			}){
+				Text("Previous Lesson")
+			}
+			Button(action: {
+				
+			}){
+				Text("Next Lesson")
+			}
+			
+			Menu {
+				Button(action: {
+					viewModel.zoomInPublisher.send("Zoom In")
+				}){
+					Label("Zoom in", systemImage: "minus.magnifyingglass")
+						.labelStyle(.titleAndIcon)
+						.foregroundColor(.black)
+				}
+				Button(action: {
+					viewModel.zoomInPublisher.send("Zoom Out")
+				}){
+					Label("Zoom out", systemImage: "plus.magnifyingglass")
+						.labelStyle(.titleAndIcon)
+						.foregroundColor(.black)
+				}
+			} label: {
+				Text("Score")
+			}
+			
+			if scorewindData.currentTimestampRecs.count > 0 {
+				Button(action: {
+					withAnimation {
+						lessonTextOverlay.toggle()
+					}
+				}){
+					if lessonTextOverlay {
+						Label("Hide lesson text", systemImage: "doc.plaintext")
+							.labelStyle(.titleAndIcon)
+						.foregroundColor(.black)
+					} else {
+						Label("Show lesson text", systemImage: "doc.plaintext")
+							.labelStyle(.titleAndIcon)
+						.foregroundColor(.black)
+					}
+				}
+			}
+			
+		} label: {
+			if scorewindData.currentView == Page.lesson {
+				Image(systemName: "list.bullet.circle")
+					.resizable()
+					.scaledToFit()
+					.frame(height: screenSize.height/25 - 4)
+					.foregroundColor(.black)
+			} else {
+				Image(systemName: "list.bullet.circle")
+					.resizable()
+					.scaledToFit()
+					.frame(height: screenSize.height/25 - 4)
+					.foregroundColor(.white)
+			}
+			
 		}
 	}
 }

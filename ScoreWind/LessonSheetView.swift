@@ -86,12 +86,12 @@ struct LessonSheetView: View {
 		}
 		.onDisappear(perform: {
 			print("[debug] LessonSheetView, onDisappear")
-			if scorewindData.lastViewAtScore == false {
+			/*if scorewindData.lastViewAtScore == false {
 				if scorewindData.getTipCount(tipType: .lessonScoreViewer) < TipLimit.lessonScoreViewer.rawValue {
 					scorewindData.currentTip = .lessonScoreViewer
 					showTip = true
 				}
-			}
+			}*/
 		})
 		//.background(Color("LessonSheet"))
 	}
