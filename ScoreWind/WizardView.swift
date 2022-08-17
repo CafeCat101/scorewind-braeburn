@@ -32,9 +32,7 @@ struct WizardView: View {
 							self.selectedTab = "TCourse"
 							scorewindData.currentLesson = scorewindData.currentCourse.lessons[0]
 							scorewindData.setCurrentTimestampRecs()
-							/*if scorewindData.currentTimestampRecs.count == 0 {
-								scorewindData.lastViewAtScore = false
-							 }*/
+							scorewindData.lastViewAtScore = true
 							scorewindData.lastPlaybackTime = 0.0
 						}) {
 							if course.id == scorewindData.currentCourse.id {

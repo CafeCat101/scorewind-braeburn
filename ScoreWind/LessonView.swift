@@ -16,11 +16,12 @@ struct LessonView: View {
 	@StateObject var viewModel = ViewModel()
 	@State private var startPos:CGPoint = .zero
 	@State private var isSwipping = true
-	@GestureState var magnifyBy = 1.0
-	@State private var magnifyStep = 1
+	//@GestureState var magnifyBy = 1.0
+	//@State private var magnifyStep = 1
 	@ObservedObject var downloadManager:DownloadManager
 	@Binding var showTip:Bool
-	@State private var lessonTextOverlay = false
+	@State private var nextLesson = Lesson()
+	@State private var previousLesson = Lesson()
 	
 	var body: some View {
 		VStack {
@@ -30,7 +31,7 @@ struct LessonView: View {
 						.font(.title3)
 						.foregroundColor(.black)
 						.truncationMode(.tail)
-					
+					Spacer()
 					lessonViewMenu()
 				}
 				.frame(height: screenSize.height/25)
@@ -57,7 +58,7 @@ struct LessonView: View {
 			if scorewindData.currentTimestampRecs.count > 0 {
 				LessonScoreView(viewModel: viewModel)
 					.overlay {
-						if lessonTextOverlay {
+						if scorewindData.lastViewAtScore == false {
 							HTMLString(htmlContent: scorewindData.currentLesson.content)
 						}
 					}
@@ -66,12 +67,12 @@ struct LessonView: View {
 			}
 			
 			/*VStack {
-				if scorewindData.lastViewAtScore == false {
-					LessonTextView()
-				}else {
-					LessonScoreView(viewModel: viewModel)
-				}
-			}*/
+			 if scorewindData.lastViewAtScore == false {
+			 LessonTextView()
+			 }else {
+			 LessonScoreView(viewModel: viewModel)
+			 }
+			 }*/
 			/*
 			 .simultaneousGesture(
 			 DragGesture()
@@ -165,12 +166,12 @@ struct LessonView: View {
 			//		scorewindData.lastViewAtScore = false
 			//	}
 			//} else {
-				/*if scorewindData.currentTimestampRecs.count > 0 {
-				 if scorewindData.getTipCount(tipType: .lessonScoreViewer) < TipLimit.lessonScoreViewer.rawValue {
-				 scorewindData.currentTip = .lessonScoreViewer
-				 showTip = true
-				 }
-				 }*/
+			/*if scorewindData.currentTimestampRecs.count > 0 {
+			 if scorewindData.getTipCount(tipType: .lessonScoreViewer) < TipLimit.lessonScoreViewer.rawValue {
+			 scorewindData.currentTip = .lessonScoreViewer
+			 showTip = true
+			 }
+			 }*/
 			//}
 			
 			if scorewindData.currentLesson.videoMP4.isEmpty == false {
@@ -180,10 +181,52 @@ struct LessonView: View {
 					viewModel.playerSeek(timestamp: scorewindData.lastPlaybackTime)
 				}
 			}
+			
+			setNextLesson()
+			setPreviousLesson()
 		})
 		.onDisappear(perform: {
 			print("[debug] LessonView onDisappear")
 		})
+		.simultaneousGesture(
+			DragGesture()
+				.onChanged { gesture in
+					if self.isSwipping {
+						self.startPos = gesture.location
+						self.isSwipping.toggle()
+					}
+				}
+				.onEnded { gesture in
+					let xDist =  abs(gesture.location.x - self.startPos.x)
+					let yDist =  abs(gesture.location.y - self.startPos.y)
+					if self.startPos.y <  gesture.location.y && yDist > xDist {
+						//down
+					}
+					else if self.startPos.y >  gesture.location.y && yDist > xDist {
+						//up
+					}
+					else if self.startPos.x > gesture.location.x && yDist < xDist {
+						//left
+						if nextLesson.scorewindID > 0 {
+							withAnimation{
+								scorewindData.currentLesson = nextLesson
+								switchLesson()
+							}
+						}
+						
+					}
+					else if self.startPos.x < gesture.location.x && yDist < xDist {
+						//right
+						if previousLesson.scorewindID > 0 {
+							withAnimation{
+								scorewindData.currentLesson = previousLesson
+								switchLesson()
+							}
+						}
+					}
+					self.isSwipping.toggle()
+				}
+		)
 		/*
 		 .sheet(isPresented: $showLessonSheet, onDismiss: {
 		 print("[debug] lastPlaybackTime\(scorewindData.lastPlaybackTime)")
@@ -279,32 +322,35 @@ struct LessonView: View {
 				
 			})
 		}
-		
 	}
 	
-	private var titleOverlay: some View {
-		HStack {
-			if scorewindData.currentView == Page.lessonFullScreen {
-				Button(action:{
-					//showLessonSheet = true
-				}) {
-					Label("\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))", systemImage: "list.bullet.circle")
-						.labelStyle(.iconOnly)
-						.font(.title2)
-						.foregroundColor(.white)
-				}
-			}
+	private func switchLesson() {
+		//when switch lesson with menu, onAppear is not triggered.
+		//prepare for the lesson content change here.
+		//magnifyStep = 1
+		
+		if scorewindData.currentLesson.videoMP4.isEmpty == false {
+			viewModel.videoPlayer?.pause()
+			viewModel.videoPlayer?.replaceCurrentItem(with: nil)
+			setupPlayer()
 		}
+		
+		scorewindData.lastViewAtScore = true
+		
+		setPreviousLesson()
+		setNextLesson()
 	}
 	
 	@ViewBuilder
 	private func lessonViewMenu() -> some View {
 		Menu {
 			Button(action: {
-				if scorewindData.currentView == Page.lesson {
-					scorewindData.currentView = Page.lessonFullScreen
-				} else {
-					scorewindData.currentView = Page.lesson
+				withAnimation {
+					if scorewindData.currentView == Page.lesson {
+						scorewindData.currentView = Page.lessonFullScreen
+					} else {
+						scorewindData.currentView = Page.lesson
+					}
 				}
 			}){
 				if scorewindData.currentView == Page.lesson {
@@ -326,50 +372,60 @@ struct LessonView: View {
 					.foregroundColor(.black)
 			}
 			
-			Button(action: {
-				
-			}){
-				Text("Previous Lesson")
-			}
-			Button(action: {
-				
-			}){
-				Text("Next Lesson")
+			if previousLesson.scorewindID > 0 {
+				Button(action: {
+					scorewindData.currentLesson = previousLesson
+					switchLesson()
+				}){
+					Text("Previous: \(scorewindData.replaceCommonHTMLNumber(htmlString: previousLesson.title))")
+				}
 			}
 			
-			Menu {
+			if nextLesson.scorewindID > 0 {
 				Button(action: {
-					viewModel.zoomInPublisher.send("Zoom In")
+					scorewindData.currentLesson = nextLesson
+					switchLesson()
 				}){
-					Label("Zoom in", systemImage: "minus.magnifyingglass")
-						.labelStyle(.titleAndIcon)
-						.foregroundColor(.black)
+					Text("Next: \(scorewindData.replaceCommonHTMLNumber(htmlString: nextLesson.title))")
 				}
-				Button(action: {
-					viewModel.zoomInPublisher.send("Zoom Out")
-				}){
-					Label("Zoom out", systemImage: "plus.magnifyingglass")
-						.labelStyle(.titleAndIcon)
-						.foregroundColor(.black)
-				}
-			} label: {
-				Text("Score")
 			}
 			
 			if scorewindData.currentTimestampRecs.count > 0 {
+				//only need to zoom in/out score if score is available
+				Menu {
+					Button(action: {
+						viewModel.zoomInPublisher.send("Zoom In")
+					}){
+						Label("Zoom in", systemImage: "minus.magnifyingglass")
+							.labelStyle(.titleAndIcon)
+							.foregroundColor(.black)
+					}
+					Button(action: {
+						viewModel.zoomInPublisher.send("Zoom Out")
+					}){
+						Label("Zoom out", systemImage: "plus.magnifyingglass")
+							.labelStyle(.titleAndIcon)
+							.foregroundColor(.black)
+					}
+				} label: {
+					Text("Score")
+				}
+				
+				//always show score first now. So just show/hide text when the score is
+				//available
 				Button(action: {
 					withAnimation {
-						lessonTextOverlay.toggle()
+						scorewindData.lastViewAtScore.toggle()
 					}
 				}){
-					if lessonTextOverlay {
+					if scorewindData.lastViewAtScore == false {
 						Label("Hide lesson text", systemImage: "doc.plaintext")
 							.labelStyle(.titleAndIcon)
-						.foregroundColor(.black)
+							.foregroundColor(.black)
 					} else {
 						Label("Show lesson text", systemImage: "doc.plaintext")
 							.labelStyle(.titleAndIcon)
-						.foregroundColor(.black)
+							.foregroundColor(.black)
 					}
 				}
 			}
@@ -389,6 +445,28 @@ struct LessonView: View {
 					.foregroundColor(.white)
 			}
 			
+		}
+	}
+	
+	private func setNextLesson() {
+		let lessonArray = scorewindData.currentCourse.lessons
+		let getCurrentIndex = lessonArray.firstIndex(where: {$0.scorewindID == scorewindData.currentLesson.scorewindID}) ?? -1
+		print("[debug] LessonView, setNextLesson, getCurrentIndex \(getCurrentIndex)")
+		if (getCurrentIndex < (lessonArray.count-1)) && (getCurrentIndex > -1) {
+			nextLesson = scorewindData.currentCourse.lessons[getCurrentIndex+1]
+		}else{
+			nextLesson = Lesson()
+		}
+	}
+	
+	private func setPreviousLesson() {
+		let lessonArray = scorewindData.currentCourse.lessons
+		let getCurrentIndex = lessonArray.firstIndex(where: {$0.scorewindID == scorewindData.currentLesson.scorewindID}) ?? -1
+		print("[debug] LessonView, setPreviousLesson, getCurrentIndex \(getCurrentIndex)")
+		if getCurrentIndex > 0 {
+			previousLesson = scorewindData.currentCourse.lessons[getCurrentIndex-1]
+		}else{
+			previousLesson = Lesson()
 		}
 	}
 }
