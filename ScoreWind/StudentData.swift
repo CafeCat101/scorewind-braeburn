@@ -16,8 +16,24 @@ class StudentData: ObservableObject {
 		return useriCloudKeyValueStore.string(forKey:"instrument") ?? ""
 	}
 	
+	func setInstrumentChoice(instrument:String) {
+		useriCloudKeyValueStore.set(instrument,forKey: "instrument")
+		useriCloudKeyValueStore.synchronize()
+	}
+	
 	func getEnrolledCourses()->[String:Any] {
 		return useriCloudKeyValueStore.dictionary(forKey:"enrolledCourses") ?? [:]
+	}
+	
+	func updateEnrolledCourse(courseID:Int, isCompleted: Bool) {
+		var enrolledCourses = getEnrolledCourses()
+		enrolledCourses.updateValue(isCompleted, forKey: String(courseID))
+		useriCloudKeyValueStore.set(enrolledCourses,forKey: "enrolledCourses")
+		useriCloudKeyValueStore.synchronize()
+	}
+	
+	func getCompletedLessons() -> [String:Any] {
+		return useriCloudKeyValueStore.dictionary(forKey: "completedLessons") ?? [:]
 	}
 	
 	func getCompletedLessons(courseID:Int)->[Int] {
@@ -29,36 +45,21 @@ class StudentData: ObservableObject {
 				filteredLessons.append(Int(lesson.key)!)
 			}
 		}
+		print(filteredLessons)
 		return filteredLessons
 	}
 	
-	
-	func setInstrumentChoice(instrument:String) {
-		useriCloudKeyValueStore.set(instrument,forKey: "instrument")
-		useriCloudKeyValueStore.synchronize()
-	}
-	
-	func updateEnrolledCourse(courseID:Int, isCompleted: Bool) {
-		var enrolledCourses = getEnrolledCourses()
-		enrolledCourses.updateValue(isCompleted, forKey: String(courseID))
-		useriCloudKeyValueStore.set(enrolledCourses,forKey: "enrolledCourses")
-		useriCloudKeyValueStore.synchronize()
-	}
-	
-	func updateCompletedLesson(courseID:Int, lessonID:Int, isCompleted:Bool){
-		var getAllCompletedLessons = getCompletedLessons(courseID: courseID)
-		if isCompleted  {
-			if getAllCompletedLessons.contains(lessonID) == false{
-				getAllCompletedLessons.append(lessonID)
-			}
-		}else{
-			if getAllCompletedLessons.contains(lessonID) == true{
-				//getAllCompletedLessons.remove(lessonID)
-			}
+	func updateCompletedLesson(courseID:Int, lessonID:Int, isCompleted:Bool) {
+		var allLessons = getCompletedLessons()
+		if isCompleted {
+			allLessons.updateValue(courseID, forKey: String(lessonID))
+		} else{
+			allLessons.removeValue(forKey: String(lessonID))
 		}
-
+		
+		useriCloudKeyValueStore.set(allLessons,forKey: "completedLessons")
+		useriCloudKeyValueStore.synchronize()
 	}
-	
 	
 	func removeAKey(keyName:String){
 		useriCloudKeyValueStore.removeObject(forKey: keyName)
@@ -66,9 +67,8 @@ class StudentData: ObservableObject {
 	
 	func backendReadAllKeys(){
 		for(key,value) in useriCloudKeyValueStore.dictionaryRepresentation {
-			print("===================")
-			print("\(key):\(value)")
-			print("===================")
+			print("=====\(key)======")
+			print("\(value)")
 		}
 	}
 }

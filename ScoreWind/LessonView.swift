@@ -22,6 +22,7 @@ struct LessonView: View {
 	@Binding var showTip:Bool
 	@State private var nextLesson = Lesson()
 	@State private var previousLesson = Lesson()
+	@State private var isCurrentLessonCompleted = false
 	
 	var body: some View {
 		VStack {
@@ -65,94 +66,6 @@ struct LessonView: View {
 			} else {
 				HTMLString(htmlContent: scorewindData.currentLesson.content)
 			}
-			
-			/*VStack {
-			 if scorewindData.lastViewAtScore == false {
-			 LessonTextView()
-			 }else {
-			 LessonScoreView(viewModel: viewModel)
-			 }
-			 }*/
-			/*
-			 .simultaneousGesture(
-			 DragGesture()
-			 .onChanged { gesture in
-			 if self.isSwipping {
-			 self.startPos = gesture.location
-			 self.isSwipping.toggle()
-			 }
-			 }
-			 .onEnded { gesture in
-			 let xDist =  abs(gesture.location.x - self.startPos.x)
-			 let yDist =  abs(gesture.location.y - self.startPos.y)
-			 if self.startPos.y <  gesture.location.y && yDist > xDist {
-			 //down
-			 }
-			 else if self.startPos.y >  gesture.location.y && yDist > xDist {
-			 //up
-			 }
-			 else if self.startPos.x > gesture.location.x && yDist < xDist {
-			 //left
-			 if scorewindData.currentTimestampRecs.count > 0 {
-			 withAnimation{
-			 scorewindData.lastViewAtScore = true
-			 }
-			 }
-			 }
-			 else if self.startPos.x < gesture.location.x && yDist < xDist {
-			 //right
-			 //viewModel.videoPlayer?.pause()
-			 withAnimation{
-			 scorewindData.lastViewAtScore = false
-			 }
-			 }
-			 self.isSwipping.toggle()
-			 }
-			 )
-			 */
-			/*
-			 .simultaneousGesture(
-			 MagnificationGesture()
-			 .updating($magnifyBy) { currentState, gestureState, transaction in
-			 gestureState = currentState
-			 print("step \(magnifyStep)")
-			 print("magnifyBy \(magnifyBy)")
-			 }
-			 .onChanged() { _ in
-			 magnifyStep += 1
-			 if magnifyStep > 1 {
-			 if magnifyBy >= 1 {
-			 viewModel.zoomInPublisher.send("Zoom In")
-			 }
-			 
-			 if magnifyBy < 1 {
-			 viewModel.zoomInPublisher.send("Zoom Out")
-			 }
-			 
-			 magnifyStep = 1
-			 }
-			 }
-			 .onEnded { value in
-			 //showScoreMenu.toggle()
-			 print("maginification \(value)")
-			 //maginificationStep = 1
-			 /*if value>magnifyBy {
-				viewModel.zoomInPublisher.send("Zoom In")
-				}
-				
-				if value<magnifyBy {
-				viewModel.zoomInPublisher.send("Zoom Out")
-				}*/
-			 if value >= 1 {
-			 viewModel.zoomInPublisher.send("Zoom In")
-			 }
-			 
-			 if value < 1 {
-			 viewModel.zoomInPublisher.send("Zoom Out")
-			 }
-			 }
-			 )
-			 */
 			Spacer()
 		}
 		.onAppear(perform: {
@@ -161,18 +74,10 @@ struct LessonView: View {
 				scorewindData.currentView = Page.lesson
 			}
 			
-			//if scorewindData.lastViewAtScore == true {
-			//	if scorewindData.currentLesson.scoreViewer.isEmpty {
-			//		scorewindData.lastViewAtScore = false
-			//	}
-			//} else {
-			/*if scorewindData.currentTimestampRecs.count > 0 {
-			 if scorewindData.getTipCount(tipType: .lessonScoreViewer) < TipLimit.lessonScoreViewer.rawValue {
-			 scorewindData.currentTip = .lessonScoreViewer
-			 showTip = true
-			 }
-			 }*/
-			//}
+			/*if scorewindData.getTipCount(tipType: .lessonScoreViewer) < TipLimit.lessonScoreViewer.rawValue {
+				scorewindData.currentTip = .lessonScoreViewer
+				showTip = true
+			}*/
 			
 			if scorewindData.currentLesson.videoMP4.isEmpty == false {
 				setupPlayer()
@@ -181,7 +86,7 @@ struct LessonView: View {
 					viewModel.playerSeek(timestamp: scorewindData.lastPlaybackTime)
 				}
 			}
-			
+			checkCurrentLessonCompleted()
 			setNextLesson()
 			setPreviousLesson()
 		})
@@ -201,22 +106,15 @@ struct LessonView: View {
 					let yDist =  abs(gesture.location.y - self.startPos.y)
 					if self.startPos.y <  gesture.location.y && yDist > xDist {
 						//down
-					}
-					else if self.startPos.y >  gesture.location.y && yDist > xDist {
-						//up
-					}
-					else if self.startPos.x > gesture.location.x && yDist < xDist {
-						//left
 						if nextLesson.scorewindID > 0 {
 							withAnimation{
 								scorewindData.currentLesson = nextLesson
 								switchLesson()
 							}
 						}
-						
 					}
-					else if self.startPos.x < gesture.location.x && yDist < xDist {
-						//right
+					else if self.startPos.y >  gesture.location.y && yDist > xDist {
+						//up
 						if previousLesson.scorewindID > 0 {
 							withAnimation{
 								scorewindData.currentLesson = previousLesson
@@ -224,34 +122,15 @@ struct LessonView: View {
 							}
 						}
 					}
+					else if self.startPos.x > gesture.location.x && yDist < xDist {
+						//left
+					}
+					else if self.startPos.x < gesture.location.x && yDist < xDist {
+						//right
+					}
 					self.isSwipping.toggle()
 				}
 		)
-		/*
-		 .sheet(isPresented: $showLessonSheet, onDismiss: {
-		 print("[debug] lastPlaybackTime\(scorewindData.lastPlaybackTime)")
-		 if scorewindData.lastPlaybackTime == 0.0 {
-		 //viewModel.highlightBar = 1
-		 magnifyStep = 1
-		 
-		 if scorewindData.currentLesson.videoMP4.isEmpty == false {
-		 viewModel.videoPlayer?.pause()
-		 viewModel.videoPlayer?.replaceCurrentItem(with: nil)
-		 }
-		 
-		 if scorewindData.lastViewAtScore == true {
-		 if scorewindData.currentTimestampRecs.count == 0 {
-		 scorewindData.lastViewAtScore = false
-		 }
-		 }
-		 
-		 if scorewindData.currentLesson.videoMP4.isEmpty == false {
-		 setupPlayer()
-		 }
-		 }
-		 }){
-		 LessonSheetView(isPresented: self.$showLessonSheet, showTip: $showTip)
-		 }*/
 	}
 	
 	private func decodeVideoURL(videoURL:String)->String{
@@ -336,7 +215,7 @@ struct LessonView: View {
 		}
 		
 		scorewindData.lastViewAtScore = true
-		
+		checkCurrentLessonCompleted()
 		setPreviousLesson()
 		setNextLesson()
 	}
@@ -365,11 +244,22 @@ struct LessonView: View {
 			}
 			
 			Button(action: {
-				print("completed")
+				if isCurrentLessonCompleted {
+					scorewindData.studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: false)
+				} else{
+					scorewindData.studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: true)
+				}
+				checkCurrentLessonCompleted()
 			}){
-				Label("Completed", systemImage: "checkmark.circle")
-					.labelStyle(.titleAndIcon)
-					.foregroundColor(.black)
+				if isCurrentLessonCompleted {
+					Label("Undo completed", systemImage: "checkmark.circle.fill")
+						.labelStyle(.titleAndIcon)
+						.foregroundColor(.green)
+				} else {
+					Label("Completed", systemImage: "checkmark.circle")
+						.labelStyle(.titleAndIcon)
+						.foregroundColor(.black)
+				}
 			}
 			
 			if previousLesson.scorewindID > 0 {
@@ -467,6 +357,16 @@ struct LessonView: View {
 			previousLesson = scorewindData.currentCourse.lessons[getCurrentIndex-1]
 		}else{
 			previousLesson = Lesson()
+		}
+	}
+	
+	private func checkCurrentLessonCompleted() {
+		print("[debug] LessonView, isLessonCompleted")
+		let getCompletedLesson = scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id)
+		if getCompletedLesson.contains(scorewindData.currentLesson.scorewindID) {
+			isCurrentLessonCompleted = true
+		} else{
+			isCurrentLessonCompleted = false
 		}
 	}
 }
