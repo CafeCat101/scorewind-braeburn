@@ -21,6 +21,7 @@ struct CourseView: View {
 	@State private var scrollOffset:CGFloat = .zero
 	@State private var dragOffset:CGFloat = .zero
 	@State private var underlineScrollOffset:CGFloat = .zero
+	@State private var completedLessons:[Int] = []
 	
 	var body: some View {
 		VStack {
@@ -113,10 +114,7 @@ struct CourseView: View {
 			 .frame(width:screenSize.width, height: 30)
 			 .foregroundColor(.gray)
 			 }*/
-			HStack {
-				courseProgressView()
-				Spacer()
-			}
+			courseProgressView()
 			.padding(EdgeInsets(top: 3, leading: 10, bottom: 2, trailing: 10))
 			
 			HStack {
@@ -136,6 +134,12 @@ struct CourseView: View {
 											.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
 										//.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
 										
+										if completedLessons.contains(lesson.scorewindID) {
+											Label("completed", systemImage: "checkmark.circle.fill")
+												.labelStyle(.iconOnly)
+												.foregroundColor(Color("LessonTitileHeighlight"))
+										}
+										
 										Button(action: {
 											scorewindData.currentLesson = lesson
 											scorewindData.setCurrentTimestampRecs()
@@ -145,7 +149,7 @@ struct CourseView: View {
 										}) {
 											Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
 												.multilineTextAlignment(.leading)
-												.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
+												.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color("LessonTitileHeighlight") : Color.black)
 												.font(Font.body.bold())
 											
 										}
@@ -236,20 +240,110 @@ struct CourseView: View {
 			scrollOffset = getSectionOffset(goToSection: selectedSection)//getInitialOffset()
 			scorewindData.findACourseByOrder(order: SearchParameter.DESC)
 			scorewindData.findACourseByOrder(order: SearchParameter.ASC)
+			completedLessons = scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id)
 		})
 	}
 	
 	@ViewBuilder
 	private func courseProgressView() -> some View {
 		//come back here after finish marking lesson complete
-		ForEach(0...(scorewindData.currentCourse.lessons.count-1), id:\.self){ index in
-			Circle()
-				.strokeBorder(Color.gray,lineWidth: 1)
-				.background(Circle().foregroundColor(Color.white))
-				.frame(width:10,height:10)
+		HStack {
+			//Spacer().frame(width:20)
+			Text("\(calculateCompletedLesson())/\(scorewindData.currentCourse.lessons.count) steps")
+				.foregroundColor(.gray)
+			HStack {
+				if calculateCompletedLesson() > 0 {
+					RoundedRectangle(cornerRadius: 4)
+						.foregroundColor(.yellow)
+						.frame(width:calculateProgressBarWidth()[0],height:10)
+					RoundedRectangle(cornerRadius: 4)
+						.foregroundColor(.gray)
+						.frame(width:calculateProgressBarWidth()[1],height:10)
+					/*if scorewindData.currentCourse.lessons.count <= 10 {
+						ForEach(1...calculateCompletedLesson(), id:\.self){ index in
+							Circle()
+								.strokeBorder(Color.gray,lineWidth: 1)
+								.background(Circle().foregroundColor(Color.yellow))
+								.frame(width:10,height:10)
+						}
+						ForEach(1...(scorewindData.currentCourse.lessons.count - calculateCompletedLesson()), id:\.self){ index in
+							Circle()
+								.strokeBorder(Color.gray,lineWidth: 1)
+								.background(Circle().foregroundColor(Color.white))
+								.frame(width:10,height:10)
+						}
+					} else {
+						RoundedRectangle(cornerRadius: 4)
+							.foregroundColor(.yellow)
+							.frame(width:calculateProgressBarWidth()[0],height:10)
+						RoundedRectangle(cornerRadius: 4)
+							.foregroundColor(.gray)
+							.frame(width:calculateProgressBarWidth()[1],height:10)
+					}*/
+				} else {
+					/*RoundedRectangle(cornerRadius: 4)
+						.stroke(.gray, lineWidth: 1)
+						.foregroundColor(Color("LessonSheet"))
+						.frame(width:calculateProgressBarWidth()[1],height:10)*/
+					if scorewindData.currentCourse.lessons.count <= 10 {
+						ForEach(((11-scorewindData.currentCourse.lessons.count)...10).reversed(), id:\.self){ number in
+							Circle()
+								.foregroundColor(Color.gray)
+								//.strokeBorder(Color.gray,lineWidth: 1)
+								.background(Circle().foregroundColor(Color.white))
+								.frame(width:10,height:10)
+						}
+					} else {
+						ForEach((1...10).reversed(), id:\.self){ number in
+							Circle()
+								.foregroundColor(Color.gray)
+								.background(Circle().foregroundColor(Color.white))
+								.frame(width:CGFloat(number),height:10)}
+						/*ForEach(1...10, id:\.self){ number in
+							if number <= 4 || number >= 8 {
+								Circle()
+									.strokeBorder(Color.gray,lineWidth: 1)
+									.background(Circle().foregroundColor(Color.white))
+									.frame(width:10,height:10)
+							} else {
+								Circle()
+									.strokeBorder(Color.gray,lineWidth: 1)
+									.background(Circle().foregroundColor(Color.gray))
+									.frame(width:5,height:5)
+							}
+						}*/
+					}
+				}
+			}
+			
 		}
-		Text("0/\(scorewindData.currentCourse.lessons.count) steps")
-			.foregroundColor(.gray)
+		
+	}
+	
+	private func calculateCompletedLesson() -> Int {
+		let getCompletedLessons = scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id)
+		var completedCount = 0
+		for i in 0..<scorewindData.currentCourse.lessons.count {
+			if getCompletedLessons.contains(scorewindData.currentCourse.lessons[i].scorewindID) {
+				completedCount += 1
+			}
+		}
+		print("[debug] CourseView, calculateCompletedLesson \(completedCount)")
+		return completedCount
+	}
+	
+	private func calculateProgressBarWidth() -> [CGFloat] {
+		let totalWidth:CGFloat = screenSize.width*0.7
+		let completedLessonCount:CGFloat = CGFloat(calculateCompletedLesson())
+		var completedWidth:CGFloat = 0.0
+		
+		completedWidth = totalWidth*completedLessonCount/10
+		
+		print("[deubg] CourseView, calculateProgressbarWidth, totalWidth: \(totalWidth)")
+		print("[deubg] CourseView, calculateProgressbarWidth, completedWidth: \(completedWidth)")
+		print("[deubg] CourseView, calculateProgressbarWidth, inCompletedWidth as int: \(Int((totalWidth-completedWidth)))")
+		
+		return [completedWidth,(totalWidth-completedWidth)]
 	}
 	
 	@ViewBuilder
@@ -333,6 +427,11 @@ struct CourseView: View {
 					Text("After removing downloads, you can not take course offline. Continue?")
 				}
 			})
+		}
+		.padding()
+		.background{
+			RoundedRectangle(cornerRadius: 10)
+				.stroke(Color("downloadCourse"), lineWidth:1)
 		}
 	}
 	

@@ -33,17 +33,17 @@ struct TipModalView: View {
 					 .opacity(0.3)*/
 				}
 				.frame(maxWidth: .infinity, maxHeight: .infinity)
-				.background(Color.black)
-				.foregroundColor(Color.white)
+				.background(Color.black)//.foregroundColor(Color.white)
 				.opacity(0.6)
 				.overlay(content: {
 					if scorewindData.currentTip == Tip.lessonScoreViewer {
 						Circle()
 							.strokeBorder(.gray,lineWidth: 1)
 							.background(Circle().foregroundColor(.white))
-							.frame(width:200,height:200)
+							.frame(width:400,height:500)
 							.overlay(
-								Text("Tip! Swipe left to see score.").foregroundColor(.black)
+								Text("Tip! Check out what you can do from the menu at up right corner.\n\nYou can also swipe lef and right to switch lessons.").foregroundColor(.black)
+									.frame(width:300,height:400)
 							)
 					} else {
 						Circle()

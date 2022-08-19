@@ -25,6 +25,24 @@ struct LessonView: View {
 	@State private var isCurrentLessonCompleted = false
 	
 	var body: some View {
+		/*ZStack {
+			VStack {
+				
+			}
+			.frame(maxWidth: .infinity, maxHeight: .infinity)
+			.background(Color.black)//.foregroundColor(Color.white)
+			.opacity(0.6)
+			.overlay(content: {
+				RoundedRectangle(cornerRadius: 20)
+					.foregroundColor(.yellow)
+					.frame(width:300, height:300)
+			})
+		}
+		.background(BackgroundCleanerView())
+		.onAppear(perform: {
+			
+		})*/
+		
 		VStack {
 			if scorewindData.currentView == Page.lesson {
 				HStack {
@@ -53,7 +71,7 @@ struct LessonView: View {
 						viewModel.videoPlayer!.replaceCurrentItem(with: nil)
 					})
 					.background(.black)
-					.overlay(lessonViewMenu(), alignment: .topLeading)
+					.overlay(lessonViewMenu().opacity(scorewindData.currentView==Page.lessonFullScreen ? 1:0.0).disabled(scorewindData.currentView==Page.lessonFullScreen ? false:true), alignment: .topLeading)
 			}
 			
 			if scorewindData.currentTimestampRecs.count > 0 {
@@ -72,12 +90,13 @@ struct LessonView: View {
 			print("[debug] LessonView onAppear")
 			if scorewindData.currentView != Page.lessonFullScreen {
 				scorewindData.currentView = Page.lesson
+				scorewindData.lastViewAtScore = true
 			}
 			
-			/*if scorewindData.getTipCount(tipType: .lessonScoreViewer) < TipLimit.lessonScoreViewer.rawValue {
+			if scorewindData.getTipCount(tipType: .lessonScoreViewer) < TipLimit.lessonScoreViewer.rawValue {
 				scorewindData.currentTip = .lessonScoreViewer
 				showTip = true
-			}*/
+			}
 			
 			if scorewindData.currentLesson.videoMP4.isEmpty == false {
 				setupPlayer()
@@ -106,6 +125,12 @@ struct LessonView: View {
 					let yDist =  abs(gesture.location.y - self.startPos.y)
 					if self.startPos.y <  gesture.location.y && yDist > xDist {
 						//down
+					}
+					else if self.startPos.y >  gesture.location.y && yDist > xDist {
+						//up
+					}
+					else if self.startPos.x > gesture.location.x && yDist < xDist {
+						//left
 						if nextLesson.scorewindID > 0 {
 							withAnimation{
 								scorewindData.currentLesson = nextLesson
@@ -113,20 +138,14 @@ struct LessonView: View {
 							}
 						}
 					}
-					else if self.startPos.y >  gesture.location.y && yDist > xDist {
-						//up
+					else if self.startPos.x < gesture.location.x && yDist < xDist {
+						//right
 						if previousLesson.scorewindID > 0 {
 							withAnimation{
 								scorewindData.currentLesson = previousLesson
 								switchLesson()
 							}
 						}
-					}
-					else if self.startPos.x > gesture.location.x && yDist < xDist {
-						//left
-					}
-					else if self.startPos.x < gesture.location.x && yDist < xDist {
-						//right
 					}
 					self.isSwipping.toggle()
 				}
@@ -235,11 +254,9 @@ struct LessonView: View {
 				if scorewindData.currentView == Page.lesson {
 					Label("Focus mode", systemImage: "lightbulb.circle")
 						.labelStyle(.titleAndIcon)
-						.foregroundColor(.black)
 				} else {
 					Label("Explore mode", systemImage: "lightbulb.circle")
 						.labelStyle(.titleAndIcon)
-						.foregroundColor(.black)
 				}
 			}
 			
@@ -254,11 +271,9 @@ struct LessonView: View {
 				if isCurrentLessonCompleted {
 					Label("Undo completed", systemImage: "checkmark.circle.fill")
 						.labelStyle(.titleAndIcon)
-						.foregroundColor(.green)
 				} else {
 					Label("Completed", systemImage: "checkmark.circle")
 						.labelStyle(.titleAndIcon)
-						.foregroundColor(.black)
 				}
 			}
 			
@@ -288,14 +303,12 @@ struct LessonView: View {
 					}){
 						Label("Zoom in", systemImage: "minus.magnifyingglass")
 							.labelStyle(.titleAndIcon)
-							.foregroundColor(.black)
 					}
 					Button(action: {
 						viewModel.zoomInPublisher.send("Zoom Out")
 					}){
 						Label("Zoom out", systemImage: "plus.magnifyingglass")
 							.labelStyle(.titleAndIcon)
-							.foregroundColor(.black)
 					}
 				} label: {
 					Text("Score")
@@ -311,30 +324,19 @@ struct LessonView: View {
 					if scorewindData.lastViewAtScore == false {
 						Label("Hide lesson text", systemImage: "doc.plaintext")
 							.labelStyle(.titleAndIcon)
-							.foregroundColor(.black)
 					} else {
 						Label("Show lesson text", systemImage: "doc.plaintext")
 							.labelStyle(.titleAndIcon)
-							.foregroundColor(.black)
 					}
 				}
 			}
 			
 		} label: {
-			if scorewindData.currentView == Page.lesson {
-				Image(systemName: "list.bullet.circle")
-					.resizable()
-					.scaledToFit()
-					.frame(height: screenSize.height/25 - 4)
-					.foregroundColor(.black)
-			} else {
-				Image(systemName: "list.bullet.circle")
-					.resizable()
-					.scaledToFit()
-					.frame(height: screenSize.height/25 - 4)
-					.foregroundColor(.white)
-			}
-			
+			Image(systemName: isCurrentLessonCompleted==false ? "list.bullet.circle":"text.badge.checkmark")
+				.resizable()
+				.scaledToFit()
+				.frame(height: screenSize.height/25 - 4)
+				.foregroundColor(scorewindData.currentView == Page.lesson ? .black:.white)
 		}
 	}
 	
@@ -368,6 +370,18 @@ struct LessonView: View {
 		} else{
 			isCurrentLessonCompleted = false
 		}
+	}
+	
+	struct BackgroundCleanerView: UIViewRepresentable {
+		func makeUIView(context: Context) -> UIView {
+			let view = UIView()
+			DispatchQueue.main.async {
+				view.superview?.superview?.backgroundColor = .clear
+			}
+			return view
+		}
+		
+		func updateUIView(_ uiView: UIView, context: Context) {}
 	}
 }
 

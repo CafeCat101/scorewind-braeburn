@@ -9,5 +9,5 @@ import Foundation
 
 enum TipLimit:Int {
 	case `default` = 1
-	case lessonScoreViewer = 3
+	case lessonScoreViewer = 2
 }
