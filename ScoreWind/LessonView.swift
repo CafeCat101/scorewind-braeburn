@@ -40,7 +40,6 @@ struct LessonView: View {
 		}
 		.background(BackgroundCleanerView())
 		.onAppear(perform: {
-			
 		})*/
 		
 		VStack {
