@@ -35,18 +35,13 @@ struct CourseView: View {
 			.frame(height: screenSize.height/25)
 			.padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 15))
 			
-			/*Text("\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentCourse.title))")
-				.font(.title3)
-				.frame(width:screenSize.width*0.95, height: screenSize.height/25)
-				.truncationMode(.tail)*/
-			
+			//show course section menus
 			HStack {
 				Button(action: {
 					selectedSection = courseSection.overview
 					withAnimation {
-						scrollOffset = getNewOffset(goToSection: selectedSection)//getSectionOffset(goToSection: selectedSection)//400
+						scrollOffset = getNewOffset(goToSection: selectedSection)
 						dragOffset = 0
-						//underlineScrollOffset = 0-screenSize.width/3
 					}
 					
 				}) {
@@ -65,7 +60,6 @@ struct CourseView: View {
 					withAnimation {
 						scrollOffset = getNewOffset(goToSection: selectedSection)//getSectionOffset(goToSection: selectedSection)//0
 						dragOffset = 0
-						//underlineScrollOffset = 0
 					}
 					
 				}) {
@@ -79,9 +73,8 @@ struct CourseView: View {
 				Button(action: {
 					selectedSection = courseSection.continue
 					withAnimation {
-						scrollOffset = getNewOffset(goToSection: selectedSection)//getSectionOffset(goToSection: selectedSection)//-400
+						scrollOffset = getNewOffset(goToSection: selectedSection)
 						dragOffset = 0
-						//underlineScrollOffset = screenSize.width/3
 					}
 				}) {
 					Text("Continue")
@@ -103,20 +96,11 @@ struct CourseView: View {
 			.frame(width:screenSize.width*3)
 			.offset(x: underlineScrollOffset - dragOffset/3, y: 0)
 			
-			/*HStack{
-			 Rectangle()
-			 .frame(width:screenSize.width-4, height: 5)
-			 .foregroundColor(.white)
-			 }
-			 .padding(EdgeInsets(top: 2, leading: 1, bottom: 2, trailing: 1))
-			 .background{
-			 Rectangle()
-			 .frame(width:screenSize.width, height: 30)
-			 .foregroundColor(.gray)
-			 }*/
+			//show course progress
 			courseProgressView()
 			.padding(EdgeInsets(top: 3, leading: 10, bottom: 2, trailing: 10))
 			
+			//show sections in course
 			HStack {
 				//Overview section
 				HTMLString(htmlContent: scorewindData.removeWhatsNext(Text: overViewContent()))
@@ -126,7 +110,7 @@ struct CourseView: View {
 				VStack {
 					courseDownloadButtonView()
 					List {
-						Section(header: Text("In This Course...")){
+						Section(header: Text("Course content")){
 							ForEach(scorewindData.currentCourse.lessons){ lesson in
 								VStack {
 									HStack {
@@ -162,7 +146,7 @@ struct CourseView: View {
 										Spacer()
 									}
 								}
-								.padding(EdgeInsets(top: 15, leading: 10, bottom: 15, trailing: 10))
+								.padding(EdgeInsets(top: 10, leading: 10, bottom: 15, trailing: 10))
 								.background{
 									RoundedRectangle(cornerRadius: 10)
 										.foregroundColor(Color("LessonTextBg"))
@@ -246,9 +230,7 @@ struct CourseView: View {
 	
 	@ViewBuilder
 	private func courseProgressView() -> some View {
-		//come back here after finish marking lesson complete
 		HStack {
-			//Spacer().frame(width:20)
 			Text("\(calculateCompletedLesson())/\(scorewindData.currentCourse.lessons.count) steps")
 				.foregroundColor(.gray)
 			HStack {
@@ -289,7 +271,6 @@ struct CourseView: View {
 						ForEach(((11-scorewindData.currentCourse.lessons.count)...10).reversed(), id:\.self){ number in
 							Circle()
 								.foregroundColor(Color.gray)
-								//.strokeBorder(Color.gray,lineWidth: 1)
 								.background(Circle().foregroundColor(Color.white))
 								.frame(width:10,height:10)
 						}
@@ -315,9 +296,7 @@ struct CourseView: View {
 					}
 				}
 			}
-			
 		}
-		
 	}
 	
 	private func calculateCompletedLesson() -> Int {
