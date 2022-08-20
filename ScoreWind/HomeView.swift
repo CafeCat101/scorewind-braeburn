@@ -86,6 +86,9 @@ struct HomeView: View {
 				} else if newPhase == .background {
 					print("[debug] HomeView, app is in the background")
 					downloadManager.appState = .background
+					if (scorewindData.currentLesson.scorewindID > 0) && (scorewindData.lastPlaybackTime >= 0.10) {
+						scorewindData.studentData.updateWatchedLessons(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, addWatched: true)
+					}
 				}
 			})
 			/*.onChange(of: selectedTab, perform: { newValue in
@@ -127,6 +130,9 @@ struct HomeView: View {
 						} else if newPhase == .background {
 							print("[debug] LessonView, app is in the background")
 							downloadManager.appState = .background
+							if (scorewindData.currentLesson.scorewindID > 0) && (scorewindData.lastPlaybackTime >= 0.10) {
+								scorewindData.studentData.updateWatchedLessons(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, addWatched: true)
+							}
 						}
 					})
 					.onReceive(downloadManager.downloadTaskPublisher, perform: { clonedDownloadList in

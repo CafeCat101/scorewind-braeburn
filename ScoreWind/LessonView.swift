@@ -67,6 +67,9 @@ struct LessonView: View {
 					.onDisappear(perform: {
 						//VideoPlayer disappears when go to another tab view, not when sheet appears
 						print("[debug] VideoPlayer onDisappear")
+						if scorewindData.lastPlaybackTime >= 0.10 {
+							scorewindData.studentData.updateWatchedLessons(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, addWatched: true)
+						}
 						viewModel.videoPlayer!.pause()
 						viewModel.videoPlayer!.replaceCurrentItem(with: nil)
 					})

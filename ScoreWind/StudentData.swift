@@ -21,31 +21,18 @@ class StudentData: ObservableObject {
 		useriCloudKeyValueStore.synchronize()
 	}
 	
-	func getEnrolledCourses()->[String:Any] {
-		return useriCloudKeyValueStore.dictionary(forKey:"enrolledCourses") ?? [:]
-	}
-	
-	func updateEnrolledCourse(courseID:Int, isCompleted: Bool) {
-		var enrolledCourses = getEnrolledCourses()
-		enrolledCourses.updateValue(isCompleted, forKey: String(courseID))
-		useriCloudKeyValueStore.set(enrolledCourses,forKey: "enrolledCourses")
-		useriCloudKeyValueStore.synchronize()
-	}
-	
+	//track completed lessons
 	func getCompletedLessons() -> [String:Any] {
 		return useriCloudKeyValueStore.dictionary(forKey: "completedLessons") ?? [:]
 	}
 	
 	func getCompletedLessons(courseID:Int)->[Int] {
-		let getAllCompletedLessons = useriCloudKeyValueStore.dictionary(forKey:"completedLessons") ?? [:]
 		var filteredLessons:[Int] = []
-		
-		for lesson in getAllCompletedLessons {
+		for lesson in getCompletedLessons() {
 			if lesson.value as! Int == courseID {
 				filteredLessons.append(Int(lesson.key)!)
 			}
 		}
-		print(filteredLessons)
 		return filteredLessons
 	}
 	
@@ -56,10 +43,43 @@ class StudentData: ObservableObject {
 		} else{
 			allLessons.removeValue(forKey: String(lessonID))
 		}
-		
 		useriCloudKeyValueStore.set(allLessons,forKey: "completedLessons")
 		useriCloudKeyValueStore.synchronize()
 	}
+	
+	//track watched lessons
+	func getWatchedLessons() -> [String:Any] {
+		return useriCloudKeyValueStore.dictionary(forKey: "watchedLessons") ?? [:]
+	}
+	
+	func getWatchedLessons(courseID:Int)->[Int] {
+		var filteredLessons:[Int] = []
+		for watchedItem in getWatchedLessons() {
+			if (watchedItem.value as! String).contains(String(courseID)+"/") {
+				filteredLessons.append(Int(watchedItem.key)!)
+			}
+		}
+		print("[debug] StudentData, getWatchedLessons, courseID\(courseID), \(filteredLessons)")
+		return filteredLessons
+	}
+	
+	func updateWatchedLessons(courseID:Int, lessonID:Int, addWatched:Bool) {
+		var allLessons = getWatchedLessons()
+		let now = Date()
+		let nowFormatter = DateFormatter()
+		nowFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+		let watchedString = String(courseID)+"/"+nowFormatter.string(from: now)
+		
+		if addWatched {
+			allLessons.updateValue(watchedString, forKey: String(lessonID))
+		} else{
+			allLessons.removeValue(forKey: String(lessonID))
+		}
+		
+		useriCloudKeyValueStore.set(allLessons,forKey: "watchedLessons")
+		useriCloudKeyValueStore.synchronize()
+	}
+	
 	
 	func removeAKey(keyName:String){
 		useriCloudKeyValueStore.removeObject(forKey: keyName)

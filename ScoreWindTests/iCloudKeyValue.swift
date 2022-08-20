@@ -35,7 +35,8 @@ class iCloudKeyValue: XCTestCase {
 		//remove enrolled courses: enrolledCourses
 		//remove instrument preference: instrument
 		//remove completed lessons: completedLessons
-		XCTAssertNoThrow(studentDataModel.removeAKey(keyName: "completedLessons"))
+		//remove watched lessons:watchedLessons
+		XCTAssertNoThrow(studentDataModel.removeAKey(keyName: "watchedLessons"))
 		studentDataModel.backendReadAllKeys()
 	}
 	
@@ -54,6 +55,15 @@ class iCloudKeyValue: XCTestCase {
 	
 	func testGetCompletedLessons() throws {
 		XCTAssertNoThrow(studentDataModel.getCompletedLessons(courseID: 123));
+	}
+	
+	func testUpdateWatchedLesson() throws {
+		XCTAssertNoThrow(studentDataModel.updateWatchedLessons(courseID: 123, lessonID: 888, addWatched: true))
+		XCTAssertNoThrow(studentDataModel.updateWatchedLessons(courseID: 124, lessonID: 222, addWatched: true))
+	}
+	
+	func testGetWatchedLessons() throws {
+		XCTAssertNoThrow(studentDataModel.getWatchedLessons(courseID: 123))
 	}
 	
 	/*func testUpdateEnrolledCourses() throws {
