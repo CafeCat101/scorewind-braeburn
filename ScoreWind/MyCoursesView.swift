@@ -10,6 +10,7 @@ import SwiftUI
 struct MyCoursesView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@Binding var selectedTab:String
+	@State private var getMyCourses:[MyCourse] = []
 	
 	var body: some View {
 		VStack {
@@ -19,10 +20,50 @@ struct MyCoursesView: View {
 						.labelStyle(.titleAndIcon)
 				Spacer()
 			}.padding().background(Color("ScreenTitleBg"))*/
-			Label("Scorewind", systemImage: "music.note")
+			Label("My Courses", systemImage: "music.note")
 					.labelStyle(.titleAndIcon)
-			Spacer()
-			Text("My Courses View")
+			
+			ScrollView {
+				ForEach(getMyCourses) { aCourse in
+					VStack {
+						HStack {
+							Text(scorewindData.replaceCommonHTMLNumber(htmlString: aCourse.courseTitle))
+								.font(.headline)
+								.multilineTextAlignment(.leading)
+								.foregroundColor(.black)
+							Spacer()
+						}
+						HStack {
+							if aCourse.completedLessons.count>0 {
+								courseProgressView(myCourse: aCourse)
+							}
+							if aCourse.watchedLessons.count>0 {
+								Label("Watched", systemImage: "eye.circle.fill")
+									.labelStyle(.iconOnly)
+									.foregroundColor(.gray)
+							}
+							Spacer()
+						}
+						.padding(EdgeInsets(top: 5, leading: 0, bottom: 0, trailing: 10))
+					}
+					.padding(EdgeInsets(top: 10, leading: 10, bottom: 15, trailing: 10))
+					.background{
+						RoundedRectangle(cornerRadius: 10)
+							.foregroundColor(Color("MyCourseItem"))
+					}
+					.onTapGesture(perform: {
+						scorewindData.currentCourse = scorewindData.allCourses.first(where: {$0.id == aCourse.courseID}) ?? Course()
+						scorewindData.currentView = Page.course
+						self.selectedTab = "TCourse"
+						scorewindData.currentLesson = scorewindData.currentCourse.lessons[0]
+						scorewindData.setCurrentTimestampRecs()
+						scorewindData.lastViewAtScore = true
+						scorewindData.lastPlaybackTime = 0.0
+					})
+				}
+			}
+			.padding()
+			
 			Spacer()
 			/*if scorewindData.studentData.getInstrumentChoice() == "" {
 			 Text("== no instrument choice ==")
@@ -34,7 +75,24 @@ struct MyCoursesView: View {
 			 }*/
 			
 		}
+		.onAppear(perform: {
+			print("[debug] MyCourseView, onAppear")
+			getMyCourses = scorewindData.studentData.myCourses(allCourses: scorewindData.allCourses)
+			print("[debug] MyCourseView, getMyCourses.count \(getMyCourses.count)")
+		})
 		
+	}
+	
+	@ViewBuilder
+	private func courseProgressView(myCourse:MyCourse) -> some View {
+		let findCourseInAll = scorewindData.allCourses.first(where: {$0.id == myCourse.courseID}) ?? Course()
+		if findCourseInAll.id > 0 {
+			if myCourse.completedLessons.count > 0 {
+				Label("\(myCourse.completedLessons.count)/\(findCourseInAll.lessons.count) lessons", systemImage: "checkmark.circle.fill")
+					.labelStyle(.titleAndIcon)
+					.foregroundColor(.gray)
+			}			
+		}
 	}
 }
 

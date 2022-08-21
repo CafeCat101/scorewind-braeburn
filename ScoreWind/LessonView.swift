@@ -245,6 +245,23 @@ struct LessonView: View {
 	private func lessonViewMenu() -> some View {
 		Menu {
 			Button(action: {
+				if isCurrentLessonCompleted {
+					scorewindData.studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: false)
+				} else{
+					scorewindData.studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: true)
+				}
+				checkCurrentLessonCompleted()
+			}){
+				if isCurrentLessonCompleted {
+					Label("Undo completed", systemImage: "checkmark.circle.fill")
+						.labelStyle(.titleAndIcon)
+				} else {
+					Label("Completed", systemImage: "checkmark.circle")
+						.labelStyle(.titleAndIcon)
+				}
+			}
+			
+			Button(action: {
 				withAnimation {
 					if scorewindData.currentView == Page.lesson {
 						scorewindData.currentView = Page.lessonFullScreen
@@ -258,23 +275,6 @@ struct LessonView: View {
 						.labelStyle(.titleAndIcon)
 				} else {
 					Label("Explore mode", systemImage: "lightbulb.circle")
-						.labelStyle(.titleAndIcon)
-				}
-			}
-			
-			Button(action: {
-				if isCurrentLessonCompleted {
-					scorewindData.studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: false)
-				} else{
-					scorewindData.studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: true)
-				}
-				checkCurrentLessonCompleted()
-			}){
-				if isCurrentLessonCompleted {
-					Label("Undo completed", systemImage: "checkmark.circle.fill")
-						.labelStyle(.titleAndIcon)
-				} else {
-					Label("Completed", systemImage: "checkmark.circle")
 						.labelStyle(.titleAndIcon)
 				}
 			}
