@@ -25,23 +25,6 @@ struct LessonView: View {
 	@State private var isCurrentLessonCompleted = false
 	
 	var body: some View {
-		/*ZStack {
-			VStack {
-				
-			}
-			.frame(maxWidth: .infinity, maxHeight: .infinity)
-			.background(Color.black)//.foregroundColor(Color.white)
-			.opacity(0.6)
-			.overlay(content: {
-				RoundedRectangle(cornerRadius: 20)
-					.foregroundColor(.yellow)
-					.frame(width:300, height:300)
-			})
-		}
-		.background(BackgroundCleanerView())
-		.onAppear(perform: {
-		})*/
-		
 		VStack {
 			if scorewindData.currentView == Page.lesson {
 				HStack {
@@ -67,6 +50,7 @@ struct LessonView: View {
 						//VideoPlayer disappears when go to another tab view, not when sheet appears
 						print("[debug] VideoPlayer onDisappear")
 						if scorewindData.lastPlaybackTime >= 0.10 {
+							print("[debug] VideoPlayer onDisappear, lastPlayBackTime>=0.10")
 							scorewindData.studentData.updateWatchedLessons(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, addWatched: true)
 						}
 						viewModel.videoPlayer!.pause()
@@ -78,21 +62,16 @@ struct LessonView: View {
 			
 			if scorewindData.currentTimestampRecs.count > 0 {
 				LessonScoreView(viewModel: viewModel)
-					.overlay {
-						if scorewindData.lastViewAtScore == false {
-							HTMLString(htmlContent: scorewindData.currentLesson.content)
-						}
-					}
-			} else {
-				HTMLString(htmlContent: scorewindData.currentLesson.content)
 			}
 			Spacer()
 		}
 		.onAppear(perform: {
+			//:LesssonView onAppear will not be triggered after sheet goes away.
+			//:LessonView onAppear will be triggered when switching tab/full screen mode.
 			print("[debug] LessonView onAppear")
 			if scorewindData.currentView != Page.lessonFullScreen {
 				scorewindData.currentView = Page.lesson
-				scorewindData.lastViewAtScore = true
+				//scorewindData.lastViewAtScore = true
 			}
 			
 			if scorewindData.getTipCount(tipType: .lessonScoreViewer) < TipLimit.lessonScoreViewer.rawValue {
@@ -107,9 +86,11 @@ struct LessonView: View {
 					viewModel.playerSeek(timestamp: scorewindData.lastPlaybackTime)
 				}
 			}
+			
 			checkCurrentLessonCompleted()
 			setNextLesson()
 			setPreviousLesson()
+			print("[debug] LessonView onAppear,showLessonSheet \(scorewindData.showLessonTextOverlay)")
 		})
 		.onDisappear(perform: {
 			print("[debug] LessonView onDisappear")
@@ -152,6 +133,29 @@ struct LessonView: View {
 					self.isSwipping.toggle()
 				}
 		)
+		.sheet(isPresented: $scorewindData.showLessonTextOverlay, content: {
+			VStack {
+				Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))
+					.font(.title)
+					.foregroundColor(.black)
+					.padding()
+				HTMLString(htmlContent: scorewindData.currentLesson.content)
+					Spacer()
+				Button(action:{
+					//showLessonSheet = false
+					scorewindData.showLessonTextOverlay = false
+				}){
+					Text("Continue")
+						.foregroundColor(.black)
+						.padding(15)
+						.background {
+							RoundedRectangle(cornerRadius: 10)
+								.foregroundColor(Color("ScreenTitleBg"))
+						}
+				}
+				Spacer()
+			}
+		})
 	}
 	
 	private func decodeVideoURL(videoURL:String)->String{
@@ -228,14 +232,19 @@ struct LessonView: View {
 		//when switch lesson with menu, onAppear is not triggered.
 		//prepare for the lesson content change here.
 		//magnifyStep = 1
+		scorewindData.setCurrentTimestampRecs()
+		scorewindData.lastPlaybackTime = 0.0
 		
 		if scorewindData.currentLesson.videoMP4.isEmpty == false {
 			viewModel.videoPlayer?.pause()
 			viewModel.videoPlayer?.replaceCurrentItem(with: nil)
 			setupPlayer()
 		}
-		
-		scorewindData.lastViewAtScore = true
+		//showLessonSheet = true
+		if scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindData.currentLesson.scorewindID) == false {
+			scorewindData.showLessonTextOverlay = true
+		}
+		//scorewindData.lastViewAtScore = true
 		checkCurrentLessonCompleted()
 		setPreviousLesson()
 		setNextLesson()
@@ -315,21 +324,16 @@ struct LessonView: View {
 				} label: {
 					Text("Score")
 				}
-				
-				//always show score first now. So just show/hide text when the score is
-				//available
+			}
+			
+			//show lesson text in sheet
+			if scorewindData.currentLesson.content.isEmpty == false {
 				Button(action: {
-					withAnimation {
-						scorewindData.lastViewAtScore.toggle()
-					}
+					//showLessonSheet = true
+					scorewindData.showLessonTextOverlay = true
 				}){
-					if scorewindData.lastViewAtScore == false {
-						Label("Hide lesson text", systemImage: "doc.plaintext")
-							.labelStyle(.titleAndIcon)
-					} else {
-						Label("Show lesson text", systemImage: "doc.plaintext")
-							.labelStyle(.titleAndIcon)
-					}
+					Label("Show lesson text", systemImage: "doc.plaintext")
+						.labelStyle(.titleAndIcon)
 				}
 			}
 			
@@ -374,16 +378,26 @@ struct LessonView: View {
 		}
 	}
 	
-	struct BackgroundCleanerView: UIViewRepresentable {
-		func makeUIView(context: Context) -> UIView {
-			let view = UIView()
-			DispatchQueue.main.async {
-				view.superview?.superview?.backgroundColor = .clear
-			}
-			return view
+	private func compareLessonDescription() -> Bool{
+		let lessonTextWithoutTags = scorewindData.currentLesson.content.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
+		if lessonTextWithoutTags.caseInsensitiveCompare(scorewindData.currentLesson.description) == .orderedSame{
+			return true
+		} else {
+			return false
 		}
-		
-		func updateUIView(_ uiView: UIView, context: Context) {}
+	}
+	
+	struct videoFrameModifier : ViewModifier {
+			var splitView : Bool
+		var screenHeight: CGFloat
+			
+			@ViewBuilder func body(content: Content) -> some View {
+					if splitView {
+						content.frame(height: screenHeight*0.35)
+					} else {
+						content
+					}
+			}
 	}
 }
 

@@ -22,6 +22,7 @@ struct CourseView: View {
 	@State private var dragOffset:CGFloat = .zero
 	@State private var underlineScrollOffset:CGFloat = .zero
 	@State private var completedLessons:[Int] = []
+	@State private var watchedLessons:[Int] = []
 	@State private var vScrolling = false
 	
 	var body: some View {
@@ -119,17 +120,13 @@ struct CourseView: View {
 											.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
 										//.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
 										
-										if completedLessons.contains(lesson.scorewindID) {
-											Label("completed", systemImage: "checkmark.circle.fill")
-												.labelStyle(.iconOnly)
-												.foregroundColor(Color("LessonTitileHeighlight"))
-										}
+										lessonIsons(scorewindID: lesson.scorewindID)
 										
 										Button(action: {
 											scorewindData.currentLesson = lesson
 											scorewindData.setCurrentTimestampRecs()
 											scorewindData.lastPlaybackTime = 0.0
-											scorewindData.lastViewAtScore = true
+											//scorewindData.lastViewAtScore = true
 											self.selectedTab = "TLesson"
 										}) {
 											Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
@@ -235,6 +232,7 @@ struct CourseView: View {
 			scorewindData.findACourseByOrder(order: SearchParameter.DESC)
 			scorewindData.findACourseByOrder(order: SearchParameter.ASC)
 			completedLessons = scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id)
+			watchedLessons = scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id)
 		})
 	}
 	
@@ -527,6 +525,21 @@ struct CourseView: View {
 		} else {
 			underlineScrollOffset = 0-screenSize.width/3
 			return contentWidth/CGFloat(sectionCount)
+		}
+	}
+	
+	@ViewBuilder
+	private func lessonIsons(scorewindID:Int) -> some View {
+		if completedLessons.contains(scorewindID) {
+			Label("completed", systemImage: "checkmark.circle.fill")
+				.labelStyle(.iconOnly)
+				.foregroundColor(Color("LessonTitileHeighlight"))
+		}
+		
+		if watchedLessons.contains(scorewindID) {
+			Label("completed", systemImage: "eye.circle.fill")
+				.labelStyle(.iconOnly)
+				.foregroundColor(Color("LessonTitileHeighlight"))
 		}
 	}
 

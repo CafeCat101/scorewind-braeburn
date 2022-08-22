@@ -17,7 +17,8 @@ class ScorewindData: ObservableObject {
 	@Published var currentTimestampRecs:[TimestampRec] = []
 	@Published var studentData: StudentData
 	@Published var currentView = Page.wizard
-	@Published var lastViewAtScore = true
+	//@Published var lastViewAtScore = true
+	@Published var showLessonTextOverlay = false
 	let courseURL = URL(fileURLWithPath: "courses_ios", relativeTo: FileManager.documentoryDirecotryURL).appendingPathExtension("json")
 	let timestampURL = URL(fileURLWithPath: "timestamps_ios", relativeTo: FileManager.documentoryDirecotryURL).appendingPathExtension("json")
 	let courseWPURL = "https://scorewind.com/courses_ios.json"

@@ -96,7 +96,8 @@ class StudentData: ObservableObject {
 	func myCourses(allCourses:[Course]) -> [MyCourse] {
 		print("[debug] StudentData, myCourses")
 		myCourses.removeAll()
-		for lesson in getCompletedLessons() {
+		let lessons = getCompletedLessons().sorted { (Int($0.key)!)<(Int($1.key)!)}
+		for lesson in lessons {
 			let findCourseInAll = allCourses.first(where: {$0.id == (lesson.value as! Int)}) ?? Course()
 			print("[debug] StudentData, myCourses, findCourseInAll.id \(findCourseInAll.id)")
 			

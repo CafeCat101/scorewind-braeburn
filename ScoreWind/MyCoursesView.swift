@@ -38,8 +38,8 @@ struct MyCoursesView: View {
 								courseProgressView(myCourse: aCourse)
 							}
 							if aCourse.watchedLessons.count>0 {
-								Label("Watched", systemImage: "eye.circle.fill")
-									.labelStyle(.iconOnly)
+								Label("\(aCourse.watchedLessons.count)", systemImage: "eye.circle.fill")
+									.labelStyle(.titleAndIcon)
 									.foregroundColor(.gray)
 							}
 							Spacer()
@@ -57,7 +57,7 @@ struct MyCoursesView: View {
 						self.selectedTab = "TCourse"
 						scorewindData.currentLesson = scorewindData.currentCourse.lessons[0]
 						scorewindData.setCurrentTimestampRecs()
-						scorewindData.lastViewAtScore = true
+						//scorewindData.lastViewAtScore = true
 						scorewindData.lastPlaybackTime = 0.0
 					})
 				}
