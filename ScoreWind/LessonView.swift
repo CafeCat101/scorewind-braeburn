@@ -23,6 +23,8 @@ struct LessonView: View {
 	@State private var nextLesson = Lesson()
 	@State private var previousLesson = Lesson()
 	@State private var isCurrentLessonCompleted = false
+	@State private var splitScreen = true
+	@State private var isFullScreen = false
 	
 	var body: some View {
 		VStack {
@@ -41,7 +43,8 @@ struct LessonView: View {
 			
 			if scorewindData.currentLesson.videoMP4.isEmpty == false {
 				VideoPlayer(player: viewModel.videoPlayer)
-					.frame(height: screenSize.height*0.35)
+					//.frame(height: scorewindData.currentTimestampRecs.count > 0 ? screenSize.height*0.35 : screenSize.height)
+					.modifier(videoFrameModifier(splitView: splitScreen, screenHeight: screenSize.height))
 					.onAppear(perform: {
 						//VideoPlayer onAppear when comeing from anohter tab view, not when the sheet disappears
 						print("[debug] VideoPlayer onAppear")
@@ -62,8 +65,10 @@ struct LessonView: View {
 			
 			if scorewindData.currentTimestampRecs.count > 0 {
 				LessonScoreView(viewModel: viewModel)
+			} else {
+				Spacer()
 			}
-			Spacer()
+			
 		}
 		.onAppear(perform: {
 			//:LesssonView onAppear will not be triggered after sheet goes away.
@@ -71,7 +76,16 @@ struct LessonView: View {
 			print("[debug] LessonView onAppear")
 			if scorewindData.currentView != Page.lessonFullScreen {
 				scorewindData.currentView = Page.lesson
+				isFullScreen = false
 				//scorewindData.lastViewAtScore = true
+			} else {
+				isFullScreen = true
+			}
+			
+			if scorewindData.currentTimestampRecs.count > 0 {
+				splitScreen = true
+			} else {
+				splitScreen = false
 			}
 			
 			if scorewindData.getTipCount(tipType: .lessonScoreViewer) < TipLimit.lessonScoreViewer.rawValue {
@@ -135,12 +149,17 @@ struct LessonView: View {
 		)
 		.sheet(isPresented: $scorewindData.showLessonTextOverlay, content: {
 			VStack {
+				HStack {
+					Spacer()
 				Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))
 					.font(.title)
 					.foregroundColor(.black)
 					.padding()
-				HTMLString(htmlContent: scorewindData.currentLesson.content)
 					Spacer()
+				}.background(.yellow)
+				HTMLString(htmlContent: scorewindData.currentLesson.content)
+				Spacer()
+				/*
 				Button(action:{
 					//showLessonSheet = false
 					scorewindData.showLessonTextOverlay = false
@@ -152,9 +171,12 @@ struct LessonView: View {
 							RoundedRectangle(cornerRadius: 10)
 								.foregroundColor(Color("ScreenTitleBg"))
 						}
-				}
+				}*/
 				Spacer()
 			}
+			.onTapGesture(perform: {
+				scorewindData.showLessonTextOverlay = false
+			})
 		})
 	}
 	
@@ -398,6 +420,17 @@ struct LessonView: View {
 						content
 					}
 			}
+	}
+	
+	struct fullScreenModifier: ViewModifier {
+		var isFullScreen:Bool
+		@ViewBuilder func body(content: Content) -> some View {
+			if isFullScreen {
+				content.ignoresSafeArea(.all, edges: .bottom)
+			} else {
+				content
+			}
+		}
 	}
 }
 

@@ -155,6 +155,7 @@ struct HomeView: View {
 							}
 						}
 					})
+					.ignoresSafeArea(.all, edges: .bottom)
 			}
 		}
 	}

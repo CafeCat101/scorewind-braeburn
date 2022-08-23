@@ -25,7 +25,6 @@ struct LessonScoreView: View {
 					print(scorewindData.timestampToJson())
 				})
 			}
-			
 		}
 	}
 }
