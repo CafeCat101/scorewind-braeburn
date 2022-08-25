@@ -24,7 +24,7 @@ struct LessonView: View {
 	@State private var previousLesson = Lesson()
 	@State private var isCurrentLessonCompleted = false
 	@State private var splitScreen = true
-	@State private var isFullScreen = false
+	//@State private var test = false
 	
 	var body: some View {
 		VStack {
@@ -43,7 +43,7 @@ struct LessonView: View {
 			
 			if scorewindData.currentLesson.videoMP4.isEmpty == false {
 				VideoPlayer(player: viewModel.videoPlayer)
-					//.frame(height: scorewindData.currentTimestampRecs.count > 0 ? screenSize.height*0.35 : screenSize.height)
+				//.frame(height: scorewindData.currentTimestampRecs.count > 0 ? screenSize.height*0.35 : screenSize.height)
 					.modifier(videoFrameModifier(splitView: splitScreen, screenHeight: screenSize.height))
 					.onAppear(perform: {
 						//VideoPlayer onAppear when comeing from anohter tab view, not when the sheet disappears
@@ -65,6 +65,20 @@ struct LessonView: View {
 			
 			if scorewindData.currentTimestampRecs.count > 0 {
 				LessonScoreView(viewModel: viewModel)
+					.contextMenu {
+						Button(action: {
+							viewModel.zoomInPublisher.send("Zoom In")
+						}){
+							Label("Zoom in", systemImage: "minus.magnifyingglass")
+								.labelStyle(.titleAndIcon)
+						}
+						Button(action: {
+							viewModel.zoomInPublisher.send("Zoom Out")
+						}){
+							Label("Zoom out", systemImage: "plus.magnifyingglass")
+								.labelStyle(.titleAndIcon)
+						}
+					}
 			} else {
 				Spacer()
 			}
@@ -74,12 +88,12 @@ struct LessonView: View {
 			//:LesssonView onAppear will not be triggered after sheet goes away.
 			//:LessonView onAppear will be triggered when switching tab/full screen mode.
 			print("[debug] LessonView onAppear")
+			/*withAnimation {
+				test = true
+			}*/
 			if scorewindData.currentView != Page.lessonFullScreen {
 				scorewindData.currentView = Page.lesson
-				isFullScreen = false
 				//scorewindData.lastViewAtScore = true
-			} else {
-				isFullScreen = true
 			}
 			
 			if scorewindData.currentTimestampRecs.count > 0 {
@@ -109,13 +123,88 @@ struct LessonView: View {
 		.onDisappear(perform: {
 			print("[debug] LessonView onDisappear")
 		})
+		/*
+		.overlay(content: {
+			if scorewindData.showLessonTextOverlay {
+				VStack {
+					VStack {
+						VStack {
+							HStack {
+								Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))
+									.font(.title)
+									.foregroundColor(.black)
+									.padding(EdgeInsets(top: 15, leading: 15, bottom: 5, trailing: 15))
+								Spacer()
+							}
+							
+							HStack {
+								if isCurrentLessonCompleted {
+									Label("Completed", systemImage: "checkmark.circle.fill")
+										.labelStyle(.iconOnly)
+										.foregroundColor(.black)
+								}
+								if scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindData.currentLesson.scorewindID) {
+									Label("Completed", systemImage: "eye.circle.fill")
+										.labelStyle(.iconOnly)
+										.foregroundColor(.black)
+								}
+								Spacer()
+							}.padding(EdgeInsets(top: 0, leading: 15, bottom: 15, trailing: 15))
+							
+						}.background(.yellow)
+
+						ScrollView {
+							Text("\(scorewindData.currentLesson.content)").padding().foregroundColor(Color("LessonSheet"))
+						}
+						//HTMLString(htmlContent: scorewindData.currentLesson.content)
+						/*Button(action:{
+							//showLessonSheet = false
+							//scorewindData.showLessonTextOverlay = false
+							withAnimation {
+								test = false
+							}
+						}){
+							Text("Continue")
+								.foregroundColor(.black)
+								.padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
+								.background {
+									RoundedRectangle(cornerRadius: 10)
+										.foregroundColor(Color("ScreenTitleBg"))
+								}
+						}
+						Spacer().frame(height:15)*/
+					}
+					.frame(height: screenSize.height*0.6,alignment: .top)
+					.background{
+						RoundedRectangle(cornerRadius: 10)
+							.foregroundColor(Color("LessonTextOverlay"))
+					}
+					.onTapGesture {
+						withAnimation {
+							//test = false
+							scorewindData.showLessonTextOverlay = false
+						}
+					}
+					Spacer()
+				}
+				.background(BackgroundCleanerView()).transition(.move(edge: .top))
+			}
+			
+		})
+		 */
 		.simultaneousGesture(
 			DragGesture()
 				.onChanged { gesture in
 					if self.isSwipping {
 						self.startPos = gesture.location
 						self.isSwipping.toggle()
-					}
+					}/* else {
+						if scorewindData.showLessonTextOverlay && ( gesture.translation.width > 20 || gesture.translation.width < -20 ) {
+							withAnimation {
+								scorewindData.showLessonTextOverlay = false
+							}
+						}
+					}*/
 				}
 				.onEnded { gesture in
 					let xDist =  abs(gesture.location.x - self.startPos.x)
@@ -150,33 +239,89 @@ struct LessonView: View {
 		.sheet(isPresented: $scorewindData.showLessonTextOverlay, content: {
 			VStack {
 				HStack {
-					Spacer()
-				Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))
-					.font(.title)
-					.foregroundColor(.black)
-					.padding()
-					Spacer()
-				}.background(.yellow)
-				HTMLString(htmlContent: scorewindData.currentLesson.content)
-				Spacer()
-				/*
-				Button(action:{
-					//showLessonSheet = false
-					scorewindData.showLessonTextOverlay = false
-				}){
-					Text("Continue")
+					Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))
+						.font(.title)
 						.foregroundColor(.black)
-						.padding(15)
-						.background {
-							RoundedRectangle(cornerRadius: 10)
-								.foregroundColor(Color("ScreenTitleBg"))
+					Spacer()
+				}
+				.padding(EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 15))
+				.background(.yellow)
+				
+				ScrollView {
+					VStack {
+						HStack {
+							if isCurrentLessonCompleted {
+								Label("Completed", systemImage: "checkmark.circle.fill")
+									.labelStyle(.titleAndIcon)
+									.foregroundColor(Color("LessonSheet"))
+									.padding(EdgeInsets(top: 6, leading: 15, bottom: 6, trailing: 15))
+									.background {
+										RoundedRectangle(cornerRadius: 20)
+											.foregroundColor(Color("BadgeCompleted"))
+									}
+									.fixedSize()
+							}
+							if scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindData.currentLesson.scorewindID) {
+								Label("Video watched", systemImage: "eye.circle.fill")
+									.labelStyle(.titleAndIcon)
+									.foregroundColor(Color("LessonSheet"))
+									.padding(EdgeInsets(top: 6, leading: 15, bottom: 6, trailing: 15))
+									.background {
+										RoundedRectangle(cornerRadius: 20)
+											.foregroundColor(Color("LessonTitileHeighlight"))
+									}
+									.fixedSize()
+							}
+							Spacer()
 						}
-				}*/
-				Spacer()
-			}
-			.onTapGesture(perform: {
+						VStack {
+							HStack {
+								if scorewindData.currentTimestampRecs.count > 0 {
+									Label("Play and learn", systemImage: "music.note.tv.fill")
+										.labelStyle(.titleAndIcon)
+										.foregroundColor(Color("LessonSheet"))
+										.padding(EdgeInsets(top: 6, leading: 15, bottom: 6, trailing: 15))
+										.background {
+											RoundedRectangle(cornerRadius: 20)
+												.foregroundColor(Color("BadgeScoreAvailable"))
+										}
+										.fixedSize()
+								} else {
+									Label("Watch and learn", systemImage: "video.bubble.left.fill")
+										.labelStyle(.titleAndIcon)
+										.foregroundColor(Color("LessonSheet"))
+										.padding(EdgeInsets(top: 6, leading: 15, bottom: 6, trailing: 15))
+										.background {
+											RoundedRectangle(cornerRadius: 20)
+												.foregroundColor(Color("BadgeWatchLearn"))
+										}
+										.fixedSize()
+								}
+								Spacer()
+							}
+						}
+						Text("\(scorewindData.currentLesson.content)").foregroundColor(Color("LessonSheet"))
+					}
+				}
+				.padding(EdgeInsets(top: 10, leading: 15, bottom: 15, trailing: 15))
+				
+				/*
+				 Button(action:{
+				 //showLessonSheet = false
+				 scorewindData.showLessonTextOverlay = false
+				 }){
+				 Text("Continue")
+				 .foregroundColor(.black)
+				 .padding(15)
+				 .background {
+				 RoundedRectangle(cornerRadius: 10)
+				 .foregroundColor(Color("ScreenTitleBg"))
+				 }
+				 }*/
+			}.background(Color("LessonTextOverlay"))
+			/*.onTapGesture(perform: {
 				scorewindData.showLessonTextOverlay = false
-			})
+			})*/
 		})
 	}
 	
@@ -254,8 +399,17 @@ struct LessonView: View {
 		//when switch lesson with menu, onAppear is not triggered.
 		//prepare for the lesson content change here.
 		//magnifyStep = 1
+		//withAnimation {
+			scorewindData.showLessonTextOverlay = true
+		//}
 		scorewindData.setCurrentTimestampRecs()
 		scorewindData.lastPlaybackTime = 0.0
+		
+		if scorewindData.currentTimestampRecs.count > 0 {
+			splitScreen = true
+		} else {
+			splitScreen = false
+		}
 		
 		if scorewindData.currentLesson.videoMP4.isEmpty == false {
 			viewModel.videoPlayer?.pause()
@@ -263,7 +417,7 @@ struct LessonView: View {
 			setupPlayer()
 		}
 		//showLessonSheet = true
-		if scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindData.currentLesson.scorewindID) == false {
+		if (scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindData.currentLesson.scorewindID) == false) && (scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindData.currentLesson.scorewindID) == false) {
 			scorewindData.showLessonTextOverlay = true
 		}
 		//scorewindData.lastViewAtScore = true
@@ -275,23 +429,6 @@ struct LessonView: View {
 	@ViewBuilder
 	private func lessonViewMenu() -> some View {
 		Menu {
-			Button(action: {
-				if isCurrentLessonCompleted {
-					scorewindData.studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: false)
-				} else{
-					scorewindData.studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: true)
-				}
-				checkCurrentLessonCompleted()
-			}){
-				if isCurrentLessonCompleted {
-					Label("Undo completed", systemImage: "checkmark.circle.fill")
-						.labelStyle(.titleAndIcon)
-				} else {
-					Label("Completed", systemImage: "checkmark.circle")
-						.labelStyle(.titleAndIcon)
-				}
-			}
-			
 			Button(action: {
 				withAnimation {
 					if scorewindData.currentView == Page.lesson {
@@ -306,6 +443,23 @@ struct LessonView: View {
 						.labelStyle(.titleAndIcon)
 				} else {
 					Label("Explore mode", systemImage: "lightbulb.circle")
+						.labelStyle(.titleAndIcon)
+				}
+			}
+			
+			Button(action: {
+				if isCurrentLessonCompleted {
+					scorewindData.studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: false)
+				} else{
+					scorewindData.studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: true)
+				}
+				checkCurrentLessonCompleted()
+			}){
+				if isCurrentLessonCompleted {
+					Label("Undo completed", systemImage: "checkmark.circle.fill")
+						.labelStyle(.titleAndIcon)
+				} else {
+					Label("Completed", systemImage: "checkmark.circle")
 						.labelStyle(.titleAndIcon)
 				}
 			}
@@ -327,27 +481,7 @@ struct LessonView: View {
 					Text("Next: \(scorewindData.replaceCommonHTMLNumber(htmlString: nextLesson.title))")
 				}
 			}
-			
-			if scorewindData.currentTimestampRecs.count > 0 {
-				//only need to zoom in/out score if score is available
-				Menu {
-					Button(action: {
-						viewModel.zoomInPublisher.send("Zoom In")
-					}){
-						Label("Zoom in", systemImage: "minus.magnifyingglass")
-							.labelStyle(.titleAndIcon)
-					}
-					Button(action: {
-						viewModel.zoomInPublisher.send("Zoom Out")
-					}){
-						Label("Zoom out", systemImage: "plus.magnifyingglass")
-							.labelStyle(.titleAndIcon)
-					}
-				} label: {
-					Text("Score")
-				}
-			}
-			
+		
 			//show lesson text in sheet
 			if scorewindData.currentLesson.content.isEmpty == false {
 				Button(action: {
@@ -410,28 +544,30 @@ struct LessonView: View {
 	}
 	
 	struct videoFrameModifier : ViewModifier {
-			var splitView : Bool
+		var splitView : Bool
 		var screenHeight: CGFloat
-			
-			@ViewBuilder func body(content: Content) -> some View {
-					if splitView {
-						content.frame(height: screenHeight*0.35)
-					} else {
-						content
-					}
-			}
-	}
-	
-	struct fullScreenModifier: ViewModifier {
-		var isFullScreen:Bool
+		
 		@ViewBuilder func body(content: Content) -> some View {
-			if isFullScreen {
-				content.ignoresSafeArea(.all, edges: .bottom)
+			if splitView {
+				content.frame(height: screenHeight*0.30)
 			} else {
 				content
 			}
 		}
 	}
+	
+	struct BackgroundCleanerView: UIViewRepresentable {
+		func makeUIView(context: Context) -> UIView {
+			let view = UIView()
+			DispatchQueue.main.async {
+				view.superview?.superview?.backgroundColor = .clear
+			}
+			return view
+		}
+		
+		func updateUIView(_ uiView: UIView, context: Context) {}
+	}
+	
 }
 
 struct LessonView_Previews: PreviewProvider {

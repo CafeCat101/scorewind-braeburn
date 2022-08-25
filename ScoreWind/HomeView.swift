@@ -94,11 +94,22 @@ struct HomeView: View {
 			.onChange(of: selectedTab, perform: { newValue in
 				if newValue == "TLesson" && scorewindData.currentLesson.content.isEmpty == false {
 					print("\(scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id))")
+					print("\(scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id))")
 					print("\(scorewindData.currentLesson.scorewindID)")
-					if scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindData.currentLesson.scorewindID) == false {
+					scorewindData.showLessonTextOverlay = true
+					/*if (scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindData.currentLesson.scorewindID) == false) && (scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindData.currentLesson.scorewindID) == false) {
+						scorewindData.showLessonTextOverlay = true
+					}*/
+				}
+				/*if newValue == "TLesson" {
+					withAnimation {
 						scorewindData.showLessonTextOverlay = true
 					}
-				}
+				}else{
+					withAnimation {
+						scorewindData.showLessonTextOverlay = false
+					}
+				}*/
 			})
 			.onReceive(downloadManager.downloadTaskPublisher, perform: { clonedDownloadList in
 				print("[deubg] HomeView,onRecieve, downloadTaskPublisher:\(clonedDownloadList.count)")
