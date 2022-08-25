@@ -11,6 +11,7 @@ struct MyCoursesView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@Binding var selectedTab:String
 	@State private var getMyCourses:[MyCourse] = []
+	let screenSize: CGRect = UIScreen.main.bounds
 	
 	var body: some View {
 		VStack {
@@ -46,6 +47,7 @@ struct MyCoursesView: View {
 						}
 						.padding(EdgeInsets(top: 5, leading: 0, bottom: 0, trailing: 10))
 					}
+					.frame(width:screenSize.width*0.9)
 					.padding(EdgeInsets(top: 10, leading: 10, bottom: 15, trailing: 10))
 					.background{
 						RoundedRectangle(cornerRadius: 10)

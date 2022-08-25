@@ -116,12 +116,6 @@ struct CourseView: View {
 							ForEach(scorewindData.currentCourse.lessons){ lesson in
 								VStack {
 									HStack {
-										downloadIconView(getLessonID: lesson.id)
-											.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
-										//.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
-										
-										lessonIsons(scorewindID: lesson.scorewindID)
-										
 										Button(action: {
 											scorewindData.currentLesson = lesson
 											scorewindData.setCurrentTimestampRecs()
@@ -136,6 +130,11 @@ struct CourseView: View {
 											
 										}
 										Spacer()
+										downloadIconView(getLessonID: lesson.id)
+											.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
+										//.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
+										
+										lessonIsons(scorewindID: lesson.scorewindID)
 									}
 									Spacer()
 										.frame(height:10)
