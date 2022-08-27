@@ -25,6 +25,7 @@ struct MyCoursesView: View {
 					.labelStyle(.titleAndIcon)
 			
 			ScrollView {
+				Spacer().frame(height:10)
 				ForEach(getMyCourses) { aCourse in
 					VStack {
 						HStack {
@@ -34,6 +35,7 @@ struct MyCoursesView: View {
 								.foregroundColor(.black)
 							Spacer()
 						}
+						.padding(EdgeInsets(top: 10, leading: 15, bottom: 0, trailing: 15))
 						HStack {
 							if aCourse.completedLessons.count>0 {
 								courseProgressView(myCourse: aCourse)
@@ -45,14 +47,13 @@ struct MyCoursesView: View {
 							}
 							Spacer()
 						}
-						.padding(EdgeInsets(top: 5, leading: 0, bottom: 0, trailing: 10))
+						.padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 15))
 					}
-					.frame(width:screenSize.width*0.9)
-					.padding(EdgeInsets(top: 10, leading: 10, bottom: 15, trailing: 10))
 					.background{
 						RoundedRectangle(cornerRadius: 10)
 							.foregroundColor(Color("MyCourseItem"))
 					}
+					.padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
 					.onTapGesture(perform: {
 						scorewindData.currentCourse = scorewindData.allCourses.first(where: {$0.id == aCourse.courseID}) ?? Course()
 						scorewindData.currentView = Page.course
@@ -64,7 +65,6 @@ struct MyCoursesView: View {
 					})
 				}
 			}
-			.padding()
 			
 			Spacer()
 			/*if scorewindData.studentData.getInstrumentChoice() == "" {

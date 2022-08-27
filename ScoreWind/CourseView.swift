@@ -125,7 +125,7 @@ struct CourseView: View {
 										}) {
 											Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
 												.multilineTextAlignment(.leading)
-												.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color("LessonTitileHeighlight") : Color.black)
+												.foregroundColor(.black)
 												.font(Font.body.bold())
 											
 										}
@@ -138,15 +138,15 @@ struct CourseView: View {
 									}
 									Spacer()
 										.frame(height:10)
-									HStack {
+									/*HStack {
 										Text(lesson.description)
 										Spacer()
-									}
+									}*/
 								}
 								.padding(EdgeInsets(top: 10, leading: 10, bottom: 15, trailing: 10))
 								.background{
 									RoundedRectangle(cornerRadius: 10)
-										.foregroundColor(Color("LessonTextBg"))
+										.foregroundColor(scorewindData.currentLesson.scorewindID == lesson.scorewindID ? .yellow : Color("LessonTextBg"))
 								}
 								
 							}

@@ -300,10 +300,10 @@ struct LessonView: View {
 								Spacer()
 							}
 						}
-						Text("\(scorewindData.currentLesson.content)").foregroundColor(Color("LessonSheet"))
-					}
+						Text("\(scorewindData.courseContentNoHtml(content: scorewindData.currentLesson.content))").foregroundColor(Color("LessonSheet"))
+					}.padding(EdgeInsets(top: 0, leading: 15, bottom: 15, trailing: 15))
 				}
-				.padding(EdgeInsets(top: 10, leading: 15, bottom: 15, trailing: 15))
+				.padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
 				
 				/*
 				 Button(action:{

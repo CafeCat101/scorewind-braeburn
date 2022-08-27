@@ -392,6 +392,18 @@ class ScorewindData: ObservableObject {
 		}
 		return tipCount
 	}
+	
+	func courseContentNoHtml(content:String) -> String {
+		var rst = content
+		rst = rst.replacingOccurrences(of: "\n", with: "")
+		rst = rst.replacingOccurrences(of: "<p></p>", with: "")
+		rst = rst.replacingOccurrences(of: "by ScoreWind Teachers", with: "")
+		rst = rst.replacingOccurrences(of: "by Scorewind Teachers", with: "")
+		rst = rst.replacingOccurrences(of: "&nbsp;", with: " ")
+		rst = rst.replacingOccurrences(of: "</p><p>", with: "\n\n")
+		rst = rst.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
+		return rst
+	}
 
 	
 }
