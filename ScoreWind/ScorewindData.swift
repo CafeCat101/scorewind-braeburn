@@ -397,6 +397,9 @@ class ScorewindData: ObservableObject {
 		var rst = content
 		rst = rst.replacingOccurrences(of: "\n", with: "")
 		rst = rst.replacingOccurrences(of: "<p></p>", with: "")
+		rst = rst.replacingOccurrences(of: "<p>by ScoreWind Exercises</p>", with: "")
+		rst = rst.replacingOccurrences(of: "<p>by ScoreWind Teachers</p>", with: "")
+		rst = rst.replacingOccurrences(of: "<p>by Scorewind Teachers</p>", with: "")
 		rst = rst.replacingOccurrences(of: "by ScoreWind Teachers", with: "")
 		rst = rst.replacingOccurrences(of: "by Scorewind Teachers", with: "")
 		rst = rst.replacingOccurrences(of: "&nbsp;", with: " ")
