@@ -164,7 +164,7 @@ struct CourseView: View {
 						if scorewindData.previousCourse.id > 0 {
 							HStack {
 								Text("Previous course")
-									.foregroundColor(.gray)
+									.fontWeight(.medium)
 									.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
 								Spacer()
 							}
@@ -180,7 +180,7 @@ struct CourseView: View {
 						if scorewindData.nextCourse.id > 0 {
 							HStack {
 								Text("Next course")
-									.foregroundColor(.gray)
+									.fontWeight(.medium)
 									.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
 								Spacer()
 							}
@@ -189,7 +189,6 @@ struct CourseView: View {
 									.padding(EdgeInsets(top: 3, leading: 10, bottom: 3, trailing: 10))
 								Spacer()
 							}
-							
 						}
 					}
 					Spacer()
@@ -431,24 +430,46 @@ struct CourseView: View {
 	
 	@ViewBuilder
 	private func continueCourseButton(order: SearchParameter) -> some View {
-		Button(action: {
-			scorewindData.currentCourse = (order == SearchParameter.ASC) ? scorewindData.nextCourse : scorewindData.previousCourse
-			scorewindData.currentLesson = scorewindData.currentCourse.lessons[0]
-			scorewindData.setCurrentTimestampRecs()
-			scorewindData.lastPlaybackTime = 0.0
-			selectedSection = courseSection.overview
-			scorewindData.findACourseByOrder(order: SearchParameter.DESC)
-			scorewindData.findACourseByOrder(order: SearchParameter.ASC)
-		}) {
-			if order == SearchParameter.ASC {
-				Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.nextCourse.title))
-					.foregroundColor(Color.black)
-					.multilineTextAlignment(.leading)
-			} else {
-				Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.previousCourse.title))
-					.foregroundColor(Color.black)
-					.multilineTextAlignment(.leading)
-			}
+		if order == SearchParameter.ASC {
+			Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.nextCourse.title))
+				.foregroundColor(Color.black)
+				.multilineTextAlignment(.leading)
+				.padding()
+				.background{
+					RoundedRectangle(cornerRadius: 10)
+						.foregroundColor(Color("MyCourseItem"))
+				}
+				.onTapGesture {
+					switchCourse(order: order)
+				}
+		} else {
+			Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.previousCourse.title))
+				.foregroundColor(Color.black)
+				.multilineTextAlignment(.leading)
+				.padding()
+				.background{
+					RoundedRectangle(cornerRadius: 10)
+						.foregroundColor(Color("MyCourseItem"))
+				}
+				.onTapGesture {
+					switchCourse(order: order)
+				}
+		}
+	}
+	
+	private func switchCourse(order: SearchParameter) {
+		scorewindData.currentCourse = (order == SearchParameter.ASC) ? scorewindData.nextCourse : scorewindData.previousCourse
+		scorewindData.currentLesson = scorewindData.currentCourse.lessons[0]
+		scorewindData.setCurrentTimestampRecs()
+		scorewindData.lastPlaybackTime = 0.0
+		selectedSection = courseSection.overview
+		scorewindData.findACourseByOrder(order: SearchParameter.DESC)
+		scorewindData.findACourseByOrder(order: SearchParameter.ASC)
+		
+		selectedSection = courseSection.overview
+		withAnimation {
+			scrollOffset = getNewOffset(goToSection: selectedSection)
+			dragOffset = 0
 		}
 	}
 	
