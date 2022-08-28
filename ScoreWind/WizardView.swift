@@ -37,10 +37,10 @@ struct WizardView: View {
 						}) {
 							if course.id == scorewindData.currentCourse.id {
 								Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
-									.foregroundColor(Color.blue)
+									.foregroundColor(Color("WizardListTextHighlight"))
 							} else {
 								Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
-									.foregroundColor(Color.black)
+									.foregroundColor(Color("MyCourseItemText"))
 							}
 							
 						}
@@ -48,6 +48,7 @@ struct WizardView: View {
 				}
 			}
 			.listStyle(GroupedListStyle())
+			.background(Color("LessonListTextBg"))
 		}//.background(Color("ScreenTitleBg"))
 		
 	}

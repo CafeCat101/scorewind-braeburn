@@ -32,7 +32,7 @@ struct MyCoursesView: View {
 							Text(scorewindData.replaceCommonHTMLNumber(htmlString: aCourse.courseTitle))
 								.font(.headline)
 								.multilineTextAlignment(.leading)
-								.foregroundColor(.black)
+								.foregroundColor(Color("MyCourseItemText"))
 							Spacer()
 						}
 						.padding(EdgeInsets(top: 10, leading: 15, bottom: 0, trailing: 15))

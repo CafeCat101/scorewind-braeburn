@@ -30,7 +30,6 @@ struct CourseView: View {
 			HStack {
 				Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentCourse.title))
 					.font(.title3)
-					.foregroundColor(.black)
 					.truncationMode(.tail)
 				Spacer()
 			}
@@ -50,7 +49,7 @@ struct CourseView: View {
 					Text("Overview")
 						.font(.headline)
 						.fontWeight(.semibold)
-						.foregroundColor(selectedSection == courseSection.overview ? Color.black : Color.gray)
+						.foregroundColor(selectedSection == courseSection.overview ? Color("ActiveCourseSectionTitle") : Color.gray)
 				}
 				.frame(width: screenSize.width/3)
 				
@@ -68,7 +67,7 @@ struct CourseView: View {
 					Text("Lessons")
 						.font(.headline)
 						.fontWeight(.semibold)
-						.foregroundColor(selectedSection == courseSection.lessons ? Color.black : Color.gray)
+						.foregroundColor(selectedSection == courseSection.lessons ? Color("ActiveCourseSectionTitle") : Color.gray)
 				}
 				.frame(width: screenSize.width/3)
 				
@@ -82,7 +81,7 @@ struct CourseView: View {
 					Text("Continue")
 						.font(.headline)
 						.fontWeight(.semibold)
-						.foregroundColor(selectedSection == courseSection.continue ? Color.black : Color.gray)
+						.foregroundColor(selectedSection == courseSection.continue ? Color("ActiveCourseSectionTitle") : Color.gray)
 				}
 				.frame(width: screenSize.width/3)
 				
@@ -93,7 +92,7 @@ struct CourseView: View {
 			HStack {
 				Rectangle()
 					.frame(width:screenSize.width/3, height: 2)
-					.foregroundColor(.yellow)
+					.foregroundColor(Color("AppYellow"))
 			}
 			.frame(width:screenSize.width*3)
 			.offset(x: underlineScrollOffset - dragOffset/3, y: 0)
@@ -146,7 +145,7 @@ struct CourseView: View {
 								.padding(EdgeInsets(top: 10, leading: 10, bottom: 15, trailing: 10))
 								.background{
 									RoundedRectangle(cornerRadius: 10)
-										.foregroundColor(scorewindData.currentLesson.scorewindID == lesson.scorewindID ? .yellow : Color("LessonTextBg"))
+										.foregroundColor(scorewindData.currentLesson.scorewindID == lesson.scorewindID ? Color("AppYellow") : Color("LessonListTextBg"))
 								}
 								
 							}
@@ -242,7 +241,7 @@ struct CourseView: View {
 			HStack {
 				if calculateCompletedLesson() > 0 {
 					RoundedRectangle(cornerRadius: 4)
-						.foregroundColor(.yellow)
+						.foregroundColor(Color("AppYellow"))
 						.frame(width:calculateProgressBarWidth()[0],height:10)
 					RoundedRectangle(cornerRadius: 4)
 						.foregroundColor(.gray)
@@ -352,11 +351,11 @@ struct CourseView: View {
 	@ViewBuilder
 	private func courseDownloadButtonView() -> some View {
 		let getStatus =  downloadManager.checkDownloadStatus(courseID: scorewindData.currentCourse.id, lessonsCount: scorewindData.currentCourse.lessons.count)
-		
+
 		HStack {
 			if getStatus == DownloadStatus.notInQueue {
-				Image(systemName: "arrow.down.to.line")
-					.foregroundColor(Color.black)
+				Image(systemName: "arrow.down.to.line.circle")
+					.foregroundColor(Color("AppYelloDynamic"))
 			} else if getStatus == DownloadStatus.inQueue {
 				Image(systemName: "arrow.down.square")
 					.foregroundColor(Color.gray)
@@ -376,10 +375,10 @@ struct CourseView: View {
 			}) {
 				if getStatus == DownloadStatus.notInQueue {
 					Text("Download course for offline")
-						.foregroundColor(Color.black)
+						.foregroundColor(Color("AppYelloDynamic"))
 				} else {
 					Text("Remove downloads")
-						.foregroundColor(Color.black)
+						.foregroundColor(Color("AppYelloDynamic"))
 				}
 			}
 			.alert("\(getAlertDialogTitle(downloadStatus:getStatus))", isPresented: $showDownloadAlert, actions: {
@@ -432,7 +431,7 @@ struct CourseView: View {
 	private func continueCourseButton(order: SearchParameter) -> some View {
 		if order == SearchParameter.ASC {
 			Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.nextCourse.title))
-				.foregroundColor(Color.black)
+				.foregroundColor(Color("MyCourseItemText"))
 				.multilineTextAlignment(.leading)
 				.padding()
 				.background{
@@ -444,7 +443,7 @@ struct CourseView: View {
 				}
 		} else {
 			Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.previousCourse.title))
-				.foregroundColor(Color.black)
+				.foregroundColor(Color("MyCourseItemText"))
 				.multilineTextAlignment(.leading)
 				.padding()
 				.background{
@@ -553,13 +552,13 @@ struct CourseView: View {
 		if completedLessons.contains(scorewindID) {
 			Label("completed", systemImage: "checkmark.circle.fill")
 				.labelStyle(.iconOnly)
-				.foregroundColor(Color("LessonTitileHeighlight"))
+				.foregroundColor(Color("LessonListStatusIcon"))
 		}
 		
 		if watchedLessons.contains(scorewindID) {
 			Label("completed", systemImage: "eye.circle.fill")
 				.labelStyle(.iconOnly)
-				.foregroundColor(Color("LessonTitileHeighlight"))
+				.foregroundColor(Color("LessonListStatusIcon"))
 		}
 	}
 

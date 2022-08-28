@@ -32,7 +32,6 @@ struct LessonView: View {
 				HStack {
 					Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))
 						.font(.title3)
-						.foregroundColor(.black)
 						.truncationMode(.tail)
 					Spacer()
 					lessonViewMenu()
@@ -179,7 +178,7 @@ struct LessonView: View {
 					Spacer()
 				}
 				.padding(EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 15))
-				.background(.yellow)
+				.background(Color("AppYellow"))
 				
 				ScrollView {
 					VStack {
@@ -419,7 +418,7 @@ struct LessonView: View {
 				.resizable()
 				.scaledToFit()
 				.frame(height: screenSize.height/25 - 4)
-				.foregroundColor(scorewindData.currentView == Page.lesson ? .black:.white)
+				.foregroundColor(scorewindData.currentView == Page.lesson ? Color("AppYelloDynamic"):.white)
 		}
 	}
 	

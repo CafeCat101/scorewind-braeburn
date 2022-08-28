@@ -51,7 +51,6 @@
 		C85F27A8287A775E00D0A4E5 /* TipLimit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F27A7287A775E00D0A4E5 /* TipLimit.swift */; };
 		C8E063E928A8F789000B3D67 /* scorewind_ios_xml.zip in Resources */ = {isa = PBXBuildFile; fileRef = C8E063E828A8F789000B3D67 /* scorewind_ios_xml.zip */; };
 		C8E063F028B0E20E000B3D67 /* MyCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E063EF28B0E20E000B3D67 /* MyCourse.swift */; };
-		C8E063F228B94802000B3D67 /* StringExtend.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E063F128B94802000B3D67 /* StringExtend.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -123,7 +122,6 @@
 		C85F27A9287A7C9C00D0A4E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C8E063E828A8F789000B3D67 /* scorewind_ios_xml.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = scorewind_ios_xml.zip; sourceTree = "<group>"; };
 		C8E063EF28B0E20E000B3D67 /* MyCourse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCourse.swift; sourceTree = "<group>"; };
-		C8E063F128B94802000B3D67 /* StringExtend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtend.swift; sourceTree = "<group>"; };
 		F3441470A2546CDD3AD7E6C9 /* Pods_ScoreWind.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScoreWind.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5B8EA121B65003489B73002 /* Pods-ScoreWindTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScoreWindTests.debug.xcconfig"; path = "Target Support Files/Pods-ScoreWindTests/Pods-ScoreWindTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -230,7 +228,6 @@
 				C85F27A32879C20400D0A4E5 /* TipModalView.swift */,
 				C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */,
 				C85F272F286F4C2C00D0A4E5 /* Preview Content */,
-				C8E063F128B94802000B3D67 /* StringExtend.swift */,
 			);
 			path = ScoreWind;
 			sourceTree = "<group>";
@@ -492,7 +489,6 @@
 				C85F2779286F4F2E00D0A4E5 /* WebView.swift in Sources */,
 				C85F2782286F4F2E00D0A4E5 /* LessonView.swift in Sources */,
 				C85F277E286F4F2E00D0A4E5 /* LessonSheetView.swift in Sources */,
-				C8E063F228B94802000B3D67 /* StringExtend.swift in Sources */,
 				C85F2796286F59BC00D0A4E5 /* InstrumentType.swift in Sources */,
 				C85F277F286F4F2E00D0A4E5 /* LessonTextView.swift in Sources */,
 				C85F2785286F4F2E00D0A4E5 /* WizardView.swift in Sources */,
