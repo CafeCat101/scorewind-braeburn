@@ -65,7 +65,7 @@ struct LessonView: View {
 			
 			if scorewindData.currentTimestampRecs.count > 0 {
 				LessonScoreView(viewModel: viewModel)
-				/*
+				
 					.contextMenu {
 						Button(action: {
 							viewModel.zoomInPublisher.send("Zoom In")
@@ -80,7 +80,7 @@ struct LessonView: View {
 								.labelStyle(.titleAndIcon)
 						}
 					}
-				 */
+				 
 			} else {
 				Spacer()
 			}
@@ -268,10 +268,10 @@ struct LessonView: View {
 			if index < scorewindData.currentTimestampRecs.count-1 {
 				endTimestamp = scorewindData.currentTimestampRecs[index+1].timestamp
 			}
-			print("==>")
-			print("loop timestamp "+String(theTime.timestamp))
-			print("endTimestamp "+String(endTimestamp))
-			print("<--")
+			print("[debug] LessonViw,--findMeasureByTimestamp-->")
+			print("[debug] LessonViw,loop timestamp "+String(theTime.timestamp))
+			print("[debug] LessonViw,endTimestamp "+String(endTimestamp))
+			print("[debug] LessonViw,<-------------------------")
 			if videoTime >= theTime.timestamp && videoTime < Double(endTimestamp) {
 				getMeasure = index//theTime.measure
 				break

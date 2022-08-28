@@ -27,6 +27,7 @@ struct WebView: UIViewRepresentable, WebViewHandlerDelegate {
 	//var score: String
 	//var linkVideoPlayer: AVPlayer?
 	@ObservedObject var scorewindData: ScorewindData
+	@State private var prevURL: URL?
 	
 	func receivedJsonValueFromWebView(value: [String : Any?]) {
 		print("JSON value received from web is: \(value)")
@@ -76,18 +77,24 @@ struct WebView: UIViewRepresentable, WebViewHandlerDelegate {
 	func updateUIView(_ webView: WKWebView, context: Context) {
 		if url == .localUrl {
 			// Load local website
-			print("Load local file")
+			print("[debug] WebView, Load local file")
 			//if let url = Bundle.main.url(forResource: "score", withExtension: "html", subdirectory: "www") {
 			let url = URL(string: "www/score.html", relativeTo: scorewindData.docsUrl)!
-			print("[debug] WebView, Load local file \(url)")
-			print("[debug] WebView, allowingReadAccessTo\(url.deletingLastPathComponent())")
+			//if prevURL != url {
+				print("[debug] WebView, Load local file \(url)")
+				print("[debug] WebView, allowingReadAccessTo\(url.deletingLastPathComponent())")
 				webView.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())
+				//DispatchQueue.main.async { prevURL = url }
+			//} else {
+			//	print("[debug] WebView, url is the same, will not loadFileURL again.")
+			//}
+			
 			//}
 		} else if url == .publicUrl {
 			// Load a public website, for example I used here google.com
-			if let url = URL(string: "https://www.google.com") {
-				webView.load(URLRequest(url: url))
-			}
+			//if let url = URL(string: "https://www.google.com") {
+			//	webView.load(URLRequest(url: url))
+			//}
 		}
 	}
 	
@@ -98,7 +105,7 @@ struct WebView: UIViewRepresentable, WebViewHandlerDelegate {
 		var loadSubscriber: AnyCancellable? = nil
 		var zoomInSubscriber: AnyCancellable? = nil
 		var webViewNavigationSubscriber: AnyCancellable? = nil
-		var timestampPublisher:AnyCancellable? = nil
+		var timestampSubscriber:AnyCancellable? = nil
 		
 		init(_ uiWebView: WebView) {
 			self.parent = uiWebView
@@ -110,7 +117,7 @@ struct WebView: UIViewRepresentable, WebViewHandlerDelegate {
 			loadSubscriber?.cancel()
 			zoomInSubscriber?.cancel()
 			webViewNavigationSubscriber?.cancel()
-			timestampPublisher?.cancel()
+			timestampSubscriber?.cancel()
 		}
 		
 		func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
@@ -169,43 +176,41 @@ struct WebView: UIViewRepresentable, WebViewHandlerDelegate {
 			/* An observer that observes 'viewModel.valuePublisher' to get value from TextField and
 			 pass that value to web app by calling JavaScript function */
 			valueSubscriber = parent.viewModel.valuePublisher.receive(on: RunLoop.main).sink(receiveValue: { value in
+				print("[debug] WebView, valueSubscriber")
 				let javascriptFunction = "valueGotFromIOS(\"\(value)\");"
-				print(javascriptFunction)
 				webView.evaluateJavaScript(javascriptFunction) { (response, error) in
 					if let error = error {
-						print("Error calling javascript:valueGotFromIOS()")
+						print("[debug] WebView, valueSubscriber, error calling javascript:valueGotFromIOS()")
 						print(error.localizedDescription)
 					} else {
-						print("Called javascript:valueGotFromIOS()")
+						print("[debug] WebView, valueSubscriber, called javascript:\(javascriptFunction)")
 					}
 				}
 			})
 			
-			timestampPublisher = parent.viewModel.timestampPublisher.receive(on: RunLoop.main).sink(receiveValue: { value in
+			timestampSubscriber = parent.viewModel.timestampPublisher.receive(on: RunLoop.main).sink(receiveValue: { value in
+				print("[debug] WebView, timestampSubscriber")
 				let javascriptFunction = "loadTimestamps(\"\(value)\");"
-				print(javascriptFunction)
 				webView.evaluateJavaScript(javascriptFunction) { (response, error) in
 					if let error = error {
-						print("Error calling javascript:loadTimestamps()")
+						print("[debug] WebView, timestampSubscriber, error calling javascript:loadTimestamps()")
 						print(error.localizedDescription)
 					} else {
-						print("Called javascript:loadTimestamps()")
+						print("[debug] WebView, timestampSubscriber, called javascript:\(javascriptFunction)")
 					}
 				}
 			})
 			
 			loadSubscriber = parent.viewModel.loadPublisher.receive(on: RunLoop.main).sink(receiveValue: { value in
-				print("loadSuscriber")
-				let javascriptFunction = "load_score_view(\"\(value)\");"
-				print(javascriptFunction)
+				print("[debug] WebView, loadSuscriber")
+				let javascriptFunction = "load_score_view(xml_array[\"\(value)\"])"//"load_score_view(\"\(value)\");"
+				//print(javascriptFunction)
 				webView.evaluateJavaScript(javascriptFunction) { (response, error) in
 					if let error = error {
-						print("Error calling javascript:load_score_view()")
+						print("[debug] WebView, loadSubscriber, Error calling javascript:load_score_view()")
 						print(error.localizedDescription)
 					} else {
-						print("Called javascript:load_score_view()")
-						//print("parent.score: "+self.parent.score)
-						print("parent.score: "+self.parent.scorewindData.currentLesson.scoreViewer)
+						print("[debug] WebView, loadSubscriber, called javascript:\(javascriptFunction)")
 					}
 				}
 			})
