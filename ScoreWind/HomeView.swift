@@ -70,9 +70,12 @@ struct HomeView: View {
 				downloadManager.appState = .active
 				//<<<<==
 			}
-			.fullScreenCover(isPresented: $showTipOverlay, content: {
-				TipModalView()
-			})
+			/*.fullScreenCover(isPresented: $showTipOverlay, content: {
+				if scorewindData.getTipCount(tipType: .lessonScoreViewer) < TipLimit.lessonScoreViewer.rawValue {
+					TipModalView()
+				}
+				
+			})*/
 			.onChange(of: scenePhase, perform: { newPhase in
 				if newPhase == .active {
 					print("[deubg] HomeView, app is active")

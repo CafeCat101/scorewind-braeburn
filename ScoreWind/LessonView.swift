@@ -57,7 +57,7 @@ struct LessonView: View {
 							scorewindData.studentData.updateWatchedLessons(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, addWatched: true)
 						}
 						viewModel.videoPlayer!.pause()
-						viewModel.videoPlayer!.replaceCurrentItem(with: nil)
+						//viewModel.videoPlayer!.replaceCurrentItem(with: nil)
 					})
 					.background(.black)
 					.overlay(lessonViewMenu().opacity(scorewindData.currentView==Page.lessonFullScreen ? 1:0.0).disabled(scorewindData.currentView==Page.lessonFullScreen ? false:true), alignment: .topLeading)
@@ -65,6 +65,7 @@ struct LessonView: View {
 			
 			if scorewindData.currentTimestampRecs.count > 0 {
 				LessonScoreView(viewModel: viewModel)
+				/*
 					.contextMenu {
 						Button(action: {
 							viewModel.zoomInPublisher.send("Zoom In")
@@ -79,6 +80,7 @@ struct LessonView: View {
 								.labelStyle(.titleAndIcon)
 						}
 					}
+				 */
 			} else {
 				Spacer()
 			}
@@ -123,75 +125,6 @@ struct LessonView: View {
 		.onDisappear(perform: {
 			print("[debug] LessonView onDisappear")
 		})
-		/*
-		.overlay(content: {
-			if scorewindData.showLessonTextOverlay {
-				VStack {
-					VStack {
-						VStack {
-							HStack {
-								Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))
-									.font(.title)
-									.foregroundColor(.black)
-									.padding(EdgeInsets(top: 15, leading: 15, bottom: 5, trailing: 15))
-								Spacer()
-							}
-							
-							HStack {
-								if isCurrentLessonCompleted {
-									Label("Completed", systemImage: "checkmark.circle.fill")
-										.labelStyle(.iconOnly)
-										.foregroundColor(.black)
-								}
-								if scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindData.currentLesson.scorewindID) {
-									Label("Completed", systemImage: "eye.circle.fill")
-										.labelStyle(.iconOnly)
-										.foregroundColor(.black)
-								}
-								Spacer()
-							}.padding(EdgeInsets(top: 0, leading: 15, bottom: 15, trailing: 15))
-							
-						}.background(.yellow)
-
-						ScrollView {
-							Text("\(scorewindData.currentLesson.content)").padding().foregroundColor(Color("LessonSheet"))
-						}
-						//HTMLString(htmlContent: scorewindData.currentLesson.content)
-						/*Button(action:{
-							//showLessonSheet = false
-							//scorewindData.showLessonTextOverlay = false
-							withAnimation {
-								test = false
-							}
-						}){
-							Text("Continue")
-								.foregroundColor(.black)
-								.padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
-								.background {
-									RoundedRectangle(cornerRadius: 10)
-										.foregroundColor(Color("ScreenTitleBg"))
-								}
-						}
-						Spacer().frame(height:15)*/
-					}
-					.frame(height: screenSize.height*0.6,alignment: .top)
-					.background{
-						RoundedRectangle(cornerRadius: 10)
-							.foregroundColor(Color("LessonTextOverlay"))
-					}
-					.onTapGesture {
-						withAnimation {
-							//test = false
-							scorewindData.showLessonTextOverlay = false
-						}
-					}
-					Spacer()
-				}
-				.background(BackgroundCleanerView()).transition(.move(edge: .top))
-			}
-			
-		})
-		 */
 		.simultaneousGesture(
 			DragGesture()
 				.onChanged { gesture in
@@ -304,24 +237,7 @@ struct LessonView: View {
 					}.padding(EdgeInsets(top: 0, leading: 15, bottom: 15, trailing: 15))
 				}
 				.padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
-				
-				/*
-				 Button(action:{
-				 //showLessonSheet = false
-				 scorewindData.showLessonTextOverlay = false
-				 }){
-				 Text("Continue")
-				 .foregroundColor(.black)
-				 .padding(15)
-				 .background {
-				 RoundedRectangle(cornerRadius: 10)
-				 .foregroundColor(Color("ScreenTitleBg"))
-				 }
-				 }*/
 			}.background(Color("LessonTextOverlay"))
-			/*.onTapGesture(perform: {
-				scorewindData.showLessonTextOverlay = false
-			})*/
 		})
 	}
 	
@@ -413,7 +329,7 @@ struct LessonView: View {
 		
 		if scorewindData.currentLesson.videoMP4.isEmpty == false {
 			viewModel.videoPlayer?.pause()
-			viewModel.videoPlayer?.replaceCurrentItem(with: nil)
+			//viewModel.videoPlayer?.replaceCurrentItem(with: nil)
 			setupPlayer()
 		}
 		//showLessonSheet = true
