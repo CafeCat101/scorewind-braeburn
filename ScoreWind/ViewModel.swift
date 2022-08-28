@@ -20,6 +20,7 @@ class ViewModel: ObservableObject {
 	//var score:String = ""
 	//var highlightBar = 1 //doesn't need this now. measure is found by playback time. keep it incase we'll track it as well.
 	@Published var videoPlayer: AVPlayer?
+	var loadToGo = false
 	
 	func playerGoTo(timestamp:Double){
 		print("playerGoTo()[ViewModel]")

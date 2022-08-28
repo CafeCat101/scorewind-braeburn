@@ -81,9 +81,15 @@ struct WebView: UIViewRepresentable, WebViewHandlerDelegate {
 			//if let url = Bundle.main.url(forResource: "score", withExtension: "html", subdirectory: "www") {
 			let url = URL(string: "www/score.html", relativeTo: scorewindData.docsUrl)!
 			//if prevURL != url {
+			if viewModel.loadToGo {
+				print("[debug] WebView, loadToGo=true")
 				print("[debug] WebView, Load local file \(url)")
 				print("[debug] WebView, allowingReadAccessTo\(url.deletingLastPathComponent())")
 				webView.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())
+				DispatchQueue.main.async { viewModel.loadToGo = false }
+			} else {
+				print("[debug] WebView, loadToGo=false")
+			}
 				//DispatchQueue.main.async { prevURL = url }
 			//} else {
 			//	print("[debug] WebView, url is the same, will not loadFileURL again.")

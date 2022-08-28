@@ -90,6 +90,7 @@ struct LessonView: View {
 			//:LesssonView onAppear will not be triggered after sheet goes away.
 			//:LessonView onAppear will be triggered when switching tab/full screen mode.
 			print("[debug] LessonView onAppear")
+			viewModel.loadToGo = true
 			/*withAnimation {
 				test = true
 			}*/
@@ -282,6 +283,7 @@ struct LessonView: View {
 	}
 	
 	private func setupPlayer(){
+		print("[debug] LessonView, setupPlayer, begin to setup")
 		if !scorewindData.currentLesson.videoMP4.isEmpty {
 			watchTime = ""
 			let courseURL = URL(string: "course\(scorewindData.currentCourse.id)", relativeTo: downloadManager.docsUrl)!
@@ -302,6 +304,7 @@ struct LessonView: View {
 				if scorewindData.currentTimestampRecs.count > 0 {
 					let atMeasure = findMesaureByTimestamp(videoTime: catchTime)
 					self.viewModel.valuePublisher.send(String(atMeasure))
+					print("[debug] LessonView, setupPlayer, ready to play")
 					print("find measure:"+String(atMeasure))
 				}
 				//self.viewModel.highlightBar = atMeasure
@@ -315,6 +318,8 @@ struct LessonView: View {
 		//when switch lesson with menu, onAppear is not triggered.
 		//prepare for the lesson content change here.
 		//magnifyStep = 1
+		
+		viewModel.loadToGo = true
 		//withAnimation {
 			scorewindData.showLessonTextOverlay = true
 		//}
