@@ -138,6 +138,8 @@ class StudentData: ObservableObject {
 			}
 		}
 		
+		myCourses = myCourses.sorted(by: {$0.courseTitle < $1.courseTitle})
+		
 		return myCourses
 	}
 }

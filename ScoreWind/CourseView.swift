@@ -556,7 +556,7 @@ struct CourseView: View {
 		}
 		
 		if watchedLessons.contains(scorewindID) {
-			Label("completed", systemImage: "eye.circle.fill")
+			Label("watched", systemImage: "eye.circle.fill")
 				.labelStyle(.iconOnly)
 				.foregroundColor(Color("LessonListStatusIcon"))
 		}
