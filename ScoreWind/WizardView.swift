@@ -23,6 +23,15 @@ struct WizardView: View {
 			.background(Color("ScreenTitleBg"))*/
 			Label("Scorewind", systemImage: "music.note")
 				.labelStyle(.titleAndIcon)
+				.contextMenu {
+					Button(action: {
+						scorewindData.studentData.removeAKey(keyName: "completedLessons")
+					}){
+						Label("Clear all completed lesson data", systemImage: "xmark.circle")
+							.labelStyle(.titleAndIcon)
+					}
+				}
+		
 			List {
 				Section(header: Text("All")) {
 					ForEach(scorewindData.allCourses) { course in

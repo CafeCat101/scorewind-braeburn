@@ -64,7 +64,7 @@ struct LessonView: View {
 			
 			if scorewindData.currentTimestampRecs.count > 0 {
 				LessonScoreView(viewModel: viewModel)
-				
+				/*
 					.contextMenu {
 						Button(action: {
 							viewModel.zoomInPublisher.send("Zoom In")
@@ -78,7 +78,7 @@ struct LessonView: View {
 							Label("Zoom out", systemImage: "plus.magnifyingglass")
 								.labelStyle(.titleAndIcon)
 						}
-					}
+					}*/
 				 
 			} else {
 				Spacer()

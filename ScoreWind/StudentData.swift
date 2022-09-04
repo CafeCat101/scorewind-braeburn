@@ -30,7 +30,7 @@ class StudentData: ObservableObject {
 	func getCompletedLessons(courseID:Int)->[Int] {
 		var filteredLessons:[Int] = []
 		for lesson in getCompletedLessons() {
-			if lesson.value as! Int == courseID {
+			if (lesson.value as! String).contains(String(courseID)+"/") {
 				filteredLessons.append(Int(lesson.key)!)
 			}
 		}
@@ -39,11 +39,17 @@ class StudentData: ObservableObject {
 	
 	func updateCompletedLesson(courseID:Int, lessonID:Int, isCompleted:Bool) {
 		var allLessons = getCompletedLessons()
+		let now = Date()
+		let nowFormatter = DateFormatter()
+		nowFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+		let completedString = String(courseID)+"/"+nowFormatter.string(from: now)
+		
 		if isCompleted {
-			allLessons.updateValue(courseID, forKey: String(lessonID))
+			allLessons.updateValue(completedString, forKey: String(lessonID))
 		} else{
 			allLessons.removeValue(forKey: String(lessonID))
 		}
+		
 		useriCloudKeyValueStore.set(allLessons,forKey: "completedLessons")
 		useriCloudKeyValueStore.synchronize()
 	}
@@ -98,7 +104,7 @@ class StudentData: ObservableObject {
 		myCourses.removeAll()
 		let lessons = getCompletedLessons().sorted { (Int($0.key)!)<(Int($1.key)!)}
 		for lesson in lessons {
-			let findCourseInAll = allCourses.first(where: {$0.id == (lesson.value as! Int)}) ?? Course()
+			let findCourseInAll = allCourses.first(where: {(lesson.value as! String).contains(String($0.id)+"/")}) ?? Course()//allCourses.first(where: {$0.id == (lesson.value as! Int)}) ?? Course()
 			print("[debug] StudentData, myCourses, findCourseInAll.id \(findCourseInAll.id)")
 			
 			if findCourseInAll.id > 0 {
