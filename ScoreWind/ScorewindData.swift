@@ -45,7 +45,8 @@ class ScorewindData: ObservableObject {
 		do {
 			if let jsonData = try String(contentsOfFile: courseURL.path).data(using: .utf8) {
 				let decodedData = try JSONDecoder().decode([Course].self, from: jsonData)
-				allCourses = decodedData
+				//allCourses = decodedData
+				allCourses = decodedData.filter({ $0.instrument == InstrumentType.guitar.rawValue || $0.instrument == InstrumentType.violin.rawValue})
 				print("->initiateCoursesFromLocal(): decoded, courses")
 			}
 		} catch {

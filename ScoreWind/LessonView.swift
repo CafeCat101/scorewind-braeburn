@@ -24,6 +24,7 @@ struct LessonView: View {
 	@State private var previousLesson = Lesson()
 	@State private var isCurrentLessonCompleted = false
 	@State private var splitScreen = true
+	@State private var showScoreZoomIcon = false
 	//@State private var test = false
 	
 	var body: some View {
@@ -64,6 +65,51 @@ struct LessonView: View {
 			
 			if scorewindData.currentTimestampRecs.count > 0 {
 				LessonScoreView(viewModel: viewModel)
+					.overlay(content: {
+						if showScoreZoomIcon {
+							VStack{
+								Spacer()
+								HStack {
+									Image(systemName: "plus.magnifyingglass")
+										.foregroundColor(.black)
+										.padding(20)
+										.background {
+											RoundedRectangle(cornerRadius: 15)
+												.foregroundColor(Color("AppYellow"))
+										}
+										.onTapGesture(perform: {
+											viewModel.zoomInPublisher.send("Zoom In")
+										})
+									Spacer()
+									Image(systemName: "minus.magnifyingglass")
+										.foregroundColor(.black)
+										.padding(20)
+										.background {
+											RoundedRectangle(cornerRadius: 15)
+												.foregroundColor(Color("AppYellow"))
+										}
+										.onTapGesture(perform: {
+											viewModel.zoomInPublisher.send("Zoom Out")
+										})
+									Spacer()
+									Image(systemName: "xmark.circle")
+										.foregroundColor(.black)
+										.padding(20)
+										.background {
+											RoundedRectangle(cornerRadius: 15)
+												.foregroundColor(Color("AppYellow"))
+										}
+										.onTapGesture(perform: {
+											withAnimation {
+												showScoreZoomIcon = false
+											}
+										})
+								}
+								.padding(15)
+							}
+							.padding(EdgeInsets(top: 0, leading: 0, bottom: 15, trailing: 0))
+						}
+					})
 				/*
 					.contextMenu {
 						Button(action: {
@@ -124,6 +170,7 @@ struct LessonView: View {
 		})
 		.onDisappear(perform: {
 			print("[debug] LessonView onDisappear")
+			showScoreZoomIcon = false
 		})
 		.simultaneousGesture(
 			DragGesture()
@@ -409,6 +456,17 @@ struct LessonView: View {
 					scorewindData.showLessonTextOverlay = true
 				}){
 					Label("Show lesson text", systemImage: "doc.plaintext")
+						.labelStyle(.titleAndIcon)
+				}
+			}
+			
+			if scorewindData.currentTimestampRecs.count > 0 {
+				Button(action: {
+					withAnimation {
+						showScoreZoomIcon = true
+					}
+				}){
+					Label("Change note size", systemImage: "music.note")
 						.labelStyle(.titleAndIcon)
 				}
 			}
