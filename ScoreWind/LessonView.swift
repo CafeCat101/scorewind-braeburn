@@ -19,13 +19,12 @@ struct LessonView: View {
 	//@GestureState var magnifyBy = 1.0
 	//@State private var magnifyStep = 1
 	@ObservedObject var downloadManager:DownloadManager
-	@Binding var showTip:Bool
+	@State private var showTip = false
 	@State private var nextLesson = Lesson()
 	@State private var previousLesson = Lesson()
 	@State private var isCurrentLessonCompleted = false
 	@State private var splitScreen = true
 	@State private var showScoreZoomIcon = false
-	//@State private var test = false
 	
 	var body: some View {
 		VStack {
@@ -150,11 +149,6 @@ struct LessonView: View {
 				splitScreen = false
 			}
 			
-			if scorewindData.getTipCount(tipType: .lessonScoreViewer) < TipLimit.lessonScoreViewer.rawValue {
-				scorewindData.currentTip = .lessonScoreViewer
-				showTip = true
-			}
-			
 			if scorewindData.currentLesson.videoMP4.isEmpty == false {
 				setupPlayer()
 				if scorewindData.lastPlaybackTime > 0.0 {
@@ -216,7 +210,12 @@ struct LessonView: View {
 					self.isSwipping.toggle()
 				}
 		)
-		.sheet(isPresented: $scorewindData.showLessonTextOverlay, content: {
+		.sheet(isPresented: $scorewindData.showLessonTextOverlay, onDismiss: {
+			if scorewindData.getTipCount(tipType: .lessonView) < 1 {
+				scorewindData.currentTip = .lessonView
+				showTip = true
+			}
+		}, content: {
 			VStack {
 				HStack {
 					Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))
@@ -285,6 +284,12 @@ struct LessonView: View {
 				}
 				.padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
 			}.background(Color("LessonTextOverlay"))
+		})
+		.fullScreenCover(isPresented: $showTip, content: {
+			if scorewindData.getTipCount(tipType: .lessonView) < 1 {
+				TipModalView()
+			}
+			
 		})
 	}
 	
@@ -550,6 +555,6 @@ struct LessonView: View {
 
 struct LessonView_Previews: PreviewProvider {
 	static var previews: some View {
-		LessonView(downloadManager: DownloadManager(),showTip: .constant(false)).environmentObject(ScorewindData())
+		LessonView(downloadManager: DownloadManager()).environmentObject(ScorewindData())
 	}
 }

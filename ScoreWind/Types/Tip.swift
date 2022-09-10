@@ -8,5 +8,7 @@
 import Foundation
 enum Tip:String {
 	case `default` = "tip"
-	case lessonScoreViewer = "tipLessonScoreViewer"
+	case lessonView = "lessonView"
+	case myCourseView = "myCourseView"
+	case wizardView = "wizardView"
 }

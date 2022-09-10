@@ -12,7 +12,6 @@ struct HomeView: View {
 	@State private var selectedTab = "TWizard"
 	@ObservedObject var downloadManager: DownloadManager
 	@Environment(\.scenePhase) var scenePhase
-	@State private var showTipOverlay = false
 	
 	var body: some View {
 		if scorewindData.currentView != Page.lessonFullScreen {
@@ -44,7 +43,7 @@ struct HomeView: View {
 				}
 				
 				if scorewindData.currentLesson.id > 0 {
-					LessonView(downloadManager: downloadManager, showTip: $showTipOverlay)
+					LessonView(downloadManager: downloadManager)
 						.tabItem {
 							Image(systemName: "note")
 							Text("Lesson")
@@ -70,12 +69,6 @@ struct HomeView: View {
 				downloadManager.appState = .active
 				//<<<<==
 			}
-			/*.fullScreenCover(isPresented: $showTipOverlay, content: {
-				if scorewindData.getTipCount(tipType: .lessonScoreViewer) < TipLimit.lessonScoreViewer.rawValue {
-					TipModalView()
-				}
-				
-			})*/
 			.onChange(of: scenePhase, perform: { newPhase in
 				if newPhase == .active {
 					print("[deubg] HomeView, app is active")
@@ -133,7 +126,7 @@ struct HomeView: View {
 			})
 		} else {
 			if scorewindData.currentView == Page.lessonFullScreen {
-				LessonView(downloadManager: downloadManager, showTip: $showTipOverlay)
+				LessonView(downloadManager: downloadManager)
 					.onChange(of: scenePhase, perform: { newPhase in
 						if newPhase == .active {
 							print("[debug] LessonView, app is active")

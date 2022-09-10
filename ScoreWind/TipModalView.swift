@@ -19,11 +19,10 @@ struct TipModalView: View {
 			 .background(Color.black)
 			 .opacity(0.3)*/
 			Button(action: {
-				if scorewindData.currentTip == .lessonScoreViewer {
-					var tipCount = userDefaults.object(forKey: Tip.lessonScoreViewer.rawValue) as? Int ?? 0
-					tipCount = tipCount + 1
-					userDefaults.set(tipCount,forKey: Tip.lessonScoreViewer.rawValue)
-				}
+				var tipCount = userDefaults.object(forKey: scorewindData.currentTip.rawValue) as? Int ?? 0
+				tipCount = tipCount + 1
+				userDefaults.set(tipCount,forKey: scorewindData.currentTip.rawValue)
+				
 				presentationMode.wrappedValue.dismiss()
 			}, label: {
 				VStack {
@@ -36,13 +35,22 @@ struct TipModalView: View {
 				.background(Color.black)//.foregroundColor(Color.white)
 				.opacity(0.6)
 				.overlay(content: {
-					if scorewindData.currentTip == Tip.lessonScoreViewer {
+					if scorewindData.currentTip == Tip.lessonView {
 						Circle()
 							.strokeBorder(.gray,lineWidth: 1)
 							.background(Circle().foregroundColor(.white))
 							.frame(width:400,height:500)
 							.overlay(
-								Text("Tip! Check out what you can do from the menu at up right corner.\n\nYou can also swipe lef and right to switch lessons.").foregroundColor(.black)
+								Text("Tip! Check out what you can do from the menu at up right corner.\n\nYou can also swipe left and right to switch lessons.\n\nTry tab the bar in the score and listen or play along.").foregroundColor(.black)
+									.frame(width:300,height:400)
+							)
+					} else if scorewindData.currentTip == Tip.myCourseView {
+						Circle()
+							.strokeBorder(.gray,lineWidth: 1)
+							.background(Circle().foregroundColor(.white))
+							.frame(width:400,height:500)
+							.overlay(
+								Text("My Courses\n\nA plcae to continue where you left off.\n\nWhen you mark a lesson completed or watched a lesson, you can find the course for it here.").foregroundColor(.black)
 									.frame(width:300,height:400)
 							)
 					} else {

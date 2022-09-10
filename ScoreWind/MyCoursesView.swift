@@ -12,6 +12,7 @@ struct MyCoursesView: View {
 	@Binding var selectedTab:String
 	@State private var getMyCourses:[MyCourse] = []
 	let screenSize: CGRect = UIScreen.main.bounds
+	@State private var showTip = false
 	
 	var body: some View {
 		VStack {
@@ -81,8 +82,15 @@ struct MyCoursesView: View {
 			print("[debug] MyCourseView, onAppear")
 			getMyCourses = scorewindData.studentData.myCourses(allCourses: scorewindData.allCourses)
 			print("[debug] MyCourseView, getMyCourses.count \(getMyCourses.count)")
+			
+			if scorewindData.getTipCount(tipType: .myCourseView) < 1 {
+				scorewindData.currentTip = .myCourseView
+				showTip = true
+			}
 		})
-		
+		.fullScreenCover(isPresented: $showTip, content: {
+			TipModalView()
+		})
 	}
 	
 	@ViewBuilder
