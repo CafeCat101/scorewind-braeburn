@@ -10,6 +10,7 @@
 		920D483E5E05884202824DE3 /* Pods_ScoreWind.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3441470A2546CDD3AD7E6C9 /* Pods_ScoreWind.framework */; };
 		B54FC1429AC896AD280E77F4 /* Pods_ScoreWindTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87352E67846310649E0B1D07 /* Pods_ScoreWindTests.framework */; };
 		C802BD6B28C512E40084B72F /* scorewind_ios_xml.zip in Resources */ = {isa = PBXBuildFile; fileRef = C802BD6A28C512E40084B72F /* scorewind_ios_xml.zip */; };
+		C802BD6D28CC570B0084B72F /* WizardStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = C802BD6C28CC570B0084B72F /* WizardStep.swift */; };
 		C85F272A286F4C2B00D0A4E5 /* ScoreWindApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2729286F4C2B00D0A4E5 /* ScoreWindApp.swift */; };
 		C85F272E286F4C2C00D0A4E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */; };
 		C85F2731286F4C2C00D0A4E5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C85F2730286F4C2C00D0A4E5 /* Preview Assets.xcassets */; };
@@ -76,6 +77,7 @@
 		5019C0DCB3C67F469026BFEA /* Pods-ScoreWind.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScoreWind.debug.xcconfig"; path = "Target Support Files/Pods-ScoreWind/Pods-ScoreWind.debug.xcconfig"; sourceTree = "<group>"; };
 		87352E67846310649E0B1D07 /* Pods_ScoreWindTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScoreWindTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C802BD6A28C512E40084B72F /* scorewind_ios_xml.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = scorewind_ios_xml.zip; sourceTree = "<group>"; };
+		C802BD6C28CC570B0084B72F /* WizardStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardStep.swift; sourceTree = "<group>"; };
 		C85F2726286F4C2B00D0A4E5 /* ScoreWind.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScoreWind.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C85F2729286F4C2B00D0A4E5 /* ScoreWindApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreWindApp.swift; sourceTree = "<group>"; };
 		C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -269,6 +271,7 @@
 				C85F279D2877DE0C00D0A4E5 /* SearchParameter.swift */,
 				C85F27A128795A8E00D0A4E5 /* Tip.swift */,
 				C85F27A7287A775E00D0A4E5 /* TipLimit.swift */,
+				C802BD6C28CC570B0084B72F /* WizardStep.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -486,6 +489,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C8E063F028B0E20E000B3D67 /* MyCourse.swift in Sources */,
+				C802BD6D28CC570B0084B72F /* WizardStep.swift in Sources */,
 				C85F2779286F4F2E00D0A4E5 /* WebView.swift in Sources */,
 				C85F2782286F4F2E00D0A4E5 /* LessonView.swift in Sources */,
 				C85F277E286F4F2E00D0A4E5 /* LessonSheetView.swift in Sources */,
