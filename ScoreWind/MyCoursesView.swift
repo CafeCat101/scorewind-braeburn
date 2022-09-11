@@ -16,12 +16,6 @@ struct MyCoursesView: View {
 	
 	var body: some View {
 		VStack {
-			/*HStack {
-				Spacer()
-				Label("Scorewind", systemImage: "music.note")
-						.labelStyle(.titleAndIcon)
-				Spacer()
-			}.padding().background(Color("ScreenTitleBg"))*/
 			Label("My Courses", systemImage: "music.note")
 					.labelStyle(.titleAndIcon)
 			
@@ -37,6 +31,7 @@ struct MyCoursesView: View {
 							Spacer()
 						}
 						.padding(EdgeInsets(top: 10, leading: 15, bottom: 0, trailing: 15))
+						
 						HStack {
 							if aCourse.completedLessons.count>0 {
 								courseProgressView(myCourse: aCourse)
@@ -48,7 +43,17 @@ struct MyCoursesView: View {
 							}
 							Spacer()
 						}
-						.padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 15))
+						.padding(EdgeInsets(top: 5, leading: 15, bottom: 0, trailing: 15))
+						
+						HStack {
+							if aCourse.completedLessons.count == 0 {
+								Text(lastCompletedWatchedTime(ask: "watched", courseID: aCourse.courseID)).foregroundColor(.gray)
+							} else {
+								Text(lastCompletedWatchedTime(ask: "completed", courseID: aCourse.courseID)).foregroundColor(.gray)
+							}
+							Spacer()
+						}
+						.padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15))
 					}
 					.background{
 						RoundedRectangle(cornerRadius: 10)
@@ -80,8 +85,10 @@ struct MyCoursesView: View {
 		}
 		.onAppear(perform: {
 			print("[debug] MyCourseView, onAppear")
-			getMyCourses = scorewindData.studentData.myCourses(allCourses: scorewindData.allCourses)
-			print("[debug] MyCourseView, getMyCourses.count \(getMyCourses.count)")
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+				getMyCourses = scorewindData.studentData.myCourses(allCourses: scorewindData.allCourses)
+				print("[debug] MyCourseView, getMyCourses.count \(getMyCourses.count)")
+			}
 			
 			if scorewindData.getTipCount(tipType: .myCourseView) < 1 {
 				scorewindData.currentTip = .myCourseView
@@ -103,6 +110,98 @@ struct MyCoursesView: View {
 					.foregroundColor(.gray)
 			}			
 		}
+	}
+	
+	private func lastCompletedWatchedTime(ask:String, courseID: Int) -> String {		
+		if ask == "completed" {
+			let allCompletedLessons = scorewindData.studentData.getCompletedLessons().filter({
+				($0.value as! String).contains(String(courseID)+"/")
+			})
+			return getFriendlyTimeDiff(StartWord: "Completed", lessoniCloudValue: allCompletedLessons, courseID: courseID)
+			
+		} else if ask == "watched" {
+			let allWatchedLessons = scorewindData.studentData.getWatchedLessons().filter({
+				($0.value as! String).contains(String(courseID)+"/")
+			})
+			return getFriendlyTimeDiff(StartWord: "Watched", lessoniCloudValue: allWatchedLessons, courseID: courseID)
+		} else {
+			return ""
+		}
+	}
+	
+	private func getFriendlyTimeDiff(StartWord:String, lessoniCloudValue:[String:Any], courseID:Int) -> String {
+		var  printTime = ""
+		let today = Date()
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+		
+		var allSecondDiff:[Int] = []
+		var allDates:[Date] = []
+		for lesson in lessoniCloudValue {
+			let completedDate = dateFormatter.date(from: (lesson.value as! String).replacingOccurrences(of: String(courseID)+"/", with: ""))!
+			let calculateSecondsDiff = Calendar.current.dateComponents([.second], from: completedDate, to: today).second ?? 0
+			allSecondDiff.append(calculateSecondsDiff)
+			allDates.append(completedDate)
+		}
+		allDates = allDates.sorted(by: {$0 < $1})
+		print("[debug] MyCourseView, lastCompletedWatchedTime(courseID:\(courseID), allSecondDiff \(allSecondDiff)")
+		allSecondDiff = allSecondDiff.sorted(by: {$0 < $1})
+		print("[debug] MyCourseView, lastCompletedWatchedTime(courseID:\(courseID), allSecondDiff.sorted \(allSecondDiff)")
+		
+		let byMinute = allSecondDiff[0]/60
+		let byHour = allSecondDiff[0]/3600
+		let byDay = allSecondDiff[0]/86400
+		let byWeek = allSecondDiff[0]/604800
+		let byMonth = allSecondDiff[0]/2419200
+		print("[debug] MyCourseView, lastCompletedWatchedTime(courseID:\(courseID), by sec\(allSecondDiff[0])-min\(byMinute)-hour\(byHour)-day\(byDay)-week\(byWeek)")
+		
+		if allSecondDiff[0] < 60 {
+			if allSecondDiff[0] == 0 {
+				printTime = "\(StartWord) just yet"
+			} else if allSecondDiff[0] == 1 {
+				printTime = "\(StartWord) \(allSecondDiff[0]) second ago"
+			} else {
+				printTime = "\(StartWord) \(allSecondDiff[0]) seconds ago"
+			}
+		} else if byMinute < 60 {
+			if byMinute < 5 {
+				printTime = "\(StartWord) few minutes ago"
+			} else{
+				printTime = "\(StartWord) \(byMinute) minutes ago"
+			}
+		} else if byHour < 24 {
+			if byHour == 1 {
+				printTime = "\(StartWord) an hour ago"
+			} else {
+				printTime = "\(StartWord) \(byHour) hours ago"
+			}
+		}else if byDay < 7 {
+			if byDay == 1 {
+				printTime = "\(StartWord) a day ago"
+			} else {
+				printTime = "\(StartWord) \(byDay) days ago"
+			}
+		} else if byWeek < 5 {
+			if byWeek == 1 {
+				printTime = "\(StartWord) a week ago"
+			} else {
+				printTime = "\(StartWord) \(byWeek) weeks ago"
+			}
+		} else if byMonth < 3 {
+			if byMonth == 1 {
+				printTime = "\(StartWord) one month ago"
+			} else {
+				printTime = "\(StartWord) \(byMonth) months ago"
+			}
+		} else {
+			let dateFormatter2 = DateFormatter()
+			dateFormatter2.dateStyle = .medium
+			dateFormatter2.timeStyle = .none
+			dateFormatter2.locale = Locale(identifier: "en_US")
+			printTime = "\(StartWord) on \(dateFormatter2.string(from: allDates[0]))"
+		}
+		
+		return printTime
 	}
 }
 

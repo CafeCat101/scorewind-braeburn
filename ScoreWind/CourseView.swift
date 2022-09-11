@@ -228,8 +228,11 @@ struct CourseView: View {
 			scrollOffset = getSectionOffset(goToSection: selectedSection)//getInitialOffset()
 			scorewindData.findACourseByOrder(order: SearchParameter.DESC)
 			scorewindData.findACourseByOrder(order: SearchParameter.ASC)
-			completedLessons = scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id)
-			watchedLessons = scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id)
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+				completedLessons = scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id)
+				watchedLessons = scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id)
+			}
+			
 		})
 	}
 	

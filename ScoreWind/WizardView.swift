@@ -62,7 +62,7 @@ struct WizardView: View {
 			} else {
 				if stepName == .chooseInstrument {
 					Spacer()
-					Text("Which instrument do you want to play?")
+					Text("Which instrument do you want to learn?")
 						.font(.headline)
 					
 					HStack {
