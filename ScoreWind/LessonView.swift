@@ -229,21 +229,34 @@ struct LessonView: View {
 			}
 		}, content: {
 			VStack {
-				HStack(alignment: .firstTextBaseline) {
-					Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))
-						.font(.title)
-						.foregroundColor(.black)
+				HStack {
 					Spacer()
-					Label("Completed", systemImage: "xmark.circle.fill")
-						.font(.title)
-						.labelStyle(.iconOnly)
-						.foregroundColor(.black)
+					Label("Continue", systemImage: "xmark.circle.fill")
+						.font(.title3)
+						.labelStyle(.titleOnly)
+						.foregroundColor(Color("LessonSheet"))
 						.onTapGesture {
 							scorewindData.showLessonTextOverlay = false
 						}
 				}
+					.padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 15))
+					.background(Color("LessonTextOverlay"))
+				HStack(alignment: .firstTextBaseline) {
+					Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))
+						.font(.title)
+						.foregroundColor(Color("AppYellow"))
+						//.foregroundColor(.black)
+					Spacer()
+					/*Label("Completed", systemImage: "xmark.circle.fill")
+						.font(.title)
+						.labelStyle(.iconOnly)
+						.foregroundColor(Color("LessonTextOverlay"))
+						.onTapGesture {
+							scorewindData.showLessonTextOverlay = false
+						}*/
+				}
 				.padding(EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 15))
-				.background(Color("AppYellow"))
+				//.background(Color("AppYellow"))
 				
 				ScrollView {
 					VStack {
