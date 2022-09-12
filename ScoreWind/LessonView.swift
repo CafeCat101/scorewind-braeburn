@@ -265,7 +265,7 @@ struct LessonView: View {
 				
 				ScrollView {
 					VStack {
-						HStack {
+						HStack{
 							if isCurrentLessonCompleted {
 								Label("Completed", systemImage: "checkmark.circle.fill")
 									.labelStyle(.iconOnly)
@@ -333,7 +333,12 @@ struct LessonView: View {
 								Spacer()
 							}
 						}*/
-						Text("\(scorewindData.courseContentNoHtml(content: scorewindData.currentLesson.content))").foregroundColor(Color("LessonSheet"))
+						HStack {
+							Text("\(scorewindData.courseContentNoHtml(content: scorewindData.currentLesson.content))")
+								.foregroundColor(Color("LessonSheet"))
+							Spacer()
+						}
+						
 						if scorewindData.currentTimestampRecs.count > 0 {
 							Label("Play and learn", systemImage: "music.note.tv.fill")
 								.labelStyle(.titleAndIcon)
@@ -521,7 +526,9 @@ struct LessonView: View {
 				scorewindData.currentLesson = previousLesson
 				switchLesson()
 			}){
-				Text("Previous: \(scorewindData.replaceCommonHTMLNumber(htmlString: previousLesson.title))")
+				//Text("Previous: \(scorewindData.replaceCommonHTMLNumber(htmlString: previousLesson.title))")
+				Label("Previous lesson", systemImage: "arrow.backward.circle")
+					.labelStyle(.titleAndIcon)
 			}
 		}
 		
@@ -530,7 +537,9 @@ struct LessonView: View {
 				scorewindData.currentLesson = nextLesson
 				switchLesson()
 			}){
-				Text("Next: \(scorewindData.replaceCommonHTMLNumber(htmlString: nextLesson.title))")
+				//Text("Next: \(scorewindData.replaceCommonHTMLNumber(htmlString: nextLesson.title))")
+				Label("Next lesson", systemImage: "arrow.forward.circle")
+					.labelStyle(.titleAndIcon)
 			}
 		}
 	
