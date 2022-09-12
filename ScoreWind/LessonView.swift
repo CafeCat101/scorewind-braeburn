@@ -34,8 +34,8 @@ struct LessonView: View {
 						lessonViewMenuContent()
 						
 					} label: {
-						//original icon: list.bullet.circle
-						Image(systemName: isCurrentLessonCompleted==false ? "menucard":"text.badge.checkmark")
+						//original icon: list.bullet.circle:text.badge.checkmark
+						Image(systemName: isCurrentLessonCompleted==false ? "menucard":"checkmark.circle.fill")
 							.resizable()
 							.scaledToFit()
 							.frame(height: screenSize.height/25 - 4)
@@ -77,7 +77,7 @@ struct LessonView: View {
 						lessonViewMenuContent()
 					 } label: {
 						 //original icon: list.bullet.circle
-						 Label("LessonMenu", systemImage: isCurrentLessonCompleted==false ? "menucard":"text.badge.checkmark")
+						 Label("LessonMenu", systemImage: isCurrentLessonCompleted==false ? "menucard":"checkmark.circle.fill")
 							 .labelStyle(.iconOnly)
 							 .foregroundColor(Color("AppYellowDynamic2"))
 							 .padding(1)
@@ -231,16 +231,21 @@ struct LessonView: View {
 			VStack {
 				HStack {
 					Spacer()
-					Label("Continue", systemImage: "xmark.circle.fill")
+					Text("About")
 						.font(.title3)
-						.labelStyle(.titleOnly)
-						.foregroundColor(Color("LessonSheet"))
-						.onTapGesture {
-							scorewindData.showLessonTextOverlay = false
-						}
+						.foregroundColor(Color("AppYellow"))
+					Spacer()
 				}
 					.padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 15))
 					.background(Color("LessonTextOverlay"))
+					.overlay(Label("Continue", systemImage: "xmark.circle.fill")
+						.font(.title3)
+						.labelStyle(.titleOnly)
+						.foregroundColor(scorewindData.currentTimestampRecs.count>0 ? Color("LessonPlayLearnContinue") : Color("LessonWatchLearnContinue"))
+						.padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 15))
+						.onTapGesture {
+							scorewindData.showLessonTextOverlay = false
+						}, alignment: .trailing)
 				HStack(alignment: .firstTextBaseline) {
 					Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))
 						.font(.title)
@@ -511,7 +516,7 @@ struct LessonView: View {
 			}
 		}
 		
-		if previousLesson.scorewindID > 0 {
+		if previousLesson.id > 0 {
 			Button(action: {
 				scorewindData.currentLesson = previousLesson
 				switchLesson()
@@ -520,7 +525,7 @@ struct LessonView: View {
 			}
 		}
 		
-		if nextLesson.scorewindID > 0 {
+		if nextLesson.id > 0 {
 			Button(action: {
 				scorewindData.currentLesson = nextLesson
 				switchLesson()
@@ -554,7 +559,7 @@ struct LessonView: View {
 	
 	private func setNextLesson() {
 		let lessonArray = scorewindData.currentCourse.lessons
-		let getCurrentIndex = lessonArray.firstIndex(where: {$0.scorewindID == scorewindData.currentLesson.scorewindID}) ?? -1
+		let getCurrentIndex = lessonArray.firstIndex(where: {$0.id == scorewindData.currentLesson.id}) ?? -1
 		print("[debug] LessonView, setNextLesson, getCurrentIndex \(getCurrentIndex)")
 		if (getCurrentIndex < (lessonArray.count-1)) && (getCurrentIndex > -1) {
 			nextLesson = scorewindData.currentCourse.lessons[getCurrentIndex+1]
@@ -565,7 +570,7 @@ struct LessonView: View {
 	
 	private func setPreviousLesson() {
 		let lessonArray = scorewindData.currentCourse.lessons
-		let getCurrentIndex = lessonArray.firstIndex(where: {$0.scorewindID == scorewindData.currentLesson.scorewindID}) ?? -1
+		let getCurrentIndex = lessonArray.firstIndex(where: {$0.id == scorewindData.currentLesson.id}) ?? -1
 		print("[debug] LessonView, setPreviousLesson, getCurrentIndex \(getCurrentIndex)")
 		if getCurrentIndex > 0 {
 			previousLesson = scorewindData.currentCourse.lessons[getCurrentIndex-1]
