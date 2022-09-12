@@ -30,11 +30,25 @@ struct LessonView: View {
 		VStack {
 			if scorewindData.currentView == Page.lesson {
 				HStack {
+					Menu {
+						lessonViewMenuContent()
+						
+					} label: {
+						//original icon: list.bullet.circle
+						Image(systemName: isCurrentLessonCompleted==false ? "menucard":"text.badge.checkmark")
+							.resizable()
+							.scaledToFit()
+							.frame(height: screenSize.height/25 - 4)
+							.foregroundColor(Color("AppYelloDynamic"))
+						Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))
+							.font(.title3)
+							.truncationMode(.tail)
+							.foregroundColor(Color("AppYelloDynamic"))
+					}
+					/*lessonViewMenu()
 					Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))
 						.font(.title3)
-						.truncationMode(.tail)
-					Spacer()
-					lessonViewMenu()
+						.truncationMode(.tail)*/
 				}
 				.frame(height: screenSize.height/25)
 				.padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 15))
@@ -59,7 +73,20 @@ struct LessonView: View {
 						//viewModel.videoPlayer!.replaceCurrentItem(with: nil)
 					})
 					.background(.black)
-					.overlay(lessonViewMenu().opacity(scorewindData.currentView==Page.lessonFullScreen ? 1:0.0).disabled(scorewindData.currentView==Page.lessonFullScreen ? false:true), alignment: .topLeading)
+					.overlay(Menu {
+						lessonViewMenuContent()
+					 } label: {
+						 //original icon: list.bullet.circle
+						 Label("LessonMenu", systemImage: isCurrentLessonCompleted==false ? "menucard":"text.badge.checkmark")
+							 .labelStyle(.iconOnly)
+							 .foregroundColor(Color("AppYellowDynamic2"))
+							 .padding(1)
+							 .fixedSize()
+							 .font(.title)
+					 }
+						.opacity(scorewindData.currentView==Page.lessonFullScreen ? 1:0.0)
+						.disabled(scorewindData.currentView==Page.lessonFullScreen ? false:true), alignment: .topLeading)
+					/*.overlay(lessonViewMenu().opacity(scorewindData.currentView==Page.lessonFullScreen ? 1:0.0).disabled(scorewindData.currentView==Page.lessonFullScreen ? false:true), alignment: .topLeading)*/
 			}
 			
 			if scorewindData.currentTimestampRecs.count > 0 {
@@ -109,22 +136,6 @@ struct LessonView: View {
 							.padding(EdgeInsets(top: 0, leading: 0, bottom: 15, trailing: 0))
 						}
 					})
-				/*
-					.contextMenu {
-						Button(action: {
-							viewModel.zoomInPublisher.send("Zoom In")
-						}){
-							Label("Zoom in", systemImage: "minus.magnifyingglass")
-								.labelStyle(.titleAndIcon)
-						}
-						Button(action: {
-							viewModel.zoomInPublisher.send("Zoom Out")
-						}){
-							Label("Zoom out", systemImage: "plus.magnifyingglass")
-								.labelStyle(.titleAndIcon)
-						}
-					}*/
-				 
 			} else {
 				Spacer()
 			}
@@ -166,6 +177,7 @@ struct LessonView: View {
 			print("[debug] LessonView onDisappear")
 			showScoreZoomIcon = false
 		})
+		/*
 		.simultaneousGesture(
 			DragGesture()
 				.onChanged { gesture in
@@ -209,7 +221,7 @@ struct LessonView: View {
 					}
 					self.isSwipping.toggle()
 				}
-		)
+		)*/
 		.sheet(isPresented: $scorewindData.showLessonTextOverlay, onDismiss: {
 			if scorewindData.getTipCount(tipType: .lessonView) < 1 {
 				scorewindData.currentTip = .lessonView
@@ -217,11 +229,18 @@ struct LessonView: View {
 			}
 		}, content: {
 			VStack {
-				HStack {
+				HStack(alignment: .firstTextBaseline) {
 					Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))
 						.font(.title)
 						.foregroundColor(.black)
 					Spacer()
+					Label("Completed", systemImage: "xmark.circle.fill")
+						.font(.title)
+						.labelStyle(.iconOnly)
+						.foregroundColor(.black)
+						.onTapGesture {
+							scorewindData.showLessonTextOverlay = false
+						}
 				}
 				.padding(EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 15))
 				.background(Color("AppYellow"))
@@ -231,29 +250,40 @@ struct LessonView: View {
 						HStack {
 							if isCurrentLessonCompleted {
 								Label("Completed", systemImage: "checkmark.circle.fill")
-									.labelStyle(.titleAndIcon)
+									.labelStyle(.iconOnly)
 									.foregroundColor(Color("LessonSheet"))
-									.padding(EdgeInsets(top: 6, leading: 15, bottom: 6, trailing: 15))
+									.padding(1)
 									.background {
-										RoundedRectangle(cornerRadius: 20)
+										Circle()
 											.foregroundColor(Color("BadgeCompleted"))
 									}
+									.fixedSize()
+								
+								Label("Completed", systemImage: "checkmark.circle.fill")
+									.labelStyle(.titleOnly)
+									.foregroundColor(Color("AppYellow"))
+									.padding(EdgeInsets(top: 6, leading: 0, bottom: 6, trailing: 15))
 									.fixedSize()
 							}
 							if scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindData.currentLesson.scorewindID) {
 								Label("Video watched", systemImage: "eye.circle.fill")
-									.labelStyle(.titleAndIcon)
+									.labelStyle(.iconOnly)
 									.foregroundColor(Color("LessonSheet"))
-									.padding(EdgeInsets(top: 6, leading: 15, bottom: 6, trailing: 15))
+									.padding(1)
 									.background {
-										RoundedRectangle(cornerRadius: 20)
+										Circle()
 											.foregroundColor(Color("LessonTitileHeighlight"))
 									}
+									.fixedSize()
+								Label("Video watched", systemImage: "eye.circle.fill")
+									.labelStyle(.titleOnly)
+									.foregroundColor(Color("AppYellow"))
+									.padding(EdgeInsets(top: 6, leading: 0, bottom: 6, trailing: 15))
 									.fixedSize()
 							}
 							Spacer()
 						}
-						VStack {
+						/*VStack {
 							HStack {
 								if scorewindData.currentTimestampRecs.count > 0 {
 									Label("Play and learn", systemImage: "music.note.tv.fill")
@@ -265,6 +295,9 @@ struct LessonView: View {
 												.foregroundColor(Color("BadgeScoreAvailable"))
 										}
 										.fixedSize()
+										.onTapGesture {
+											scorewindData.showLessonTextOverlay = false
+										}
 								} else {
 									Label("Watch and learn", systemImage: "video.bubble.left.fill")
 										.labelStyle(.titleAndIcon)
@@ -275,11 +308,41 @@ struct LessonView: View {
 												.foregroundColor(Color("BadgeWatchLearn"))
 										}
 										.fixedSize()
+										.onTapGesture {
+											scorewindData.showLessonTextOverlay = false
+										}
 								}
 								Spacer()
 							}
-						}
+						}*/
 						Text("\(scorewindData.courseContentNoHtml(content: scorewindData.currentLesson.content))").foregroundColor(Color("LessonSheet"))
+						if scorewindData.currentTimestampRecs.count > 0 {
+							Label("Play and learn", systemImage: "music.note.tv.fill")
+								.labelStyle(.titleAndIcon)
+								.foregroundColor(Color("LessonSheet"))
+								.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
+								.background {
+									RoundedRectangle(cornerRadius: 20)
+										.foregroundColor(Color("BadgeScoreAvailable"))
+								}
+								.fixedSize()
+								.onTapGesture {
+									scorewindData.showLessonTextOverlay = false
+								}
+						} else {
+							Label("Watch and learn", systemImage: "video.bubble.left.fill")
+								.labelStyle(.titleAndIcon)
+								.foregroundColor(Color("LessonSheet"))
+								.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
+								.background {
+									RoundedRectangle(cornerRadius: 20)
+										.foregroundColor(Color("BadgeWatchLearn"))
+								}
+								.fixedSize()
+								.onTapGesture {
+									scorewindData.showLessonTextOverlay = false
+								}
+						}
 					}.padding(EdgeInsets(top: 0, leading: 15, bottom: 15, trailing: 15))
 				}
 				.padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
@@ -399,89 +462,80 @@ struct LessonView: View {
 	}
 	
 	@ViewBuilder
-	private func lessonViewMenu() -> some View {
-		Menu {
+	private func lessonViewMenuContent() -> some View {
+		Button(action: {
+			withAnimation {
+				if scorewindData.currentView == Page.lesson {
+					scorewindData.currentView = Page.lessonFullScreen
+				} else {
+					scorewindData.currentView = Page.lesson
+				}
+			}
+		}){
+			if scorewindData.currentView == Page.lesson {
+				Label("Focus mode", systemImage: "lightbulb.circle")
+					.labelStyle(.titleAndIcon)
+			} else {
+				Label("Explore mode", systemImage: "lightbulb.circle")
+					.labelStyle(.titleAndIcon)
+			}
+		}
+		
+		Button(action: {
+			if isCurrentLessonCompleted {
+				scorewindData.studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: false)
+			} else{
+				scorewindData.studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: true)
+			}
+			checkCurrentLessonCompleted()
+		}){
+			if isCurrentLessonCompleted {
+				Label("Undo completed", systemImage: "checkmark.circle.fill")
+					.labelStyle(.titleAndIcon)
+			} else {
+				Label("Completed", systemImage: "checkmark.circle")
+					.labelStyle(.titleAndIcon)
+			}
+		}
+		
+		if previousLesson.scorewindID > 0 {
+			Button(action: {
+				scorewindData.currentLesson = previousLesson
+				switchLesson()
+			}){
+				Text("Previous: \(scorewindData.replaceCommonHTMLNumber(htmlString: previousLesson.title))")
+			}
+		}
+		
+		if nextLesson.scorewindID > 0 {
+			Button(action: {
+				scorewindData.currentLesson = nextLesson
+				switchLesson()
+			}){
+				Text("Next: \(scorewindData.replaceCommonHTMLNumber(htmlString: nextLesson.title))")
+			}
+		}
+	
+		//show lesson text in sheet
+		if scorewindData.currentLesson.content.isEmpty == false {
+			Button(action: {
+				//showLessonSheet = true
+				scorewindData.showLessonTextOverlay = true
+			}){
+				Label("Show lesson text", systemImage: "doc.plaintext")
+					.labelStyle(.titleAndIcon)
+			}
+		}
+		
+		if scorewindData.currentTimestampRecs.count > 0 {
 			Button(action: {
 				withAnimation {
-					if scorewindData.currentView == Page.lesson {
-						scorewindData.currentView = Page.lessonFullScreen
-					} else {
-						scorewindData.currentView = Page.lesson
-					}
+					showScoreZoomIcon = true
 				}
 			}){
-				if scorewindData.currentView == Page.lesson {
-					Label("Focus mode", systemImage: "lightbulb.circle")
-						.labelStyle(.titleAndIcon)
-				} else {
-					Label("Explore mode", systemImage: "lightbulb.circle")
-						.labelStyle(.titleAndIcon)
-				}
+				Label("Change note size", systemImage: "music.note")
+					.labelStyle(.titleAndIcon)
 			}
-			
-			Button(action: {
-				if isCurrentLessonCompleted {
-					scorewindData.studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: false)
-				} else{
-					scorewindData.studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: true)
-				}
-				checkCurrentLessonCompleted()
-			}){
-				if isCurrentLessonCompleted {
-					Label("Undo completed", systemImage: "checkmark.circle.fill")
-						.labelStyle(.titleAndIcon)
-				} else {
-					Label("Completed", systemImage: "checkmark.circle")
-						.labelStyle(.titleAndIcon)
-				}
-			}
-			
-			if previousLesson.scorewindID > 0 {
-				Button(action: {
-					scorewindData.currentLesson = previousLesson
-					switchLesson()
-				}){
-					Text("Previous: \(scorewindData.replaceCommonHTMLNumber(htmlString: previousLesson.title))")
-				}
-			}
-			
-			if nextLesson.scorewindID > 0 {
-				Button(action: {
-					scorewindData.currentLesson = nextLesson
-					switchLesson()
-				}){
-					Text("Next: \(scorewindData.replaceCommonHTMLNumber(htmlString: nextLesson.title))")
-				}
-			}
-		
-			//show lesson text in sheet
-			if scorewindData.currentLesson.content.isEmpty == false {
-				Button(action: {
-					//showLessonSheet = true
-					scorewindData.showLessonTextOverlay = true
-				}){
-					Label("Show lesson text", systemImage: "doc.plaintext")
-						.labelStyle(.titleAndIcon)
-				}
-			}
-			
-			if scorewindData.currentTimestampRecs.count > 0 {
-				Button(action: {
-					withAnimation {
-						showScoreZoomIcon = true
-					}
-				}){
-					Label("Change note size", systemImage: "music.note")
-						.labelStyle(.titleAndIcon)
-				}
-			}
-			
-		} label: {
-			Image(systemName: isCurrentLessonCompleted==false ? "list.bullet.circle":"text.badge.checkmark")
-				.resizable()
-				.scaledToFit()
-				.frame(height: screenSize.height/25 - 4)
-				.foregroundColor(scorewindData.currentView == Page.lesson ? Color("AppYelloDynamic"):.white)
 		}
 	}
 	
