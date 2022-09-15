@@ -41,7 +41,7 @@ struct TipModalView: View {
 							.background(Circle().foregroundColor(.white))
 							.frame(width:400,height:500)
 							.overlay(
-								Text("Tip! Check out what you can do from the menu at up right corner.\n\nYou can also swipe left and right to switch lessons.\n\nTry tab the bar in the score and listen or play along.").foregroundColor(.black)
+								Text("Tip! Tab the lesson title to find out what you can do in the menu.\n\nTo remember lesson you've learned, just mark it \"Completed\" from there.").foregroundColor(.black)
 									.frame(width:300,height:400)
 							)
 					} else if scorewindData.currentTip == Tip.myCourseView {
@@ -50,7 +50,7 @@ struct TipModalView: View {
 							.background(Circle().foregroundColor(.white))
 							.frame(width:400,height:500)
 							.overlay(
-								Text("My Courses\n\nA plcae to continue where you left off.\n\nWhen you mark a lesson completed or watched a lesson, you can find the course for it here.").foregroundColor(.black)
+								Text("My Courses\n\nA plcae to continue where you left off.\n\nWhen you mark a lesson completed or watched, you can find the course for it here.").foregroundColor(.black)
 									.frame(width:300,height:400)
 							)
 					} else {

@@ -22,11 +22,19 @@ struct HomeView: View {
 						Text("Wizard")
 					}.tag("TWizard")
 				
-				MyCoursesView(selectedTab: $selectedTab)
-					.tabItem {
-						Image(systemName: "music.note.list")
-						Text("My Courses")
-					}.tag("TMyCourses")
+				if scorewindData.studentData.myCourses(allCourses: scorewindData.allCourses).count > 0 {
+					MyCoursesView(selectedTab: $selectedTab)
+						.tabItem {
+							Image(systemName: "music.note.list")
+							Text("My Courses")
+						}.tag("TMyCourses")
+				} else {
+					BlankTabView(message: "After you've completed or watched a lesson, you can find the course for it here.")
+						.tabItem {
+							Image(systemName: "music.note.list")
+							Text("My Courses")
+						}.tag("TMyCourses")
+				}
 				
 				if scorewindData.currentCourse.id > 0 {
 					CourseView(selectedTab: $selectedTab, downloadManager: downloadManager)

@@ -232,14 +232,15 @@ struct LessonView: View {
 				HStack {
 					Spacer()
 					Text("About")
-						.font(.title3)
+						//.font(.title3)
+						.fontWeight(.bold)
 						.foregroundColor(Color("AppYellow"))
 					Spacer()
 				}
 					.padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 15))
 					.background(Color("LessonTextOverlay"))
 					.overlay(Label("Continue", systemImage: "xmark.circle.fill")
-						.font(.title3)
+						//.font(.title3)
 						.labelStyle(.titleOnly)
 						.foregroundColor(scorewindData.currentTimestampRecs.count>0 ? Color("LessonPlayLearnContinue") : Color("LessonWatchLearnContinue"))
 						.padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 15))
