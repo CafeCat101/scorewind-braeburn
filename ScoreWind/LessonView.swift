@@ -488,24 +488,6 @@ struct LessonView: View {
 	@ViewBuilder
 	private func lessonViewMenuContent() -> some View {
 		Button(action: {
-			withAnimation {
-				if scorewindData.currentView == Page.lesson {
-					scorewindData.currentView = Page.lessonFullScreen
-				} else {
-					scorewindData.currentView = Page.lesson
-				}
-			}
-		}){
-			if scorewindData.currentView == Page.lesson {
-				Label("Focus mode", systemImage: "lightbulb.circle")
-					.labelStyle(.titleAndIcon)
-			} else {
-				Label("Explore mode", systemImage: "lightbulb.circle")
-					.labelStyle(.titleAndIcon)
-			}
-		}
-		
-		Button(action: {
 			if isCurrentLessonCompleted {
 				scorewindData.studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: false)
 			} else{
@@ -562,6 +544,24 @@ struct LessonView: View {
 				}
 			}){
 				Label("Change note size", systemImage: "music.note")
+					.labelStyle(.titleAndIcon)
+			}
+		}
+		
+		Button(action: {
+			withAnimation {
+				if scorewindData.currentView == Page.lesson {
+					scorewindData.currentView = Page.lessonFullScreen
+				} else {
+					scorewindData.currentView = Page.lesson
+				}
+			}
+		}){
+			if scorewindData.currentView == Page.lesson {
+				Label("Focus mode", systemImage: "lightbulb.circle")
+					.labelStyle(.titleAndIcon)
+			} else {
+				Label("Explore mode", systemImage: "lightbulb.circle")
 					.labelStyle(.titleAndIcon)
 			}
 		}
