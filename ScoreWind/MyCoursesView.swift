@@ -68,6 +68,7 @@ struct MyCoursesView: View {
 						scorewindData.setCurrentTimestampRecs()
 						//scorewindData.lastViewAtScore = true
 						scorewindData.lastPlaybackTime = 0.0
+						scorewindData.lessonChanged = true
 					})
 				}
 			}

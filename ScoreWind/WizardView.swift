@@ -68,6 +68,7 @@ struct WizardView: View {
 								scorewindData.setCurrentTimestampRecs()
 								//scorewindData.lastViewAtScore = true
 								scorewindData.lastPlaybackTime = 0.0
+								scorewindData.lessonChanged = true
 							}) {
 								if course.id == scorewindData.currentCourse.id {
 									Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
@@ -91,6 +92,7 @@ struct WizardView: View {
 								scorewindData.setCurrentTimestampRecs()
 								//scorewindData.lastViewAtScore = true
 								scorewindData.lastPlaybackTime = 0.0
+								scorewindData.lessonChanged = true
 							}) {
 								if course.id == scorewindData.currentCourse.id {
 									Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
@@ -114,6 +116,7 @@ struct WizardView: View {
 								scorewindData.setCurrentTimestampRecs()
 								//scorewindData.lastViewAtScore = true
 								scorewindData.lastPlaybackTime = 0.0
+								scorewindData.lessonChanged = true
 							}) {
 								if course.id == scorewindData.currentCourse.id {
 									Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
@@ -137,6 +140,7 @@ struct WizardView: View {
 								scorewindData.setCurrentTimestampRecs()
 								//scorewindData.lastViewAtScore = true
 								scorewindData.lastPlaybackTime = 0.0
+								scorewindData.lessonChanged = true
 							}) {
 								if course.id == scorewindData.currentCourse.id {
 									Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))

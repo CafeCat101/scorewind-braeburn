@@ -31,6 +31,7 @@ class ScorewindData: ObservableObject {
 	private var userDefaults = UserDefaults.standard
 	var dataVersion = 0
 	@Published var currentTip: Tip = .default
+	var lessonChanged = true
 	
 	init() {
 		print(docsUrl!.path)

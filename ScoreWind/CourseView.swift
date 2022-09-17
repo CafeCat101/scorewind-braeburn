@@ -121,6 +121,7 @@ struct CourseView: View {
 											scorewindData.lastPlaybackTime = 0.0
 											//scorewindData.lastViewAtScore = true
 											self.selectedTab = "TLesson"
+											scorewindData.lessonChanged = true
 										}) {
 											Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
 												.multilineTextAlignment(.leading)

@@ -100,7 +100,7 @@ struct HomeView: View {
 					print("\(scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id))")
 					print("\(scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id))")
 					print("\(scorewindData.currentLesson.scorewindID)")
-					scorewindData.showLessonTextOverlay = true
+					//scorewindData.showLessonTextOverlay = true
 					/*if (scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindData.currentLesson.scorewindID) == false) && (scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindData.currentLesson.scorewindID) == false) {
 						scorewindData.showLessonTextOverlay = true
 					}*/

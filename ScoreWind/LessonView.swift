@@ -25,6 +25,7 @@ struct LessonView: View {
 	@State private var isCurrentLessonCompleted = false
 	@State private var splitScreen = true
 	@State private var showScoreZoomIcon = false
+	@State private var savePlayerPlayable = false
 	
 	var body: some View {
 		VStack {
@@ -86,6 +87,9 @@ struct LessonView: View {
 					 }
 						.opacity(scorewindData.currentView==Page.lessonFullScreen ? 1:0.0)
 						.disabled(scorewindData.currentView==Page.lessonFullScreen ? false:true), alignment: .topLeading)
+					/*.onTapGesture(perform: {
+						print("[debug] VideoPlayer, onTapGesture")
+					})*/
 					/*.overlay(lessonViewMenu().opacity(scorewindData.currentView==Page.lessonFullScreen ? 1:0.0).disabled(scorewindData.currentView==Page.lessonFullScreen ? false:true), alignment: .topLeading)*/
 			}
 			
@@ -145,6 +149,12 @@ struct LessonView: View {
 			//:LesssonView onAppear will not be triggered after sheet goes away.
 			//:LessonView onAppear will be triggered when switching tab/full screen mode.
 			print("[debug] LessonView onAppear")
+			if scorewindData.lessonChanged {
+				scorewindData.showLessonTextOverlay = true
+				scorewindData.lessonChanged = false
+			}
+			
+			
 			viewModel.loadToGo = true
 			/*withAnimation {
 				test = true
@@ -163,8 +173,17 @@ struct LessonView: View {
 			if scorewindData.currentLesson.videoMP4.isEmpty == false {
 				setupPlayer()
 				if scorewindData.lastPlaybackTime > 0.0 {
-					print("[debug] LessonView, call viewModel.playerSeek")
-					viewModel.playerSeek(timestamp: scorewindData.lastPlaybackTime)
+					if scorewindData.showLessonTextOverlay {
+						viewModel.playerSeek(timestamp: scorewindData.lastPlaybackTime)
+					} else {
+						viewModel.playerGoTo(timestamp: scorewindData.lastPlaybackTime)
+					}
+				} else {
+					if scorewindData.showLessonTextOverlay {
+						viewModel.playerSeek(timestamp: 0.0)
+					} else {
+						viewModel.playerGoTo(timestamp: 0.0)
+					}
 				}
 			}
 			
@@ -226,6 +245,9 @@ struct LessonView: View {
 			if scorewindData.getTipCount(tipType: .lessonView) < 1 {
 				scorewindData.currentTip = .lessonView
 				showTip = true
+			}
+			if scorewindData.currentLesson.videoMP4.isEmpty == false {
+				viewModel.videoPlayer?.play()
 			}
 		}, content: {
 			VStack {
@@ -442,9 +464,11 @@ struct LessonView: View {
 				if scorewindData.currentTimestampRecs.count > 0 {
 					let atMeasure = findMesaureByTimestamp(videoTime: catchTime)
 					self.viewModel.valuePublisher.send(String(atMeasure))
-					print("[debug] LessonView, setupPlayer, ready to play")
+					//print("[debug] LessonView, setupPlayer, ready to play")
 					print("find measure:"+String(atMeasure))
 				}
+				
+
 				//self.viewModel.highlightBar = atMeasure
 				watchTime = String(format: "%.3f", Float(catchTime))//createTimeString(time: Float(time.seconds))
 				
@@ -476,10 +500,13 @@ struct LessonView: View {
 			setupPlayer()
 		}
 		//showLessonSheet = true
+		/*
 		if (scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindData.currentLesson.scorewindID) == false) && (scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindData.currentLesson.scorewindID) == false) {
 			scorewindData.showLessonTextOverlay = true
 		}
+		 */
 		//scorewindData.lastViewAtScore = true
+		scorewindData.lessonChanged = true
 		checkCurrentLessonCompleted()
 		setPreviousLesson()
 		setNextLesson()
@@ -548,6 +575,7 @@ struct LessonView: View {
 			}
 		}
 		
+		/*
 		Button(action: {
 			withAnimation {
 				if scorewindData.currentView == Page.lesson {
@@ -565,6 +593,7 @@ struct LessonView: View {
 					.labelStyle(.titleAndIcon)
 			}
 		}
+		*/
 	}
 	
 	private func setNextLesson() {
