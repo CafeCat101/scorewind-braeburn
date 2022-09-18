@@ -10,7 +10,7 @@ import SwiftUI
 
 
 class StudentData: ObservableObject {
-	private var myCourses:[MyCourse] = []
+	@Published var myCourses:[MyCourse] = []
 	private let useriCloudKeyValueStore = NSUbiquitousKeyValueStore.default
 	
 	func getInstrumentChoice()->String{
@@ -99,7 +99,7 @@ class StudentData: ObservableObject {
 		}
 	}
 	
-	func myCourses(allCourses:[Course]) -> [MyCourse] {
+	func updateMyCourses(allCourses:[Course]) {
 		print("[debug] StudentData, myCourses")
 		myCourses.removeAll()
 		refilMyCourses(allCourses: allCourses, statusType: "completed")
@@ -177,8 +177,6 @@ class StudentData: ObservableObject {
 		}
 		
 		myCourses = myCourses.sorted(by: {$0.lastUpdatedDate > $1.lastUpdatedDate})
-		
-		return myCourses
 	}
 	
 	private func refilMyCourses(allCourses:[Course], statusType: String) {

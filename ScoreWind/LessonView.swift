@@ -521,6 +521,7 @@ struct LessonView: View {
 			} else{
 				scorewindData.studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: true)
 			}
+			scorewindData.studentData.updateMyCourses(allCourses: scorewindData.allCourses)
 			checkCurrentLessonCompleted()
 		}){
 			if isCurrentLessonCompleted {

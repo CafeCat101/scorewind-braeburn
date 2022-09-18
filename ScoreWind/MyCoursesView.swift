@@ -10,7 +10,7 @@ import SwiftUI
 struct MyCoursesView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@Binding var selectedTab:String
-	@State private var getMyCourses:[MyCourse] = []
+	//@State private var getMyCourses:[MyCourse] = []
 	let screenSize: CGRect = UIScreen.main.bounds
 	@State private var showTip = false
 	
@@ -25,7 +25,7 @@ struct MyCoursesView: View {
 			}.padding(EdgeInsets(top: 10, leading: 15, bottom: 0, trailing: 15))
 			ScrollView {
 				Spacer().frame(height:10)
-				ForEach(getMyCourses) { aCourse in
+				ForEach(scorewindData.studentData.myCourses) { aCourse in
 					VStack {
 						HStack {
 							Text(scorewindData.replaceCommonHTMLNumber(htmlString: aCourse.courseTitle))
@@ -90,10 +90,10 @@ struct MyCoursesView: View {
 		}
 		.onAppear(perform: {
 			print("[debug] MyCourseView, onAppear")
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+			/*DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 				getMyCourses = scorewindData.studentData.myCourses(allCourses: scorewindData.allCourses)
 				print("[debug] MyCourseView, getMyCourses.count \(getMyCourses.count)")
-			}
+			}*/
 			
 			if scorewindData.getTipCount(tipType: .myCourseView) < 1 {
 				scorewindData.currentTip = .myCourseView

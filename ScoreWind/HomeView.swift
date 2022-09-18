@@ -22,7 +22,8 @@ struct HomeView: View {
 						Text("Wizard")
 					}.tag("TWizard")
 				
-				if scorewindData.studentData.myCourses(allCourses: scorewindData.allCourses).count > 0 {
+				//if scorewindData.studentData.myCourses(allCourses: scorewindData.allCourses).count > 0 {
+				if scorewindData.studentData.myCourses.count > 0 {
 					MyCoursesView(selectedTab: $selectedTab)
 						.tabItem {
 							Image(systemName: "music.note.list")
@@ -195,6 +196,7 @@ struct HomeView: View {
 		scorewindData.launchSetup(syncData: false)
 		scorewindData.initiateTimestampsFromLocal()
 		scorewindData.initiateCoursesFromLocal()
+		scorewindData.studentData.updateMyCourses(allCourses: scorewindData.allCourses)
 	}
 }
 
