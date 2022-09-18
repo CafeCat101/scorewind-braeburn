@@ -90,7 +90,8 @@ struct HomeView: View {
 				} else if newPhase == .background {
 					print("[debug] HomeView, app is in the background")
 					downloadManager.appState = .background
-					if (scorewindData.currentLesson.scorewindID > 0) && (scorewindData.lastPlaybackTime >= 0.10) {
+					if (scorewindData.currentLesson.scorewindID > 0) && (scorewindData.lastPlaybackTime >= 10) {
+						print("[debug] VideoPlayer onDisappear, lastPlayBackTime>=10")
 						scorewindData.studentData.updateWatchedLessons(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, addWatched: true)
 					}
 				}
@@ -133,6 +134,7 @@ struct HomeView: View {
 				}
 			})
 		} else {
+			/*
 			if scorewindData.currentView == Page.lessonFullScreen {
 				LessonView(downloadManager: downloadManager)
 					.onChange(of: scenePhase, perform: { newPhase in
@@ -172,6 +174,7 @@ struct HomeView: View {
 					})
 					.ignoresSafeArea(.all, edges: .bottom)
 			}
+			 */
 		}
 	}
 	

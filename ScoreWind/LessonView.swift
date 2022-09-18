@@ -66,8 +66,9 @@ struct LessonView: View {
 					.onDisappear(perform: {
 						//VideoPlayer disappears when go to another tab view, not when sheet appears
 						print("[debug] VideoPlayer onDisappear")
-						if scorewindData.lastPlaybackTime >= 0.10 {
-							print("[debug] VideoPlayer onDisappear, lastPlayBackTime>=0.10")
+						print("[debug] lastPlaybackTime \(scorewindData.lastPlaybackTime)")
+						if scorewindData.lastPlaybackTime >= 10 {
+							print("[debug] VideoPlayer onDisappear, lastPlayBackTime>=10")
 							scorewindData.studentData.updateWatchedLessons(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, addWatched: true)
 						}
 						viewModel.videoPlayer!.pause()
@@ -394,12 +395,12 @@ struct LessonView: View {
 				.padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
 			}.background(Color("LessonTextOverlay"))
 		})
-		.fullScreenCover(isPresented: $showTip, content: {
+		/*.fullScreenCover(isPresented: $showTip, content: {
 			if scorewindData.getTipCount(tipType: .lessonView) < 1 {
 				TipModalView()
 			}
 			
-		})
+		})*/
 	}
 	
 	private func decodeVideoURL(videoURL:String)->String{

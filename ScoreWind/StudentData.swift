@@ -102,6 +102,9 @@ class StudentData: ObservableObject {
 	func myCourses(allCourses:[Course]) -> [MyCourse] {
 		print("[debug] StudentData, myCourses")
 		myCourses.removeAll()
+		refilMyCourses(allCourses: allCourses, statusType: "completed")
+		refilMyCourses(allCourses: allCourses, statusType: "watched")
+		/*
 		let lessons = getCompletedLessons().sorted { (Int($0.key)!)<(Int($1.key)!)}
 		for lesson in lessons {
 			let findCourseInAll = allCourses.first(where: {(lesson.value as! String).contains(String($0.id)+"/")}) ?? Course()//allCourses.first(where: {$0.id == (lesson.value as! Int)}) ?? Course()
@@ -143,9 +146,71 @@ class StudentData: ObservableObject {
 				}
 			}
 		}
+		*/
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
 		
-		myCourses = myCourses.sorted(by: {$0.courseTitle < $1.courseTitle})
+		for (index,course) in myCourses.enumerated() {
+			//print("[debug] StudentData, myCourses-title, \(course.courseTitle)")
+			var dateCollection:[Date] = []
+			for lesson in getCompletedLessons() {
+				//print("[debug] StudentData, completed scorewindID \(lesson.key)")
+				//print("[debug] StudentData, completed scorewindID \(lesson.value as! String)")
+				if (lesson.value as! String).contains(String(course.courseID)+"/") {
+					let completedDateStr = (lesson.value as! String).replacingOccurrences(of: String(course.courseID)+"/", with: "")
+					//print("[debug] StudentData, completed \(completedDateStr)")
+					dateCollection.append(dateFormatter.date(from: completedDateStr) ?? Date())
+				}
+			}
+			for lesson in getWatchedLessons() {
+				//print("[debug] StudentData, watched scorewindID \(lesson.key)")
+				//print("[debug] StudentData, watched scorewindID \(lesson.value as! String)")
+				if (lesson.value as! String).contains(String(course.courseID)+"/") {
+					let completedDateStr = (lesson.value as! String).replacingOccurrences(of: String(course.courseID)+"/", with: "")
+					//print("[debug] StudentData, watched \(completedDateStr)")
+					dateCollection.append(dateFormatter.date(from: completedDateStr) ?? Date())
+				}
+			}
+			dateCollection = dateCollection.sorted(by: {$0 > $1})
+			//print("[debug] StudentData, myCourses-dateCollection \(dateCollection)")
+			myCourses[index].lastUpdatedDate = dateCollection[0]
+		}
+		
+		myCourses = myCourses.sorted(by: {$0.lastUpdatedDate > $1.lastUpdatedDate})
 		
 		return myCourses
+	}
+	
+	private func refilMyCourses(allCourses:[Course], statusType: String) {
+		for lesson in (statusType=="completed" ? getCompletedLessons() : getWatchedLessons()) {
+			let findCourseInAll = allCourses.first(where: {(lesson.value as! String).contains(String($0.id)+"/")}) ?? Course()
+			
+			if findCourseInAll.id > 0 {
+				let findMyCourseIndex = myCourses.firstIndex(where: {$0.courseID == findCourseInAll.id}) ?? -1
+				if findMyCourseIndex > -1 {
+					if statusType == "completed" {
+						if myCourses[findMyCourseIndex].completedLessons.contains(Int(lesson.key)!) == false {
+							myCourses[findMyCourseIndex].completedLessons.append(Int(lesson.key)!)
+						}
+					} else {
+						if myCourses[findMyCourseIndex].watchedLessons.contains(Int(lesson.key)!) == false {
+							myCourses[findMyCourseIndex].watchedLessons.append(Int(lesson.key)!)
+						}
+					}
+				} else {
+					var addNewCourse = MyCourse()
+					addNewCourse.courseID = findCourseInAll.id
+					addNewCourse.courseTitle = findCourseInAll.title
+					addNewCourse.courseShortDescription = findCourseInAll.shortDescription
+					if statusType == "completed" {
+						addNewCourse.completedLessons.append(Int(lesson.key)!)
+					} else {
+						addNewCourse.watchedLessons.append(Int(lesson.key)!)
+					}
+					
+					myCourses.append(addNewCourse)
+				}
+			}
+		}
 	}
 }

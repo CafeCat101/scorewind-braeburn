@@ -18,7 +18,11 @@ struct MyCoursesView: View {
 		VStack {
 			Label("My Courses", systemImage: "music.note")
 					.labelStyle(.titleAndIcon)
-			
+			HStack {
+				Label("By last completed or watched", systemImage: "arrow.up.arrow.down")
+					.labelStyle(.titleAndIcon)
+				Spacer()
+			}.padding(EdgeInsets(top: 10, leading: 15, bottom: 0, trailing: 15))
 			ScrollView {
 				Spacer().frame(height:10)
 				ForEach(getMyCourses) { aCourse in
@@ -145,16 +149,16 @@ struct MyCoursesView: View {
 			allDates.append(completedDate)
 		}
 		allDates = allDates.sorted(by: {$0 < $1})
-		print("[debug] MyCourseView, lastCompletedWatchedTime(courseID:\(courseID), allSecondDiff \(allSecondDiff)")
+		//print("[debug] MyCourseView, lastCompletedWatchedTime(courseID:\(courseID), allSecondDiff \(allSecondDiff)")
 		allSecondDiff = allSecondDiff.sorted(by: {$0 < $1})
-		print("[debug] MyCourseView, lastCompletedWatchedTime(courseID:\(courseID), allSecondDiff.sorted \(allSecondDiff)")
+		//print("[debug] MyCourseView, lastCompletedWatchedTime(courseID:\(courseID), allSecondDiff.sorted \(allSecondDiff)")
 		
 		let byMinute = allSecondDiff[0]/60
 		let byHour = allSecondDiff[0]/3600
 		let byDay = allSecondDiff[0]/86400
 		let byWeek = allSecondDiff[0]/604800
 		let byMonth = allSecondDiff[0]/2419200
-		print("[debug] MyCourseView, lastCompletedWatchedTime(courseID:\(courseID), by sec\(allSecondDiff[0])-min\(byMinute)-hour\(byHour)-day\(byDay)-week\(byWeek)")
+		//print("[debug] MyCourseView, lastCompletedWatchedTime(courseID:\(courseID), by sec\(allSecondDiff[0])-min\(byMinute)-hour\(byHour)-day\(byDay)-week\(byWeek)")
 		
 		if allSecondDiff[0] < 60 {
 			if allSecondDiff[0] == 0 {
@@ -203,6 +207,12 @@ struct MyCoursesView: View {
 		}
 		
 		return printTime
+	}
+	
+	private func testDateToString(getDate: Date) -> String {
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+		return dateFormatter.string(from: getDate)
 	}
 }
 

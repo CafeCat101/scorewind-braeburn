@@ -14,7 +14,7 @@ struct MyCourse: Identifiable{
 	var courseShortDescription: String
 	var completedLessons: [Int]
 	var watchedLessons: [Int]
-	var lastWatchedDate: String
+	var lastUpdatedDate: Date
 	
 	init() {
 		id = UUID()
@@ -23,6 +23,6 @@ struct MyCourse: Identifiable{
 		courseShortDescription = ""
 		completedLessons = []
 		watchedLessons = []
-		lastWatchedDate = ""
+		lastUpdatedDate = Date()
 	}
 }
