@@ -70,6 +70,10 @@ struct LessonView: View {
 						if scorewindData.lastPlaybackTime >= 10 {
 							print("[debug] VideoPlayer onDisappear, lastPlayBackTime>=10")
 							scorewindData.studentData.updateWatchedLessons(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, addWatched: true)
+							//DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+								//because video.onDisappear will fire after onAappear of other view
+								scorewindData.studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+							//}
 						}
 						viewModel.videoPlayer!.pause()
 						//viewModel.videoPlayer!.replaceCurrentItem(with: nil)
@@ -521,7 +525,11 @@ struct LessonView: View {
 			} else{
 				scorewindData.studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: true)
 			}
-			scorewindData.studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+			
+			//DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+				scorewindData.studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+			//}
+			
 			checkCurrentLessonCompleted()
 		}){
 			if isCurrentLessonCompleted {

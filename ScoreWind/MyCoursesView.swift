@@ -10,7 +10,7 @@ import SwiftUI
 struct MyCoursesView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@Binding var selectedTab:String
-	//@State private var getMyCourses:[MyCourse] = []
+	@State private var getMyCourses:[MyCourse] = []
 	let screenSize: CGRect = UIScreen.main.bounds
 	@State private var showTip = false
 	
@@ -23,77 +23,75 @@ struct MyCoursesView: View {
 					.labelStyle(.titleAndIcon)
 				Spacer()
 			}.padding(EdgeInsets(top: 10, leading: 15, bottom: 0, trailing: 15))
-			ScrollView {
-				Spacer().frame(height:10)
-				ForEach(scorewindData.studentData.myCourses) { aCourse in
-					VStack {
-						HStack {
-							Text(scorewindData.replaceCommonHTMLNumber(htmlString: aCourse.courseTitle))
-								.font(.headline)
-								.multilineTextAlignment(.leading)
-								.foregroundColor(Color("MyCourseItemText"))
-							Spacer()
-						}
-						.padding(EdgeInsets(top: 10, leading: 15, bottom: 0, trailing: 15))
-						
-						HStack {
-							if aCourse.completedLessons.count>0 {
-								courseProgressView(myCourse: aCourse)
+			
+			if getMyCourses.count > 0 {
+				ScrollView {
+					Spacer().frame(height:10)
+					ForEach(getMyCourses) { aCourse in
+						VStack {
+							HStack {
+								Text(scorewindData.replaceCommonHTMLNumber(htmlString: aCourse.courseTitle))
+									.font(.headline)
+									.multilineTextAlignment(.leading)
+									.foregroundColor(Color("MyCourseItemText"))
+								Spacer()
 							}
-							if aCourse.watchedLessons.count>0 {
-								Label("\(aCourse.watchedLessons.count)", systemImage: "eye.circle.fill")
-									.labelStyle(.titleAndIcon)
-									.foregroundColor(.gray)
+							.padding(EdgeInsets(top: 10, leading: 15, bottom: 0, trailing: 15))
+							
+							HStack {
+								if aCourse.completedLessons.count>0 {
+									courseProgressView(myCourse: aCourse)
+								}
+								if aCourse.watchedLessons.count>0 {
+									Label("\(aCourse.watchedLessons.count)", systemImage: "eye.circle.fill")
+										.labelStyle(.titleAndIcon)
+										.foregroundColor(.gray)
+								}
+								Spacer()
 							}
-							Spacer()
-						}
-						.padding(EdgeInsets(top: 5, leading: 15, bottom: 0, trailing: 15))
-						
-						HStack {
-							if aCourse.completedLessons.count == 0 {
-								Text(lastCompletedWatchedTime(ask: "watched", courseID: aCourse.courseID)).foregroundColor(.gray)
-							} else {
-								Text(lastCompletedWatchedTime(ask: "completed", courseID: aCourse.courseID)).foregroundColor(.gray)
+							.padding(EdgeInsets(top: 5, leading: 15, bottom: 0, trailing: 15))
+							
+							HStack {
+								if aCourse.completedLessons.count == 0 {
+									Text(lastCompletedWatchedTime(ask: "watched", courseID: aCourse.courseID)).foregroundColor(.gray)
+								} else {
+									Text(lastCompletedWatchedTime(ask: "completed", courseID: aCourse.courseID)).foregroundColor(.gray)
+								}
+								Spacer()
 							}
-							Spacer()
+							.padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15))
 						}
-						.padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15))
+						.background{
+							RoundedRectangle(cornerRadius: 10)
+								.foregroundColor(Color("MyCourseItem"))
+						}
+						.padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
+						.onTapGesture(perform: {
+							scorewindData.currentCourse = scorewindData.allCourses.first(where: {$0.id == aCourse.courseID}) ?? Course()
+							scorewindData.currentView = Page.course
+							self.selectedTab = "TCourse"
+							scorewindData.currentLesson = scorewindData.currentCourse.lessons[0]
+							scorewindData.setCurrentTimestampRecs()
+							//scorewindData.lastViewAtScore = true
+							scorewindData.lastPlaybackTime = 0.0
+							scorewindData.lessonChanged = true
+						})
 					}
-					.background{
-						RoundedRectangle(cornerRadius: 10)
-							.foregroundColor(Color("MyCourseItem"))
-					}
-					.padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
-					.onTapGesture(perform: {
-						scorewindData.currentCourse = scorewindData.allCourses.first(where: {$0.id == aCourse.courseID}) ?? Course()
-						scorewindData.currentView = Page.course
-						self.selectedTab = "TCourse"
-						scorewindData.currentLesson = scorewindData.currentCourse.lessons[0]
-						scorewindData.setCurrentTimestampRecs()
-						//scorewindData.lastViewAtScore = true
-						scorewindData.lastPlaybackTime = 0.0
-						scorewindData.lessonChanged = true
-					})
 				}
+			} else {
+				Spacer()
+				Text("After you've completed or watched a lesson, you can find the course for it here.")
+					.padding(15)
 			}
 			
 			Spacer()
-			/*if scorewindData.studentData.getInstrumentChoice() == "" {
-			 Text("== no instrument choice ==")
-			 }else{
-			 Text(scorewindData.studentData.getInstrumentChoice())
-			 }*/
-			/*ForEach(scorewindData.allCourses, id: \.id) { course in
-			 Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
-			 }*/
-			
 		}
 		.onAppear(perform: {
 			print("[debug] MyCourseView, onAppear")
-			/*DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-				getMyCourses = scorewindData.studentData.myCourses(allCourses: scorewindData.allCourses)
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+				getMyCourses = scorewindData.studentData.myCourses
 				print("[debug] MyCourseView, getMyCourses.count \(getMyCourses.count)")
-			}*/
+			}
 			
 			if scorewindData.getTipCount(tipType: .myCourseView) < 1 {
 				scorewindData.currentTip = .myCourseView
@@ -117,7 +115,49 @@ struct MyCoursesView: View {
 		}
 	}
 	
-	private func lastCompletedWatchedTime(ask:String, courseID: Int) -> String {		
+	private func lastCompletedWatchedTime(ask:String, courseID: Int) -> String {
+		let allCompletedLessons = scorewindData.studentData.getCompletedLessons().filter({
+			($0.value as! String).contains(String(courseID)+"/")
+		})
+		let allWatchedLessons = scorewindData.studentData.getWatchedLessons().filter({
+			($0.value as! String).contains(String(courseID)+"/")
+		})
+		
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+		
+		var dateCollections:[Date:String] = [:]
+		
+		for lesson in allWatchedLessons {
+			let stringToDate = dateFormatter.date(from: (lesson.value as! String).replacingOccurrences(of: String(courseID)+"/", with: "")) ?? Date()
+			dateCollections.updateValue("Watched", forKey: stringToDate )
+		}
+		
+		for lesson in allCompletedLessons {
+			let stringToDate = dateFormatter.date(from: (lesson.value as! String).replacingOccurrences(of: String(courseID)+"/", with: "")) ?? Date()
+			dateCollections.updateValue("Completed", forKey: stringToDate )
+		}
+		
+		/*let dateCollectionsSorted = dateCollections.sorted(by: {$0.key > $1.key})
+		if dateCollectionsSorted[0].value == "Completed" {
+			return getFriendlyTimeDiff(StartWord: "Completed", lessoniCloudValue: allCompletedLessons, courseID: courseID)
+		} else if dateCollectionsSorted[0].value == "Watched" {
+			return getFriendlyTimeDiff(StartWord: "Watched", lessoniCloudValue: allWatchedLessons, courseID: courseID)
+		} else {
+			return ""
+		}*/
+		
+		switch dateCollections.sorted(by: {$0.key > $1.key})[0].value {
+		case "Completed" :
+			return getFriendlyTimeDiff(StartWord: "Completed", lessoniCloudValue: allCompletedLessons, courseID: courseID)
+		case "Watched" :
+			return getFriendlyTimeDiff(StartWord: "Watched", lessoniCloudValue: allWatchedLessons, courseID: courseID)
+		default :
+			return ""
+		}
+		
+		
+		/*
 		if ask == "completed" {
 			let allCompletedLessons = scorewindData.studentData.getCompletedLessons().filter({
 				($0.value as! String).contains(String(courseID)+"/")
@@ -132,6 +172,7 @@ struct MyCoursesView: View {
 		} else {
 			return ""
 		}
+		 */
 	}
 	
 	private func getFriendlyTimeDiff(StartWord:String, lessoniCloudValue:[String:Any], courseID:Int) -> String {
