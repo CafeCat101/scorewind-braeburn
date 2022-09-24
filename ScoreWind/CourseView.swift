@@ -138,10 +138,6 @@ struct CourseView: View {
 									}
 									Spacer()
 										.frame(height:10)
-									/*HStack {
-										Text(lesson.description)
-										Spacer()
-									}*/
 								}
 								.padding(EdgeInsets(top: 10, leading: 10, bottom: 15, trailing: 10))
 								.background{
@@ -157,6 +153,14 @@ struct CourseView: View {
 					Spacer()
 				}
 				.frame(width:screenSize.width)
+				.onAppear(perform: {
+					DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+						withAnimation {
+							completedLessons = scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id)
+							watchedLessons = scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id)
+						}
+					}
+				})
 				
 				//Continue section
 				VStack {
@@ -194,6 +198,10 @@ struct CourseView: View {
 					Spacer()
 				}
 				.frame(width:screenSize.width)
+				.onAppear(perform: {
+					scorewindData.findACourseByOrder(order: SearchParameter.DESC)
+					scorewindData.findACourseByOrder(order: SearchParameter.ASC)
+				})
 			}
 			.offset(x: scrollOffset + dragOffset, y: 0)
 			.simultaneousGesture(
@@ -226,14 +234,7 @@ struct CourseView: View {
 		.onAppear(perform: {
 			print("[debug] CourseView, dragOffset \(dragOffset)")
 			underlineScrollOffset = 0-screenSize.width/3
-			scrollOffset = getSectionOffset(goToSection: selectedSection)//getInitialOffset()
-			scorewindData.findACourseByOrder(order: SearchParameter.DESC)
-			scorewindData.findACourseByOrder(order: SearchParameter.ASC)
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-				completedLessons = scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id)
-				watchedLessons = scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id)
-			}
-			
+			scrollOffset = getSectionOffset(goToSection: selectedSection)
 		})
 	}
 	

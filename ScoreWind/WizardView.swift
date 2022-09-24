@@ -15,7 +15,7 @@ struct WizardView: View {
 	
 	var body: some View {
 		VStack {
-			Label("Scorewind", systemImage: "music.note")
+			Label("Scorewind (\(userRole))", systemImage: "music.note")
 				.labelStyle(.titleAndIcon)
 				.contextMenu {
 					Button(action: {
@@ -199,6 +199,11 @@ struct WizardView: View {
 			
 			
 		}
+		.onAppear(perform: {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+				userRole = "teacher"
+			}
+		})
 	}
 	
 	private func guitarCourses(type: String) -> [Course] {
