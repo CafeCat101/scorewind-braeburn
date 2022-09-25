@@ -19,27 +19,27 @@ struct MyCoursesView: View {
 		VStack {
 			Label("My Courses", systemImage: "music.note")
 				.labelStyle(.titleAndIcon)
-			HStack {
+			/*HStack {
 				Label("By last completed or watched", systemImage: "arrow.up.arrow.down")
 					.labelStyle(.titleAndIcon)
 				Spacer()
-			}.padding(EdgeInsets(top: 10, leading: 15, bottom: 0, trailing: 15))
-			
-			if getMyCourses.count > 0 {
-				ScrollView {
-					Spacer().frame(height:10)
-					ForEach(getMyCourses) { aCourse in
-						VStack {
-							HStack {
-								Text(scorewindData.replaceCommonHTMLNumber(htmlString: aCourse.courseTitle))
-									.font(.headline)
-									.multilineTextAlignment(.leading)
-									.foregroundColor(aCourse.courseID == scorewindData.currentCourse.id ? Color("MyCourseItemTextHighlited") : Color("MyCourseItemText"))
-								Spacer()
-							}
-							.padding(EdgeInsets(top: 10, leading: 15, bottom: 0, trailing: 15))
-							
-							Group {
+			}.padding(EdgeInsets(top: 10, leading: 15, bottom: 0, trailing: 15))*/
+			ScrollViewReader { proxy in
+				if getMyCourses.count > 0 {
+					
+					ScrollView {
+						Spacer().frame(height:10)
+						ForEach(getMyCourses) { aCourse in
+							VStack {
+								HStack {
+									Text(scorewindData.replaceCommonHTMLNumber(htmlString: aCourse.courseTitle))
+										.font(.headline)
+										.multilineTextAlignment(.leading)
+										.foregroundColor(getColorHere(colorFor: "MyCourseItemText", courseID: aCourse.courseID))
+									Spacer()
+								}
+								.padding(EdgeInsets(top: 10, leading: 15, bottom: 0, trailing: 15))
+								
 								HStack {
 									if aCourse.completedLessons.count>0 {
 										courseProgressView(myCourse: aCourse)
@@ -47,50 +47,65 @@ struct MyCoursesView: View {
 									if aCourse.watchedLessons.count>0 {
 										Label("\(aCourse.watchedLessons.count)", systemImage: "eye.circle.fill")
 											.labelStyle(.titleAndIcon)
-											.foregroundColor(aCourse.courseID == scorewindData.currentCourse.id ? Color("MyCourseItemTextHighlited") : Color("MyCourseItemText"))
+											.foregroundColor(getColorHere(colorFor: "MyCourseItemText", courseID: aCourse.courseID))
 									}
 									Spacer()
 								}
+								.padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15))
+								
+								HStack() {
+									lastCompletedWatchedTime(courseID: aCourse.courseID)
+									Spacer()
+								}.padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15))
 							}
-							.padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15))
-							
-							HStack() {
-								lastCompletedWatchedTime(courseID: aCourse.courseID)
-								Spacer()
-							}.padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15))
+							.id(aCourse.courseID)
+							.background{
+								RoundedRectangle(cornerRadius: 10)
+									.foregroundColor(getColorHere(colorFor: "MyCourseItem", courseID: aCourse.courseID))
+							}
+							.padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
+							.onTapGesture(perform: {
+								scorewindData.currentCourse = scorewindData.allCourses.first(where: {$0.id == aCourse.courseID}) ?? Course()
+								scorewindData.currentView = Page.course
+								self.selectedTab = "TCourse"
+								
+								let dateCollections:[Date:String] = getDateCollectionsFromAllStatus(courseID: aCourse.courseID)
+								let lastUpdatedItemValue = (dateCollections.sorted(by: {$0.key > $1.key})[0].value).split(separator:"/")
+								let courseLessons = scorewindData.allCourses.first(where: {$0.id == aCourse.courseID})?.lessons
+								let latestUpdatedLessonIndex = courseLessons?.firstIndex(where: {$0.scorewindID == Int(lastUpdatedItemValue[1])}) ?? 0
+								scorewindData.currentLesson = scorewindData.currentCourse.lessons[latestUpdatedLessonIndex]
+								scorewindData.setCurrentTimestampRecs()
+								//scorewindData.lastViewAtScore = true
+								scorewindData.lastPlaybackTime = 0.0
+								scorewindData.lessonChanged = true
+							})
 						}
-						.background{
-							RoundedRectangle(cornerRadius: 10)
-								.foregroundColor(scorewindData.currentCourse.id == aCourse.courseID ? Color("AppYellow") : Color("MyCourseItem"))
-						}
-						.padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
-						.onTapGesture(perform: {
-							scorewindData.currentCourse = scorewindData.allCourses.first(where: {$0.id == aCourse.courseID}) ?? Course()
-							scorewindData.currentView = Page.course
-							self.selectedTab = "TCourse"
-							
-							let dateCollections:[Date:String] = getDateCollectionsFromAllStatus(courseID: aCourse.courseID)
-							let lastUpdatedItemValue = (dateCollections.sorted(by: {$0.key > $1.key})[0].value).split(separator:"/")
-							let courseLessons = scorewindData.allCourses.first(where: {$0.id == aCourse.courseID})?.lessons
-							let latestUpdatedLessonIndex = courseLessons?.firstIndex(where: {$0.scorewindID == Int(lastUpdatedItemValue[1])}) ?? 0
-							scorewindData.currentLesson = scorewindData.currentCourse.lessons[latestUpdatedLessonIndex]
-							scorewindData.setCurrentTimestampRecs()
-							//scorewindData.lastViewAtScore = true
-							scorewindData.lastPlaybackTime = 0.0
-							scorewindData.lessonChanged = true
-						})
 					}
+					.onAppear(perform: {
+						DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+							if getMyCourses.firstIndex(where: {$0.courseID == scorewindData.currentCourse.id}) ?? -1 > -1 {
+								print("[debug] MyCourseView, scrollView onAppear, currentCourse.id is found")
+								withAnimation {
+									proxy.scrollTo(scorewindData.currentCourse.id, anchor: .top)
+								}
+								
+							}
+						}
+					})
+					
+					
+				} else {
+					Spacer()
+					Text("After you've completed or watched a lesson, you can find the course for it here.")
+						.padding(15)
+					Spacer()
 				}
-			} else {
-				Spacer()
-				Text("After you've completed or watched a lesson, you can find the course for it here.")
-					.padding(15)
 			}
-			
 			Spacer()
 		}
 		.onAppear(perform: {
 			print("[debug] MyCourseView, onAppear")
+			
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 				withAnimation {
 					getMyCourses = scorewindData.studentData.myCourses
@@ -107,6 +122,24 @@ struct MyCoursesView: View {
 		.fullScreenCover(isPresented: $showTip, content: {
 			TipModalView()
 		})
+	}
+	
+	private func getColorHere(colorFor: String, courseID:Int) -> Color {
+		if colorFor == "MyCourseItemText" {
+			if courseID == scorewindData.currentCourse.id {
+				return Color("MyCourseItemTextHighlited")
+			} else {
+				return Color("MyCourseItemText")
+			}
+		} else if colorFor == "MyCourseItem" {
+			if courseID == scorewindData.currentCourse.id {
+				return Color("AppYellow")
+			} else {
+				return Color("MyCourseItem")
+			}
+		} else {
+			return .black
+		}
 	}
 	
 	@ViewBuilder
