@@ -109,52 +109,66 @@ struct CourseView: View {
 				
 				//Lessons section
 				VStack {
-					courseDownloadButtonView()
-					List {
-						Section(header: Text("Course content")){
-							ForEach(scorewindData.currentCourse.lessons){ lesson in
-								VStack {
-									HStack {
-										Button(action: {
-											scorewindData.currentLesson = lesson
-											scorewindData.setCurrentTimestampRecs()
-											scorewindData.lastPlaybackTime = 0.0
-											//scorewindData.lastViewAtScore = true
-											self.selectedTab = "TLesson"
-											scorewindData.lessonChanged = true
-										}) {
-											Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
-												.multilineTextAlignment(.leading)
-												.foregroundColor(.black)
-												.font(Font.body.bold())
+					ScrollViewReader { proxy in
+						courseDownloadButtonView()
+						List {
+							Section(header: Text("Course content")){
+								ForEach(scorewindData.currentCourse.lessons){ lesson in
+									VStack {
+										HStack {
+											Button(action: {
+												scorewindData.currentLesson = lesson
+												scorewindData.setCurrentTimestampRecs()
+												scorewindData.lastPlaybackTime = 0.0
+												//scorewindData.lastViewAtScore = true
+												self.selectedTab = "TLesson"
+												scorewindData.lessonChanged = true
+											}) {
+												Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
+													.multilineTextAlignment(.leading)
+													.foregroundColor(.black)
+													.font(Font.body.bold())
+												
+											}
+											Spacer()
+											downloadIconView(getLessonID: lesson.id)
+												.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
+											//.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
 											
+											lessonIsons(scorewindID: lesson.scorewindID)
 										}
 										Spacer()
-										downloadIconView(getLessonID: lesson.id)
-											.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
-										//.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
-										
-										lessonIsons(scorewindID: lesson.scorewindID)
+											.frame(height:10)
 									}
-									Spacer()
-										.frame(height:10)
+									.padding(EdgeInsets(top: 10, leading: 10, bottom: 15, trailing: 10))
+									.background{
+										RoundedRectangle(cornerRadius: 10)
+											.foregroundColor(scorewindData.currentLesson.scorewindID == lesson.scorewindID ? Color("AppYellow") : Color("LessonListTextBg"))
+									}
+									.id(lesson.scorewindID)
+									
 								}
-								.padding(EdgeInsets(top: 10, leading: 10, bottom: 15, trailing: 10))
-								.background{
-									RoundedRectangle(cornerRadius: 10)
-										.foregroundColor(scorewindData.currentLesson.scorewindID == lesson.scorewindID ? Color("AppYellow") : Color("LessonListTextBg"))
-								}
-								
 							}
 						}
+						.listStyle(.plain)
+						.onAppear(perform: {
+							print("[debug] CourseView, lesson List-onAppear")
+							DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+								withAnimation {
+									proxy.scrollTo(scorewindData.currentLesson.scorewindID, anchor: .top)
+								}
+							
+							}
+						})
+						//}
+						Spacer()
 					}
-					.listStyle(.plain)
-					//}
-					Spacer()
+					
 				}
 				.frame(width:screenSize.width)
 				.onAppear(perform: {
 					DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+						print("[debug] CourseView, lesson section, VStack-dispatchQueue+0.5")
 						withAnimation {
 							completedLessons = scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id)
 							watchedLessons = scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id)
