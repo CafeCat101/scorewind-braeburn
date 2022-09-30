@@ -26,7 +26,6 @@ struct MyCoursesView: View {
 			}.padding(EdgeInsets(top: 10, leading: 15, bottom: 0, trailing: 15))*/
 			ScrollViewReader { proxy in
 				if getMyCourses.count > 0 {
-					
 					ScrollView {
 						Spacer().frame(height:10)
 						ForEach(getMyCourses) { aCourse in

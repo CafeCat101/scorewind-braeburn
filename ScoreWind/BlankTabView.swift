@@ -15,6 +15,7 @@ struct BlankTabView: View {
 				.labelStyle(.titleAndIcon)
 			Spacer()
 			Text(message)
+				.padding(15)
 			Spacer()
 		}
 		
