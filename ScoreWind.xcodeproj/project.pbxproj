@@ -23,7 +23,6 @@
 		C85F2773286F4F2E00D0A4E5 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F275F286F4F2E00D0A4E5 /* HomeView.swift */; };
 		C85F2774286F4F2E00D0A4E5 /* MyCoursesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2760286F4F2E00D0A4E5 /* MyCoursesView.swift */; };
 		C85F2775286F4F2E00D0A4E5 /* LessonScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2761286F4F2E00D0A4E5 /* LessonScoreView.swift */; };
-		C85F2776286F4F2E00D0A4E5 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2762286F4F2E00D0A4E5 /* WelcomeView.swift */; };
 		C85F2777286F4F2E00D0A4E5 /* ScorewindTimestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2763286F4F2E00D0A4E5 /* ScorewindTimestamp.swift */; };
 		C85F2778286F4F2E00D0A4E5 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2764286F4F2E00D0A4E5 /* ViewModel.swift */; };
 		C85F2779286F4F2E00D0A4E5 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2765286F4F2E00D0A4E5 /* WebView.swift */; };
@@ -50,6 +49,7 @@
 		C85F27A228795A8E00D0A4E5 /* Tip.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F27A128795A8E00D0A4E5 /* Tip.swift */; };
 		C85F27A42879C20400D0A4E5 /* TipModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F27A32879C20400D0A4E5 /* TipModalView.swift */; };
 		C85F27A8287A775E00D0A4E5 /* TipLimit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F27A7287A775E00D0A4E5 /* TipLimit.swift */; };
+		C878275328E8675F0007DDC1 /* MyCouseItemview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878275228E8675F0007DDC1 /* MyCouseItemview.swift */; };
 		C88E652C28D3231A000FDC2D /* scorewind_ios_xml.zip in Resources */ = {isa = PBXBuildFile; fileRef = C88E652B28D3231A000FDC2D /* scorewind_ios_xml.zip */; };
 		C8E063F028B0E20E000B3D67 /* MyCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E063EF28B0E20E000B3D67 /* MyCourse.swift */; };
 /* End PBXBuildFile section */
@@ -94,7 +94,6 @@
 		C85F275F286F4F2E00D0A4E5 /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		C85F2760286F4F2E00D0A4E5 /* MyCoursesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCoursesView.swift; sourceTree = "<group>"; };
 		C85F2761286F4F2E00D0A4E5 /* LessonScoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LessonScoreView.swift; sourceTree = "<group>"; };
-		C85F2762286F4F2E00D0A4E5 /* WelcomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		C85F2763286F4F2E00D0A4E5 /* ScorewindTimestamp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScorewindTimestamp.swift; sourceTree = "<group>"; };
 		C85F2764286F4F2E00D0A4E5 /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		C85F2765286F4F2E00D0A4E5 /* WebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
@@ -122,6 +121,7 @@
 		C85F27A32879C20400D0A4E5 /* TipModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipModalView.swift; sourceTree = "<group>"; };
 		C85F27A7287A775E00D0A4E5 /* TipLimit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipLimit.swift; sourceTree = "<group>"; };
 		C85F27A9287A7C9C00D0A4E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C878275228E8675F0007DDC1 /* MyCouseItemview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCouseItemview.swift; sourceTree = "<group>"; };
 		C88E652B28D3231A000FDC2D /* scorewind_ios_xml.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = scorewind_ios_xml.zip; sourceTree = "<group>"; };
 		C8E063EF28B0E20E000B3D67 /* MyCourse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCourse.swift; sourceTree = "<group>"; };
 		F3441470A2546CDD3AD7E6C9 /* Pods_ScoreWind.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScoreWind.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -224,12 +224,12 @@
 				C85F2769286F4F2E00D0A4E5 /* StudentData.swift */,
 				C85F2764286F4F2E00D0A4E5 /* ViewModel.swift */,
 				C85F2765286F4F2E00D0A4E5 /* WebView.swift */,
-				C85F2762286F4F2E00D0A4E5 /* WelcomeView.swift */,
 				C85F2771286F4F2E00D0A4E5 /* WizardView.swift */,
 				C85F279B2871846200D0A4E5 /* BlankTabView.swift */,
 				C85F27A32879C20400D0A4E5 /* TipModalView.swift */,
 				C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */,
 				C85F272F286F4C2C00D0A4E5 /* Preview Content */,
+				C878275228E8675F0007DDC1 /* MyCouseItemview.swift */,
 			);
 			path = ScoreWind;
 			sourceTree = "<group>";
@@ -513,12 +513,12 @@
 				C85F2783286F4F2E00D0A4E5 /* FileManager.swift in Sources */,
 				C85F279E2877DE0C00D0A4E5 /* SearchParameter.swift in Sources */,
 				C85F2794286F59BC00D0A4E5 /* YesNoType.swift in Sources */,
+				C878275328E8675F0007DDC1 /* MyCouseItemview.swift in Sources */,
 				C85F27A42879C20400D0A4E5 /* TipModalView.swift in Sources */,
 				C85F2772286F4F2E00D0A4E5 /* CourseView.swift in Sources */,
 				C85F2795286F59BC00D0A4E5 /* CourseType.swift in Sources */,
 				C85F2793286F59BC00D0A4E5 /* Page.swift in Sources */,
 				C85F2781286F4F2E00D0A4E5 /* MyTheme.swift in Sources */,
-				C85F2776286F4F2E00D0A4E5 /* WelcomeView.swift in Sources */,
 				C85F277B286F4F2E00D0A4E5 /* HTMLString.swift in Sources */,
 				C85F2797286F59BC00D0A4E5 /* DownloadStatus.swift in Sources */,
 			);

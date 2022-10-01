@@ -66,6 +66,7 @@ struct HomeView: View {
 					print("[debug] HomeView, tabview, downloadManager.appState=background")
 					setupDataObjects()
 					activateDownloadVideoXML()
+					updateMyCoursesDownloadStatus()
 				}
 				downloadManager.appState = .active
 				//<<<<==
@@ -76,6 +77,7 @@ struct HomeView: View {
 					if downloadManager.appState == .background {
 						print("[debug] HomeView, tabview, downloadManager.appState=background")
 						activateDownloadVideoXML()
+						updateMyCoursesDownloadStatus()
 					}
 					downloadManager.appState = .active
 				} else if newPhase == .inactive {
@@ -190,6 +192,32 @@ struct HomeView: View {
 		scorewindData.initiateTimestampsFromLocal()
 		scorewindData.initiateCoursesFromLocal()
 		studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+	}
+	
+	private func updateMyCoursesDownloadStatus() {
+		print("[deubg] HomeView, updateMyCoursesDownloadStatus")
+		var courseFromDownloadList:[Int] = []
+		for offlineCourse in downloadManager.downloadList {
+			if courseFromDownloadList.contains(where: {$0 == offlineCourse.courseID}) == false {
+				courseFromDownloadList.append(offlineCourse.courseID)
+			}
+		}
+		print("[deubg] HomeView, updateMyCoursesDownloadStatus-courseFromDownloadList:\(courseFromDownloadList)")
+		for courseID in courseFromDownloadList {
+			let findCourseFromScoewindData = scorewindData.allCourses.first(where: {$0.id == courseID}) ?? Course()
+			let courseDownloadStatus = downloadManager.checkDownloadStatus(courseID: courseID, lessonsCount: findCourseFromScoewindData.lessons.count)
+			let findMyCourseIndex = studentData.myCourses.firstIndex(where: {$0.courseID == courseID}) ?? -1
+			if findMyCourseIndex > -1 {
+				studentData.myCourses[findMyCourseIndex].downloadStatus = courseDownloadStatus.rawValue
+			} else {
+				var addNewCourse = MyCourse()
+				addNewCourse.courseID = findCourseFromScoewindData.id
+				addNewCourse.courseTitle = findCourseFromScoewindData.title
+				addNewCourse.courseShortDescription = findCourseFromScoewindData.shortDescription
+				addNewCourse.downloadStatus = courseDownloadStatus.rawValue
+				studentData.myCourses.append(addNewCourse)
+			}
+		}
 	}
 }
 

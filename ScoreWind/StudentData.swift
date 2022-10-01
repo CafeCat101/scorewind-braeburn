@@ -105,6 +105,7 @@ class StudentData: ObservableObject {
 		myCourses.removeAll()
 		refilMyCourses(allCourses: allCourses, statusType: "completed")
 		refilMyCourses(allCourses: allCourses, statusType: "watched")
+
 		/*
 		let lessons = getCompletedLessons().sorted { (Int($0.key)!)<(Int($1.key)!)}
 		for lesson in lessons {
@@ -212,4 +213,5 @@ class StudentData: ObservableObject {
 			}
 		}
 	}
+
 }

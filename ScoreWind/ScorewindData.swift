@@ -408,6 +408,10 @@ class ScorewindData: ObservableObject {
 		rst = rst.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
 		return rst
 	}
-
+	
+	func getLessonCount(courseID:Int) -> Int {
+		let findCourse = allCourses.first(where: {$0.id == courseID}) ?? Course()
+		return findCourse.lessons.count
+	}
 	
 }
