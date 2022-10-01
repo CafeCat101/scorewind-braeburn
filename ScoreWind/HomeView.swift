@@ -22,7 +22,7 @@ struct HomeView: View {
 						Text("Wizard")
 					}.tag("TWizard")
 				
-				MyCoursesView(selectedTab: $selectedTab)
+				MyCoursesView(selectedTab: $selectedTab, downloadManager: downloadManager)
 					.tabItem {
 						Image(systemName: "music.note.list")
 						Text("My Courses")

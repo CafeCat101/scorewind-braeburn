@@ -10,7 +10,6 @@ import AVKit
 
 struct LessonView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
-	//@State private var showLessonSheet = false
 	let screenSize: CGRect = UIScreen.main.bounds
 	@State private var watchTime = ""
 	@StateObject var viewModel = ViewModel()
@@ -46,15 +45,12 @@ struct LessonView: View {
 							.truncationMode(.tail)
 							.foregroundColor(Color("AppYelloDynamic"))
 					}
-					/*lessonViewMenu()
-					Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))
-						.font(.title3)
-						.truncationMode(.tail)*/
 				}
 				.frame(height: screenSize.height/25)
 				.padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 15))
 			}
 			
+			//::LESSON VIDEO::
 			if scorewindData.currentLesson.videoMP4.isEmpty == false {
 				VideoPlayer(player: viewModel.videoPlayer)
 				//.frame(height: scorewindData.currentTimestampRecs.count > 0 ? screenSize.height*0.35 : screenSize.height)
@@ -98,6 +94,7 @@ struct LessonView: View {
 					/*.overlay(lessonViewMenu().opacity(scorewindData.currentView==Page.lessonFullScreen ? 1:0.0).disabled(scorewindData.currentView==Page.lessonFullScreen ? false:true), alignment: .topLeading)*/
 			}
 			
+			//::SCORE VIEWER::
 			if scorewindData.currentTimestampRecs.count > 0 {
 				LessonScoreView(viewModel: viewModel)
 					.overlay(content: {
@@ -159,14 +156,9 @@ struct LessonView: View {
 				scorewindData.lessonChanged = false
 			}
 			
-			
 			viewModel.loadToGo = true
-			/*withAnimation {
-				test = true
-			}*/
 			if scorewindData.currentView != Page.lessonFullScreen {
 				scorewindData.currentView = Page.lesson
-				//scorewindData.lastViewAtScore = true
 			}
 			
 			if scorewindData.currentTimestampRecs.count > 0 {
@@ -259,7 +251,6 @@ struct LessonView: View {
 				HStack {
 					Spacer()
 					Text("About")
-						//.font(.title3)
 						.fontWeight(.bold)
 						.foregroundColor(Color("AppYellow"))
 					Spacer()
@@ -278,18 +269,9 @@ struct LessonView: View {
 					Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))
 						.font(.title)
 						.foregroundColor(Color("AppYellow"))
-						//.foregroundColor(.black)
 					Spacer()
-					/*Label("Completed", systemImage: "xmark.circle.fill")
-						.font(.title)
-						.labelStyle(.iconOnly)
-						.foregroundColor(Color("LessonTextOverlay"))
-						.onTapGesture {
-							scorewindData.showLessonTextOverlay = false
-						}*/
 				}
 				.padding(EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 15))
-				//.background(Color("AppYellow"))
 				
 				ScrollView {
 					VStack {
@@ -329,38 +311,6 @@ struct LessonView: View {
 							}
 							Spacer()
 						}
-						/*VStack {
-							HStack {
-								if scorewindData.currentTimestampRecs.count > 0 {
-									Label("Play and learn", systemImage: "music.note.tv.fill")
-										.labelStyle(.titleAndIcon)
-										.foregroundColor(Color("LessonSheet"))
-										.padding(EdgeInsets(top: 6, leading: 15, bottom: 6, trailing: 15))
-										.background {
-											RoundedRectangle(cornerRadius: 20)
-												.foregroundColor(Color("BadgeScoreAvailable"))
-										}
-										.fixedSize()
-										.onTapGesture {
-											scorewindData.showLessonTextOverlay = false
-										}
-								} else {
-									Label("Watch and learn", systemImage: "video.bubble.left.fill")
-										.labelStyle(.titleAndIcon)
-										.foregroundColor(Color("LessonSheet"))
-										.padding(EdgeInsets(top: 6, leading: 15, bottom: 6, trailing: 15))
-										.background {
-											RoundedRectangle(cornerRadius: 20)
-												.foregroundColor(Color("BadgeWatchLearn"))
-										}
-										.fixedSize()
-										.onTapGesture {
-											scorewindData.showLessonTextOverlay = false
-										}
-								}
-								Spacer()
-							}
-						}*/
 						HStack {
 							Text("\(scorewindData.courseContentNoHtml(content: scorewindData.currentLesson.content))")
 								.foregroundColor(Color("LessonSheet"))
@@ -373,7 +323,7 @@ struct LessonView: View {
 								.foregroundColor(Color("LessonSheet"))
 								.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
 								.background {
-									RoundedRectangle(cornerRadius: 20)
+									RoundedRectangle(cornerRadius: 26)
 										.foregroundColor(Color("BadgeScoreAvailable"))
 								}
 								.fixedSize()
@@ -386,7 +336,7 @@ struct LessonView: View {
 								.foregroundColor(Color("LessonSheet"))
 								.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
 								.background {
-									RoundedRectangle(cornerRadius: 20)
+									RoundedRectangle(cornerRadius: 26)
 										.foregroundColor(Color("BadgeWatchLearn"))
 								}
 								.fixedSize()
@@ -504,13 +454,6 @@ struct LessonView: View {
 			//viewModel.videoPlayer?.replaceCurrentItem(with: nil)
 			setupPlayer()
 		}
-		//showLessonSheet = true
-		/*
-		if (scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindData.currentLesson.scorewindID) == false) && (scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindData.currentLesson.scorewindID) == false) {
-			scorewindData.showLessonTextOverlay = true
-		}
-		 */
-		//scorewindData.lastViewAtScore = true
 		scorewindData.lessonChanged = true
 		checkCurrentLessonCompleted()
 		setPreviousLesson()
@@ -526,9 +469,7 @@ struct LessonView: View {
 				scorewindData.studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: true)
 			}
 			
-			//DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-				scorewindData.studentData.updateMyCourses(allCourses: scorewindData.allCourses)
-			//}
+			scorewindData.studentData.updateMyCourses(allCourses: scorewindData.allCourses)
 			
 			checkCurrentLessonCompleted()
 		}){
@@ -546,7 +487,6 @@ struct LessonView: View {
 				scorewindData.currentLesson = previousLesson
 				switchLesson()
 			}){
-				//Text("Previous: \(scorewindData.replaceCommonHTMLNumber(htmlString: previousLesson.title))")
 				Label("Previous lesson", systemImage: "arrow.backward.circle")
 					.labelStyle(.titleAndIcon)
 			}
@@ -557,7 +497,6 @@ struct LessonView: View {
 				scorewindData.currentLesson = nextLesson
 				switchLesson()
 			}){
-				//Text("Next: \(scorewindData.replaceCommonHTMLNumber(htmlString: nextLesson.title))")
 				Label("Next lesson", systemImage: "arrow.forward.circle")
 					.labelStyle(.titleAndIcon)
 			}
@@ -584,26 +523,6 @@ struct LessonView: View {
 					.labelStyle(.titleAndIcon)
 			}
 		}
-		
-		/*
-		Button(action: {
-			withAnimation {
-				if scorewindData.currentView == Page.lesson {
-					scorewindData.currentView = Page.lessonFullScreen
-				} else {
-					scorewindData.currentView = Page.lesson
-				}
-			}
-		}){
-			if scorewindData.currentView == Page.lesson {
-				Label("Focus mode", systemImage: "lightbulb.circle")
-					.labelStyle(.titleAndIcon)
-			} else {
-				Label("Explore mode", systemImage: "lightbulb.circle")
-					.labelStyle(.titleAndIcon)
-			}
-		}
-		*/
 	}
 	
 	private func setNextLesson() {

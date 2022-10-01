@@ -10,6 +10,7 @@ import SwiftUI
 struct MyCoursesView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@Binding var selectedTab:String
+	@ObservedObject var downloadManager:DownloadManager
 	@State private var getMyCourses:[MyCourse] = []
 	let screenSize: CGRect = UIScreen.main.bounds
 	@State private var showTip = false
@@ -24,11 +25,42 @@ struct MyCoursesView: View {
 					.labelStyle(.titleAndIcon)
 				Spacer()
 			}.padding(EdgeInsets(top: 10, leading: 15, bottom: 0, trailing: 15))*/
+			
+			//::FILTER TAGS::
+			HStack {
+				Label("Favourite", systemImage: "suit.heart")
+					.labelStyle(.titleOnly)
+					.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
+					.background {
+						RoundedRectangle(cornerRadius: 20)
+							.stroke(Color("MyCourseFilterTagBorder"), lineWidth: 1)
+							.background(RoundedRectangle(cornerRadius: 20).fill(Color("MyCourseItem")))
+					}
+					.foregroundColor(Color("MyCourseItemText"))
+					.onTapGesture {
+						
+					}
+				Label("Downloaded", systemImage: "arrow.down.circle.fill")
+					.labelStyle(.titleOnly)
+					.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
+					.background {
+						RoundedRectangle(cornerRadius: 20)
+							.stroke(Color("MyCourseFilterTagBorder"), lineWidth: 1)
+							//.foregroundColor(Color("BadgeScoreAvailable"))
+					}
+					.foregroundColor(Color("MyCourseItemText"))
+					.onTapGesture {
+						
+					}
+				Spacer()
+			}.padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
+			
+			//::MY COURSE LIST::
 			ScrollViewReader { proxy in
 				if getMyCourses.count > 0 {
 					ScrollView {
 						Spacer().frame(height:10)
-						ForEach(getMyCourses) { aCourse in
+						ForEach(self.getMyCourses) { aCourse in
 							VStack {
 								HStack {
 									Text(scorewindData.replaceCommonHTMLNumber(htmlString: aCourse.courseTitle))
@@ -43,11 +75,17 @@ struct MyCoursesView: View {
 									if aCourse.completedLessons.count>0 {
 										courseProgressView(myCourse: aCourse)
 									}
+									
 									if aCourse.watchedLessons.count>0 {
 										Label("\(aCourse.watchedLessons.count)", systemImage: "eye.circle.fill")
 											.labelStyle(.titleAndIcon)
 											.foregroundColor(getColorHere(colorFor: "MyCourseItemText", courseID: aCourse.courseID))
 									}
+									
+									if downloadManager.checkDownloadStatus(courseID: aCourse.courseID, lessonsCount: getLessonCount(courseID: aCourse.courseID)) == DownloadStatus.downloaded {
+										Text("*")
+									}
+									
 									Spacer()
 								}
 								.padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15))
@@ -121,6 +159,11 @@ struct MyCoursesView: View {
 		.fullScreenCover(isPresented: $showTip, content: {
 			TipModalView()
 		})
+	}
+	
+	private func getLessonCount(courseID: Int) -> Int {
+		let findCourse = scorewindData.allCourses.first(where: {$0.id == courseID}) ?? Course()
+		return findCourse.lessons.count
 	}
 	
 	private func getColorHere(colorFor: String, courseID:Int) -> Color {
@@ -341,6 +384,6 @@ struct MyCoursesView: View {
 struct MyCoursesView_Previews: PreviewProvider {
 	@State static var tab = "TMyCourses"
 	static var previews: some View {
-		MyCoursesView(selectedTab:$tab).environmentObject(ScorewindData())
+		MyCoursesView(selectedTab:$tab, downloadManager: DownloadManager()).environmentObject(ScorewindData())
 	}
 }
