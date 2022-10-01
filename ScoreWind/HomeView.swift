@@ -12,6 +12,7 @@ struct HomeView: View {
 	@State private var selectedTab = "TWizard"
 	@ObservedObject var downloadManager: DownloadManager
 	@Environment(\.scenePhase) var scenePhase
+	@StateObject var studentData = StudentData()
 	
 	var body: some View {
 		if scorewindData.currentView != Page.lessonFullScreen {
@@ -22,14 +23,14 @@ struct HomeView: View {
 						Text("Wizard")
 					}.tag("TWizard")
 				
-				MyCoursesView(selectedTab: $selectedTab, downloadManager: downloadManager)
+				MyCoursesView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData)
 					.tabItem {
 						Image(systemName: "music.note.list")
 						Text("My Courses")
 					}.tag("TMyCourses")
 				
 				if scorewindData.currentCourse.id > 0 {
-					CourseView(selectedTab: $selectedTab, downloadManager: downloadManager)
+					CourseView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData)
 						.tabItem {
 							Image(systemName: "note.text")
 							Text("Course")
@@ -43,7 +44,7 @@ struct HomeView: View {
 				}
 				
 				if scorewindData.currentLesson.id > 0 {
-					LessonView(downloadManager: downloadManager)
+					LessonView(downloadManager: downloadManager, studentData: studentData)
 						.tabItem {
 							Image(systemName: "note")
 							Text("Lesson")
@@ -84,15 +85,15 @@ struct HomeView: View {
 					downloadManager.appState = .background
 					if (scorewindData.currentLesson.scorewindID > 0) && (scorewindData.lastPlaybackTime >= 10) {
 						print("[debug] HomeView.onChange, .background lastPlayBackTime>=10")
-						scorewindData.studentData.updateWatchedLessons(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, addWatched: true)
-						scorewindData.studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+						studentData.updateWatchedLessons(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, addWatched: true)
+						studentData.updateMyCourses(allCourses: scorewindData.allCourses)
 					}
 				}
 			})
 			.onChange(of: selectedTab, perform: { newValue in
 				if newValue == "TLesson" && scorewindData.currentLesson.content.isEmpty == false {
-					print("\(scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id))")
-					print("\(scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id))")
+					print("\(studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id))")
+					print("\(studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id))")
 					print("\(scorewindData.currentLesson.scorewindID)")
 					//scorewindData.showLessonTextOverlay = true
 					/*if (scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindData.currentLesson.scorewindID) == false) && (scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindData.currentLesson.scorewindID) == false) {
@@ -188,7 +189,7 @@ struct HomeView: View {
 		scorewindData.launchSetup(syncData: false)
 		scorewindData.initiateTimestampsFromLocal()
 		scorewindData.initiateCoursesFromLocal()
-		scorewindData.studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+		studentData.updateMyCourses(allCourses: scorewindData.allCourses)
 	}
 }
 

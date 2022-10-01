@@ -15,7 +15,7 @@ class ScorewindData: ObservableObject {
 	@Published var previousCourse:Course = Course()
 	@Published var nextCourse:Course = Course()
 	@Published var currentTimestampRecs:[TimestampRec] = []
-	@Published var studentData: StudentData
+	//@Published var studentData: StudentData
 	@Published var currentView = Page.wizard
 	//@Published var lastViewAtScore = true
 	@Published var showLessonTextOverlay = false
@@ -35,7 +35,7 @@ class ScorewindData: ObservableObject {
 	
 	init() {
 		print(docsUrl!.path)
-		studentData = StudentData()
+		//studentData = StudentData()
 		dataVersion = userDefaults.object(forKey: "dataVersion") as? Int ?? 0
 		print("[debug] ScoreWindData, userDefaults.dataversion \(dataVersion)")
 		//========

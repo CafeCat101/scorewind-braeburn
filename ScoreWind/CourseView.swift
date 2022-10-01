@@ -21,9 +21,10 @@ struct CourseView: View {
 	@State private var scrollOffset:CGFloat = .zero
 	@State private var dragOffset:CGFloat = .zero
 	@State private var underlineScrollOffset:CGFloat = .zero
-	@State private var completedLessons:[Int] = []
-	@State private var watchedLessons:[Int] = []
+	//@State private var completedLessons:[Int] = []
+	//@State private var watchedLessons:[Int] = []
 	@State private var vScrolling = false
+	@ObservedObject var studentData:StudentData
 	
 	var body: some View {
 		VStack {
@@ -153,7 +154,7 @@ struct CourseView: View {
 						.listStyle(.plain)
 						.onAppear(perform: {
 							print("[debug] CourseView, lesson List-onAppear")
-							DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+							DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
 								withAnimation {
 									proxy.scrollTo(scorewindData.currentLesson.scorewindID, anchor: .top)
 								}
@@ -166,15 +167,15 @@ struct CourseView: View {
 					
 				}
 				.frame(width:screenSize.width)
-				.onAppear(perform: {
-					DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-						print("[debug] CourseView, lesson section, VStack-dispatchQueue+0.5")
-						withAnimation {
-							completedLessons = scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id)
-							watchedLessons = scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id)
-						}
-					}
-				})
+				//.onAppear(perform: {
+					//DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+						//print("[debug] CourseView, lesson section, VStack-dispatchQueue+0.5")
+						//withAnimation {
+							//completedLessons = scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id)
+							//watchedLessons = scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id)
+						//}
+					//}
+				//})
 				
 				//Continue section
 				VStack {
@@ -324,7 +325,7 @@ struct CourseView: View {
 	}
 	
 	private func calculateCompletedLesson() -> Int {
-		let getCompletedLessons = scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id)
+		let getCompletedLessons = studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id)
 		var completedCount = 0
 		for i in 0..<scorewindData.currentCourse.lessons.count {
 			if getCompletedLessons.contains(scorewindData.currentCourse.lessons[i].scorewindID) {
@@ -568,12 +569,14 @@ struct CourseView: View {
 	
 	@ViewBuilder
 	private func lessonIsons(scorewindID:Int) -> some View {
+		let completedLessons = studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id)
 		if completedLessons.contains(scorewindID) {
 			Label("completed", systemImage: "checkmark.circle.fill")
 				.labelStyle(.iconOnly)
 				.foregroundColor(Color("LessonListStatusIcon"))
 		}
 		
+		let watchedLessons = studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id)
 		if watchedLessons.contains(scorewindID) {
 			Label("watched", systemImage: "eye.circle.fill")
 				.labelStyle(.iconOnly)
@@ -586,7 +589,7 @@ struct CourseView: View {
 struct CourseView_Previews: PreviewProvider {
 	@State static var tab = "TCourse"
 	static var previews: some View {
-		CourseView(selectedTab: $tab, downloadManager: DownloadManager()).environmentObject(ScorewindData())
+		CourseView(selectedTab: $tab, downloadManager: DownloadManager(), studentData: StudentData()).environmentObject(ScorewindData())
 	}
 }
 

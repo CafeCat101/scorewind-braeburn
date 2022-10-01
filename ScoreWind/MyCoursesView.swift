@@ -11,10 +11,11 @@ struct MyCoursesView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@Binding var selectedTab:String
 	@ObservedObject var downloadManager:DownloadManager
-	@State private var getMyCourses:[MyCourse] = []
+	//@State private var getMyCourses:[MyCourse] = []
 	let screenSize: CGRect = UIScreen.main.bounds
 	@State private var showTip = false
 	@State private var saveLastUpdatedLesson:[Int:Lesson] = [:]
+	@ObservedObject var studentData:StudentData
 	
 	var body: some View {
 		VStack {
@@ -57,10 +58,10 @@ struct MyCoursesView: View {
 			
 			//::MY COURSE LIST::
 			ScrollViewReader { proxy in
-				if getMyCourses.count > 0 {
+				if studentData.myCourses.count > 0 {
 					ScrollView {
 						Spacer().frame(height:10)
-						ForEach(self.getMyCourses) { aCourse in
+						ForEach(studentData.myCourses) { aCourse in
 							VStack {
 								HStack {
 									Text(scorewindData.replaceCommonHTMLNumber(htmlString: aCourse.courseTitle))
@@ -119,8 +120,8 @@ struct MyCoursesView: View {
 						}
 					}
 					.onAppear(perform: {
-						DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-							if getMyCourses.firstIndex(where: {$0.courseID == scorewindData.currentCourse.id}) ?? -1 > -1 {
+						DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+							if studentData.myCourses.firstIndex(where: {$0.courseID == scorewindData.currentCourse.id}) ?? -1 > -1 {
 								print("[debug] MyCourseView, scrollView onAppear, currentCourse.id is found")
 								withAnimation {
 									proxy.scrollTo(scorewindData.currentCourse.id, anchor: .top)
@@ -143,13 +144,13 @@ struct MyCoursesView: View {
 		.onAppear(perform: {
 			print("[debug] MyCourseView, onAppear")
 			
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-				withAnimation {
-					getMyCourses = scorewindData.studentData.myCourses
-					print("[debug] MyCourseView, getMyCourses.count \(getMyCourses.count)")
-				}
+			//DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+				//withAnimation {
+					//studentData.myCourses = scorewindData.studentData.myCourses
+					//print("[debug] MyCourseView, getMyCourses.count \(studentData.myCourses.count)")
+				//}
 				
-			}
+			//}
 			
 			if scorewindData.getTipCount(tipType: .myCourseView) < 1 {
 				scorewindData.currentTip = .myCourseView
@@ -212,10 +213,10 @@ struct MyCoursesView: View {
 	}
 	
 	private func getDateCollectionsFromAllStatus(courseID: Int) -> [Date:String] {
-		let allCompletedLessons = scorewindData.studentData.getCompletedLessons().filter({
+		let allCompletedLessons = studentData.getCompletedLessons().filter({
 			($0.value as! String).contains(String(courseID)+"/")
 		})
-		let allWatchedLessons = scorewindData.studentData.getWatchedLessons().filter({
+		let allWatchedLessons = studentData.getWatchedLessons().filter({
 			($0.value as! String).contains(String(courseID)+"/")
 		})
 		
@@ -384,6 +385,6 @@ struct MyCoursesView: View {
 struct MyCoursesView_Previews: PreviewProvider {
 	@State static var tab = "TMyCourses"
 	static var previews: some View {
-		MyCoursesView(selectedTab:$tab, downloadManager: DownloadManager()).environmentObject(ScorewindData())
+		MyCoursesView(selectedTab:$tab, downloadManager: DownloadManager(), studentData: StudentData()).environmentObject(ScorewindData())
 	}
 }

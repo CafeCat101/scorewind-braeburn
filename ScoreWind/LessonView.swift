@@ -25,6 +25,7 @@ struct LessonView: View {
 	@State private var splitScreen = true
 	@State private var showScoreZoomIcon = false
 	@State private var savePlayerPlayable = false
+	@ObservedObject var studentData:StudentData
 	
 	var body: some View {
 		VStack {
@@ -65,10 +66,10 @@ struct LessonView: View {
 						print("[debug] lastPlaybackTime \(scorewindData.lastPlaybackTime)")
 						if scorewindData.lastPlaybackTime >= 10 {
 							print("[debug] VideoPlayer onDisappear, lastPlayBackTime>=10")
-							scorewindData.studentData.updateWatchedLessons(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, addWatched: true)
+							studentData.updateWatchedLessons(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, addWatched: true)
 							//DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 								//because video.onDisappear will fire after onAappear of other view
-								scorewindData.studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+								studentData.updateMyCourses(allCourses: scorewindData.allCourses)
 							//}
 						}
 						viewModel.videoPlayer!.pause()
@@ -293,7 +294,7 @@ struct LessonView: View {
 									.padding(EdgeInsets(top: 6, leading: 0, bottom: 6, trailing: 15))
 									.fixedSize()
 							}
-							if scorewindData.studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindData.currentLesson.scorewindID) {
+							if studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindData.currentLesson.scorewindID) {
 								Label("Video watched", systemImage: "eye.circle.fill")
 									.labelStyle(.iconOnly)
 									.foregroundColor(Color("LessonSheet"))
@@ -464,12 +465,12 @@ struct LessonView: View {
 	private func lessonViewMenuContent() -> some View {
 		Button(action: {
 			if isCurrentLessonCompleted {
-				scorewindData.studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: false)
+				studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: false)
 			} else{
-				scorewindData.studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: true)
+				studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: true)
 			}
 			
-			scorewindData.studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+			studentData.updateMyCourses(allCourses: scorewindData.allCourses)
 			
 			checkCurrentLessonCompleted()
 		}){
@@ -549,7 +550,7 @@ struct LessonView: View {
 	
 	private func checkCurrentLessonCompleted() {
 		print("[debug] LessonView, isLessonCompleted")
-		let getCompletedLesson = scorewindData.studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id)
+		let getCompletedLesson = studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id)
 		if getCompletedLesson.contains(scorewindData.currentLesson.scorewindID) {
 			isCurrentLessonCompleted = true
 		} else{
@@ -595,6 +596,6 @@ struct LessonView: View {
 
 struct LessonView_Previews: PreviewProvider {
 	static var previews: some View {
-		LessonView(downloadManager: DownloadManager()).environmentObject(ScorewindData())
+		LessonView(downloadManager: DownloadManager(), studentData: StudentData()).environmentObject(ScorewindData())
 	}
 }
