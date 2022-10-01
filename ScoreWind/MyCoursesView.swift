@@ -11,7 +11,6 @@ struct MyCoursesView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@Binding var selectedTab:String
 	@ObservedObject var downloadManager:DownloadManager
-	//@State private var getMyCourses:[MyCourse] = []
 	let screenSize: CGRect = UIScreen.main.bounds
 	@State private var showTip = false
 	@State private var saveLastUpdatedLesson:[Int:Lesson] = [:]
@@ -23,11 +22,6 @@ struct MyCoursesView: View {
 		VStack {
 			Label("My Courses", systemImage: "music.note")
 				.labelStyle(.titleAndIcon)
-			/*HStack {
-				Label("By last completed or watched", systemImage: "arrow.up.arrow.down")
-					.labelStyle(.titleAndIcon)
-				Spacer()
-			}.padding(EdgeInsets(top: 10, leading: 15, bottom: 0, trailing: 15))*/
 			
 			//::FILTER TAGS::
 			ScrollView(.horizontal) {

@@ -21,8 +21,6 @@ struct CourseView: View {
 	@State private var scrollOffset:CGFloat = .zero
 	@State private var dragOffset:CGFloat = .zero
 	@State private var underlineScrollOffset:CGFloat = .zero
-	//@State private var completedLessons:[Int] = []
-	//@State private var watchedLessons:[Int] = []
 	@State private var vScrolling = false
 	@ObservedObject var studentData:StudentData
 	
@@ -121,7 +119,6 @@ struct CourseView: View {
 												scorewindData.currentLesson = lesson
 												scorewindData.setCurrentTimestampRecs()
 												scorewindData.lastPlaybackTime = 0.0
-												//scorewindData.lastViewAtScore = true
 												self.selectedTab = "TLesson"
 												scorewindData.lessonChanged = true
 											}) {
@@ -134,7 +131,6 @@ struct CourseView: View {
 											Spacer()
 											downloadIconView(getLessonID: lesson.id)
 												.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
-											//.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
 											
 											lessonIsons(scorewindID: lesson.scorewindID)
 										}
@@ -161,7 +157,7 @@ struct CourseView: View {
 							
 							}
 						})
-						//}
+						
 						Spacer()
 					}
 					
@@ -266,32 +262,7 @@ struct CourseView: View {
 					RoundedRectangle(cornerRadius: 4)
 						.foregroundColor(.gray)
 						.frame(width:calculateProgressBarWidth()[1],height:10)
-					/*if scorewindData.currentCourse.lessons.count <= 10 {
-						ForEach(1...calculateCompletedLesson(), id:\.self){ index in
-							Circle()
-								.strokeBorder(Color.gray,lineWidth: 1)
-								.background(Circle().foregroundColor(Color.yellow))
-								.frame(width:10,height:10)
-						}
-						ForEach(1...(scorewindData.currentCourse.lessons.count - calculateCompletedLesson()), id:\.self){ index in
-							Circle()
-								.strokeBorder(Color.gray,lineWidth: 1)
-								.background(Circle().foregroundColor(Color.white))
-								.frame(width:10,height:10)
-						}
-					} else {
-						RoundedRectangle(cornerRadius: 4)
-							.foregroundColor(.yellow)
-							.frame(width:calculateProgressBarWidth()[0],height:10)
-						RoundedRectangle(cornerRadius: 4)
-							.foregroundColor(.gray)
-							.frame(width:calculateProgressBarWidth()[1],height:10)
-					}*/
 				} else {
-					/*RoundedRectangle(cornerRadius: 4)
-						.stroke(.gray, lineWidth: 1)
-						.foregroundColor(Color("LessonSheet"))
-						.frame(width:calculateProgressBarWidth()[1],height:10)*/
 					if scorewindData.currentCourse.lessons.count <= 10 {
 						ForEach(((11-scorewindData.currentCourse.lessons.count)...10).reversed(), id:\.self){ number in
 							Circle()
@@ -305,19 +276,6 @@ struct CourseView: View {
 								.foregroundColor(Color.gray)
 								.background(Circle().foregroundColor(Color.white))
 								.frame(width:CGFloat(number),height:10)}
-						/*ForEach(1...10, id:\.self){ number in
-							if number <= 4 || number >= 8 {
-								Circle()
-									.strokeBorder(Color.gray,lineWidth: 1)
-									.background(Circle().foregroundColor(Color.white))
-									.frame(width:10,height:10)
-							} else {
-								Circle()
-									.strokeBorder(Color.gray,lineWidth: 1)
-									.background(Circle().foregroundColor(Color.gray))
-									.frame(width:5,height:5)
-							}
-						}*/
 					}
 				}
 			}
