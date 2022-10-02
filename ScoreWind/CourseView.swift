@@ -15,7 +15,7 @@ struct CourseView: View {
 	@Binding var selectedTab:String
 	@State private var selectedSection = courseSection.overview
 	@ObservedObject var downloadManager:DownloadManager
-	@State private var showDownloadAlert = false
+	//@State private var showDownloadAlert = false
 	@State private var startPos:CGPoint = .zero
 	@State private var isSwipping = true
 	@State private var scrollOffset:CGFloat = .zero
@@ -109,34 +109,27 @@ struct CourseView: View {
 				//Lessons section
 				VStack {
 					ScrollViewReader { proxy in
-						courseDownloadButtonView()
+						HStack {
+							Label("Add to favourite", systemImage: "suit.heart")
+								.labelStyle(.iconOnly)
+								.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
+								.background {
+									RoundedRectangle(cornerRadius: 20)
+										.stroke(Color("MyCourseFilterTagBorder"), lineWidth: 1)
+										.background(RoundedRectangle(cornerRadius: 20).fill(Color("MyCourseItem")).opacity(0))
+								}
+								.foregroundColor(Color("MyCourseItemText"))
+								.onTapGesture {
+									
+								}
+							//courseDownloadButtonView()
+							CourseDownloadButtonView(getStatus: downloadManager.checkDownloadStatus(courseID: scorewindData.currentCourse.id, lessonsCount: scorewindData.currentCourse.lessons.count), downloadManager: downloadManager)
+						}
+						
 						List {
 							Section(header: Text("Course content")){
 								ForEach(scorewindData.currentCourse.lessons){ lesson in
-									VStack {
-										HStack {
-											Button(action: {
-												scorewindData.currentLesson = lesson
-												scorewindData.setCurrentTimestampRecs()
-												scorewindData.lastPlaybackTime = 0.0
-												self.selectedTab = "TLesson"
-												scorewindData.lessonChanged = true
-											}) {
-												Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
-													.multilineTextAlignment(.leading)
-													.foregroundColor(.black)
-													.font(Font.body.bold())
-												
-											}
-											Spacer()
-											downloadIconView(getLessonID: lesson.id)
-												.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
-											
-											lessonIsons(scorewindID: lesson.scorewindID)
-										}
-										Spacer()
-											.frame(height:10)
-									}
+									CourseLessonListItemView(selectedTab: $selectedTab, lesson: lesson, downloadManager: downloadManager, studentData: studentData)
 									.padding(EdgeInsets(top: 10, leading: 10, bottom: 15, trailing: 10))
 									.background{
 										RoundedRectangle(cornerRadius: 10)
@@ -308,24 +301,8 @@ struct CourseView: View {
 		return [completedWidth,(totalWidth-completedWidth)]
 	}
 	
-	@ViewBuilder
-	private func downloadIconView(getLessonID: Int) -> some View {
-		let getStatus =  downloadManager.checkDownloadStatus(lessonID: getLessonID)
-		if getStatus == DownloadStatus.inQueue.rawValue {
-			Image(systemName: "arrow.down.square")
-				.foregroundColor(Color.gray)
-		} else if getStatus == DownloadStatus.downloading.rawValue {
-			Image(systemName: "square.and.arrow.down.on.square.fill")
-				.foregroundColor(.blue)
-		} else if getStatus == DownloadStatus.downloaded.rawValue {
-			Image(systemName: "arrow.down.square.fill")
-				.foregroundColor(Color.green)
-		} else if getStatus == DownloadStatus.failed.rawValue {
-			Image(systemName: "exclamationmark.square")
-				.foregroundColor(Color.gray)
-		}
-	}
-	
+
+/*
 	@ViewBuilder
 	private func courseDownloadButtonView() -> some View {
 		let getStatus =  downloadManager.checkDownloadStatus(courseID: scorewindData.currentCourse.id, lessonsCount: scorewindData.currentCourse.lessons.count)
@@ -396,7 +373,7 @@ struct CourseView: View {
 				.stroke(Color("downloadCourse"), lineWidth:1)
 		}
 	}
-	
+*/
 	private func getAlertDialogTitle(downloadStatus: DownloadStatus) -> String {
 		if downloadStatus == DownloadStatus.notInQueue {
 			return "Download course"
@@ -525,22 +502,7 @@ struct CourseView: View {
 		}
 	}
 	
-	@ViewBuilder
-	private func lessonIsons(scorewindID:Int) -> some View {
-		let completedLessons = studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id)
-		if completedLessons.contains(scorewindID) {
-			Label("completed", systemImage: "checkmark.circle.fill")
-				.labelStyle(.iconOnly)
-				.foregroundColor(Color("LessonListStatusIcon"))
-		}
-		
-		let watchedLessons = studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id)
-		if watchedLessons.contains(scorewindID) {
-			Label("watched", systemImage: "eye.circle.fill")
-				.labelStyle(.iconOnly)
-				.foregroundColor(Color("LessonListStatusIcon"))
-		}
-	}
+
 
 }
 

@@ -38,6 +38,7 @@ struct MyCoursesView: View {
 						.onTapGesture {
 							listFilterFavourite.toggle()
 						}
+						
 					Label("Downloaded", systemImage: "arrow.down.circle.fill")
 						.labelStyle(.titleOnly)
 						.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
@@ -71,9 +72,6 @@ struct MyCoursesView: View {
 								MyCouseItemview(selectedTab:$selectedTab ,aCourse: aCourse,downloadManager:downloadManager, studentData: studentData)
 								.id(aCourse.courseID)
 								.padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
-								.onReceive(downloadManager.downloadTaskPublisher, perform: { clonedDownloadList in
-									updateMyCoursesDownloadStatus();
-								})
 							}
 						}
 					}
@@ -88,7 +86,19 @@ struct MyCoursesView: View {
 							}
 						}
 					})
-					
+					/*.onReceive(downloadManager.downloadTaskPublisher, perform: { clonedDownloadList in
+						print("[debug] MyCourseView lessonList onRecieve-downloadTaskPublisher")
+						updateMyCoursesDownloadStatus();
+					})*/
+					.onReceive(downloadManager.myCourseRebuildPublisher, perform: { hasOfflineCourseRemoved in
+						print("[debug] MyCourseView lessonList onRecieve-myCourseRebuildPublisher:\(hasOfflineCourseRemoved)")
+						if hasOfflineCourseRemoved {
+							studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+							updateMyCoursesDownloadStatus()
+						} else {
+							updateMyCoursesDownloadStatus()
+						}
+					})
 					
 				} else {
 					Spacer()
@@ -152,6 +162,7 @@ struct MyCoursesView: View {
 		for courseID in courseFromDownloadList {
 			let findCourseFromScoewindData = scorewindData.allCourses.first(where: {$0.id == courseID}) ?? Course()
 			let courseDownloadStatus = downloadManager.checkDownloadStatus(courseID: courseID, lessonsCount: findCourseFromScoewindData.lessons.count)
+			print("[debug] MyCourseView updateMyCourseDownloadStatus course title:\(findCourseFromScoewindData.title)")
 			let findMyCourseIndex = studentData.myCourses.firstIndex(where: {$0.courseID == courseID}) ?? -1
 			if findMyCourseIndex > -1 {
 				studentData.myCourses[findMyCourseIndex].downloadStatus = courseDownloadStatus.rawValue

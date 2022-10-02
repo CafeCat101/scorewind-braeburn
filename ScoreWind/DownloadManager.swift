@@ -17,6 +17,7 @@ class DownloadManager: ObservableObject {
 	var appState:ScenePhase = .background
 	private var userDefaults = UserDefaults.standard
 	var downloadingCourse = 0
+	var myCourseRebuildPublisher = PassthroughSubject<Bool, Never>()
 	
 	init() {
 		let checkCourseOfflineList = userDefaults.object(forKey: "courseOffline") as? [Int] ?? []
@@ -100,10 +101,12 @@ class DownloadManager: ObservableObject {
 			} else {
 				print("[debug] UserDefault key:courseOffline didn't have courseID\(courseID)")
 			}
+			
 			if !findExistingLessonItems.isEmpty{
 				for lesson in lessons {
 					downloadList.removeAll(where: {$0.lessonID == lesson.id})
 				}
+				self.myCourseRebuildPublisher.send(true)
 			}
 		}
 	}
@@ -212,6 +215,7 @@ class DownloadManager: ObservableObject {
 		
 		DispatchQueue.main.async {
 			self.downloadTaskPublisher.send(downloadTargets)
+			self.myCourseRebuildPublisher.send(false)
 		}
 	}
 	
