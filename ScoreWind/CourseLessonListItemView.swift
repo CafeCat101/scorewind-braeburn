@@ -46,16 +46,16 @@ struct CourseLessonListItemView: View {
 		let getStatus =  downloadManager.checkDownloadStatus(lessonID: getLessonID)
 		if getStatus == DownloadStatus.inQueue.rawValue {
 			Image(systemName: "arrow.down.to.line.compact")
-				.foregroundColor(Color.gray)
+				.foregroundColor(Color("LessonListStatusIcon"))
 		} else if getStatus == DownloadStatus.downloading.rawValue {
 			Image(systemName: "arrow.down.to.line.circle")
-				.foregroundColor(.blue)
+				.foregroundColor(Color("LessonListStatusIcon"))
 		} else if getStatus == DownloadStatus.downloaded.rawValue {
 			Image(systemName: "arrow.down.circle.fill")
-				.foregroundColor(Color.green)
+				.foregroundColor(Color("LessonListStatusIcon"))
 		} else if getStatus == DownloadStatus.failed.rawValue {
 			Image(systemName: "exclamationmark.circle.fill")
-				.foregroundColor(Color.gray)
+				.foregroundColor(Color("LessonListStatusIcon"))
 		}
 	}
 	
