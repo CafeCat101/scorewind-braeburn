@@ -32,11 +32,17 @@ struct MyCoursesView: View {
 						.background {
 							RoundedRectangle(cornerRadius: 20)
 								.stroke(Color("MyCourseFilterTagBorder"), lineWidth: 1)
-								.background(RoundedRectangle(cornerRadius: 20).fill(Color("MyCourseItem")).opacity(0))
+								.background(
+									RoundedRectangle(cornerRadius: 20)
+										.fill(Color("MyCourseItem"))
+										.opacity(listFilterFavourite ? 1 : 0)
+								)
 						}
 						.foregroundColor(Color("MyCourseItemText"))
 						.onTapGesture {
-							listFilterFavourite.toggle()
+							withAnimation {
+								listFilterFavourite.toggle()
+							}
 						}
 						
 					Label("Downloaded", systemImage: "arrow.down.circle.fill")
@@ -86,10 +92,6 @@ struct MyCoursesView: View {
 							}
 						}
 					})
-					/*.onReceive(downloadManager.downloadTaskPublisher, perform: { clonedDownloadList in
-						print("[debug] MyCourseView lessonList onRecieve-downloadTaskPublisher")
-						updateMyCoursesDownloadStatus();
-					})*/
 					.onReceive(downloadManager.myCourseRebuildPublisher, perform: { hasOfflineCourseRemoved in
 						print("[debug] MyCourseView lessonList onRecieve-myCourseRebuildPublisher:\(hasOfflineCourseRemoved)")
 						if hasOfflineCourseRemoved {
@@ -139,6 +141,13 @@ struct MyCoursesView: View {
 			if listFilterDownloaded {
 				let getLessonCount = scorewindData.allCourses.first(where: {$0.id == courseID})?.lessons.count ?? 0
 				if downloadManager.checkDownloadStatus(courseID: courseID, lessonsCount: getLessonCount) == DownloadStatus.downloaded {
+					filterMatchCount = filterMatchCount + 1
+				}
+			}
+			
+			if listFilterFavourite {
+				let findInMyCourses = studentData.myCourses.first(where: {$0.courseID == courseID}) ?? MyCourse()
+				if findInMyCourses.isFavourite {
 					filterMatchCount = filterMatchCount + 1
 				}
 			}

@@ -67,6 +67,14 @@ class iCloudKeyValue: XCTestCase {
 		XCTAssertNoThrow(studentDataModel.getWatchedLessons(courseID: 123))
 	}
 	
+	func testUpdateFavouritedCourse() throws {
+		XCTAssertNoThrow(studentDataModel.updateFavouritedCourse(courseID: 1234))
+	}
+	
+	func testGetFavouritedCourses() throws {
+		XCTAssertNoThrow(print("\(studentDataModel.getFavouritedCourses())"))
+	}
+	
 	/*func testUpdateEnrolledCourses() throws {
 		let testCourseID = 12347
 		let testCourseIsCompelted = true

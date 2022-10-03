@@ -48,6 +48,14 @@ struct MyCouseItemview: View {
 						.frame(width:20)
 				}
 				
+				if aCourse.isFavourite {
+					Label("favourite", systemImage: "heart.circle.fill")
+						.labelStyle(.iconOnly)
+						.foregroundColor(getColorHere(colorFor: "MyCourseItemText", courseID: aCourse.courseID))
+					Spacer()
+						.frame(width:20)
+				}
+				
 				Spacer()
 			}
 			.padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15))

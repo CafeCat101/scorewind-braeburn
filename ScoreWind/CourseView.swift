@@ -23,6 +23,7 @@ struct CourseView: View {
 	@State private var underlineScrollOffset:CGFloat = .zero
 	@State private var vScrolling = false
 	@ObservedObject var studentData:StudentData
+	@State private var isFavourite = false
 	
 	var body: some View {
 		VStack {
@@ -110,7 +111,7 @@ struct CourseView: View {
 				VStack {
 					ScrollViewReader { proxy in
 						HStack {
-							Label("Add to favourite", systemImage: "suit.heart")
+							Label("Add to favourite", systemImage: isFavourite ? "heart.circle.fill" : "suit.heart")
 								.labelStyle(.iconOnly)
 								.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
 								.background {
@@ -120,7 +121,13 @@ struct CourseView: View {
 								}
 								.foregroundColor(Color("MyCourseItemText"))
 								.onTapGesture {
-									
+									studentData.updateFavouritedCourse(courseID: scorewindData.currentCourse.id)
+									if studentData.getFavouritedCourses().contains(where: {$0.self as! Int == scorewindData.currentCourse.id}) {
+										isFavourite = true
+									} else {
+										isFavourite = false
+									}
+									studentData.updateMyCourses(allCourses: scorewindData.allCourses)
 								}
 							//courseDownloadButtonView()
 							CourseDownloadButtonView(getStatus: downloadManager.checkDownloadStatus(courseID: scorewindData.currentCourse.id, lessonsCount: scorewindData.currentCourse.lessons.count), downloadManager: downloadManager)
@@ -239,6 +246,11 @@ struct CourseView: View {
 			print("[debug] CourseView, dragOffset \(dragOffset)")
 			underlineScrollOffset = 0-screenSize.width/3
 			scrollOffset = getSectionOffset(goToSection: selectedSection)
+			if studentData.getFavouritedCourses().contains(where: {$0.self as! Int == scorewindData.currentCourse.id}) {
+				isFavourite = true
+			} else {
+				isFavourite = false
+			}
 		})
 	}
 	
@@ -501,7 +513,7 @@ struct CourseView: View {
 			return contentWidth/CGFloat(sectionCount)
 		}
 	}
-	
+
 
 
 }

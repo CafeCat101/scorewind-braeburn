@@ -16,6 +16,7 @@ struct MyCourse: Identifiable{
 	var watchedLessons: [Int]
 	var lastUpdatedDate: Date
 	var downloadStatus: Int
+	var isFavourite: Bool
 	
 	init() {
 		id = UUID()
@@ -26,5 +27,6 @@ struct MyCourse: Identifiable{
 		watchedLessons = []
 		lastUpdatedDate = Date()
 		downloadStatus = DownloadStatus.notInQueue.rawValue
+		isFavourite = false
 	}
 }
