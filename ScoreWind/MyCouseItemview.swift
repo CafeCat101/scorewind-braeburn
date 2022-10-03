@@ -60,13 +60,13 @@ struct MyCouseItemview: View {
 			}
 			.padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15))
 			
-			if aCourse.completedLessons.count > 0 || aCourse.watchedLessons.count > 0 {
+			if aCourse.completedLessons.count > 0 || aCourse.watchedLessons.count > 0  || aCourse.isFavourite{
 				HStack() {
 					lastCompletedWatchedTime(courseID: aCourse.courseID)
 					Spacer()
 				}.padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15))
 			}
-			
+			//Text("\(aCourse.courseID):\(testDateToString(getDate:aCourse.lastUpdatedDate))")
 		}
 		.background{
 			RoundedRectangle(cornerRadius: 10)
@@ -113,8 +113,10 @@ struct MyCouseItemview: View {
 		let latestUpdatedLesson = courseLessons?.first(where: {$0.scorewindID == Int(lastUpdatedItemValue[1])}) ?? Lesson()
 		
 		VStack(alignment:.leading) {
-			Text("\(String(describing: scorewindData.replaceCommonHTMLNumber(htmlString: latestUpdatedLesson.title)))")
-				.foregroundColor(courseID == scorewindData.currentCourse.id ? Color("MyCourseItemTextHighlited") : Color("MyCourseItemText"))
+			if latestUpdatedLesson.id > 0 {
+				Text("\(String(describing: scorewindData.replaceCommonHTMLNumber(htmlString: latestUpdatedLesson.title)))")
+					.foregroundColor(courseID == scorewindData.currentCourse.id ? Color("MyCourseItemTextHighlited") : Color("MyCourseItemText"))
+			}
 			Text("\(String(lastUpdatedItemValue[0])) \(getFriendlyDateTimeDiff(targetDateTime: dateCollections.sorted(by: {$0.key > $1.key})[0].key))").foregroundColor(courseID == scorewindData.currentCourse.id ? Color("FriednlyTimeDiffText") : .gray)
 		}
 	}
@@ -147,6 +149,9 @@ struct MyCouseItemview: View {
 			($0.value as! String).contains(String(courseID)+"/")
 		})
 		
+		let findInMyCourse = studentData.myCourses.first(where: {$0.courseID == courseID}) ?? MyCourse()
+		 
+		
 		let dateFormatter = DateFormatter()
 		dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
 		
@@ -159,6 +164,11 @@ struct MyCouseItemview: View {
 			let stringToDate = dateFormatter.date(from: (lesson.value as! String).replacingOccurrences(of: String(courseID)+"/", with: "")) ?? Date()
 			dateCollections.updateValue("Completed/\(lesson.key)", forKey: stringToDate )
 		}
+		
+		if findInMyCourse.isFavourite {
+			dateCollections.updateValue("Favourited/-1", forKey: findInMyCourse.favouritedDate)
+		}
+		
 		
 		return dateCollections
 	}
@@ -228,6 +238,12 @@ struct MyCouseItemview: View {
 	private func getLessonCount(courseID: Int) -> Int {
 		let findCourse = scorewindData.allCourses.first(where: {$0.id == courseID}) ?? Course()
 		return findCourse.lessons.count
+	}
+	
+	private func testDateToString(getDate: Date) -> String {
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+		return dateFormatter.string(from: getDate)
 	}
 }
 

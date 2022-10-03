@@ -122,7 +122,7 @@ struct CourseView: View {
 								.foregroundColor(Color("MyCourseItemText"))
 								.onTapGesture {
 									studentData.updateFavouritedCourse(courseID: scorewindData.currentCourse.id)
-									if studentData.getFavouritedCourses().contains(where: {$0.self as! Int == scorewindData.currentCourse.id}) {
+									if studentData.getFavouritedCourses().contains(where: { Int($0.key) == scorewindData.currentCourse.id}) {
 										isFavourite = true
 									} else {
 										isFavourite = false
@@ -246,7 +246,7 @@ struct CourseView: View {
 			print("[debug] CourseView, dragOffset \(dragOffset)")
 			underlineScrollOffset = 0-screenSize.width/3
 			scrollOffset = getSectionOffset(goToSection: selectedSection)
-			if studentData.getFavouritedCourses().contains(where: {$0.self as! Int == scorewindData.currentCourse.id}) {
+			if studentData.getFavouritedCourses().contains(where: { Int($0.key) == scorewindData.currentCourse.id}) {
 				isFavourite = true
 			} else {
 				isFavourite = false

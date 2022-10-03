@@ -88,16 +88,20 @@ class StudentData: ObservableObject {
 		useriCloudKeyValueStore.synchronize()
 	}
 	
-	func getFavouritedCourses() -> [Any] {
-		return useriCloudKeyValueStore.array(forKey: "favouritedCourses") ?? []
+	func getFavouritedCourses() -> [String:Any] {
+		return useriCloudKeyValueStore.dictionary(forKey: "favouritedCourses") ?? [:]
 	}
 	
 	func updateFavouritedCourse(courseID: Int) {
 		var getFavouriteCourses = getFavouritedCourses()
-		if getFavouriteCourses.contains(where: {$0.self as! Int == courseID}) {
-			getFavouriteCourses.remove(at: getFavouriteCourses.firstIndex(where: {$0.self as! Int == courseID}) ?? -1)
+		let now = Date()
+		let nowFormatter = DateFormatter()
+		nowFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+		
+		if getFavouriteCourses.contains(where: {Int($0.key) == courseID}) {
+			getFavouriteCourses.removeValue(forKey: String(courseID))
 		} else {
-			getFavouriteCourses.append(courseID)
+			getFavouriteCourses.updateValue(nowFormatter.string(from: now), forKey: String(courseID))//.append(courseID)
 		}
 		
 		useriCloudKeyValueStore.set(getFavouriteCourses,forKey: "favouritedCourses")
@@ -119,8 +123,10 @@ class StudentData: ObservableObject {
 	func updateMyCourses(allCourses:[Course]) {
 		print("[debug] StudentData, myCourses")
 		myCourses.removeAll()
+		
 		refilMyCourses(allCourses: allCourses, statusType: "completed")
 		refilMyCourses(allCourses: allCourses, statusType: "watched")
+		refilMyCourses(allCourses: allCourses, statusType: "favourited")
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
@@ -149,41 +155,76 @@ class StudentData: ObservableObject {
 				}
 			}
 			
-			updateMyCoursesFavouriteStatus(allCourses: allCourses)
 			
-			dateCollection = dateCollection.sorted(by: {$0 > $1})
-			//print("[debug] StudentData, myCourses-dateCollection \(dateCollection)")
-			myCourses[index].lastUpdatedDate = dateCollection[0]
+			for favouriteCourse in getFavouritedCourses() {
+				if Int(favouriteCourse.key) == course.courseID {
+					dateCollection.append(course.favouritedDate)
+				}
+			}
+			
+			//updateMyCoursesFavouriteStatus(allCourses: allCourses)
+			if dateCollection.count > 0 {
+				dateCollection = dateCollection.sorted(by: {$0 > $1})
+				print("[debug] StudentData, myCourses-dateCollection(courseID:\(course.courseID) \(dateCollection)")
+				myCourses[index].lastUpdatedDate = dateCollection[0]
+			}
+			
 		}
 		
 		myCourses = myCourses.sorted(by: {$0.lastUpdatedDate > $1.lastUpdatedDate})
 	}
 	
 	private func refilMyCourses(allCourses:[Course], statusType: String) {
-		for lesson in (statusType=="completed" ? getCompletedLessons() : getWatchedLessons()) {
-			let findCourseInAll = allCourses.first(where: {(lesson.value as! String).contains(String($0.id)+"/")}) ?? Course()
+		var processArray:[String:Any] = [:]
+		if statusType == "completed" {
+			processArray = getCompletedLessons()
+		} else if statusType == "watched" {
+			processArray = getWatchedLessons()
+		} else if statusType == "favourited" {
+			processArray = getFavouritedCourses()
+		}
+		
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+		
+		for item in processArray {
+			var findCourseInAll:Course = Course()
+			if statusType == "favourited" {
+				findCourseInAll = allCourses.first(where: {$0.id == Int(item.key)}) ?? Course()
+			} else {
+				findCourseInAll = allCourses.first(where: {(item.value as! String).contains(String($0.id)+"/")}) ?? Course()
+			}
 			
 			if findCourseInAll.id > 0 {
 				let findMyCourseIndex = myCourses.firstIndex(where: {$0.courseID == findCourseInAll.id}) ?? -1
 				if findMyCourseIndex > -1 {
 					if statusType == "completed" {
-						if myCourses[findMyCourseIndex].completedLessons.contains(Int(lesson.key)!) == false {
-							myCourses[findMyCourseIndex].completedLessons.append(Int(lesson.key)!)
+						if myCourses[findMyCourseIndex].completedLessons.contains(Int(item.key)!) == false {
+							myCourses[findMyCourseIndex].completedLessons.append(Int(item.key)!)
 						}
-					} else {
-						if myCourses[findMyCourseIndex].watchedLessons.contains(Int(lesson.key)!) == false {
-							myCourses[findMyCourseIndex].watchedLessons.append(Int(lesson.key)!)
+					} else if statusType == "watched" {
+						if myCourses[findMyCourseIndex].watchedLessons.contains(Int(item.key)!) == false {
+							myCourses[findMyCourseIndex].watchedLessons.append(Int(item.key)!)
 						}
+					} else if statusType == "favourited" {
+						myCourses[findMyCourseIndex].isFavourite = true
+						print("[debug] StudentDaata, refileMyCourses, favouritedDate(\(item.key): \(item.value as! String)")
+						myCourses[findMyCourseIndex].favouritedDate = dateFormatter.date(from: item.value as! String) ?? Date()
 					}
 				} else {
 					var addNewCourse = MyCourse()
 					addNewCourse.courseID = findCourseInAll.id
 					addNewCourse.courseTitle = findCourseInAll.title
 					addNewCourse.courseShortDescription = findCourseInAll.shortDescription
+					
 					if statusType == "completed" {
-						addNewCourse.completedLessons.append(Int(lesson.key)!)
-					} else {
-						addNewCourse.watchedLessons.append(Int(lesson.key)!)
+						addNewCourse.completedLessons.append(Int(item.key)!)
+					} else if statusType == "watched" {
+						addNewCourse.watchedLessons.append(Int(item.key)!)
+					} else if statusType == "favourited" {
+						addNewCourse.isFavourite = true
+						print("[debug] StudentDaata, refileMyCourses, favouritedDate(\(item.key): \(item.value as! String)")
+						addNewCourse.favouritedDate = dateFormatter.date(from: item.value as! String) ?? Date()
 					}
 					
 					myCourses.append(addNewCourse)
@@ -191,7 +232,7 @@ class StudentData: ObservableObject {
 			}
 		}
 	}
-	
+	/*
 	func updateMyCoursesFavouriteStatus(allCourses:[Course]) {
 		for courseID in getFavouritedCourses() {
 			let findCourseFromScoewindData = allCourses.first(where: {$0.id == courseID as! Int}) ?? Course()
@@ -214,5 +255,5 @@ class StudentData: ObservableObject {
 			}
 		}
 	}
-
+  */
 }
