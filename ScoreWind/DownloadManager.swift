@@ -109,6 +109,9 @@ class DownloadManager: ObservableObject {
 				self.myCourseRebuildPublisher.send(true)
 			}
 		}
+		
+		self.updateCourseOfflineDate(courseID: courseID)
+		
 	}
 	
 	func buildDownloadListFromJSON(allCourses:[Course]) {
@@ -137,6 +140,16 @@ class DownloadManager: ObservableObject {
 				}
 			}
 			downloadList = newDownloadList
+		}
+	}
+	
+	private func updateCourseOfflineDate(courseID: Int) {
+		let now = Date()
+		var courseOfflineDateList = userDefaults.object(forKey: "courseOfflineDate") as? [String:Any] ?? [:]
+		if courseOfflineDateList.contains(where: {Int($0.key) == courseID}) {
+			courseOfflineDateList.updateValue(now, forKey: String(courseID))
+		} else {
+			courseOfflineDateList.removeValue(forKey: String(courseID))
 		}
 	}
 	
@@ -226,6 +239,7 @@ class DownloadManager: ObservableObject {
 		print("[deubg] [downlaodVideoXML-downloadTaskUpdateStatus] getDownloadListIndex\(getDownloadListIndex) lessonID\(tempLessonID)")
 		if getDownloadListIndex > -1 {
 			self.downloadList[getDownloadListIndex].videoDownloadStatus = status.rawValue
+			self.updateCourseOfflineDate(courseID: tempCourseID)
 		}
 	}
 	
