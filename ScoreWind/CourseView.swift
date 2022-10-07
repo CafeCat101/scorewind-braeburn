@@ -128,6 +128,7 @@ struct CourseView: View {
 										isFavourite = false
 									}
 									studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+									studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 								}
 							//courseDownloadButtonView()
 							CourseDownloadButtonView(getStatus: downloadManager.checkDownloadStatus(courseID: scorewindData.currentCourse.id, lessonsCount: scorewindData.currentCourse.lessons.count), downloadManager: downloadManager)

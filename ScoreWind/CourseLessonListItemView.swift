@@ -48,7 +48,7 @@ struct CourseLessonListItemView: View {
 			Image(systemName: "arrow.down.to.line.compact")
 				.foregroundColor(Color("LessonListStatusIcon"))
 		} else if getStatus == DownloadStatus.downloading.rawValue {
-			Image(systemName: "arrow.down.to.line.circle")
+			Image(systemName: "arrow.down.circle")
 				.foregroundColor(Color("LessonListStatusIcon"))
 		} else if getStatus == DownloadStatus.downloaded.rawValue {
 			Image(systemName: "arrow.down.circle.fill")

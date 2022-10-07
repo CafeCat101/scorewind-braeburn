@@ -92,14 +92,10 @@ struct MyCoursesView: View {
 							}
 						}
 					})
-					.onReceive(downloadManager.myCourseRebuildPublisher, perform: { hasOfflineCourseRemoved in
-						print("[debug] MyCourseView lessonList onRecieve-myCourseRebuildPublisher:\(hasOfflineCourseRemoved)")
-						if hasOfflineCourseRemoved {
-							studentData.updateMyCourses(allCourses: scorewindData.allCourses)
-							updateMyCoursesDownloadStatus()
-						} else {
-							updateMyCoursesDownloadStatus()
-						}
+					.onReceive(downloadManager.myCourseRebuildPublisher, perform: { pushDate in
+						print("[debug] MyCourseView lessonList onRecieve, \(pushDate)")
+						studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+						studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 					})
 					
 				} else {

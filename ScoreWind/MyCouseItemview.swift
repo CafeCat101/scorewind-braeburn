@@ -66,7 +66,7 @@ struct MyCouseItemview: View {
 					Spacer()
 				}.padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15))
 			}
-			//Text("\(aCourse.courseID):\(testDateToString(getDate:aCourse.lastUpdatedDate))")
+			Text("\(aCourse.courseID):\(testDateToString(getDate:aCourse.lastUpdatedDate))")
 		}
 		.background{
 			RoundedRectangle(cornerRadius: 10)

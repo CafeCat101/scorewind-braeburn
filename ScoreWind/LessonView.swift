@@ -70,6 +70,7 @@ struct LessonView: View {
 							//DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 								//because video.onDisappear will fire after onAappear of other view
 								studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+							studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 							//}
 						}
 						viewModel.videoPlayer!.pause()
@@ -471,6 +472,7 @@ struct LessonView: View {
 			}
 			
 			studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+			studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 			
 			checkCurrentLessonCompleted()
 		}){

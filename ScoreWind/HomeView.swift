@@ -66,7 +66,8 @@ struct HomeView: View {
 					print("[debug] HomeView, tabview, downloadManager.appState=background")
 					setupDataObjects()
 					activateDownloadVideoXML()
-					updateMyCoursesDownloadStatus()
+					//updateMyCoursesDownloadStatus()
+					studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 				}
 				downloadManager.appState = .active
 				//<<<<==
@@ -77,7 +78,8 @@ struct HomeView: View {
 					if downloadManager.appState == .background {
 						print("[debug] HomeView, tabview, downloadManager.appState=background")
 						activateDownloadVideoXML()
-						updateMyCoursesDownloadStatus()
+						//updateMyCoursesDownloadStatus()
+						studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 					}
 					downloadManager.appState = .active
 				} else if newPhase == .inactive {
@@ -89,6 +91,7 @@ struct HomeView: View {
 						print("[debug] HomeView.onChange, .background lastPlayBackTime>=10")
 						studentData.updateWatchedLessons(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, addWatched: true)
 						studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+						studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 					}
 				}
 			})
@@ -114,9 +117,10 @@ struct HomeView: View {
 			})
 			.onReceive(downloadManager.downloadTaskPublisher, perform: { clonedDownloadList in
 				print("[deubg] HomeView,onRecieve, downloadTaskPublisher:\(clonedDownloadList.count)")
-				for courseID in clonedDownloadList {
+				
+				/*for courseID in clonedDownloadList {
 					print("[debug] HomeView, onRecieve - \(courseID)")
-				}
+				}*/
 				if downloadManager.compareDownloadList(downloadTargets: clonedDownloadList) == false {
 					print("[deubg] HomeView, onRecieve, cloned and original are different, call downloadXMLVideo")
 					Task {

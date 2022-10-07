@@ -144,7 +144,7 @@ struct CourseDownloadButtonView: View {
 		if getStatus == DownloadStatus.inQueue {
 			return "arrow.down.to.line.compact"
 		} else if getStatus == DownloadStatus.downloading {
-			return "arrow.down.to.line.circle"
+			return "arrow.down.circle"
 		} else if getStatus == DownloadStatus.downloaded {
 			return "arrow.down.circle.fill"
 		} else if getStatus == DownloadStatus.failed {

@@ -37,8 +37,8 @@ class iCloudKeyValue: XCTestCase {
 		//remove completed lessons: completedLessons
 		//remove watched lessons:watchedLessons
 		//XCTAssertNoThrow(studentDataModel.removeAKey(keyName: "completedLessons"))
-		//XCTAssertNoThrow(studentDataModel.removeAKey(keyName: "watchedLessons"))
-		XCTAssertNoThrow(studentDataModel.removeAKey(keyName: "favouritedCourses"))
+		XCTAssertNoThrow(studentDataModel.removeAKey(keyName: "watchedLessons"))
+		//XCTAssertNoThrow(studentDataModel.removeAKey(keyName: "favouritedCourses"))
 		studentDataModel.backendReadAllKeys()
 	}
 	

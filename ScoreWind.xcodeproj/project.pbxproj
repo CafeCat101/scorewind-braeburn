@@ -52,6 +52,7 @@
 		C878275328E8675F0007DDC1 /* MyCouseItemview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878275228E8675F0007DDC1 /* MyCouseItemview.swift */; };
 		C878275728E8861C0007DDC1 /* CourseLessonListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878275628E8861C0007DDC1 /* CourseLessonListItemView.swift */; };
 		C878275928E88B8E0007DDC1 /* CourseDownloadButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878275828E88B8E0007DDC1 /* CourseDownloadButtonView.swift */; };
+		C878275C28EF0AA60007DDC1 /* UserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878275A28EF0AA60007DDC1 /* UserDefault.swift */; };
 		C88E652C28D3231A000FDC2D /* scorewind_ios_xml.zip in Resources */ = {isa = PBXBuildFile; fileRef = C88E652B28D3231A000FDC2D /* scorewind_ios_xml.zip */; };
 		C8E063F028B0E20E000B3D67 /* MyCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E063EF28B0E20E000B3D67 /* MyCourse.swift */; };
 /* End PBXBuildFile section */
@@ -126,6 +127,7 @@
 		C878275228E8675F0007DDC1 /* MyCouseItemview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCouseItemview.swift; sourceTree = "<group>"; };
 		C878275628E8861C0007DDC1 /* CourseLessonListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseLessonListItemView.swift; sourceTree = "<group>"; };
 		C878275828E88B8E0007DDC1 /* CourseDownloadButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDownloadButtonView.swift; sourceTree = "<group>"; };
+		C878275A28EF0AA60007DDC1 /* UserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefault.swift; sourceTree = "<group>"; };
 		C88E652B28D3231A000FDC2D /* scorewind_ios_xml.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = scorewind_ios_xml.zip; sourceTree = "<group>"; };
 		C8E063EF28B0E20E000B3D67 /* MyCourse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCourse.swift; sourceTree = "<group>"; };
 		F3441470A2546CDD3AD7E6C9 /* Pods_ScoreWind.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScoreWind.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -253,6 +255,7 @@
 			children = (
 				C85F273A286F4C2C00D0A4E5 /* ScoreWindTests.swift */,
 				C85F2799286F5B1C00D0A4E5 /* iCloudKeyValue.swift */,
+				C878275A28EF0AA60007DDC1 /* UserDefault.swift */,
 			);
 			path = ScoreWindTests;
 			sourceTree = "<group>";
@@ -538,6 +541,7 @@
 			files = (
 				C85F273B286F4C2C00D0A4E5 /* ScoreWindTests.swift in Sources */,
 				C85F279A286F5B1C00D0A4E5 /* iCloudKeyValue.swift in Sources */,
+				C878275C28EF0AA60007DDC1 /* UserDefault.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

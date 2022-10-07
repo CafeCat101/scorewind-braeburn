@@ -13,6 +13,7 @@ import Combine
 class StudentData: ObservableObject {
 	@Published var myCourses:[MyCourse] = []
 	private let useriCloudKeyValueStore = NSUbiquitousKeyValueStore.default
+	private var userDefaults = UserDefaults.standard
 	
 	func getInstrumentChoice()->String{
 		return useriCloudKeyValueStore.string(forKey:"instrument") ?? ""
@@ -155,7 +156,6 @@ class StudentData: ObservableObject {
 				}
 			}
 			
-			
 			for favouriteCourse in getFavouritedCourses() {
 				if Int(favouriteCourse.key) == course.courseID {
 					dateCollection.append(course.favouritedDate)
@@ -230,6 +230,48 @@ class StudentData: ObservableObject {
 					myCourses.append(addNewCourse)
 				}
 			}
+		}
+	}
+	
+	func updateMyCoursesDownloadStatus(allCourses:[Course], downloadManager:DownloadManager){
+		let courseOfflineDateList = userDefaults.object(forKey: "courseOfflineDate") as? [String:Any] ?? [:]
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+		
+		if myCourses.count > 0 {
+			for (index,course) in myCourses.enumerated() {
+				//update downloadStatus for course in self.myCourses first
+				let findInAllCourses = allCourses.first(where: {$0.id == course.courseID}) ?? Course()
+				myCourses[index].downloadStatus = downloadManager.checkDownloadStatus(courseID: course.courseID, lessonsCount: findInAllCourses.lessons.count).rawValue
+				
+				//update lastUpdateDate for course in self.myCourses against courseOfflineDate Key-Value if it's necessary
+				let findInCourseOfflineDate = courseOfflineDateList.first(where: { Int($0.key) == course.courseID})
+				if findInCourseOfflineDate != nil {
+					let getCourseOfflineDate = findInCourseOfflineDate!.value as! Date
+					if course.lastUpdatedDate < getCourseOfflineDate {
+						myCourses[index].lastUpdatedDate = getCourseOfflineDate
+					}
+				}
+			}
+			
+			if courseOfflineDateList.count > 0 {
+				//add courses that exist in Key-Value courseOfflineDate but not in self.myCourses
+				for dateItem in courseOfflineDateList {
+					if myCourses.contains(where: {$0.courseID == Int(dateItem.key)}) == false {
+						let findInAllCourses = allCourses.first(where: {$0.id == Int(dateItem.key)}) ?? Course()
+						var newCourse = MyCourse()
+						newCourse.courseID = findInAllCourses.id
+						newCourse.courseTitle = findInAllCourses.title
+						newCourse.courseShortDescription = findInAllCourses.shortDescription
+						newCourse.downloadStatus = downloadManager.checkDownloadStatus(courseID: Int(dateItem.key)!, lessonsCount: findInAllCourses.lessons.count).rawValue
+						newCourse.lastUpdatedDate = dateItem.value as! Date
+						myCourses.append(newCourse)
+					}
+				}
+			}
+			
+			myCourses = myCourses.sorted(by: {$0.lastUpdatedDate > $1.lastUpdatedDate})
+			
 		}
 	}
 	/*

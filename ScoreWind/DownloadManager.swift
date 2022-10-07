@@ -17,7 +17,7 @@ class DownloadManager: ObservableObject {
 	var appState:ScenePhase = .background
 	private var userDefaults = UserDefaults.standard
 	var downloadingCourse = 0
-	var myCourseRebuildPublisher = PassthroughSubject<Bool, Never>()
+	var myCourseRebuildPublisher = PassthroughSubject<Date, Never>()
 	
 	init() {
 		let checkCourseOfflineList = userDefaults.object(forKey: "courseOffline") as? [Int] ?? []
@@ -28,6 +28,20 @@ class DownloadManager: ObservableObject {
 		} else {
 			print("[deubg] DownloadManager, UserDefault-key:courseOffline is empty")
 		}
+		
+		let checkCourseOfflineDateList = userDefaults.object(forKey: "courseOfflineDate") as? [String:Any] ?? [:]
+		print("[debug] DownloadManager, UserDefault-key:courseOfflineDate item:\(checkCourseOfflineDateList)")
+		 
+	}
+	
+	func printKeyCourseOffline(){
+		let checkCourseOfflineList = userDefaults.object(forKey: "courseOffline") as? [Int] ?? []
+		print("[debug] DownloadManager, UserDefault-key:courseOffline items: \(checkCourseOfflineList)")
+	}
+	
+	func printKeyCourseOfflineDate(){
+		let checkCourseOfflineDateList = userDefaults.object(forKey: "courseOfflineDate") as? [String:Any] ?? [:]
+		print("[debug] DownloadManager, UserDefault-key:courseOfflineDate items: \(checkCourseOfflineDateList)")
 	}
 	
 	func checkDownloadStatus(lessonID:Int) -> Int {
@@ -84,6 +98,7 @@ class DownloadManager: ObservableObject {
 					downloadList.append(DownloadItem(courseID: courseID, lessonID: lesson.id, videoDownloadStatus: DownloadStatus.inQueue.rawValue))
 				}
 			}
+			self.updateCourseOfflineDate(courseID: courseID, isRemoved: false)
 		} else {
 			if !findExistingCourseItem.isEmpty {
 				print("[deubg] remove course(id:\(courseID) from UserDefault key:courseOffline")
@@ -106,12 +121,9 @@ class DownloadManager: ObservableObject {
 				for lesson in lessons {
 					downloadList.removeAll(where: {$0.lessonID == lesson.id})
 				}
-				self.myCourseRebuildPublisher.send(true)
+				self.updateCourseOfflineDate(courseID: courseID, isRemoved: true)
 			}
 		}
-		
-		self.updateCourseOfflineDate(courseID: courseID)
-		
 	}
 	
 	func buildDownloadListFromJSON(allCourses:[Course]) {
@@ -143,14 +155,19 @@ class DownloadManager: ObservableObject {
 		}
 	}
 	
-	private func updateCourseOfflineDate(courseID: Int) {
+	private func updateCourseOfflineDate(courseID: Int, isRemoved: Bool) {
+		print("[debug] DownloadManager updateCourseOfflineDate, courseID\(courseID), isRemoved:\(isRemoved)")
 		let now = Date()
 		var courseOfflineDateList = userDefaults.object(forKey: "courseOfflineDate") as? [String:Any] ?? [:]
-		if courseOfflineDateList.contains(where: {Int($0.key) == courseID}) {
+		
+		if isRemoved == false {
 			courseOfflineDateList.updateValue(now, forKey: String(courseID))
 		} else {
 			courseOfflineDateList.removeValue(forKey: String(courseID))
 		}
+		
+		userDefaults.set(courseOfflineDateList, forKey: "courseOfflineDate")
+		self.myCourseRebuildPublisher.send(Date())
 	}
 	
 	func downloadVideos(allCourses: [Course]) async throws{
@@ -228,7 +245,6 @@ class DownloadManager: ObservableObject {
 		
 		DispatchQueue.main.async {
 			self.downloadTaskPublisher.send(downloadTargets)
-			self.myCourseRebuildPublisher.send(false)
 		}
 	}
 	
@@ -239,7 +255,7 @@ class DownloadManager: ObservableObject {
 		print("[deubg] [downlaodVideoXML-downloadTaskUpdateStatus] getDownloadListIndex\(getDownloadListIndex) lessonID\(tempLessonID)")
 		if getDownloadListIndex > -1 {
 			self.downloadList[getDownloadListIndex].videoDownloadStatus = status.rawValue
-			self.updateCourseOfflineDate(courseID: tempCourseID)
+			self.updateCourseOfflineDate(courseID: tempCourseID, isRemoved: false)
 		}
 	}
 	
