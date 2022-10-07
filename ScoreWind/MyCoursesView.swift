@@ -156,32 +156,6 @@ struct MyCoursesView: View {
 		}
 	}
 	
-	private func updateMyCoursesDownloadStatus() {
-		var courseFromDownloadList:[Int] = []
-		for offlineCourse in downloadManager.downloadList {
-			if courseFromDownloadList.contains(where: {$0 == offlineCourse.courseID}) == false {
-				courseFromDownloadList.append(offlineCourse.courseID)
-			}
-		}
-		
-		for courseID in courseFromDownloadList {
-			let findCourseFromScoewindData = scorewindData.allCourses.first(where: {$0.id == courseID}) ?? Course()
-			let courseDownloadStatus = downloadManager.checkDownloadStatus(courseID: courseID, lessonsCount: findCourseFromScoewindData.lessons.count)
-			print("[debug] MyCourseView updateMyCourseDownloadStatus course title:\(findCourseFromScoewindData.title)")
-			let findMyCourseIndex = studentData.myCourses.firstIndex(where: {$0.courseID == courseID}) ?? -1
-			if findMyCourseIndex > -1 {
-				studentData.myCourses[findMyCourseIndex].downloadStatus = courseDownloadStatus.rawValue
-			} else {
-				var addNewCourse = MyCourse()
-				addNewCourse.courseID = findCourseFromScoewindData.id
-				addNewCourse.courseTitle = findCourseFromScoewindData.title
-				addNewCourse.courseShortDescription = findCourseFromScoewindData.shortDescription
-				addNewCourse.downloadStatus = courseDownloadStatus.rawValue
-				studentData.myCourses.append(addNewCourse)
-			}
-		}
-	}
-	
 
 }
 
