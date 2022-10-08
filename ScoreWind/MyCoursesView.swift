@@ -27,6 +27,7 @@ struct MyCoursesView: View {
 			ScrollView(.horizontal) {
 				HStack {
 					Label("Favourite", systemImage: "suit.heart")
+						.fixedSize(horizontal: true, vertical: true)
 						.labelStyle(.titleOnly)
 						.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
 						.background {
@@ -46,6 +47,7 @@ struct MyCoursesView: View {
 						}
 						
 					Label("Downloaded", systemImage: "arrow.down.circle.fill")
+						.fixedSize(horizontal: true, vertical: true)
 						.labelStyle(.titleOnly)
 						.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
 						.background {

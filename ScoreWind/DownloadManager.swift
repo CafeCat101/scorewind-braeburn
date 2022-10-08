@@ -39,9 +39,10 @@ class DownloadManager: ObservableObject {
 		print("[debug] DownloadManager, UserDefault-key:courseOffline items: \(checkCourseOfflineList)")
 	}
 	
-	func printKeyCourseOfflineDate(){
+	func getKeyCourseOfflineDate() -> [String:Any]{
 		let checkCourseOfflineDateList = userDefaults.object(forKey: "courseOfflineDate") as? [String:Any] ?? [:]
 		print("[debug] DownloadManager, UserDefault-key:courseOfflineDate items: \(checkCourseOfflineDateList)")
+		return checkCourseOfflineDateList
 	}
 	
 	func checkDownloadStatus(lessonID:Int) -> Int {
@@ -124,6 +125,7 @@ class DownloadManager: ObservableObject {
 				self.updateCourseOfflineDate(courseID: courseID, isRemoved: true)
 			}
 		}
+		self.myCourseRebuildPublisher.send(Date())
 	}
 	
 	func buildDownloadListFromJSON(allCourses:[Course]) {
@@ -167,13 +169,19 @@ class DownloadManager: ObservableObject {
 		}
 		
 		userDefaults.set(courseOfflineDateList, forKey: "courseOfflineDate")
-		self.myCourseRebuildPublisher.send(Date())
+		//self.myCourseRebuildPublisher.send(Date())
 	}
 	
 	func downloadVideos(allCourses: [Course]) async throws{
 		let downloadTargets = self.downloadList
+		var trackCourseID = 0
 		for item in downloadTargets {
 			if item.videoDownloadStatus == 1{
+				if trackCourseID != item.courseID {
+					print("[debug] [downloadVideoXML] trackCourseID \(trackCourseID):item.courseID \(item.courseID)")
+					trackCourseID = item.courseID
+					self.myCourseRebuildPublisher.send(Date())
+				}
 				let getCourse = allCourses.first(where: {$0.id == item.courseID})
 				let getLesson = getCourse?.lessons.first(where: {$0.id == item.lessonID})
 				print("[deubg] [downlaodVideoXML] lessonID:\(getLesson?.id ?? 0)")

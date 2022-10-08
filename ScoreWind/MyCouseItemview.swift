@@ -40,8 +40,16 @@ struct MyCouseItemview: View {
 						.frame(width:20)
 				}
 				
-				if downloadManager.checkDownloadStatus(courseID: aCourse.courseID, lessonsCount: getLessonCount(courseID: aCourse.courseID)) == DownloadStatus.downloaded {
+				/*if downloadManager.checkDownloadStatus(courseID: aCourse.courseID, lessonsCount: getLessonCount(courseID: aCourse.courseID)) == DownloadStatus.downloaded {
 					Label("Downloaded", systemImage: "arrow.down.circle.fill")
+						.labelStyle(.iconOnly)
+						.foregroundColor(getColorHere(colorFor: "MyCourseItemText", courseID: aCourse.courseID))
+					Spacer()
+						.frame(width:20)
+				}*/
+				if let myString = getCourseDownloadStatusIcon(courseID: aCourse.courseID), !myString.isEmpty {
+					//print("myString \(myString)")
+					Label("Downloaded", systemImage: myString)
 						.labelStyle(.iconOnly)
 						.foregroundColor(getColorHere(colorFor: "MyCourseItemText", courseID: aCourse.courseID))
 					Spacer()
@@ -66,7 +74,7 @@ struct MyCouseItemview: View {
 					Spacer()
 				}.padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15))
 			}
-			Text("\(aCourse.courseID):\(testDateToString(getDate:aCourse.lastUpdatedDate))")
+			//Text("\(aCourse.courseID):\(testDateToString(getDate:aCourse.lastUpdatedDate))")
 		}
 		.background{
 			RoundedRectangle(cornerRadius: 10)
@@ -103,6 +111,22 @@ struct MyCouseItemview: View {
 					.foregroundColor(myCourse.courseID == scorewindData.currentCourse.id ? Color("MyCourseItemTextHighlited") : Color("MyCourseItemText"))
 			}
 		}
+	}
+
+	private func getCourseDownloadStatusIcon(courseID: Int) -> String {
+		let getStatus = downloadManager.checkDownloadStatus(courseID: courseID, lessonsCount: getLessonCount(courseID: courseID))
+		if getStatus == DownloadStatus.inQueue {
+			return "arrow.down.to.line.compact"
+		} else if getStatus == DownloadStatus.downloading {
+			return "arrow.down.circle"
+		} else if getStatus == DownloadStatus.downloaded {
+			return "arrow.down.circle.fill"
+		} else if getStatus == DownloadStatus.failed {
+			return "exclamationmark.circle.fill"
+		} else{
+			return ""
+		}
+		
 	}
 	
 	@ViewBuilder
