@@ -13,7 +13,7 @@ struct CourseView: View {
 	@State private var showOverview = true
 	let screenSize: CGRect = UIScreen.main.bounds
 	@Binding var selectedTab:String
-	@State private var selectedSection = courseSection.overview
+	@State private var selectedSection = courseSection.lessons
 	@ObservedObject var downloadManager:DownloadManager
 	//@State private var showDownloadAlert = false
 	@State private var startPos:CGPoint = .zero
