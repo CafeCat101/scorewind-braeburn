@@ -150,11 +150,22 @@ struct MyCoursesView: View {
 				}
 			}
 			
-			if filterMatchCount > 0 {
-				return true
+			if listFilterFavourite && listFilterDownloaded {
+				if filterMatchCount == 2 {
+					return true
+				} else {
+					return false
+				}
 			} else {
-				return false
+				if filterMatchCount > 0 {
+					return true
+				} else {
+					return false
+				}
 			}
+
+			
+			
 		}
 	}
 	
