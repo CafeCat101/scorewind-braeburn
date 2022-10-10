@@ -17,17 +17,11 @@ struct HomeView: View {
 	var body: some View {
 		if scorewindData.currentView != Page.lessonFullScreen {
 			TabView(selection: $selectedTab) {
-				WizardView(selectedTab: $selectedTab)
+				WizardView(selectedTab: $selectedTab, studentData: studentData)
 					.tabItem {
 						Image(systemName: "eyes")
 						Text("Wizard")
 					}.tag("TWizard")
-				
-				MyCoursesView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData)
-					.tabItem {
-						Image(systemName: "music.note.list")
-						Text("My Courses")
-					}.tag("TMyCourses")
 				
 				if scorewindData.currentCourse.id > 0 {
 					CourseView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData)
@@ -56,6 +50,12 @@ struct HomeView: View {
 							Text("Lesson")
 						}.tag("TLesson")
 				}
+				
+				MyCoursesView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData)
+					.tabItem {
+						Image(systemName: "music.note.list")
+						Text("My Courses")
+					}.tag("TMyCourses")
 			}
 			.ignoresSafeArea()
 			.onAppear{

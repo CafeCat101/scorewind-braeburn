@@ -39,6 +39,6 @@ class UserDefault: XCTestCase {
 	}
 	
 	func testPrintKeyCourseOfflineDate() throws {
-		XCTAssertNoThrow(downloadManagerModel.printKeyCourseOfflineDate())
+		XCTAssertNoThrow(downloadManagerModel.getKeyCourseOfflineDate())
 	}
 }

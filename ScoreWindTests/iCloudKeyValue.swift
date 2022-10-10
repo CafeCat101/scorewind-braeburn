@@ -42,8 +42,8 @@ class iCloudKeyValue: XCTestCase {
 		studentDataModel.backendReadAllKeys()
 	}
 	
-	func testSetInstrumentChoice() throws {
-		XCTAssertNoThrow(studentDataModel.setInstrumentChoice(instrument: InstrumentType.guitar.rawValue))
+	func testUpdateInstrumentChoice() throws {
+		XCTAssertNoThrow(studentDataModel.updateInstrumentChoice(instrument: InstrumentType.guitar))
 	}
 	
 	func testGetInstrumentChoice() throws {

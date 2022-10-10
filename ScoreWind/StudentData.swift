@@ -19,8 +19,8 @@ class StudentData: ObservableObject {
 		return useriCloudKeyValueStore.string(forKey:"instrument") ?? ""
 	}
 	
-	func setInstrumentChoice(instrument:String) {
-		useriCloudKeyValueStore.set(instrument,forKey: "instrument")
+	func updateInstrumentChoice(instrument:InstrumentType) {
+		useriCloudKeyValueStore.set(instrument.rawValue, forKey: "instrument")
 		useriCloudKeyValueStore.synchronize()
 	}
 	

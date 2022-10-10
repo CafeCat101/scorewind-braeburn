@@ -12,9 +12,8 @@ enum Page {
 	case myCourses //CoursesForYou
 	case course
 	case lesson
-	case courseType
-	case readScoreAbility
-	case yesNoResult
-	case songChoice
 	case lessonFullScreen
+	case wizardChooseInstrument
+	case wizardPlayable
+	case wizardResult
 }
