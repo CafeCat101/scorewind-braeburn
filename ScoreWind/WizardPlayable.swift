@@ -35,6 +35,9 @@ struct WizardPlayable: View {
 					.scaledToFit()
 					.frame(height: screenSize.height/25 - 4)
 					.foregroundColor(Color("AppYelloDynamic"))
+					.onTapGesture(perform: {
+						stepName = .wizardChooseInstrument
+					})
 				Text("How do you feel about playing this?")
 					.font(.title3)
 					.truncationMode(.tail)
@@ -55,77 +58,22 @@ struct WizardPlayable: View {
 				viewModel.loadToGo = true
 				setupPlayer()
 			})
-			/*
-			Picker(selection: .constant(3), label: /*@START_MENU_TOKEN@*/Text("Picker")/*@END_MENU_TOKEN@*/) {
-				Text("Easy peasy").tag(1)
-				Text("Comfortable").tag(2)
-				Text("I can learn it").tag(3)
-				Text("A little difficult").tag(4)
-				Text("Hard").tag(5)
-			}
-			.frame(maxHeight: 95)
-			.pickerStyle(.wheel)
-			.clipped()
-			.padding([.bottom],30)
-			*/
 			
 			ScrollView(.horizontal, showsIndicators: false) {
 				HStack {
-					Text("Easy peasy")
-						.foregroundColor(Color("LessonSheet"))
-						.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
-						.background {
-							RoundedRectangle(cornerRadius: 26)
-								.foregroundColor(Color("BadgeScoreAvailable"))
-						}
-						.fixedSize()
-						.onTapGesture {
-							print("feedback clicked")
-						}
-					Text("Comfortable")
-						.foregroundColor(Color("LessonSheet"))
-						.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
-						.background {
-							RoundedRectangle(cornerRadius: 26)
-								.foregroundColor(Color("BadgeScoreAvailable"))
-						}
-						.fixedSize()
-						.onTapGesture {
-							print("feedback clicked")
-						}
-					Text("I can learn it")
-						.foregroundColor(Color("LessonSheet"))
-						.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
-						.background {
-							RoundedRectangle(cornerRadius: 26)
-								.foregroundColor(Color("BadgeScoreAvailable"))
-						}
-						.fixedSize()
-						.onTapGesture {
-							print("feedback clicked")
-						}
-					Text("A little difficult")
-						.foregroundColor(Color("LessonSheet"))
-						.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
-						.background {
-							RoundedRectangle(cornerRadius: 26)
-								.foregroundColor(Color("BadgeScoreAvailable"))
-						}
-						.fixedSize()
-						.onTapGesture {
-							print("feedback clicked")
-						}
-					Text("Very hard")
-						.foregroundColor(Color("LessonSheet"))
-						.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
-						.background {
-							RoundedRectangle(cornerRadius: 26)
-								.foregroundColor(Color("BadgeScoreAvailable"))
-						}
-						.fixedSize()
-						.onTapGesture {
-							print("feedback clicked")
-						}
+					ForEach(WizardScoreFeedback.allCases, id: \.self){ feedbackItem in
+						Text(feedbackItem.getLabel())
+							.foregroundColor(Color("LessonSheet"))
+							.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
+							.background {
+								RoundedRectangle(cornerRadius: 26)
+									.foregroundColor(Color("BadgeScoreAvailable"))
+							}
+							.fixedSize()
+							.onTapGesture {
+								print("feedback clicked value \(feedbackItem.rawValue)")
+							}
+					}
 				}
 				.padding([.leading,.trailing],20)
 			}

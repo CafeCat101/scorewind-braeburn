@@ -274,28 +274,4 @@ class StudentData: ObservableObject {
 			
 		}
 	}
-	/*
-	func updateMyCoursesFavouriteStatus(allCourses:[Course]) {
-		for courseID in getFavouritedCourses() {
-			let findCourseFromScoewindData = allCourses.first(where: {$0.id == courseID as! Int}) ?? Course()
-			let findMyCourseIndex = myCourses.firstIndex(where: {$0.courseID == courseID as! Int}) ?? -1
-			if findMyCourseIndex > -1 {
-				myCourses[findMyCourseIndex].isFavourite = true
-			} else {
-				var addNewCourse = MyCourse()
-				addNewCourse.courseID = findCourseFromScoewindData.id
-				addNewCourse.courseTitle = findCourseFromScoewindData.title
-				addNewCourse.courseShortDescription = findCourseFromScoewindData.shortDescription
-				addNewCourse.isFavourite = true
-				myCourses.append(addNewCourse)
-			}
-		}
-		
-		for (index,course) in myCourses.enumerated() {
-			if getFavouritedCourses().contains(where: {$0.self as! Int == course.courseID}) == false {
-				myCourses[index].isFavourite = false
-			}
-		}
-	}
-  */
 }
