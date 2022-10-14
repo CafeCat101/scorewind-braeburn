@@ -6,17 +6,174 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct WizardPlayable: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@Binding var selectedTab:String
 	@Binding var stepName:Page
 	@ObservedObject var studentData:StudentData
+	@StateObject var viewModel = ViewModel()
+	let screenSize: CGRect = UIScreen.main.bounds
 	
 	var body: some View {
 		VStack {
-			Text("\(studentData.getInstrumentChoice())")
+			/*
+			HStack {
+				Label("How do you feel about playing this?", systemImage: "chevron.backward.circle")
+					.labelStyle(.titleAndIcon)
+					.font(.title)
+					.onTapGesture(perform: {
+						stepName = .wizardChooseInstrument
+					})
+				Spacer()
+			}
+			.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))*/
+			HStack {
+				Image(systemName: "chevron.backward.circle")
+					.resizable()
+					.scaledToFit()
+					.frame(height: screenSize.height/25 - 4)
+					.foregroundColor(Color("AppYelloDynamic"))
+				Text("How do you feel about playing this?")
+					.font(.title3)
+					.truncationMode(.tail)
+					.foregroundColor(Color("AppYelloDynamic"))
+			}
+			.frame(height: screenSize.height/25)
+			.padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 15))
+			
+			/*Text("How do you feel about playing this?")
+				.bold()*/
+			Text("Tap the bar to hear!")
+				.bold()
+			
+			Group {
+				VideoPlayer(player: viewModel.videoPlayer)
+				LessonScoreView(viewModel: viewModel)
+			}.onAppear(perform: {
+				viewModel.loadToGo = true
+				setupPlayer()
+			})
+			/*
+			Picker(selection: .constant(3), label: /*@START_MENU_TOKEN@*/Text("Picker")/*@END_MENU_TOKEN@*/) {
+				Text("Easy peasy").tag(1)
+				Text("Comfortable").tag(2)
+				Text("I can learn it").tag(3)
+				Text("A little difficult").tag(4)
+				Text("Hard").tag(5)
+			}
+			.frame(maxHeight: 95)
+			.pickerStyle(.wheel)
+			.clipped()
+			.padding([.bottom],30)
+			*/
+			
+			ScrollView(.horizontal, showsIndicators: false) {
+				HStack {
+					Text("Easy peasy")
+						.foregroundColor(Color("LessonSheet"))
+						.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
+						.background {
+							RoundedRectangle(cornerRadius: 26)
+								.foregroundColor(Color("BadgeScoreAvailable"))
+						}
+						.fixedSize()
+						.onTapGesture {
+							print("feedback clicked")
+						}
+					Text("Comfortable")
+						.foregroundColor(Color("LessonSheet"))
+						.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
+						.background {
+							RoundedRectangle(cornerRadius: 26)
+								.foregroundColor(Color("BadgeScoreAvailable"))
+						}
+						.fixedSize()
+						.onTapGesture {
+							print("feedback clicked")
+						}
+					Text("I can learn it")
+						.foregroundColor(Color("LessonSheet"))
+						.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
+						.background {
+							RoundedRectangle(cornerRadius: 26)
+								.foregroundColor(Color("BadgeScoreAvailable"))
+						}
+						.fixedSize()
+						.onTapGesture {
+							print("feedback clicked")
+						}
+					Text("A little difficult")
+						.foregroundColor(Color("LessonSheet"))
+						.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
+						.background {
+							RoundedRectangle(cornerRadius: 26)
+								.foregroundColor(Color("BadgeScoreAvailable"))
+						}
+						.fixedSize()
+						.onTapGesture {
+							print("feedback clicked")
+						}
+					Text("Very hard")
+						.foregroundColor(Color("LessonSheet"))
+						.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
+						.background {
+							RoundedRectangle(cornerRadius: 26)
+								.foregroundColor(Color("BadgeScoreAvailable"))
+						}
+						.fixedSize()
+						.onTapGesture {
+							print("feedback clicked")
+						}
+				}
+				.padding([.leading,.trailing],20)
+			}
+			
+			
+			Spacer()
 		}
+	}
+	
+	private func setupPlayer(){
+		viewModel.videoPlayer = AVPlayer(url: URL(string: decodeVideoURL(videoURL: scorewindData.currentLesson.video))!)
+		
+		viewModel.videoPlayer!.addPeriodicTimeObserver(forInterval: CMTime(value: 1, timescale: 3), queue: .main, using: { time in
+			let catchTime = time.seconds
+			
+			let atMeasure = findMesaureByTimestamp(videoTime: catchTime)
+			self.viewModel.valuePublisher.send(String(atMeasure))
+			//print("[debug] LessonView, setupPlayer, ready to play")
+			print("find measure:"+String(atMeasure))
+			
+		})
+	}
+	
+	private func findMesaureByTimestamp(videoTime: Double)->Int{
+		var getMeasure = 0
+		for(index, theTime) in scorewindData.currentTimestampRecs.enumerated(){
+			//print("index "+String(index))
+			//print("timestamp "+String(theTime.measure))
+			var endTimestamp = theTime.timestamp + 100
+			if index < scorewindData.currentTimestampRecs.count-1 {
+				endTimestamp = scorewindData.currentTimestampRecs[index+1].timestamp
+			}
+			print("[debug] LessonViw,--findMeasureByTimestamp-->")
+			print("[debug] LessonViw,loop timestamp "+String(theTime.timestamp))
+			print("[debug] LessonViw,endTimestamp "+String(endTimestamp))
+			print("[debug] LessonViw,<-------------------------")
+			if videoTime >= theTime.timestamp && videoTime < Double(endTimestamp) {
+				getMeasure = index//theTime.measure
+				break
+			}
+		}
+		
+		return getMeasure
+	}
+	
+	private func decodeVideoURL(videoURL:String)->String{
+		let decodedURL = videoURL.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!
+		return decodedURL
 	}
 }
 

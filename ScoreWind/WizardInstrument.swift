@@ -17,7 +17,7 @@ struct WizardInstrument: View {
 		VStack {
 			Spacer()
 			Text("Which instrument do you want to learn?")
-				.font(.headline)
+				.font(.title3)
 			
 			HStack {
 				Button(action:{
@@ -29,11 +29,9 @@ struct WizardInstrument: View {
 						.background(Circle().foregroundColor(Color.white))
 						.frame(width:100,height:100)
 						.overlay(
-							Image("instrument-guitar-icon")
-								.resizable()
-								.scaleEffect(0.6)
+							getChoiceIcon(instrumentImage: "instrument-guitar-icon", isSelected: isInstrumentSelected(askInstrument: .guitar))
 						)
-				}
+				}.padding()
 				
 				Button(action:{
 					stepName = .wizardPlayable
@@ -44,16 +42,38 @@ struct WizardInstrument: View {
 						.background(Circle().foregroundColor(Color.white))
 						.frame(width:100,height:100)
 						.overlay(
-							Image("instrument-violin-icon")
-								.resizable()
-								.scaleEffect(0.6)
+							getChoiceIcon(instrumentImage: "instrument-violin-icon", isSelected: isInstrumentSelected(askInstrument: .violin))
 						)
-				}
+				}.padding()
 			}
 			
 			Spacer()
 		}
 	}
+	
+	@ViewBuilder
+	private func getChoiceIcon(instrumentImage:String, isSelected:Bool) -> some View {
+		Image(instrumentImage)
+			.resizable()
+			.scaleEffect(0.6)
+			.overlay(
+				alignment:.bottom,
+				content: {
+					Label("select",systemImage: "checkmark.circle.fill")
+						.labelStyle(.iconOnly)
+						.font(.title)
+						.opacity(isSelected ? 1.0 : 0.0)
+				})
+	}
+	
+	private func isInstrumentSelected(askInstrument: InstrumentType) -> Bool {
+		if studentData.getInstrumentChoice() == askInstrument.rawValue {
+			return true
+		} else {
+			return false
+		}
+	}
+	
 }
 
 struct WizardInstrument_Previews: PreviewProvider {
