@@ -206,6 +206,34 @@ class ScorewindData: ObservableObject {
 		}
 	}
 	
+	func getCourseHighlights(targetText:String) -> [String] {
+		if targetText.isEmpty {
+			return []
+		}
+		
+		var highlightList = ""
+		highlightList = targetText.replacingOccurrences(of: "\n", with: "")
+		if let range = highlightList.range(of:"<h4>Highlights</h4><ul>(.*?)</ul>", options: .regularExpression) {
+			highlightList = String(highlightList[range])
+		}
+		
+		var capture:[String] = []
+		let highlightRange = NSRange(highlightList.startIndex..<highlightList.endIndex, in: highlightList)
+		let highlightRegex = try! NSRegularExpression(pattern: #"<li>(.*?)</li>"#)
+		let matches = highlightRegex.matches(in: highlightList, options:[], range: highlightRange)
+		if matches.count > 0 {
+			for match in matches {
+				let matchRange = match.range(at: 1)
+				if let substringRange = Range(matchRange, in:highlightList) {
+					let listItem = String(highlightList[substringRange])
+					capture.append(listItem)
+				}
+			}
+		}
+		
+		return capture
+	}
+	
 	private func readBundleDataVersion() -> Int {
 		let dataVersionURL = URL(fileURLWithPath: "data_version", relativeTo: Bundle.main.resourceURL).appendingPathExtension("json")
 		do {

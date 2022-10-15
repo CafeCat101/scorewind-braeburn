@@ -15,72 +15,95 @@ struct WizardPlayable: View {
 	@ObservedObject var studentData:StudentData
 	@StateObject var viewModel = ViewModel()
 	let screenSize: CGRect = UIScreen.main.bounds
+	@State private var scoreviewrMode = true
 	
 	var body: some View {
 		VStack {
-			/*
 			HStack {
-				Label("How do you feel about playing this?", systemImage: "chevron.backward.circle")
-					.labelStyle(.titleAndIcon)
-					.font(.title)
+				Image(systemName: "chevron.backward")
+					.resizable()
+					.scaledToFit()
+					.frame(height: screenSize.height/25 - 4)
+					.foregroundColor(Color("WizardBackArrow"))
 					.onTapGesture(perform: {
 						stepName = .wizardChooseInstrument
 					})
 				Spacer()
-			}
-			.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))*/
-			HStack {
-				Image(systemName: "chevron.backward.circle")
-					.resizable()
-					.scaledToFit()
-					.frame(height: screenSize.height/25 - 4)
-					.foregroundColor(Color("AppYelloDynamic"))
-					.onTapGesture(perform: {
-						stepName = .wizardChooseInstrument
-					})
-				Text("How do you feel about playing this?")
-					.font(.title3)
-					.truncationMode(.tail)
-					.foregroundColor(Color("AppYelloDynamic"))
 			}
 			.frame(height: screenSize.height/25)
 			.padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 15))
 			
 			/*Text("How do you feel about playing this?")
 				.bold()*/
-			Text("Tap the bar to hear!")
-				.bold()
 			
-			Group {
-				VideoPlayer(player: viewModel.videoPlayer)
-				LessonScoreView(viewModel: viewModel)
-			}.onAppear(perform: {
-				viewModel.loadToGo = true
-				setupPlayer()
-			})
 			
-			ScrollView(.horizontal, showsIndicators: false) {
-				HStack {
-					ForEach(WizardScoreFeedback.allCases, id: \.self){ feedbackItem in
-						Text(feedbackItem.getLabel())
-							.foregroundColor(Color("LessonSheet"))
-							.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
-							.background {
-								RoundedRectangle(cornerRadius: 26)
-									.foregroundColor(Color("BadgeScoreAvailable"))
-							}
-							.fixedSize()
-							.onTapGesture {
-								print("feedback clicked value \(feedbackItem.rawValue)")
-							}
-					}
+			if scoreviewrMode {
+				Text("How do you feel about playing this? \nTab the bar to hear!")
+					.font(.title3)
+					.foregroundColor(Color("WizardBackArrow"))
+					.bold()
+				
+				GeometryReader { reader in
+					VStack {
+							VideoPlayer(player: viewModel.videoPlayer)
+							//.frame(height: reader.size.height * 0.4)
+							LessonScoreView(viewModel: viewModel)
+						
+					}.onAppear(perform: {
+						viewModel.loadToGo = true
+						setupPlayer()
+					})
 				}
-				.padding([.leading,.trailing],20)
+				
+				
+			} else {
+				Spacer()
+				Text("Do you know?")
+					.font(.title3)
+					.bold()
+					.foregroundColor(Color("WizardBackArrow"))
+				ForEach(scorewindData.getCourseHighlights(targetText: scorewindData.currentCourse.content), id:\.self) { highlight in
+					Text(highlight)
+				}
+				Spacer()
+				//Text(scorewindData.getCourseHighlights(targetText: scorewindData.currentCourse.content))
 			}
 			
 			
-			Spacer()
+			ScrollView(.horizontal, showsIndicators: false) {
+				HStack {
+					if scorewindData.currentTimestampRecs.count > 0 {
+						ForEach(WizardScoreFeedback.allCases, id: \.self){ feedbackItem in
+							Text(feedbackItem.getLabel())
+								.modifier(FeedbackOptionsModifier())
+								.onTapGesture {
+									print("feedback clicked value \(feedbackItem.rawValue)")
+								}
+						}
+					} else {
+						ForEach(WizardHighlightFeedback.allCases, id: \.self) {feedbackItem in
+							Text(feedbackItem.getLabel())
+								.modifier(FeedbackOptionsModifier())
+								.onTapGesture {
+									print("feedback clicked value \(feedbackItem.rawValue)")
+								}
+						}
+					}
+					
+				}
+				.padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+			}
+			
+			
+			//Spacer()
 		}
+		.onAppear(perform: {
+			if scorewindData.currentTimestampRecs.count > 0 {
+				scoreviewrMode = true
+			} else {
+				scoreviewrMode = false
+			}
+		})
 	}
 	
 	private func setupPlayer(){
@@ -122,6 +145,19 @@ struct WizardPlayable: View {
 	private func decodeVideoURL(videoURL:String)->String{
 		let decodedURL = videoURL.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!
 		return decodedURL
+	}
+}
+
+struct FeedbackOptionsModifier: ViewModifier {
+	func body(content: Content) -> some View {
+		content
+			.foregroundColor(Color("LessonSheet"))
+			.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
+			.background {
+				RoundedRectangle(cornerRadius: 26)
+					.foregroundColor(Color("BadgeScoreAvailable"))
+			}
+			.fixedSize()
 	}
 }
 
