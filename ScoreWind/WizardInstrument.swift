@@ -16,8 +16,15 @@ struct WizardInstrument: View {
 	var body: some View {
 		VStack {
 			Spacer()
-			Text("Which instrument do you want to learn?")
-				.font(.title3)
+			HStack {
+				Spacer()
+				Text("Which instrument do you want to learn?")
+					.font(.title3)
+					.foregroundColor(Color("WizardBackArrow"))
+					.bold()
+				Spacer()
+			}
+			
 			
 			HStack {
 				Button(action:{
@@ -48,7 +55,7 @@ struct WizardInstrument: View {
 			}
 			
 			Spacer()
-		}
+		}.background(Color("WizardTabBackground"))
 	}
 	
 	@ViewBuilder

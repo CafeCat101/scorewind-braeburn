@@ -19,20 +19,27 @@ struct WizardPlayable: View {
 	
 	var body: some View {
 		VStack {
-			HStack {
-				Image(systemName: "chevron.backward")
+			/*HStack {
+				Label("Back", systemImage: "chevron.backward.circle.fill")
+					.labelStyle(.iconOnly)
+					.foregroundColor(Color("WizardBackArrow"))
+					.font(.title3)
+					.onTapGesture(perform: {
+						stepName = .wizardChooseInstrument
+					})
+				/*Image(systemName: "chevron.backward")
 					.resizable()
 					.scaledToFit()
 					.frame(height: screenSize.height/25 - 4)
 					.foregroundColor(Color("WizardBackArrow"))
 					.onTapGesture(perform: {
 						stepName = .wizardChooseInstrument
-					})
+					})*/
 				Spacer()
 			}
 			.frame(height: screenSize.height/25)
 			.padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 15))
-			
+			*/
 			/*Text("How do you feel about playing this?")
 				.bold()*/
 			
@@ -42,14 +49,34 @@ struct WizardPlayable: View {
 					.font(.title3)
 					.foregroundColor(Color("WizardBackArrow"))
 					.bold()
+					.padding(EdgeInsets(top: 5, leading: 15, bottom: 0, trailing: 15))
 				
 				GeometryReader { reader in
 					VStack {
+						/*VStack {
 							VideoPlayer(player: viewModel.videoPlayer)
-							//.frame(height: reader.size.height * 0.4)
-							LessonScoreView(viewModel: viewModel)
+						}
+						.background(.black)
+						.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+						.padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))
+							.frame(maxHeight: reader.size.height * 0.45)
 						
-					}.onAppear(perform: {
+						VStack {
+							LessonScoreView(viewModel: viewModel)
+						}
+						.background(.white)
+						.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+						.padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))*/
+						
+						VideoPlayer(player: viewModel.videoPlayer)
+							.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+							.padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))
+								.frame(maxHeight: reader.size.height * 0.45)
+						LessonScoreView(viewModel: viewModel)
+							.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+							.padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))
+					}
+					.onAppear(perform: {
 						viewModel.loadToGo = true
 						setupPlayer()
 					})
@@ -58,15 +85,27 @@ struct WizardPlayable: View {
 				
 			} else {
 				Spacer()
-				Text("Do you know?")
-					.font(.title3)
-					.bold()
-					.foregroundColor(Color("WizardBackArrow"))
-				ForEach(scorewindData.getCourseHighlights(targetText: scorewindData.currentCourse.content), id:\.self) { highlight in
-					Text(highlight)
+				
+				VStack{
+					Text("Do you know?")
+						.font(.title3)
+						.bold()
+						.foregroundColor(Color("WizardBackArrow"))
+						.padding(EdgeInsets(top: 50, leading: 30, bottom: 30, trailing: 30))
+					VStack(alignment:.leading){
+						ForEach(scorewindData.getCourseHighlights(targetText: scorewindData.currentCourse.content), id:\.self) { highlight in
+							//Label(highlight, systemImage: "circle.dotted")
+							Text("\u{2022}\(highlight)")
+						}
+					}.padding(EdgeInsets(top: 0, leading: 30, bottom: 50, trailing: 30))
+					
+					
 				}
+				.background(Color("WizardFeedBack"))
+				.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+				.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
+				
 				Spacer()
-				//Text(scorewindData.getCourseHighlights(targetText: scorewindData.currentCourse.content))
 			}
 			
 			
@@ -91,12 +130,13 @@ struct WizardPlayable: View {
 					}
 					
 				}
-				.padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+				.padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
 			}
 			
 			
 			//Spacer()
 		}
+		.background(Color("WizardTabBackground"))
 		.onAppear(perform: {
 			if scorewindData.currentTimestampRecs.count > 0 {
 				scoreviewrMode = true
@@ -152,10 +192,10 @@ struct FeedbackOptionsModifier: ViewModifier {
 	func body(content: Content) -> some View {
 		content
 			.foregroundColor(Color("LessonSheet"))
-			.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
+			.padding(EdgeInsets(top: 12, leading: 25, bottom: 12, trailing: 25))
 			.background {
-				RoundedRectangle(cornerRadius: 26)
-					.foregroundColor(Color("BadgeScoreAvailable"))
+				RoundedRectangle(cornerRadius: 25)
+					.foregroundColor(Color("WizardFeedBack"))
 			}
 			.fixedSize()
 	}

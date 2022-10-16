@@ -16,6 +16,7 @@ struct WizardView: View {
 	
 	var body: some View {
 		VStack {
+			/*
 			Label("Scorewind (\(userRole))", systemImage: "music.note")
 				.labelStyle(.titleAndIcon)
 				.contextMenu {
@@ -31,7 +32,41 @@ struct WizardView: View {
 						Label("Teachers only", systemImage: "brain.head.profile")
 							.labelStyle(.titleAndIcon)
 					}
+				}*/
+			HStack {
+				Spacer()
+					Label(stepName == .wizardPlayable ? "Wizard step2" : "Wizard step1", systemImage: "music.note")
+						.labelStyle(.titleAndIcon)
+						.contextMenu {
+							Button(action: {
+								userRole = "student"
+							}){
+								Label("I'm a student", systemImage: "face.smiling")
+									.labelStyle(.titleAndIcon)
+							}
+							Button(action: {
+								userRole = "teacher"
+							}){
+								Label("Teachers only", systemImage: "brain.head.profile")
+									.labelStyle(.titleAndIcon)
+							}
+						}
+				Spacer()
+			}
+			.overlay(alignment:.leading, content: {
+				if stepName != .wizardChooseInstrument {
+					Label("Teachers only", systemImage: "chevron.backward.circle.fill")
+						.padding([.leading], 15)
+						.font(.title3)
+						.labelStyle(.iconOnly)
+						.onTapGesture(perform: {
+							if stepName == .wizardPlayable {
+								stepName = .wizardChooseInstrument
+							}
+						})
+					
 				}
+			})
 			
 			if userRole == "teacher" {
 				WizardTeacherView(selectedTab: $selectedTab)
@@ -46,6 +81,7 @@ struct WizardView: View {
 			
 			
 		}
+		.background(Color("WizardTabBackground"))
 		.onAppear(perform: {
 			/*
 			DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
