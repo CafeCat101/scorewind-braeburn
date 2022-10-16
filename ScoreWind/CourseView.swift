@@ -29,12 +29,13 @@ struct CourseView: View {
 		VStack {
 			HStack {
 				Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentCourse.title))
+					.foregroundColor(Color("AppBlackDynamic"))
 					.font(.title3)
 					.truncationMode(.tail)
 				Spacer()
 			}
 			.frame(height: screenSize.height/25)
-			.padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 15))
+			.padding(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 15))
 			
 			//show course section menus
 			HStack {
@@ -111,6 +112,10 @@ struct CourseView: View {
 				VStack {
 					ScrollViewReader { proxy in
 						HStack {
+							Text("Course content")
+								.font(.headline)
+							Spacer()
+							
 							Label("Add to favourite", systemImage: isFavourite ? "heart.circle.fill" : "suit.heart")
 								.labelStyle(.iconOnly)
 								.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
@@ -132,23 +137,20 @@ struct CourseView: View {
 								}
 							//courseDownloadButtonView()
 							CourseDownloadButtonView(getStatus: downloadManager.checkDownloadStatus(courseID: scorewindData.currentCourse.id, lessonsCount: scorewindData.currentCourse.lessons.count), downloadManager: downloadManager)
-						}
+						}.padding(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 15))
 						
-						List {
-							Section(header: Text("Course content")){
-								ForEach(scorewindData.currentCourse.lessons){ lesson in
-									CourseLessonListItemView(selectedTab: $selectedTab, lesson: lesson, downloadManager: downloadManager, studentData: studentData)
+						ScrollView {
+							ForEach(scorewindData.currentCourse.lessons){ lesson in
+								CourseLessonListItemView(selectedTab: $selectedTab, lesson: lesson, downloadManager: downloadManager, studentData: studentData)
 									.padding(EdgeInsets(top: 10, leading: 10, bottom: 15, trailing: 10))
 									.background{
 										RoundedRectangle(cornerRadius: 10)
 											.foregroundColor(scorewindData.currentLesson.scorewindID == lesson.scorewindID ? Color("AppYellow") : Color("LessonListTextBg"))
 									}
 									.id(lesson.scorewindID)
-									
-								}
-							}
+							}.padding([.leading,.trailing], 15)
 						}
-						.listStyle(.plain)
+						//.listStyle(.plain)
 						.onAppear(perform: {
 							print("[debug] CourseView, lesson List-onAppear")
 							DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -234,6 +236,7 @@ struct CourseView: View {
 					})
 			)
 		}
+		.background(Color("AppBackground"))
 		.onAppear(perform: {
 			print("[debug] CourseView, dragOffset \(dragOffset)")
 			underlineScrollOffset = 0-screenSize.width/3

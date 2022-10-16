@@ -136,7 +136,7 @@ struct WizardPlayable: View {
 			
 			//Spacer()
 		}
-		.background(Color("WizardTabBackground"))
+		.background(Color("AppBackground"))
 		.onAppear(perform: {
 			if scorewindData.currentTimestampRecs.count > 0 {
 				scoreviewrMode = true
@@ -191,7 +191,7 @@ struct WizardPlayable: View {
 struct FeedbackOptionsModifier: ViewModifier {
 	func body(content: Content) -> some View {
 		content
-			.foregroundColor(Color("LessonSheet"))
+			.foregroundColor(Color("WizardFeedbackText"))
 			.padding(EdgeInsets(top: 12, leading: 25, bottom: 12, trailing: 25))
 			.background {
 				RoundedRectangle(cornerRadius: 25)

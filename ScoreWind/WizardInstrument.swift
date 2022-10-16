@@ -55,7 +55,7 @@ struct WizardInstrument: View {
 			}
 			
 			Spacer()
-		}.background(Color("WizardTabBackground"))
+		}.background(Color("AppBackground"))
 	}
 	
 	@ViewBuilder

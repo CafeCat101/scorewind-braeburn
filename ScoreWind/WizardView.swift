@@ -37,6 +37,7 @@ struct WizardView: View {
 				Spacer()
 					Label(stepName == .wizardPlayable ? "Wizard step2" : "Wizard step1", systemImage: "music.note")
 						.labelStyle(.titleAndIcon)
+						.foregroundColor(Color("AppBlackDynamic"))
 						.contextMenu {
 							Button(action: {
 								userRole = "student"
@@ -79,9 +80,9 @@ struct WizardView: View {
 			}
 			
 			
-			
+			Divider()
 		}
-		.background(Color("WizardTabBackground"))
+		.background(Color("AppBackground"))
 		.onAppear(perform: {
 			/*
 			DispatchQueue.main.asyncAfter(deadline: .now() + 1) {

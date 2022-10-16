@@ -22,6 +22,7 @@ struct MyCoursesView: View {
 		VStack {
 			Label("My Courses", systemImage: "music.note")
 				.labelStyle(.titleAndIcon)
+				.foregroundColor(Color("AppBlackDynamic"))
 			
 			//::FILTER TAGS::
 			ScrollView(.horizontal) {
@@ -109,6 +110,7 @@ struct MyCoursesView: View {
 			}
 			Spacer()
 		}
+		.background(Color("AppBackground"))
 		.onAppear(perform: {
 			print("[debug] MyCourseView, onAppear")
 			
