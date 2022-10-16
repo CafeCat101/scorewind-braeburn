@@ -84,6 +84,9 @@ struct WizardView: View {
 		}
 		.background(Color("AppBackground"))
 		.onAppear(perform: {
+			if stepName != .wizardResult {
+				stepName = .wizardChooseInstrument
+			}
 			/*
 			DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
 				userRole = "teacher"

@@ -105,8 +105,6 @@ struct LessonView: View {
 			//::SCORE VIEWER::
 			if scorewindData.currentTimestampRecs.count > 0 {
 				LessonScoreView(viewModel: viewModel)
-					.cornerRadius(10)
-					.padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15))
 					.overlay(content: {
 						if showScoreZoomIcon {
 							VStack{
@@ -155,7 +153,6 @@ struct LessonView: View {
 			} else {
 				Spacer()
 			}
-			
 		}
 		.background(Color("AppBackground"))
 		.onAppear(perform: {

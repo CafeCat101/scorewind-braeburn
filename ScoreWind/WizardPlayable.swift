@@ -108,7 +108,32 @@ struct WizardPlayable: View {
 				Spacer()
 			}
 			
+			if scorewindData.currentTimestampRecs.count > 0 {
+				ScrollView(.horizontal, showsIndicators: false) {
+					HStack {
+						ForEach(WizardScoreFeedback.allCases, id: \.self){ feedbackItem in
+							Text(feedbackItem.getLabel())
+								.modifier(FeedbackOptionsModifier())
+								.onTapGesture {
+									print("feedback clicked value \(feedbackItem.rawValue)")
+								}
+						}
+					}.padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
+				}
+				
+			} else {
+				VStack {
+					ForEach(WizardHighlightFeedback.allCases, id: \.self) {feedbackItem in
+						Text(feedbackItem.getLabel())
+							.modifier(FeedbackOptionsModifier())
+							.onTapGesture {
+								print("feedback clicked value \(feedbackItem.rawValue)")
+							}
+					}
+				}.padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
+			}
 			
+			/*
 			ScrollView(.horizontal, showsIndicators: false) {
 				HStack {
 					if scorewindData.currentTimestampRecs.count > 0 {
@@ -132,7 +157,7 @@ struct WizardPlayable: View {
 				}
 				.padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
 			}
-			
+			*/
 			
 			//Spacer()
 		}

@@ -100,7 +100,6 @@ struct MyCoursesView: View {
 						studentData.updateMyCourses(allCourses: scorewindData.allCourses)
 						studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 					})
-					
 				} else {
 					Spacer()
 					Text("After you've completed or watched a lesson, you can find the course for it here.")
@@ -108,7 +107,7 @@ struct MyCoursesView: View {
 					Spacer()
 				}
 			}
-			Spacer()
+			//Spacer()
 		}
 		.background(Color("AppBackground"))
 		.onAppear(perform: {

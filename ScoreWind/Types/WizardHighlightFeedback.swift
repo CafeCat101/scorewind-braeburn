@@ -15,11 +15,11 @@ enum WizardHighlightFeedback: Int, CaseIterable {
 	func getLabel() -> String {
 		switch self {
 		case .allOfThem:
-			return "All of them"
+			return "Yes"
 		case .someOfThem:
-			return "Some of them"
+			return "Somewhat familar"
 		case .fewOfThem:
-			return "Few of them"
+			return "No"
 		}
 	}
 }

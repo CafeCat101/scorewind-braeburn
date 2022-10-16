@@ -27,7 +27,6 @@ struct CourseLessonListItemView: View {
 					Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
 						.multilineTextAlignment(.leading)
 						.foregroundColor(.black)
-						.font(Font.body.bold())
 					
 				}
 				Spacer()

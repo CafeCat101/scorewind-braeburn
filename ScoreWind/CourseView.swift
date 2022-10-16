@@ -160,8 +160,6 @@ struct CourseView: View {
 							
 							}
 						})
-						
-						Spacer()
 					}
 					
 				}
