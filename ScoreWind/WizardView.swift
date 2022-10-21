@@ -35,7 +35,7 @@ struct WizardView: View {
 				}*/
 			HStack {
 				Spacer()
-					Label(stepName == .wizardPlayable ? "Wizard step2" : "Wizard step1", systemImage: "music.note")
+					Label(getWizardViewTitle(), systemImage: "music.note")
 						.labelStyle(.titleAndIcon)
 						.foregroundColor(Color("AppBlackDynamic"))
 						.contextMenu {
@@ -63,6 +63,8 @@ struct WizardView: View {
 						.onTapGesture(perform: {
 							if stepName == .wizardPlayable {
 								stepName = .wizardChooseInstrument
+							} else if stepName == .wizardResult {
+								stepName = .wizardPlayable
 							}
 						})
 					
@@ -76,6 +78,8 @@ struct WizardView: View {
 					WizardInstrument(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
 				} else if stepName == .wizardPlayable {
 					WizardPlayable(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
+				} else if stepName == .wizardResult {
+					WizardResult(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
 				}
 			}
 			
@@ -95,6 +99,17 @@ struct WizardView: View {
 		})
 	}
 	
+	private func getWizardViewTitle() -> String {
+		if stepName == .wizardChooseInstrument {
+			return "Wizard step 1"
+		} else if stepName == .wizardPlayable {
+			return "Wizard step 2"
+		} else if stepName == .wizardResult {
+			return "Wizard final step"
+		} else {
+			return ""
+		}
+	}
 
 }
 

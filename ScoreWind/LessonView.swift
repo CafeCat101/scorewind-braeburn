@@ -41,7 +41,7 @@ struct LessonView: View {
 						 .scaledToFit()
 						 .frame(height: screenSize.height/25 - 4)
 						 .foregroundColor(Color("AppBlackDynamic"))*/
-						Label("scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title)", systemImage: isCurrentLessonCompleted==false ? "list.bullet.circle.fill":"checkmark.circle.fill")
+						Label(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title), systemImage: isCurrentLessonCompleted==false ? "list.bullet.circle.fill":"checkmark.circle.fill")
 							.foregroundColor(Color("AppBlackDynamic"))
 							.font(.title3)
 							.foregroundColor(Color("AppBlackDynamic"))

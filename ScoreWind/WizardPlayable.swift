@@ -116,6 +116,9 @@ struct WizardPlayable: View {
 								.modifier(FeedbackOptionsModifier())
 								.onTapGesture {
 									print("feedback clicked value \(feedbackItem.rawValue)")
+									if feedbackItem.rawValue == 2 {
+										stepName = .wizardResult
+									}
 								}
 						}
 					}.padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
@@ -128,6 +131,9 @@ struct WizardPlayable: View {
 							.modifier(FeedbackOptionsModifier())
 							.onTapGesture {
 								print("feedback clicked value \(feedbackItem.rawValue)")
+								if feedbackItem.rawValue == 1 {
+									stepName = .wizardResult
+								}
 							}
 					}
 				}.padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
