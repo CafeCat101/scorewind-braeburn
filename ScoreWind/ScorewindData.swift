@@ -206,26 +206,26 @@ class ScorewindData: ObservableObject {
 		}
 	}
 	
-	func getCourseHighlights(targetText:String) -> [String] {
+	func getListInCourse(targetText:String, listName:ListInCourse) -> [String] {
 		if targetText.isEmpty {
 			return []
 		}
 		
-		var highlightList = ""
-		highlightList = targetText.replacingOccurrences(of: "\n", with: "")
-		if let range = highlightList.range(of:"<h4>Highlights</h4><ul>(.*?)</ul>", options: .regularExpression) {
-			highlightList = String(highlightList[range])
+		var theList = ""
+		theList = targetText.replacingOccurrences(of: "\n", with: "")
+		if let range = theList.range(of:"<h4>\(listName.rawValue)</h4><ul>(.*?)</ul>", options: .regularExpression) {
+			theList = String(theList[range])
 		}
 		
 		var capture:[String] = []
-		let highlightRange = NSRange(highlightList.startIndex..<highlightList.endIndex, in: highlightList)
+		let highlightRange = NSRange(theList.startIndex..<theList.endIndex, in: theList)
 		let highlightRegex = try! NSRegularExpression(pattern: #"<li>(.*?)</li>"#)
-		let matches = highlightRegex.matches(in: highlightList, options:[], range: highlightRange)
+		let matches = highlightRegex.matches(in: theList, options:[], range: highlightRange)
 		if matches.count > 0 {
 			for match in matches {
 				let matchRange = match.range(at: 1)
-				if let substringRange = Range(matchRange, in:highlightList) {
-					let listItem = String(highlightList[substringRange])
+				if let substringRange = Range(matchRange, in:theList) {
+					let listItem = String(theList[substringRange])
 					capture.append(listItem)
 				}
 			}

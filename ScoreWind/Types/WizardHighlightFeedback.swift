@@ -17,7 +17,7 @@ enum WizardHighlightFeedback: Int, CaseIterable {
 		case .allOfThem:
 			return "Yes"
 		case .someOfThem:
-			return "Somewhat familar"
+			return "Somewhat familiar"
 		case .fewOfThem:
 			return "No"
 		}

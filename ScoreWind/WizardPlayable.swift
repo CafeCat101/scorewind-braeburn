@@ -93,7 +93,7 @@ struct WizardPlayable: View {
 						.foregroundColor(Color("WizardBackArrow"))
 						.padding(EdgeInsets(top: 50, leading: 30, bottom: 30, trailing: 30))
 					VStack(alignment:.leading){
-						ForEach(scorewindData.getCourseHighlights(targetText: scorewindData.currentCourse.content), id:\.self) { highlight in
+						ForEach(scorewindData.getListInCourse(targetText: scorewindData.currentCourse.content, listName: .highlight), id:\.self) { highlight in
 							//Label(highlight, systemImage: "circle.dotted")
 							Text("\u{2022}\(highlight)")
 						}

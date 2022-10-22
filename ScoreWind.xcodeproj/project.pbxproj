@@ -57,6 +57,7 @@
 		C878276628F94D290007DDC1 /* WizardScoreFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276528F94D290007DDC1 /* WizardScoreFeedback.swift */; };
 		C878276828F9B8B90007DDC1 /* WizardHighlightFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276728F9B8B90007DDC1 /* WizardHighlightFeedback.swift */; };
 		C878276A28FC25030007DDC1 /* WizardResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276928FC25030007DDC1 /* WizardResult.swift */; };
+		C878276C29044C790007DDC1 /* ListInCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276B29044C790007DDC1 /* ListInCourse.swift */; };
 		C88E652C28D3231A000FDC2D /* scorewind_ios_xml.zip in Resources */ = {isa = PBXBuildFile; fileRef = C88E652B28D3231A000FDC2D /* scorewind_ios_xml.zip */; };
 		C8E063F028B0E20E000B3D67 /* MyCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E063EF28B0E20E000B3D67 /* MyCourse.swift */; };
 /* End PBXBuildFile section */
@@ -136,6 +137,7 @@
 		C878276528F94D290007DDC1 /* WizardScoreFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardScoreFeedback.swift; sourceTree = "<group>"; };
 		C878276728F9B8B90007DDC1 /* WizardHighlightFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardHighlightFeedback.swift; sourceTree = "<group>"; };
 		C878276928FC25030007DDC1 /* WizardResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardResult.swift; sourceTree = "<group>"; };
+		C878276B29044C790007DDC1 /* ListInCourse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListInCourse.swift; sourceTree = "<group>"; };
 		C88E652B28D3231A000FDC2D /* scorewind_ios_xml.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = scorewind_ios_xml.zip; sourceTree = "<group>"; };
 		C8E063EF28B0E20E000B3D67 /* MyCourse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCourse.swift; sourceTree = "<group>"; };
 		F3441470A2546CDD3AD7E6C9 /* Pods_ScoreWind.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScoreWind.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -293,6 +295,7 @@
 				C85F27A7287A775E00D0A4E5 /* TipLimit.swift */,
 				C878276528F94D290007DDC1 /* WizardScoreFeedback.swift */,
 				C878276728F9B8B90007DDC1 /* WizardHighlightFeedback.swift */,
+				C878276B29044C790007DDC1 /* ListInCourse.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -518,6 +521,7 @@
 				C878275E28F1A04E0007DDC1 /* WizardTeacherView.swift in Sources */,
 				C85F2796286F59BC00D0A4E5 /* InstrumentType.swift in Sources */,
 				C85F277F286F4F2E00D0A4E5 /* LessonTextView.swift in Sources */,
+				C878276C29044C790007DDC1 /* ListInCourse.swift in Sources */,
 				C85F2785286F4F2E00D0A4E5 /* WizardView.swift in Sources */,
 				C85F2778286F4F2E00D0A4E5 /* ViewModel.swift in Sources */,
 				C85F2775286F4F2E00D0A4E5 /* LessonScoreView.swift in Sources */,
