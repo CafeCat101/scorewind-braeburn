@@ -28,8 +28,9 @@ struct WizardInstrument: View {
 			
 			HStack {
 				Button(action:{
-					stepName = .wizardPlayable
+					stepName = .wizardDoYouKnow
 					studentData.updateInstrumentChoice(instrument: .guitar)
+					studentData.wizardStepNames.append(stepName)
 				}){
 					Circle()
 						.strokeBorder(Color.black,lineWidth: 1)
@@ -41,8 +42,9 @@ struct WizardInstrument: View {
 				}.padding()
 				
 				Button(action:{
-					stepName = .wizardPlayable
+					stepName = .wizardDoYouKnow
 					studentData.updateInstrumentChoice(instrument: .violin)
+					studentData.wizardStepNames.append(stepName)
 				}){
 					Circle()
 						.strokeBorder(Color.black,lineWidth: 1)
@@ -55,7 +57,11 @@ struct WizardInstrument: View {
 			}
 			
 			Spacer()
-		}.background(Color("AppBackground"))
+		}
+		.background(Color("AppBackground"))
+		.onAppear(perform: {
+			studentData.wizardStepNames = [.wizardChooseInstrument]
+		})
 	}
 	
 	@ViewBuilder

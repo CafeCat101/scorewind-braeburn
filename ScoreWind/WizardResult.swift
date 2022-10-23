@@ -55,7 +55,11 @@ struct WizardResult: View {
 					
 				}.padding([.leading,.trailing], 15)
 			}
-		}.background(Color("AppBackground"))
+		}
+		.background(Color("AppBackground"))
+		.onAppear(perform: {
+			studentData.wizardStepNames.append(stepName)
+		})
 	}
 }
 

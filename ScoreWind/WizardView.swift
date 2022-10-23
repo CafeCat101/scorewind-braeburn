@@ -55,17 +55,16 @@ struct WizardView: View {
 				Spacer()
 			}
 			.overlay(alignment:.leading, content: {
-				if stepName != .wizardChooseInstrument {
-					Label("Teachers only", systemImage: "chevron.backward.circle.fill")
+				//::NAVIGATE BACK
+				if studentData.wizardStepNames.count > 1 {
+					Label("Previous step", systemImage: "chevron.backward.circle.fill")
 						.padding([.leading], 15)
 						.font(.title3)
 						.labelStyle(.iconOnly)
 						.onTapGesture(perform: {
-							if stepName == .wizardPlayable {
-								stepName = .wizardChooseInstrument
-							} else if stepName == .wizardResult {
-								stepName = .wizardPlayable
-							}
+							studentData.wizardStepNames.removeLast()
+							print("[debug] WizardView, wizardStepNames \(studentData.wizardStepNames)")
+							stepName = studentData.wizardStepNames[(studentData.wizardStepNames.count-1)]
 						})
 					
 				}
@@ -76,6 +75,8 @@ struct WizardView: View {
 			} else {
 				if stepName == .wizardChooseInstrument {
 					WizardInstrument(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
+				} else if stepName == .wizardDoYouKnow {
+					WizardDoYouKnow(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
 				} else if stepName == .wizardPlayable {
 					WizardPlayable(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
 				} else if stepName == .wizardResult {
@@ -88,9 +89,8 @@ struct WizardView: View {
 		}
 		.background(Color("AppBackground"))
 		.onAppear(perform: {
-			if stepName != .wizardResult {
-				stepName = .wizardChooseInstrument
-			}
+			stepName = .wizardChooseInstrument
+			print("[debug] WizardView, wizardStepNames \(studentData.wizardStepNames)")
 			/*
 			DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
 				userRole = "teacher"

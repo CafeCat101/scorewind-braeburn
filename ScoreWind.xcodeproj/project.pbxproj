@@ -54,10 +54,11 @@
 		C878275E28F1A04E0007DDC1 /* WizardTeacherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878275D28F1A04E0007DDC1 /* WizardTeacherView.swift */; };
 		C878276028F404320007DDC1 /* WizardInstrument.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878275F28F404320007DDC1 /* WizardInstrument.swift */; };
 		C878276228F4066E0007DDC1 /* WizardPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276128F4066E0007DDC1 /* WizardPlayable.swift */; };
-		C878276628F94D290007DDC1 /* WizardScoreFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276528F94D290007DDC1 /* WizardScoreFeedback.swift */; };
-		C878276828F9B8B90007DDC1 /* WizardHighlightFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276728F9B8B90007DDC1 /* WizardHighlightFeedback.swift */; };
+		C878276628F94D290007DDC1 /* PlayableFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276528F94D290007DDC1 /* PlayableFeedback.swift */; };
+		C878276828F9B8B90007DDC1 /* DoYouKnowFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276728F9B8B90007DDC1 /* DoYouKnowFeedback.swift */; };
 		C878276A28FC25030007DDC1 /* WizardResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276928FC25030007DDC1 /* WizardResult.swift */; };
 		C878276C29044C790007DDC1 /* ListInCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276B29044C790007DDC1 /* ListInCourse.swift */; };
+		C878276E2904F2DA0007DDC1 /* WizardDoYouKnow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276D2904F2DA0007DDC1 /* WizardDoYouKnow.swift */; };
 		C88E652C28D3231A000FDC2D /* scorewind_ios_xml.zip in Resources */ = {isa = PBXBuildFile; fileRef = C88E652B28D3231A000FDC2D /* scorewind_ios_xml.zip */; };
 		C8E063F028B0E20E000B3D67 /* MyCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E063EF28B0E20E000B3D67 /* MyCourse.swift */; };
 /* End PBXBuildFile section */
@@ -134,10 +135,11 @@
 		C878275D28F1A04E0007DDC1 /* WizardTeacherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardTeacherView.swift; sourceTree = "<group>"; };
 		C878275F28F404320007DDC1 /* WizardInstrument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardInstrument.swift; sourceTree = "<group>"; };
 		C878276128F4066E0007DDC1 /* WizardPlayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardPlayable.swift; sourceTree = "<group>"; };
-		C878276528F94D290007DDC1 /* WizardScoreFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardScoreFeedback.swift; sourceTree = "<group>"; };
-		C878276728F9B8B90007DDC1 /* WizardHighlightFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardHighlightFeedback.swift; sourceTree = "<group>"; };
+		C878276528F94D290007DDC1 /* PlayableFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayableFeedback.swift; sourceTree = "<group>"; };
+		C878276728F9B8B90007DDC1 /* DoYouKnowFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoYouKnowFeedback.swift; sourceTree = "<group>"; };
 		C878276928FC25030007DDC1 /* WizardResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardResult.swift; sourceTree = "<group>"; };
 		C878276B29044C790007DDC1 /* ListInCourse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListInCourse.swift; sourceTree = "<group>"; };
+		C878276D2904F2DA0007DDC1 /* WizardDoYouKnow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardDoYouKnow.swift; sourceTree = "<group>"; };
 		C88E652B28D3231A000FDC2D /* scorewind_ios_xml.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = scorewind_ios_xml.zip; sourceTree = "<group>"; };
 		C8E063EF28B0E20E000B3D67 /* MyCourse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCourse.swift; sourceTree = "<group>"; };
 		F3441470A2546CDD3AD7E6C9 /* Pods_ScoreWind.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScoreWind.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -252,6 +254,7 @@
 				C878275F28F404320007DDC1 /* WizardInstrument.swift */,
 				C878276128F4066E0007DDC1 /* WizardPlayable.swift */,
 				C878276928FC25030007DDC1 /* WizardResult.swift */,
+				C878276D2904F2DA0007DDC1 /* WizardDoYouKnow.swift */,
 			);
 			path = ScoreWind;
 			sourceTree = "<group>";
@@ -293,8 +296,8 @@
 				C85F279D2877DE0C00D0A4E5 /* SearchParameter.swift */,
 				C85F27A128795A8E00D0A4E5 /* Tip.swift */,
 				C85F27A7287A775E00D0A4E5 /* TipLimit.swift */,
-				C878276528F94D290007DDC1 /* WizardScoreFeedback.swift */,
-				C878276728F9B8B90007DDC1 /* WizardHighlightFeedback.swift */,
+				C878276528F94D290007DDC1 /* PlayableFeedback.swift */,
+				C878276728F9B8B90007DDC1 /* DoYouKnowFeedback.swift */,
 				C878276B29044C790007DDC1 /* ListInCourse.swift */,
 			);
 			path = Types;
@@ -512,9 +515,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C878276E2904F2DA0007DDC1 /* WizardDoYouKnow.swift in Sources */,
 				C878275928E88B8E0007DDC1 /* CourseDownloadButtonView.swift in Sources */,
 				C8E063F028B0E20E000B3D67 /* MyCourse.swift in Sources */,
-				C878276628F94D290007DDC1 /* WizardScoreFeedback.swift in Sources */,
+				C878276628F94D290007DDC1 /* PlayableFeedback.swift in Sources */,
 				C85F2779286F4F2E00D0A4E5 /* WebView.swift in Sources */,
 				C85F2782286F4F2E00D0A4E5 /* LessonView.swift in Sources */,
 				C85F277E286F4F2E00D0A4E5 /* LessonSheetView.swift in Sources */,
@@ -525,7 +529,7 @@
 				C85F2785286F4F2E00D0A4E5 /* WizardView.swift in Sources */,
 				C85F2778286F4F2E00D0A4E5 /* ViewModel.swift in Sources */,
 				C85F2775286F4F2E00D0A4E5 /* LessonScoreView.swift in Sources */,
-				C878276828F9B8B90007DDC1 /* WizardHighlightFeedback.swift in Sources */,
+				C878276828F9B8B90007DDC1 /* DoYouKnowFeedback.swift in Sources */,
 				C878276228F4066E0007DDC1 /* WizardPlayable.swift in Sources */,
 				C85F2773286F4F2E00D0A4E5 /* HomeView.swift in Sources */,
 				C85F27A8287A775E00D0A4E5 /* TipLimit.swift in Sources */,

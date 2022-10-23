@@ -14,6 +14,7 @@ enum Page {
 	case lesson
 	case lessonFullScreen
 	case wizardChooseInstrument
+	case wizardDoYouKnow
 	case wizardPlayable
 	case wizardResult
 }

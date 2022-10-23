@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum WizardScoreFeedback: Int, CaseIterable {
+enum PlayableFeedback: Int, CaseIterable {
 	case easyPeasy = 0
 	case comfortable = 1
 	case canLearn = 2

@@ -15,7 +15,6 @@ struct WizardPlayable: View {
 	@ObservedObject var studentData:StudentData
 	@StateObject var viewModel = ViewModel()
 	let screenSize: CGRect = UIScreen.main.bounds
-	@State private var scoreviewrMode = true
 	
 	var body: some View {
 		VStack {
@@ -43,97 +42,52 @@ struct WizardPlayable: View {
 			/*Text("How do you feel about playing this?")
 				.bold()*/
 			
+			Text("How do you feel about playing this? \nTab the bar to hear!")
+				.font(.title3)
+				.foregroundColor(Color("WizardBackArrow"))
+				.bold()
+				.padding(EdgeInsets(top: 5, leading: 15, bottom: 0, trailing: 15))
 			
-			if scoreviewrMode {
-				Text("How do you feel about playing this? \nTab the bar to hear!")
-					.font(.title3)
-					.foregroundColor(Color("WizardBackArrow"))
-					.bold()
-					.padding(EdgeInsets(top: 5, leading: 15, bottom: 0, trailing: 15))
-				
-				GeometryReader { reader in
+			GeometryReader { reader in
+				VStack {
+					/*VStack {
+						VideoPlayer(player: viewModel.videoPlayer)
+					}
+					.background(.black)
+					.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+					.padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))
+						.frame(maxHeight: reader.size.height * 0.45)
+					
 					VStack {
-						/*VStack {
-							VideoPlayer(player: viewModel.videoPlayer)
-						}
-						.background(.black)
+						LessonScoreView(viewModel: viewModel)
+					}
+					.background(.white)
+					.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+					.padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))*/
+					
+					VideoPlayer(player: viewModel.videoPlayer)
 						.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
 						.padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))
 							.frame(maxHeight: reader.size.height * 0.45)
-						
-						VStack {
-							LessonScoreView(viewModel: viewModel)
-						}
-						.background(.white)
+					LessonScoreView(viewModel: viewModel)
 						.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
-						.padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))*/
-						
-						VideoPlayer(player: viewModel.videoPlayer)
-							.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
-							.padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))
-								.frame(maxHeight: reader.size.height * 0.45)
-						LessonScoreView(viewModel: viewModel)
-							.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
-							.padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))
-					}
-					.onAppear(perform: {
-						viewModel.loadToGo = true
-						setupPlayer()
-					})
+						.padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))
 				}
-				
-				
-			} else {
-				Spacer()
-				
-				VStack{
-					Text("Do you know?")
-						.font(.title3)
-						.bold()
-						.foregroundColor(Color("WizardBackArrow"))
-						.padding(EdgeInsets(top: 50, leading: 30, bottom: 30, trailing: 30))
-					VStack(alignment:.leading){
-						ForEach(scorewindData.getListInCourse(targetText: scorewindData.currentCourse.content, listName: .highlight), id:\.self) { highlight in
-							//Label(highlight, systemImage: "circle.dotted")
-							Text("\u{2022}\(highlight)")
-						}
-					}.padding(EdgeInsets(top: 0, leading: 30, bottom: 50, trailing: 30))
-					
-					
-				}
-				.background(Color("WizardFeedBack"))
-				.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
-				.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
-				
-				Spacer()
+				.onAppear(perform: {
+					viewModel.loadToGo = true
+					setupPlayer()
+				})
 			}
 			
-			if scorewindData.currentTimestampRecs.count > 0 {
-				ScrollView(.horizontal, showsIndicators: false) {
-					HStack {
-						ForEach(WizardScoreFeedback.allCases, id: \.self){ feedbackItem in
-							Text(feedbackItem.getLabel())
-								.modifier(FeedbackOptionsModifier())
-								.onTapGesture {
-									print("feedback clicked value \(feedbackItem.rawValue)")
-									if feedbackItem.rawValue == 2 {
-										stepName = .wizardResult
-									}
-								}
-						}
-					}.padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
-				}
-				
-			} else {
-				VStack {
-					ForEach(WizardHighlightFeedback.allCases, id: \.self) {feedbackItem in
+			ScrollView(.horizontal, showsIndicators: false) {
+				HStack {
+					ForEach(PlayableFeedback.allCases, id: \.self){ feedbackItem in
 						Text(feedbackItem.getLabel())
 							.modifier(FeedbackOptionsModifier())
 							.onTapGesture {
 								print("feedback clicked value \(feedbackItem.rawValue)")
-								if feedbackItem.rawValue == 1 {
-									stepName = .wizardResult
-								}
+								stepName = .wizardResult
+								studentData.wizardStepNames.append(stepName)
 							}
 					}
 				}.padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
@@ -169,11 +123,7 @@ struct WizardPlayable: View {
 		}
 		.background(Color("AppBackground"))
 		.onAppear(perform: {
-			if scorewindData.currentTimestampRecs.count > 0 {
-				scoreviewrMode = true
-			} else {
-				scoreviewrMode = false
-			}
+			//
 		})
 	}
 	

@@ -14,6 +14,7 @@ class StudentData: ObservableObject {
 	@Published var myCourses:[MyCourse] = []
 	private let useriCloudKeyValueStore = NSUbiquitousKeyValueStore.default
 	private var userDefaults = UserDefaults.standard
+	var wizardStepNames:[Page] = []
 	
 	func getInstrumentChoice()->String{
 		return useriCloudKeyValueStore.string(forKey:"instrument") ?? ""

@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum WizardHighlightFeedback: Int, CaseIterable {
+enum DoYouKnowFeedback: Int, CaseIterable {
 	case allOfThem = 0
 	case someOfThem = 1
 	case fewOfThem = 2
