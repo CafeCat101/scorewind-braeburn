@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct WizardResult: View {
+struct WizardResultView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@Binding var selectedTab:String
 	@Binding var stepName:Page
@@ -58,7 +58,7 @@ struct WizardResult: View {
 		}
 		.background(Color("AppBackground"))
 		.onAppear(perform: {
-			studentData.wizardStepNames.append(stepName)
+			print("[debug] WizardResultView.onAppear, wizardStepNames \(studentData.wizardStepNames)")
 		})
 	}
 }
@@ -68,6 +68,6 @@ struct WizardResult_Previews: PreviewProvider {
 	@State static var step:Page = .wizardResult
 	
 	static var previews: some View {
-		WizardResult(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
+		WizardResultView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
 	}
 }

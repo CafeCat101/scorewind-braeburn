@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct WizardDoYouKnow: View {
+struct WizardDoYouKnowView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@Binding var selectedTab:String
 	@Binding var stepName:Page
@@ -63,7 +63,7 @@ struct WizardDoYouKnow_Previews: PreviewProvider {
 	@State static var step:Page = .wizardDoYouKnow
 	
 	static var previews: some View {
-		WizardDoYouKnow(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
-		WizardDoYouKnow(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData()).environment(\.colorScheme, .dark)
+		WizardDoYouKnowView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
+		WizardDoYouKnowView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData()).environment(\.colorScheme, .dark)
 	}
 }

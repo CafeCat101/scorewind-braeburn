@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct WizardInstrument: View {
+struct WizardInstrumentView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@Binding var selectedTab:String
 	@Binding var stepName:Page
@@ -93,6 +93,6 @@ struct WizardInstrument_Previews: PreviewProvider {
 	@State static var tab = "TWizard"
 	@State static var step:Page = .wizardChooseInstrument
 	static var previews: some View {
-		WizardInstrument(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
+		WizardInstrumentView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
 	}
 }

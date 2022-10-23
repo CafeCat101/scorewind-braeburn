@@ -52,13 +52,13 @@
 		C878275928E88B8E0007DDC1 /* CourseDownloadButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878275828E88B8E0007DDC1 /* CourseDownloadButtonView.swift */; };
 		C878275C28EF0AA60007DDC1 /* UserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878275A28EF0AA60007DDC1 /* UserDefault.swift */; };
 		C878275E28F1A04E0007DDC1 /* WizardTeacherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878275D28F1A04E0007DDC1 /* WizardTeacherView.swift */; };
-		C878276028F404320007DDC1 /* WizardInstrument.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878275F28F404320007DDC1 /* WizardInstrument.swift */; };
-		C878276228F4066E0007DDC1 /* WizardPlayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276128F4066E0007DDC1 /* WizardPlayable.swift */; };
+		C878276028F404320007DDC1 /* WizardInstrumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878275F28F404320007DDC1 /* WizardInstrumentView.swift */; };
+		C878276228F4066E0007DDC1 /* WizardPlayableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276128F4066E0007DDC1 /* WizardPlayableView.swift */; };
 		C878276628F94D290007DDC1 /* PlayableFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276528F94D290007DDC1 /* PlayableFeedback.swift */; };
 		C878276828F9B8B90007DDC1 /* DoYouKnowFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276728F9B8B90007DDC1 /* DoYouKnowFeedback.swift */; };
-		C878276A28FC25030007DDC1 /* WizardResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276928FC25030007DDC1 /* WizardResult.swift */; };
+		C878276A28FC25030007DDC1 /* WizardResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276928FC25030007DDC1 /* WizardResultView.swift */; };
 		C878276C29044C790007DDC1 /* ListInCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276B29044C790007DDC1 /* ListInCourse.swift */; };
-		C878276E2904F2DA0007DDC1 /* WizardDoYouKnow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276D2904F2DA0007DDC1 /* WizardDoYouKnow.swift */; };
+		C878276E2904F2DA0007DDC1 /* WizardDoYouKnowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276D2904F2DA0007DDC1 /* WizardDoYouKnowView.swift */; };
 		C88E652C28D3231A000FDC2D /* scorewind_ios_xml.zip in Resources */ = {isa = PBXBuildFile; fileRef = C88E652B28D3231A000FDC2D /* scorewind_ios_xml.zip */; };
 		C8E063F028B0E20E000B3D67 /* MyCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E063EF28B0E20E000B3D67 /* MyCourse.swift */; };
 /* End PBXBuildFile section */
@@ -133,13 +133,13 @@
 		C878275828E88B8E0007DDC1 /* CourseDownloadButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDownloadButtonView.swift; sourceTree = "<group>"; };
 		C878275A28EF0AA60007DDC1 /* UserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefault.swift; sourceTree = "<group>"; };
 		C878275D28F1A04E0007DDC1 /* WizardTeacherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardTeacherView.swift; sourceTree = "<group>"; };
-		C878275F28F404320007DDC1 /* WizardInstrument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardInstrument.swift; sourceTree = "<group>"; };
-		C878276128F4066E0007DDC1 /* WizardPlayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardPlayable.swift; sourceTree = "<group>"; };
+		C878275F28F404320007DDC1 /* WizardInstrumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardInstrumentView.swift; sourceTree = "<group>"; };
+		C878276128F4066E0007DDC1 /* WizardPlayableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardPlayableView.swift; sourceTree = "<group>"; };
 		C878276528F94D290007DDC1 /* PlayableFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayableFeedback.swift; sourceTree = "<group>"; };
 		C878276728F9B8B90007DDC1 /* DoYouKnowFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoYouKnowFeedback.swift; sourceTree = "<group>"; };
-		C878276928FC25030007DDC1 /* WizardResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardResult.swift; sourceTree = "<group>"; };
+		C878276928FC25030007DDC1 /* WizardResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardResultView.swift; sourceTree = "<group>"; };
 		C878276B29044C790007DDC1 /* ListInCourse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListInCourse.swift; sourceTree = "<group>"; };
-		C878276D2904F2DA0007DDC1 /* WizardDoYouKnow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardDoYouKnow.swift; sourceTree = "<group>"; };
+		C878276D2904F2DA0007DDC1 /* WizardDoYouKnowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardDoYouKnowView.swift; sourceTree = "<group>"; };
 		C88E652B28D3231A000FDC2D /* scorewind_ios_xml.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = scorewind_ios_xml.zip; sourceTree = "<group>"; };
 		C8E063EF28B0E20E000B3D67 /* MyCourse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCourse.swift; sourceTree = "<group>"; };
 		F3441470A2546CDD3AD7E6C9 /* Pods_ScoreWind.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScoreWind.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -219,6 +219,7 @@
 		C85F2728286F4C2B00D0A4E5 /* ScoreWind */ = {
 			isa = PBXGroup;
 			children = (
+				C878276F290511430007DDC1 /* Models */,
 				C85F275A286F4EF900D0A4E5 /* www */,
 				C85F2753286F4CF200D0A4E5 /* ScoreWind.entitlements */,
 				C85F2758286F4EEE00D0A4E5 /* data_version.json */,
@@ -227,8 +228,6 @@
 				C878275828E88B8E0007DDC1 /* CourseDownloadButtonView.swift */,
 				C878275628E8861C0007DDC1 /* CourseLessonListItemView.swift */,
 				C85F275E286F4F2E00D0A4E5 /* CourseView.swift */,
-				C85F2770286F4F2E00D0A4E5 /* DownloadManager.swift */,
-				C85F276F286F4F2E00D0A4E5 /* FileManager.swift */,
 				C85F275F286F4F2E00D0A4E5 /* HomeView.swift */,
 				C85F2767286F4F2E00D0A4E5 /* HTMLString.swift */,
 				C85F2761286F4F2E00D0A4E5 /* LessonScoreView.swift */,
@@ -239,11 +238,12 @@
 				C878275228E8675F0007DDC1 /* MyCouseItemview.swift */,
 				C85F276D286F4F2E00D0A4E5 /* MyTheme.swift */,
 				C85F2729286F4C2B00D0A4E5 /* ScoreWindApp.swift */,
-				C85F2768286F4F2E00D0A4E5 /* ScorewindData.swift */,
-				C85F2769286F4F2E00D0A4E5 /* StudentData.swift */,
 				C85F27A32879C20400D0A4E5 /* TipModalView.swift */,
-				C85F2764286F4F2E00D0A4E5 /* ViewModel.swift */,
 				C85F2765286F4F2E00D0A4E5 /* WebView.swift */,
+				C878276D2904F2DA0007DDC1 /* WizardDoYouKnowView.swift */,
+				C878275F28F404320007DDC1 /* WizardInstrumentView.swift */,
+				C878276128F4066E0007DDC1 /* WizardPlayableView.swift */,
+				C878276928FC25030007DDC1 /* WizardResultView.swift */,
 				C878275D28F1A04E0007DDC1 /* WizardTeacherView.swift */,
 				C85F2771286F4F2E00D0A4E5 /* WizardView.swift */,
 				C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */,
@@ -251,10 +251,6 @@
 				C8E063EA28AE06B7000B3D67 /* DataModel */,
 				C85F272F286F4C2C00D0A4E5 /* Preview Content */,
 				C85F2798286F5A4E00D0A4E5 /* Types */,
-				C878275F28F404320007DDC1 /* WizardInstrument.swift */,
-				C878276128F4066E0007DDC1 /* WizardPlayable.swift */,
-				C878276928FC25030007DDC1 /* WizardResult.swift */,
-				C878276D2904F2DA0007DDC1 /* WizardDoYouKnow.swift */,
 			);
 			path = ScoreWind;
 			sourceTree = "<group>";
@@ -301,6 +297,18 @@
 				C878276B29044C790007DDC1 /* ListInCourse.swift */,
 			);
 			path = Types;
+			sourceTree = "<group>";
+		};
+		C878276F290511430007DDC1 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C85F2768286F4F2E00D0A4E5 /* ScorewindData.swift */,
+				C85F2769286F4F2E00D0A4E5 /* StudentData.swift */,
+				C85F2770286F4F2E00D0A4E5 /* DownloadManager.swift */,
+				C85F276F286F4F2E00D0A4E5 /* FileManager.swift */,
+				C85F2764286F4F2E00D0A4E5 /* ViewModel.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		C8E063EA28AE06B7000B3D67 /* DataModel */ = {
@@ -515,7 +523,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C878276E2904F2DA0007DDC1 /* WizardDoYouKnow.swift in Sources */,
+				C878276E2904F2DA0007DDC1 /* WizardDoYouKnowView.swift in Sources */,
 				C878275928E88B8E0007DDC1 /* CourseDownloadButtonView.swift in Sources */,
 				C8E063F028B0E20E000B3D67 /* MyCourse.swift in Sources */,
 				C878276628F94D290007DDC1 /* PlayableFeedback.swift in Sources */,
@@ -530,17 +538,17 @@
 				C85F2778286F4F2E00D0A4E5 /* ViewModel.swift in Sources */,
 				C85F2775286F4F2E00D0A4E5 /* LessonScoreView.swift in Sources */,
 				C878276828F9B8B90007DDC1 /* DoYouKnowFeedback.swift in Sources */,
-				C878276228F4066E0007DDC1 /* WizardPlayable.swift in Sources */,
+				C878276228F4066E0007DDC1 /* WizardPlayableView.swift in Sources */,
 				C85F2773286F4F2E00D0A4E5 /* HomeView.swift in Sources */,
 				C85F27A8287A775E00D0A4E5 /* TipLimit.swift in Sources */,
-				C878276A28FC25030007DDC1 /* WizardResult.swift in Sources */,
+				C878276A28FC25030007DDC1 /* WizardResultView.swift in Sources */,
 				C878275728E8861C0007DDC1 /* CourseLessonListItemView.swift in Sources */,
 				C85F2774286F4F2E00D0A4E5 /* MyCoursesView.swift in Sources */,
 				C85F277A286F4F2E00D0A4E5 /* ScorewindCourse.swift in Sources */,
 				C85F272A286F4C2B00D0A4E5 /* ScoreWindApp.swift in Sources */,
 				C85F277C286F4F2E00D0A4E5 /* ScorewindData.swift in Sources */,
 				C85F279C2871846200D0A4E5 /* BlankTabView.swift in Sources */,
-				C878276028F404320007DDC1 /* WizardInstrument.swift in Sources */,
+				C878276028F404320007DDC1 /* WizardInstrumentView.swift in Sources */,
 				C85F277D286F4F2E00D0A4E5 /* StudentData.swift in Sources */,
 				C85F2784286F4F2E00D0A4E5 /* DownloadManager.swift in Sources */,
 				C85F2777286F4F2E00D0A4E5 /* ScorewindTimestamp.swift in Sources */,

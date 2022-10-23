@@ -12,6 +12,8 @@ import Combine
 
 class StudentData: ObservableObject {
 	@Published var myCourses:[MyCourse] = []
+	@Published var wizardPickedCourse = Course()
+	@Published var wizardPickedLesson = Lesson()
 	private let useriCloudKeyValueStore = NSUbiquitousKeyValueStore.default
 	private var userDefaults = UserDefaults.standard
 	var wizardStepNames:[Page] = []

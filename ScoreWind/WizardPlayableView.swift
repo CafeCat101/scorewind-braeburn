@@ -8,7 +8,7 @@
 import SwiftUI
 import AVKit
 
-struct WizardPlayable: View {
+struct WizardPlayableView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@Binding var selectedTab:String
 	@Binding var stepName:Page
@@ -187,6 +187,6 @@ struct WizardPlayable_Previews: PreviewProvider {
 	@State static var step:Page = .wizardPlayable
 	
 	static var previews: some View {
-		WizardPlayable(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
+		WizardPlayableView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
 	}
 }

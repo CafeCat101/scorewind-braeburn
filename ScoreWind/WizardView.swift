@@ -74,13 +74,13 @@ struct WizardView: View {
 				WizardTeacherView(selectedTab: $selectedTab)
 			} else {
 				if stepName == .wizardChooseInstrument {
-					WizardInstrument(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
+					WizardInstrumentView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
 				} else if stepName == .wizardDoYouKnow {
-					WizardDoYouKnow(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
+					WizardDoYouKnowView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
 				} else if stepName == .wizardPlayable {
-					WizardPlayable(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
+					WizardPlayableView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
 				} else if stepName == .wizardResult {
-					WizardResult(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
+					WizardResultView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
 				}
 			}
 			

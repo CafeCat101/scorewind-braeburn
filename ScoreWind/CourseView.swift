@@ -161,7 +161,7 @@ struct CourseView: View {
 							}
 						})
 					}
-					
+					Spacer()
 				}
 				.frame(width:screenSize.width)
 				
