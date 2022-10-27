@@ -102,12 +102,14 @@ struct WizardView: View {
 	private func getWizardViewTitle() -> String {
 		if stepName == .wizardChooseInstrument {
 			return "Wizard step 1"
-		} else if stepName == .wizardPlayable {
+		} else if stepName == .wizardDoYouKnow {
 			return "Wizard step 2"
+		} else if stepName == .wizardPlayable {
+			return "Wizard step 3"
 		} else if stepName == .wizardResult {
 			return "Wizard final step"
 		} else {
-			return ""
+			return "Wizard"
 		}
 	}
 

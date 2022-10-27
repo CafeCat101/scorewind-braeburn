@@ -59,6 +59,8 @@
 		C878276A28FC25030007DDC1 /* WizardResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276928FC25030007DDC1 /* WizardResultView.swift */; };
 		C878276C29044C790007DDC1 /* ListInCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276B29044C790007DDC1 /* ListInCourse.swift */; };
 		C878276E2904F2DA0007DDC1 /* WizardDoYouKnowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276D2904F2DA0007DDC1 /* WizardDoYouKnowView.swift */; };
+		C878277129054B380007DDC1 /* WizardCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878277029054B380007DDC1 /* WizardCalculator.swift */; };
+		C8782773290586590007DDC1 /* WizardExperienceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8782772290586590007DDC1 /* WizardExperienceView.swift */; };
 		C88E652C28D3231A000FDC2D /* scorewind_ios_xml.zip in Resources */ = {isa = PBXBuildFile; fileRef = C88E652B28D3231A000FDC2D /* scorewind_ios_xml.zip */; };
 		C8E063F028B0E20E000B3D67 /* MyCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E063EF28B0E20E000B3D67 /* MyCourse.swift */; };
 /* End PBXBuildFile section */
@@ -140,6 +142,8 @@
 		C878276928FC25030007DDC1 /* WizardResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardResultView.swift; sourceTree = "<group>"; };
 		C878276B29044C790007DDC1 /* ListInCourse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListInCourse.swift; sourceTree = "<group>"; };
 		C878276D2904F2DA0007DDC1 /* WizardDoYouKnowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardDoYouKnowView.swift; sourceTree = "<group>"; };
+		C878277029054B380007DDC1 /* WizardCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardCalculator.swift; sourceTree = "<group>"; };
+		C8782772290586590007DDC1 /* WizardExperienceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardExperienceView.swift; sourceTree = "<group>"; };
 		C88E652B28D3231A000FDC2D /* scorewind_ios_xml.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = scorewind_ios_xml.zip; sourceTree = "<group>"; };
 		C8E063EF28B0E20E000B3D67 /* MyCourse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCourse.swift; sourceTree = "<group>"; };
 		F3441470A2546CDD3AD7E6C9 /* Pods_ScoreWind.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScoreWind.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -251,6 +255,7 @@
 				C8E063EA28AE06B7000B3D67 /* DataModel */,
 				C85F272F286F4C2C00D0A4E5 /* Preview Content */,
 				C85F2798286F5A4E00D0A4E5 /* Types */,
+				C8782772290586590007DDC1 /* WizardExperienceView.swift */,
 			);
 			path = ScoreWind;
 			sourceTree = "<group>";
@@ -307,6 +312,7 @@
 				C85F2770286F4F2E00D0A4E5 /* DownloadManager.swift */,
 				C85F276F286F4F2E00D0A4E5 /* FileManager.swift */,
 				C85F2764286F4F2E00D0A4E5 /* ViewModel.swift */,
+				C878277029054B380007DDC1 /* WizardCalculator.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -527,6 +533,8 @@
 				C878275928E88B8E0007DDC1 /* CourseDownloadButtonView.swift in Sources */,
 				C8E063F028B0E20E000B3D67 /* MyCourse.swift in Sources */,
 				C878276628F94D290007DDC1 /* PlayableFeedback.swift in Sources */,
+				C878277129054B380007DDC1 /* WizardCalculator.swift in Sources */,
+				C8782773290586590007DDC1 /* WizardExperienceView.swift in Sources */,
 				C85F2779286F4F2E00D0A4E5 /* WebView.swift in Sources */,
 				C85F2782286F4F2E00D0A4E5 /* LessonView.swift in Sources */,
 				C85F277E286F4F2E00D0A4E5 /* LessonSheetView.swift in Sources */,

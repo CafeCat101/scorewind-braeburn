@@ -15,9 +15,7 @@ class ScorewindData: ObservableObject {
 	@Published var previousCourse:Course = Course()
 	@Published var nextCourse:Course = Course()
 	@Published var currentTimestampRecs:[TimestampRec] = []
-	//@Published var studentData: StudentData
 	@Published var currentView = Page.wizard
-	//@Published var lastViewAtScore = true
 	@Published var showLessonTextOverlay = false
 	let courseURL = URL(fileURLWithPath: "courses_ios", relativeTo: FileManager.documentoryDirecotryURL).appendingPathExtension("json")
 	let timestampURL = URL(fileURLWithPath: "timestamps_ios", relativeTo: FileManager.documentoryDirecotryURL).appendingPathExtension("json")
@@ -35,7 +33,6 @@ class ScorewindData: ObservableObject {
 	
 	init() {
 		print(docsUrl!.path)
-		//studentData = StudentData()
 		dataVersion = userDefaults.object(forKey: "dataVersion") as? Int ?? 0
 		print("[debug] ScoreWindData, userDefaults.dataversion \(dataVersion)")
 		//========
