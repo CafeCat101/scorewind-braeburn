@@ -91,6 +91,7 @@ struct WizardView: View {
 		.onAppear(perform: {
 			stepName = .wizardChooseInstrument
 			print("[debug] WizardView, wizardStepNames \(studentData.wizardStepNames)")
+			scorewindData.createRecommendation(availableCourses: scorewindData.allCourses)
 			/*
 			DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
 				userRole = "teacher"

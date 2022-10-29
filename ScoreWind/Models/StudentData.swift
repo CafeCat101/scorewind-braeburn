@@ -12,8 +12,9 @@ import Combine
 
 class StudentData: ObservableObject {
 	@Published var myCourses:[MyCourse] = []
-	@Published var wizardPickedCourse = Course()
-	@Published var wizardPickedLesson = Lesson()
+	//@Published var wizardPickedCourse:Course = Course()
+	//@Published var wizardPickedLesson:Lesson = Lesson()
+	//@Published var wizardPickedTimestamps:[TimestampRec] = []
 	private let useriCloudKeyValueStore = NSUbiquitousKeyValueStore.default
 	private var userDefaults = UserDefaults.standard
 	var wizardStepNames:[Page] = []
@@ -277,4 +278,11 @@ class StudentData: ObservableObject {
 			
 		}
 	}
+	
+	/*
+	func createRecommendation(availableCourses:[Course]) {
+		wizardPickedCourse = availableCourses.first(where: {$0.id == 96111}) ?? Course()
+		wizardPickedLesson = wizardPickedCourse.lessons.first(where: {$0.scorewindID == 13828}) ?? Lesson()
+	}
+	*/
 }

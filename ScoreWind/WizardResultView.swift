@@ -26,7 +26,7 @@ struct WizardResultView: View {
 			
 			ScrollView(.vertical) {
 				VStack {
-					Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title))
+					Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.wizardPickedLesson.title))
 						.font(.title2)
 						.bold()
 						.frame(maxWidth: .infinity, minHeight: 100)
@@ -34,7 +34,7 @@ struct WizardResultView: View {
 						.background(.yellow)
 						.cornerRadius(25)
 					
-					Text(scorewindData.currentLesson.description)
+					Text(scorewindData.wizardPickedLesson.description)
 					
 					HStack {
 						Text("Your learning path")

@@ -145,7 +145,8 @@ struct WebView: UIViewRepresentable, WebViewHandlerDelegate {
 			
 			let encoder = JSONEncoder()
 			do{
-				let data = try encoder.encode(parent.scorewindData.currentTimestampRecs)
+				//let data = try encoder.encode(parent.scorewindData.currentTimestampRecs)
+				let data = try encoder.encode(parent.viewModel.viewedTimestampRecs)
 				let dataJson = String(data: data, encoding: .utf8)!
 				let replacedString = dataJson.replacingOccurrences(of: "\"", with: #"\""#)
 				let javascriptFunction2 = "loadTimestamps(\"\(replacedString)\");"
@@ -163,8 +164,8 @@ struct WebView: UIViewRepresentable, WebViewHandlerDelegate {
 			//print("parent.viewModel.score: "+parent.viewModel.score)
 			//print("parent.score:" + parent.score)
 			print("[debug] WebView, parent.scorewindData, scoreViewer:\(parent.scorewindData.currentLesson.scoreViewer)")
-			//let javascriptFunction = "load_score_view(\"\(parent.scorewindData.currentLesson.scoreViewer)\");"
-			let scoreViewerArr = parent.scorewindData.currentLesson.scoreViewer.components(separatedBy: "/")
+			//let scoreViewerArr = parent.scorewindData.currentLesson.scoreViewer.components(separatedBy: "/")
+			let scoreViewerArr = parent.viewModel.viewedLesson!.scoreViewer.components(separatedBy: "/")
 			let javascriptFunction = "load_score_view(xml_array[\"\(scoreViewerArr[scoreViewerArr.count-1])\"])"
 			webView.evaluateJavaScript(javascriptFunction) { (response, error) in
 				if let error = error {

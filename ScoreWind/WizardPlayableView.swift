@@ -75,6 +75,8 @@ struct WizardPlayableView: View {
 				}
 				.onAppear(perform: {
 					viewModel.loadToGo = true
+					viewModel.viewedLesson = scorewindData.wizardPickedLesson
+					viewModel.viewedTimestampRecs = scorewindData.wizardPickedTimestamps
 					setupPlayer()
 				})
 			}
@@ -128,7 +130,7 @@ struct WizardPlayableView: View {
 	}
 	
 	private func setupPlayer(){
-		viewModel.videoPlayer = AVPlayer(url: URL(string: decodeVideoURL(videoURL: scorewindData.currentLesson.video))!)
+		viewModel.videoPlayer = AVPlayer(url: URL(string: decodeVideoURL(videoURL: scorewindData.wizardPickedLesson.video))!)
 		
 		viewModel.videoPlayer!.addPeriodicTimeObserver(forInterval: CMTime(value: 1, timescale: 3), queue: .main, using: { time in
 			let catchTime = time.seconds
@@ -143,12 +145,12 @@ struct WizardPlayableView: View {
 	
 	private func findMesaureByTimestamp(videoTime: Double)->Int{
 		var getMeasure = 0
-		for(index, theTime) in scorewindData.currentTimestampRecs.enumerated(){
+		for(index, theTime) in scorewindData.wizardPickedTimestamps.enumerated(){
 			//print("index "+String(index))
 			//print("timestamp "+String(theTime.measure))
 			var endTimestamp = theTime.timestamp + 100
-			if index < scorewindData.currentTimestampRecs.count-1 {
-				endTimestamp = scorewindData.currentTimestampRecs[index+1].timestamp
+			if index < scorewindData.wizardPickedTimestamps.count-1 {
+				endTimestamp = scorewindData.wizardPickedTimestamps[index+1].timestamp
 			}
 			print("[debug] LessonViw,--findMeasureByTimestamp-->")
 			print("[debug] LessonViw,loop timestamp "+String(theTime.timestamp))

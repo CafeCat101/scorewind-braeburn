@@ -25,11 +25,15 @@ class ScorewindData: ObservableObject {
 	let docsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
 	var lastPlaybackTime = 0.0
 	var allCourses:[Course] = []
-	private var allTimestamps:[Timestamp] = []
+	internal var allTimestamps:[Timestamp] = []
 	private var userDefaults = UserDefaults.standard
 	var dataVersion = 0
 	@Published var currentTip: Tip = .default
 	var lessonChanged = true
+	
+	@Published var wizardPickedCourse:Course = Course()
+	@Published var wizardPickedLesson:Lesson = Lesson()
+	@Published var wizardPickedTimestamps:[TimestampRec] = []
 	
 	init() {
 		print(docsUrl!.path)

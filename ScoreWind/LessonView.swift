@@ -176,6 +176,8 @@ struct LessonView: View {
 			}
 			
 			if scorewindData.currentLesson.videoMP4.isEmpty == false {
+				viewModel.viewedLesson = scorewindData.currentLesson
+				viewModel.viewedTimestampRecs = scorewindData.currentTimestampRecs
 				setupPlayer()
 				if scorewindData.lastPlaybackTime > 0.0 {
 					if scorewindData.showLessonTextOverlay {
@@ -460,6 +462,8 @@ struct LessonView: View {
 		if scorewindData.currentLesson.videoMP4.isEmpty == false {
 			viewModel.videoPlayer?.pause()
 			//viewModel.videoPlayer?.replaceCurrentItem(with: nil)
+			viewModel.viewedLesson = scorewindData.currentLesson
+			viewModel.viewedTimestampRecs = scorewindData.currentTimestampRecs
 			setupPlayer()
 		}
 		scorewindData.lessonChanged = true
