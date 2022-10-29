@@ -15,6 +15,7 @@ struct WizardExperienceView: View {
 	
 	var body: some View {
 		VStack {
+			Spacer()
 			Text("Start with Starter Kit")
 				.modifier(FeedbackOptionsModifier())
 				.onTapGesture {
@@ -22,6 +23,7 @@ struct WizardExperienceView: View {
 					stepName = .wizardResult
 					studentData.wizardStepNames.append(stepName)
 				}
+				.padding(.bottom,20)
 			
 			Text("Pick something else")
 				.modifier(FeedbackOptionsModifier())
@@ -30,10 +32,11 @@ struct WizardExperienceView: View {
 					stepName = .wizardDoYouKnow
 					studentData.wizardStepNames.append(stepName)
 				}
+			Spacer()
 		}
 		.background(Color("AppBackground"))
 		.onAppear(perform: {
-			studentData.wizardStepNames = [.wizardExperience]
+			
 		})
 	}
 }

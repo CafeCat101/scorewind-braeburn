@@ -75,6 +75,8 @@ struct WizardView: View {
 			} else {
 				if stepName == .wizardChooseInstrument {
 					WizardInstrumentView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
+				} else if stepName == .wizardExperience {
+					WizardExperienceView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
 				} else if stepName == .wizardDoYouKnow {
 					WizardDoYouKnowView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
 				} else if stepName == .wizardPlayable {
@@ -101,16 +103,12 @@ struct WizardView: View {
 	}
 	
 	private func getWizardViewTitle() -> String {
-		if stepName == .wizardChooseInstrument {
-			return "Wizard step 1"
-		} else if stepName == .wizardDoYouKnow {
-			return "Wizard step 2"
-		} else if stepName == .wizardPlayable {
-			return "Wizard step 3"
-		} else if stepName == .wizardResult {
+		let findStepIndex = studentData.wizardStepNames.firstIndex(where: {$0.self == stepName}) ?? 0
+		
+		if stepName == .wizardResult {
 			return "Wizard final step"
 		} else {
-			return "Wizard"
+			return "Wizard step \(findStepIndex+1)"
 		}
 	}
 

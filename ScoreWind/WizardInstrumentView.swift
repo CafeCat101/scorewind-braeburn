@@ -28,7 +28,7 @@ struct WizardInstrumentView: View {
 			
 			HStack {
 				Button(action:{
-					stepName = .wizardDoYouKnow
+					stepName = .wizardExperience
 					studentData.updateInstrumentChoice(instrument: .guitar)
 					studentData.wizardStepNames.append(stepName)
 				}){
@@ -42,7 +42,7 @@ struct WizardInstrumentView: View {
 				}.padding()
 				
 				Button(action:{
-					stepName = .wizardDoYouKnow
+					stepName = .wizardExperience
 					studentData.updateInstrumentChoice(instrument: .violin)
 					studentData.wizardStepNames.append(stepName)
 				}){
