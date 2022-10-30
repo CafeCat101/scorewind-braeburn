@@ -61,6 +61,7 @@
 		C878276E2904F2DA0007DDC1 /* WizardDoYouKnowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276D2904F2DA0007DDC1 /* WizardDoYouKnowView.swift */; };
 		C878277129054B380007DDC1 /* WizardCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878277029054B380007DDC1 /* WizardCalculator.swift */; };
 		C8782773290586590007DDC1 /* WizardExperienceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8782772290586590007DDC1 /* WizardExperienceView.swift */; };
+		C8782779290E4AD80007DDC1 /* WizardVideos in Resources */ = {isa = PBXBuildFile; fileRef = C8782778290E4AD80007DDC1 /* WizardVideos */; };
 		C88E652C28D3231A000FDC2D /* scorewind_ios_xml.zip in Resources */ = {isa = PBXBuildFile; fileRef = C88E652B28D3231A000FDC2D /* scorewind_ios_xml.zip */; };
 		C8E063F028B0E20E000B3D67 /* MyCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E063EF28B0E20E000B3D67 /* MyCourse.swift */; };
 /* End PBXBuildFile section */
@@ -144,6 +145,7 @@
 		C878276D2904F2DA0007DDC1 /* WizardDoYouKnowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardDoYouKnowView.swift; sourceTree = "<group>"; };
 		C878277029054B380007DDC1 /* WizardCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardCalculator.swift; sourceTree = "<group>"; };
 		C8782772290586590007DDC1 /* WizardExperienceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardExperienceView.swift; sourceTree = "<group>"; };
+		C8782778290E4AD80007DDC1 /* WizardVideos */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WizardVideos; sourceTree = "<group>"; };
 		C88E652B28D3231A000FDC2D /* scorewind_ios_xml.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = scorewind_ios_xml.zip; sourceTree = "<group>"; };
 		C8E063EF28B0E20E000B3D67 /* MyCourse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCourse.swift; sourceTree = "<group>"; };
 		F3441470A2546CDD3AD7E6C9 /* Pods_ScoreWind.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScoreWind.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -223,6 +225,7 @@
 		C85F2728286F4C2B00D0A4E5 /* ScoreWind */ = {
 			isa = PBXGroup;
 			children = (
+				C8782778290E4AD80007DDC1 /* WizardVideos */,
 				C878276F290511430007DDC1 /* Models */,
 				C85F275A286F4EF900D0A4E5 /* www */,
 				C85F2753286F4CF200D0A4E5 /* ScoreWind.entitlements */,
@@ -439,6 +442,7 @@
 				C85F2755286F4E4B00D0A4E5 /* LaunchScreen.storyboard in Resources */,
 				C85F2731286F4C2C00D0A4E5 /* Preview Assets.xcassets in Resources */,
 				C85F272E286F4C2C00D0A4E5 /* Assets.xcassets in Resources */,
+				C8782779290E4AD80007DDC1 /* WizardVideos in Resources */,
 				C88E652C28D3231A000FDC2D /* scorewind_ios_xml.zip in Resources */,
 				C85F2759286F4EEE00D0A4E5 /* data_version.json in Resources */,
 			);

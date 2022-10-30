@@ -15,33 +15,10 @@ struct WizardPlayableView: View {
 	@ObservedObject var studentData:StudentData
 	@StateObject var viewModel = ViewModel()
 	let screenSize: CGRect = UIScreen.main.bounds
+	@State private var videoOnly = true
 	
 	var body: some View {
 		VStack {
-			/*HStack {
-				Label("Back", systemImage: "chevron.backward.circle.fill")
-					.labelStyle(.iconOnly)
-					.foregroundColor(Color("WizardBackArrow"))
-					.font(.title3)
-					.onTapGesture(perform: {
-						stepName = .wizardChooseInstrument
-					})
-				/*Image(systemName: "chevron.backward")
-					.resizable()
-					.scaledToFit()
-					.frame(height: screenSize.height/25 - 4)
-					.foregroundColor(Color("WizardBackArrow"))
-					.onTapGesture(perform: {
-						stepName = .wizardChooseInstrument
-					})*/
-				Spacer()
-			}
-			.frame(height: screenSize.height/25)
-			.padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 15))
-			*/
-			/*Text("How do you feel about playing this?")
-				.bold()*/
-			
 			Text("How do you feel about playing this? \nTab the bar to hear!")
 				.font(.title3)
 				.foregroundColor(Color("WizardBackArrow"))
@@ -50,78 +27,79 @@ struct WizardPlayableView: View {
 			
 			GeometryReader { reader in
 				VStack {
-					/*VStack {
-						VideoPlayer(player: viewModel.videoPlayer)
-					}
-					.background(.black)
-					.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
-					.padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))
-						.frame(maxHeight: reader.size.height * 0.45)
-					
-					VStack {
-						LessonScoreView(viewModel: viewModel)
-					}
-					.background(.white)
-					.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
-					.padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))*/
-					
 					VideoPlayer(player: viewModel.videoPlayer)
 						.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
 						.padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))
-							.frame(maxHeight: reader.size.height * 0.45)
-					LessonScoreView(viewModel: viewModel)
-						.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
-						.padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))
+						.frame(maxHeight: reader.size.height * 0.45)
+					
+					if videoOnly {
+						VStack {
+							Spacer()
+							Group {
+								HStack {
+									Text(PlayableFeedback.easyPeasy.getLabel())
+										.modifier(FeedbackOptionsModifier())
+										.onTapGesture {
+											feedbackTagAction(feedback: .easyPeasy)
+										}
+									Text(PlayableFeedback.comfortable.getLabel())
+										.modifier(FeedbackOptionsModifier())
+										.onTapGesture {
+											feedbackTagAction(feedback: .comfortable)
+										}
+								}
+								Text(PlayableFeedback.canLearn.getLabel())
+									.modifier(FeedbackOptionsModifier())
+									.onTapGesture {
+										feedbackTagAction(feedback: .canLearn)
+									}
+								HStack {
+									Text(PlayableFeedback.littleDifficult.getLabel())
+										.modifier(FeedbackOptionsModifier())
+										.onTapGesture {
+											feedbackTagAction(feedback: .littleDifficult)
+										}
+									Text(PlayableFeedback.veryHard.getLabel())
+										.modifier(FeedbackOptionsModifier())
+										.onTapGesture {
+											feedbackTagAction(feedback: .veryHard)
+										}
+								}
+							}
+							Spacer()
+							HStack {
+								Spacer()
+								Button("Viwe whole lesson") {
+									viewModel.videoPlayer!.pause()
+									viewModel.videoPlayer!.replaceCurrentItem(with: nil)
+									videoOnly = false
+									viewModel.loadToGo = true
+									setupPlayer(withoutScoreViewer: videoOnly)
+								}
+							}
+						}.padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
+					} else {
+						LessonScoreView(viewModel: viewModel)
+							.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+							.padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))
+						ScrollView(.horizontal, showsIndicators: false) {
+							HStack {
+								feedbackOptionView()
+							}.padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
+						}
+					}
 				}
 				.onAppear(perform: {
-					viewModel.loadToGo = true
+					viewModel.loadToGo = false
 					viewModel.viewedLesson = scorewindData.wizardPickedLesson
 					viewModel.viewedTimestampRecs = scorewindData.wizardPickedTimestamps
-					setupPlayer()
+					setupPlayer(withoutScoreViewer: videoOnly)
+				})
+				.onDisappear(perform: {
+					viewModel.videoPlayer!.pause()
+					viewModel.videoPlayer!.replaceCurrentItem(with: nil)
 				})
 			}
-			
-			ScrollView(.horizontal, showsIndicators: false) {
-				HStack {
-					ForEach(PlayableFeedback.allCases, id: \.self){ feedbackItem in
-						Text(feedbackItem.getLabel())
-							.modifier(FeedbackOptionsModifier())
-							.onTapGesture {
-								print("feedback clicked value \(feedbackItem.rawValue)")
-								stepName = .wizardResult
-								studentData.wizardStepNames.append(stepName)
-							}
-					}
-				}.padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
-			}
-			
-			/*
-			ScrollView(.horizontal, showsIndicators: false) {
-				HStack {
-					if scorewindData.currentTimestampRecs.count > 0 {
-						ForEach(WizardScoreFeedback.allCases, id: \.self){ feedbackItem in
-							Text(feedbackItem.getLabel())
-								.modifier(FeedbackOptionsModifier())
-								.onTapGesture {
-									print("feedback clicked value \(feedbackItem.rawValue)")
-								}
-						}
-					} else {
-						ForEach(WizardHighlightFeedback.allCases, id: \.self) {feedbackItem in
-							Text(feedbackItem.getLabel())
-								.modifier(FeedbackOptionsModifier())
-								.onTapGesture {
-									print("feedback clicked value \(feedbackItem.rawValue)")
-								}
-						}
-					}
-					
-				}
-				.padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
-			}
-			*/
-			
-			//Spacer()
 		}
 		.background(Color("AppBackground"))
 		.onAppear(perform: {
@@ -129,18 +107,44 @@ struct WizardPlayableView: View {
 		})
 	}
 	
-	private func setupPlayer(){
-		viewModel.videoPlayer = AVPlayer(url: URL(string: decodeVideoURL(videoURL: scorewindData.wizardPickedLesson.video))!)
+	@ViewBuilder
+	private func feedbackOptionView() -> some View {
+		ForEach(PlayableFeedback.allCases, id: \.self){ feedbackItem in
+			Text(feedbackItem.getLabel())
+				.modifier(FeedbackOptionsModifier())
+				.onTapGesture {
+					feedbackTagAction(feedback: feedbackItem)
+				}
+		}
+	}
+	
+	private func feedbackTagAction(feedback: PlayableFeedback) {
+		print("feedback clicked value \(feedback.rawValue)")
+		stepName = .wizardResult
+		studentData.wizardStepNames.append(stepName)
+	}
+	
+	private func setupPlayer(withoutScoreViewer: Bool){
+		if withoutScoreViewer == false {
+			viewModel.videoPlayer = AVPlayer(url: URL(string: decodeVideoURL(videoURL: scorewindData.wizardPickedLesson.video))!)
+			viewModel.videoPlayer!.addPeriodicTimeObserver(forInterval: CMTime(value: 1, timescale: 3), queue: .main, using: { time in
+				let catchTime = time.seconds
+				
+				let atMeasure = findMesaureByTimestamp(videoTime: catchTime)
+				self.viewModel.valuePublisher.send(String(atMeasure))
+				//print("[debug] LessonView, setupPlayer, ready to play")
+				print("find measure:"+String(atMeasure))
+			})
+		} else {
+			let downloadableVideoURL = URL(string: scorewindData.wizardPickedLesson.videoMP4.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!)!
+			let wizardVideoURL = Bundle.main.resourceURL!.appendingPathComponent("WizardVideos/\(downloadableVideoURL.lastPathComponent)")
+			print("[debug] WizardPlayableView, wizardVideoUrl.path \(wizardVideoURL.path)")
+			if FileManager.default.fileExists(atPath: wizardVideoURL.path) {
+				viewModel.videoPlayer = AVPlayer(url: wizardVideoURL)
+				viewModel.videoPlayer?.play()
+			}
+		}
 		
-		viewModel.videoPlayer!.addPeriodicTimeObserver(forInterval: CMTime(value: 1, timescale: 3), queue: .main, using: { time in
-			let catchTime = time.seconds
-			
-			let atMeasure = findMesaureByTimestamp(videoTime: catchTime)
-			self.viewModel.valuePublisher.send(String(atMeasure))
-			//print("[debug] LessonView, setupPlayer, ready to play")
-			print("find measure:"+String(atMeasure))
-			
-		})
 	}
 	
 	private func findMesaureByTimestamp(videoTime: Double)->Int{
