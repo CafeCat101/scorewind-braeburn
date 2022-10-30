@@ -17,7 +17,7 @@ class StudentData: ObservableObject {
 	//@Published var wizardPickedTimestamps:[TimestampRec] = []
 	private let useriCloudKeyValueStore = NSUbiquitousKeyValueStore.default
 	private var userDefaults = UserDefaults.standard
-	var wizardStepNames:[Page] = []
+	@Published var wizardStepNames:[Page] = []
 	@Published var playableViewVideoOnly = true
 	
 	func getInstrumentChoice()->String{

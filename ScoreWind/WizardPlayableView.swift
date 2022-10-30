@@ -115,6 +115,7 @@ struct WizardPlayableView: View {
 				.onDisappear(perform: {
 					viewModel.videoPlayer!.pause()
 					viewModel.videoPlayer!.replaceCurrentItem(with: nil)
+					studentData.playableViewVideoOnly = true
 				})
 			}
 		}

@@ -10,7 +10,7 @@ import SwiftUI
 struct WizardView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@Binding var selectedTab:String
-	@State private var userRole = "student"
+	@State private var userRole:UserRole = .student
 	@State private var stepName:Page = .wizardChooseInstrument
 	@ObservedObject var studentData:StudentData
 	
@@ -40,13 +40,14 @@ struct WizardView: View {
 						.foregroundColor(Color("AppBlackDynamic"))
 						.contextMenu {
 							Button(action: {
-								userRole = "student"
+								userRole = .student
+								stepName = .wizardChooseInstrument
 							}){
 								Label("I'm a student", systemImage: "face.smiling")
 									.labelStyle(.titleAndIcon)
 							}
 							Button(action: {
-								userRole = "teacher"
+								userRole = .teacher
 							}){
 								Label("Teachers only", systemImage: "brain.head.profile")
 									.labelStyle(.titleAndIcon)
@@ -56,7 +57,7 @@ struct WizardView: View {
 			}
 			.overlay(alignment:.leading, content: {
 				//::NAVIGATE BACK
-				if studentData.wizardStepNames.count > 1 && studentData.playableViewVideoOnly {
+				if studentData.wizardStepNames.count > 1 && studentData.playableViewVideoOnly && userRole == .student {
 					Label("Previous step", systemImage: "chevron.backward.circle.fill")
 						.padding([.leading], 15)
 						.font(.title3)
@@ -71,7 +72,7 @@ struct WizardView: View {
 				}
 			})
 			
-			if userRole == "teacher" {
+			if userRole == .teacher {
 				WizardTeacherView(selectedTab: $selectedTab)
 			} else {
 				if stepName == .wizardChooseInstrument {
@@ -106,11 +107,16 @@ struct WizardView: View {
 	private func getWizardViewTitle() -> String {
 		let findStepIndex = studentData.wizardStepNames.firstIndex(where: {$0.self == stepName}) ?? 0
 		
-		if stepName == .wizardResult {
-			return "Wizard final step"
+		if userRole == .student {
+			if stepName == .wizardResult {
+				return "Wizard final step"
+			} else {
+				return "Wizard step \(findStepIndex+1)"
+			}
 		} else {
-			return "Wizard step \(findStepIndex+1)"
+			return "Wizard (Teachers only)"
 		}
+		
 	}
 
 }
@@ -124,4 +130,9 @@ struct WizardView_Previews: PreviewProvider {
 		}
 		
 	}
+}
+
+enum UserRole {
+	case teacher
+	case student
 }
