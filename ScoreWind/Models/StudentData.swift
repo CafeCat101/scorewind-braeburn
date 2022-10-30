@@ -18,6 +18,7 @@ class StudentData: ObservableObject {
 	private let useriCloudKeyValueStore = NSUbiquitousKeyValueStore.default
 	private var userDefaults = UserDefaults.standard
 	var wizardStepNames:[Page] = []
+	@Published var playableViewVideoOnly = true
 	
 	func getInstrumentChoice()->String{
 		return useriCloudKeyValueStore.string(forKey:"instrument") ?? ""

@@ -56,7 +56,7 @@ struct WizardView: View {
 			}
 			.overlay(alignment:.leading, content: {
 				//::NAVIGATE BACK
-				if studentData.wizardStepNames.count > 1 {
+				if studentData.wizardStepNames.count > 1 && studentData.playableViewVideoOnly {
 					Label("Previous step", systemImage: "chevron.backward.circle.fill")
 						.padding([.leading], 15)
 						.font(.title3)
@@ -65,6 +65,7 @@ struct WizardView: View {
 							studentData.wizardStepNames.removeLast()
 							print("[debug] WizardView, wizardStepNames \(studentData.wizardStepNames)")
 							stepName = studentData.wizardStepNames[(studentData.wizardStepNames.count-1)]
+							
 						})
 					
 				}

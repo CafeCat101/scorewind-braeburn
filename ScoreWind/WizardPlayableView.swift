@@ -15,15 +15,32 @@ struct WizardPlayableView: View {
 	@ObservedObject var studentData:StudentData
 	@StateObject var viewModel = ViewModel()
 	let screenSize: CGRect = UIScreen.main.bounds
-	@State private var videoOnly = true
+	//@State private var videoOnly = true
 	
 	var body: some View {
 		VStack {
+			if studentData.playableViewVideoOnly == false {
+				HStack {
+					Label("Back to video clip", systemImage: "chevron.backward.circle")
+						.padding([.leading], 15)
+						.font(.title3)
+						.labelStyle(.titleAndIcon)
+						.onTapGesture(perform: {
+							viewModel.videoPlayer!.pause()
+							viewModel.videoPlayer!.replaceCurrentItem(with: nil)
+							viewModel.loadToGo = false
+							studentData.playableViewVideoOnly = true
+							setupPlayer(withoutScoreViewer: studentData.playableViewVideoOnly)
+						})
+					Spacer()
+				}
+			}
 			Text("How do you feel about playing this? \nTab the bar to hear!")
 				.font(.title3)
 				.foregroundColor(Color("WizardBackArrow"))
 				.bold()
-				.padding(EdgeInsets(top: 5, leading: 15, bottom: 0, trailing: 15))
+				.padding(EdgeInsets(top: 5, leading: 30, bottom: 0, trailing: 15))
+			
 			
 			GeometryReader { reader in
 				VStack {
@@ -32,7 +49,7 @@ struct WizardPlayableView: View {
 						.padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))
 						.frame(maxHeight: reader.size.height * 0.45)
 					
-					if videoOnly {
+					if studentData.playableViewVideoOnly {
 						VStack {
 							Spacer()
 							Group {
@@ -72,9 +89,9 @@ struct WizardPlayableView: View {
 								Button("Viwe whole lesson") {
 									viewModel.videoPlayer!.pause()
 									viewModel.videoPlayer!.replaceCurrentItem(with: nil)
-									videoOnly = false
+									studentData.playableViewVideoOnly = false
 									viewModel.loadToGo = true
-									setupPlayer(withoutScoreViewer: videoOnly)
+									setupPlayer(withoutScoreViewer: studentData.playableViewVideoOnly)
 								}
 							}
 						}.padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
@@ -93,7 +110,7 @@ struct WizardPlayableView: View {
 					viewModel.loadToGo = false
 					viewModel.viewedLesson = scorewindData.wizardPickedLesson
 					viewModel.viewedTimestampRecs = scorewindData.wizardPickedTimestamps
-					setupPlayer(withoutScoreViewer: videoOnly)
+					setupPlayer(withoutScoreViewer: studentData.playableViewVideoOnly)
 				})
 				.onDisappear(perform: {
 					viewModel.videoPlayer!.pause()
