@@ -62,6 +62,7 @@
 		C878277129054B380007DDC1 /* WizardCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878277029054B380007DDC1 /* WizardCalculator.swift */; };
 		C8782773290586590007DDC1 /* WizardExperienceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8782772290586590007DDC1 /* WizardExperienceView.swift */; };
 		C8782779290E4AD80007DDC1 /* WizardVideos in Resources */ = {isa = PBXBuildFile; fileRef = C8782778290E4AD80007DDC1 /* WizardVideos */; };
+		C878277B291670780007DDC1 /* ExperienceFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878277A291670780007DDC1 /* ExperienceFeedback.swift */; };
 		C88E652C28D3231A000FDC2D /* scorewind_ios_xml.zip in Resources */ = {isa = PBXBuildFile; fileRef = C88E652B28D3231A000FDC2D /* scorewind_ios_xml.zip */; };
 		C8E063F028B0E20E000B3D67 /* MyCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E063EF28B0E20E000B3D67 /* MyCourse.swift */; };
 /* End PBXBuildFile section */
@@ -146,6 +147,7 @@
 		C878277029054B380007DDC1 /* WizardCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardCalculator.swift; sourceTree = "<group>"; };
 		C8782772290586590007DDC1 /* WizardExperienceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardExperienceView.swift; sourceTree = "<group>"; };
 		C8782778290E4AD80007DDC1 /* WizardVideos */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WizardVideos; sourceTree = "<group>"; };
+		C878277A291670780007DDC1 /* ExperienceFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperienceFeedback.swift; sourceTree = "<group>"; };
 		C88E652B28D3231A000FDC2D /* scorewind_ios_xml.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = scorewind_ios_xml.zip; sourceTree = "<group>"; };
 		C8E063EF28B0E20E000B3D67 /* MyCourse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCourse.swift; sourceTree = "<group>"; };
 		F3441470A2546CDD3AD7E6C9 /* Pods_ScoreWind.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScoreWind.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -303,6 +305,7 @@
 				C878276528F94D290007DDC1 /* PlayableFeedback.swift */,
 				C878276728F9B8B90007DDC1 /* DoYouKnowFeedback.swift */,
 				C878276B29044C790007DDC1 /* ListInCourse.swift */,
+				C878277A291670780007DDC1 /* ExperienceFeedback.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -533,6 +536,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C878277B291670780007DDC1 /* ExperienceFeedback.swift in Sources */,
 				C878276E2904F2DA0007DDC1 /* WizardDoYouKnowView.swift in Sources */,
 				C878275928E88B8E0007DDC1 /* CourseDownloadButtonView.swift in Sources */,
 				C8E063F028B0E20E000B3D67 /* MyCourse.swift in Sources */,

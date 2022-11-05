@@ -16,21 +16,32 @@ struct WizardExperienceView: View {
 	var body: some View {
 		VStack {
 			Spacer()
-			Text("Start with Starter Kit")
+			Text(ExperienceFeedback.starterKit.rawValue)
 				.modifier(FeedbackOptionsModifier())
 				.onTapGesture {
 					print("choose Starter Kit")
 					stepName = .wizardResult
 					studentData.wizardStepNames.append(stepName)
+					scorewindData.createRecommendation(availableCourses: scorewindData.allCourses, studentData: studentData, experienceFeedback: .starterKit)
 				}
 				.padding(.bottom,20)
 			
-			Text("Pick something else")
+			Text(ExperienceFeedback.playedBefore.rawValue)
 				.modifier(FeedbackOptionsModifier())
 				.onTapGesture {
 					print("choose Pick something else")
 					stepName = .wizardDoYouKnow
 					studentData.wizardStepNames.append(stepName)
+					scorewindData.createRecommendation(availableCourses: scorewindData.allCourses, studentData: studentData, experienceFeedback: .playedBefore)
+				}.padding(.bottom,20)
+			
+			Text(ExperienceFeedback.continueLearning.rawValue)
+				.modifier(FeedbackOptionsModifier())
+				.onTapGesture {
+					print("choose Pick something else")
+					stepName = .wizardDoYouKnow
+					studentData.wizardStepNames.append(stepName)
+					scorewindData.createRecommendation(availableCourses: scorewindData.allCourses, studentData: studentData, experienceFeedback: .continueLearning)
 				}
 			Spacer()
 		}
