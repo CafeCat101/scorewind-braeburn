@@ -17,15 +17,6 @@ class StudentData: ObservableObject {
 	@Published var wizardStepNames:[Page] = []
 	@Published var playableViewVideoOnly = true
 	
-	func getInstrumentChoice()->String{
-		return useriCloudKeyValueStore.string(forKey:"instrument") ?? ""
-	}
-	
-	func updateInstrumentChoice(instrument:InstrumentType) {
-		useriCloudKeyValueStore.set(instrument.rawValue, forKey: "instrument")
-		useriCloudKeyValueStore.synchronize()
-	}
-	
 	//track completed lessons
 	func getCompletedLessons() -> [String:Any] {
 		return useriCloudKeyValueStore.dictionary(forKey: "completedLessons") ?? [:]
@@ -277,6 +268,29 @@ class StudentData: ObservableObject {
 		}
 	}
 	
+	/*
+	 DATA FOR WIZARD
+	 */
+	
+	func getInstrumentChoice()->String{
+		return useriCloudKeyValueStore.string(forKey:"instrument") ?? ""
+	}
+	
+	func updateInstrumentChoice(instrument:InstrumentType) {
+		useriCloudKeyValueStore.set(instrument.rawValue, forKey: "instrument")
+		useriCloudKeyValueStore.synchronize()
+	}
+	
+	func getExperience()->String {
+		return useriCloudKeyValueStore.string(forKey:"experience") ?? ""
+	}
+	
+	func updateExperience(experience: ExperienceFeedback) {
+		useriCloudKeyValueStore.set(experience.rawValue, forKey: "experience")
+		useriCloudKeyValueStore.synchronize()
+	}
+
+  
 	func getWizardDiscovered() -> [String:Any] {
 		return useriCloudKeyValueStore.dictionary(forKey: "wizardDiscovered") ?? [:]
 	}

@@ -7,7 +7,15 @@
 
 import Foundation
 enum ExperienceFeedback:String {
-	case starterKit = "I've never played it before" //never played it, start from 101
-	case playedBefore = "I played this instrument before" //if no prior wizard data, show this option. Start from 103
-	case continueLearning = "Continue learning" //If prior wizard data exists, show this option. Start from last completed lesson or course
+	case starterKit = "start" //never played it, should start from 101
+	case continueLearning = "continue" //If prior wizard data exists, show this option. Start from last completed lesson or course or 103
+	
+	func getLabel() -> String{
+		switch self {
+		case .starterKit:
+			return "I've never played it before"
+		case .continueLearning:
+			return "Continue learning"
+		}
+	}
 }

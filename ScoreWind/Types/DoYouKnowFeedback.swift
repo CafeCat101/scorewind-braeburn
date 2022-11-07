@@ -8,9 +8,9 @@
 import Foundation
 
 enum DoYouKnowFeedback: Int, CaseIterable {
-	case allOfThem = 0
-	case someOfThem = 1
-	case fewOfThem = 2
+	case allOfThem = 3
+	case someOfThem = 2
+	case fewOfThem = 1
 	
 	func getLabel() -> String {
 		switch self {

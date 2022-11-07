@@ -14,6 +14,8 @@ struct WizardDoYouKnowView: View {
 	@ObservedObject var studentData:StudentData
 	@StateObject var viewModel = ViewModel()
 	let screenSize: CGRect = UIScreen.main.bounds
+	@State private var currentQuestionIndex = 0
+	@State private var feedbackScores = 0
 	
 	var body: some View {
 		VStack {
@@ -24,12 +26,14 @@ struct WizardDoYouKnowView: View {
 					.bold()
 					.foregroundColor(Color("WizardBackArrow"))
 					.padding(EdgeInsets(top: 50, leading: 30, bottom: 30, trailing: 30))
-				VStack(alignment:.leading){
+				Text("\(scorewindData.getListInCourse(targetText: scorewindData.wizardPickedCourse.content, listName: .requirement)[currentQuestionIndex])")
+					.padding(EdgeInsets(top: 0, leading: 30, bottom: 50, trailing: 30))
+				
+				/*VStack(alignment:.leading){
 					ForEach(scorewindData.getListInCourse(targetText: scorewindData.wizardPickedCourse.content, listName: .requirement), id:\.self) { highlight in
-						//Label(highlight, systemImage: "circle.dotted")
 						Text("\u{2022}\(highlight)")
 					}
-				}.padding(EdgeInsets(top: 0, leading: 30, bottom: 50, trailing: 30))
+				}.padding(EdgeInsets(top: 0, leading: 30, bottom: 50, trailing: 30))*/
 				
 				
 			}
@@ -45,8 +49,16 @@ struct WizardDoYouKnowView: View {
 						.modifier(FeedbackOptionsModifier())
 						.onTapGesture {
 							print("feedback clicked value \(feedbackItem.rawValue)")
-							stepName = .wizardPlayable
-							studentData.wizardStepNames.append(stepName)
+							feedbackScores = feedbackScores + feedbackItem.rawValue
+							print("feedback scores sum \(feedbackScores)")
+							if (currentQuestionIndex + 1) < scorewindData.getListInCourse(targetText: scorewindData.wizardPickedCourse.content, listName: .requirement).count {
+								currentQuestionIndex = currentQuestionIndex + 1
+								
+							} else {
+								stepName = .wizardPlayable
+								studentData.wizardStepNames.append(stepName)
+							}
+							
 						}
 				}
 			}.padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))

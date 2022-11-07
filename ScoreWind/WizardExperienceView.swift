@@ -16,32 +16,19 @@ struct WizardExperienceView: View {
 	var body: some View {
 		VStack {
 			Spacer()
-			Text(ExperienceFeedback.starterKit.rawValue)
+			Text(ExperienceFeedback.starterKit.getLabel())
 				.modifier(FeedbackOptionsModifier())
 				.onTapGesture {
 					print("choose Starter Kit")
-					stepName = .wizardResult
-					studentData.wizardStepNames.append(stepName)
-					scorewindData.createRecommendation(availableCourses: scorewindData.allCourses, studentData: studentData, experienceFeedback: .starterKit)
+					gotFeedback(goToStep: .wizardResult, selectedFeedback: .starterKit)
 				}
 				.padding(.bottom,20)
 			
-			Text(ExperienceFeedback.playedBefore.rawValue)
+			Text(ExperienceFeedback.continueLearning.getLabel())
 				.modifier(FeedbackOptionsModifier())
 				.onTapGesture {
 					print("choose Pick something else")
-					stepName = .wizardDoYouKnow
-					studentData.wizardStepNames.append(stepName)
-					scorewindData.createRecommendation(availableCourses: scorewindData.allCourses, studentData: studentData, experienceFeedback: .playedBefore)
-				}.padding(.bottom,20)
-			
-			Text(ExperienceFeedback.continueLearning.rawValue)
-				.modifier(FeedbackOptionsModifier())
-				.onTapGesture {
-					print("choose Pick something else")
-					stepName = .wizardDoYouKnow
-					studentData.wizardStepNames.append(stepName)
-					scorewindData.createRecommendation(availableCourses: scorewindData.allCourses, studentData: studentData, experienceFeedback: .continueLearning)
+					gotFeedback(goToStep: .wizardDoYouKnow, selectedFeedback: .continueLearning)
 				}
 			Spacer()
 		}
@@ -49,6 +36,14 @@ struct WizardExperienceView: View {
 		.onAppear(perform: {
 			
 		})
+	}
+	
+	private func gotFeedback(goToStep: Page, selectedFeedback: ExperienceFeedback) {
+		studentData.updateExperience(experience: selectedFeedback)
+		if scorewindData.createRecommendation(availableCourses: scorewindData.allCourses, studentData: studentData) {
+			stepName = goToStep
+			studentData.wizardStepNames.append(stepName)
+		}
 	}
 }
 
