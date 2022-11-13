@@ -8,11 +8,13 @@
 import Foundation
 
 extension ScorewindData {
-	func createRecommendation(availableCourses:[Course], studentData: StudentData) -> Bool {
+	func createRecommendation(availableCourses:[Course], studentData: StudentData) -> Page {
 		var testCourseId = 0
 		var testLessonId = 0
+		var goToWizardStep:Page = .wizardChooseInstrument
+		let currentStepName = studentData.wizardStepNames[studentData.wizardStepNames.count-1]
 		
-		if studentData.wizardStepNames[studentData.wizardStepNames.count-1] == Page.wizardExperience {
+		if currentStepName == Page.wizardExperience {
 			if studentData.getExperience() == ExperienceFeedback.continueLearning.rawValue {
 				if studentData.getInstrumentChoice() == InstrumentType.guitar.rawValue {
 					testCourseId = 96111
@@ -21,6 +23,7 @@ extension ScorewindData {
 					testCourseId = 94882
 					testLessonId = 94949
 				}
+				goToWizardStep = .wizardDoYouKnow
 				
 			} else {
 				if studentData.getInstrumentChoice() == InstrumentType.guitar.rawValue {
@@ -30,18 +33,22 @@ extension ScorewindData {
 					testCourseId = 94069
 					testLessonId = 90662
 				}
+				goToWizardStep = .wizardResult
+				
 			}
+		}
+		
+		if currentStepName == .wizardDoYouKnow {
+			
 		}
 		
 		if testCourseId > 0 && testLessonId > 0 {
 			wizardPickedCourse = availableCourses.first(where: {$0.id == testCourseId}) ?? Course()
 			wizardPickedLesson = wizardPickedCourse.lessons.first(where: {$0.id == testLessonId}) ?? Lesson()
 			wizardPickedTimestamps = (allTimestamps.first(where: {$0.id == testCourseId})?.lessons.first(where: {$0.id == testLessonId})!.timestamps)!
-			
-			return true
-		} else {
-			return false
 		}
+		
+		return goToWizardStep
 	}
 
 }

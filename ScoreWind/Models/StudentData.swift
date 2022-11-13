@@ -17,6 +17,9 @@ class StudentData: ObservableObject {
 	@Published var wizardStepNames:[Page] = []
 	@Published var playableViewVideoOnly = true
 	
+	/*
+	 DATA FOR MY COURSES
+	 */
 	//track completed lessons
 	func getCompletedLessons() -> [String:Any] {
 		return useriCloudKeyValueStore.dictionary(forKey: "completedLessons") ?? [:]
@@ -289,10 +292,22 @@ class StudentData: ObservableObject {
 		useriCloudKeyValueStore.set(experience.rawValue, forKey: "experience")
 		useriCloudKeyValueStore.synchronize()
 	}
+	
+	func getDoYouKnow()-> Any {
+		return useriCloudKeyValueStore.dictionary(forKey: "doYouKnow") ?? doYouKnow(courseID: 0, answers: [])
+	}
+	
+	func updateDoYouKnow(courseID:Int, feedbackValues:[Int]) {
+		useriCloudKeyValueStore.set(doYouKnow(courseID: courseID, answers: feedbackValues), forKey: "doYouKnow")
+	}
 
-  
 	func getWizardDiscovered() -> [String:Any] {
 		return useriCloudKeyValueStore.dictionary(forKey: "wizardDiscovered") ?? [:]
+	}
+	
+	struct doYouKnow {
+		var courseID: Int
+		var answers: [Int]
 	}
 	
 }

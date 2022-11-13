@@ -20,7 +20,7 @@ struct WizardExperienceView: View {
 				.modifier(FeedbackOptionsModifier())
 				.onTapGesture {
 					print("choose Starter Kit")
-					gotFeedback(goToStep: .wizardResult, selectedFeedback: .starterKit)
+					gotFeedback(selectedFeedback: .starterKit)
 				}
 				.padding(.bottom,20)
 			
@@ -28,7 +28,7 @@ struct WizardExperienceView: View {
 				.modifier(FeedbackOptionsModifier())
 				.onTapGesture {
 					print("choose Pick something else")
-					gotFeedback(goToStep: .wizardDoYouKnow, selectedFeedback: .continueLearning)
+					gotFeedback(selectedFeedback: .continueLearning)
 				}
 			Spacer()
 		}
@@ -38,11 +38,14 @@ struct WizardExperienceView: View {
 		})
 	}
 	
-	private func gotFeedback(goToStep: Page, selectedFeedback: ExperienceFeedback) {
+	private func gotFeedback(selectedFeedback: ExperienceFeedback) {
 		studentData.updateExperience(experience: selectedFeedback)
-		if scorewindData.createRecommendation(availableCourses: scorewindData.allCourses, studentData: studentData) {
-			stepName = goToStep
-			studentData.wizardStepNames.append(stepName)
+		
+		let nextStepPage = scorewindData.createRecommendation(availableCourses: scorewindData.allCourses, studentData: studentData)
+		
+		if nextStepPage != .wizardChooseInstrument {
+			stepName = nextStepPage
+			studentData.wizardStepNames.append(nextStepPage)
 		}
 	}
 }
