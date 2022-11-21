@@ -18,4 +18,8 @@ enum ExperienceFeedback:String {
 			return "Continue learning"
 		}
 	}
+	
+	func getKeyName() -> String {
+		return "experience"
+	}
 }

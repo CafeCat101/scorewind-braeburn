@@ -293,21 +293,20 @@ class StudentData: ObservableObject {
 		useriCloudKeyValueStore.synchronize()
 	}
 	
-	func getDoYouKnow()-> Any {
-		return useriCloudKeyValueStore.dictionary(forKey: "doYouKnow") ?? doYouKnow(courseID: 0, answers: [])
+	func getDoYouKnow()-> [String:Any] {
+		return useriCloudKeyValueStore.dictionary(forKey: "doYouKnow") ?? [:]
 	}
 	
 	func updateDoYouKnow(courseID:Int, feedbackValues:[Int]) {
-		useriCloudKeyValueStore.set(doYouKnow(courseID: courseID, answers: feedbackValues), forKey: "doYouKnow")
+		var lastDoYouKnow = getDoYouKnow()
+		lastDoYouKnow.updateValue(feedbackValues, forKey: String(courseID))
+		useriCloudKeyValueStore.set(lastDoYouKnow, forKey: "doYouKnow")
+		
+		useriCloudKeyValueStore.synchronize()
 	}
 
 	func getWizardDiscovered() -> [String:Any] {
 		return useriCloudKeyValueStore.dictionary(forKey: "wizardDiscovered") ?? [:]
-	}
-	
-	struct doYouKnow {
-		var courseID: Int
-		var answers: [Int]
 	}
 	
 }

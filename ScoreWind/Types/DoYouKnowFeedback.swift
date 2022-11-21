@@ -22,4 +22,9 @@ enum DoYouKnowFeedback: Int, CaseIterable {
 			return "No"
 		}
 	}
+	
+	func getKeyName() -> String {
+		return "doYouKnow"
+	}
+	
 }

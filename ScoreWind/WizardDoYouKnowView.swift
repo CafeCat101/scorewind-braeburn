@@ -63,6 +63,7 @@ struct WizardDoYouKnowView: View {
 		.background(Color("AppBackground"))
 		.onAppear(perform: {
 			print("[debug] WizardDoYouKnowView, wizardStepNames \(studentData.wizardStepNames)")
+			currentQuestionIndex = 0
 		})
 	}
 }

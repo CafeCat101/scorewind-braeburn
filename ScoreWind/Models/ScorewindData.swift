@@ -386,7 +386,7 @@ class ScorewindData: ObservableObject {
 		}
 	}
 	
-	private func cleanSortOrder(sortValue:String) -> String {
+	internal func cleanSortOrder(sortValue:String) -> String {
 		let cleanNumber = sortValue.replacingOccurrences(of: "^0*", with: "", options: .regularExpression)
 		return cleanNumber
 	}

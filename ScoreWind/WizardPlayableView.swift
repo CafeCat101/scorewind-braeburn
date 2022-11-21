@@ -121,7 +121,8 @@ struct WizardPlayableView: View {
 		}
 		.background(Color("AppBackground"))
 		.onAppear(perform: {
-			//
+			print("[debug] WizardPlayableView, wizardPickedCourse \(scorewindData.wizardPickedCourse.title)")
+			print("[debug] WizardPlayableView, wizardPickedLesson \(scorewindData.wizardPickedLesson.title)")
 		})
 	}
 	

@@ -30,6 +30,7 @@ struct WizardInstrumentView: View {
 				Button(action:{
 					stepName = .wizardExperience
 					studentData.updateInstrumentChoice(instrument: .guitar)
+					studentData.removeAKey(keyName: "experience")
 					studentData.wizardStepNames.append(stepName)
 				}){
 					Circle()

@@ -40,6 +40,7 @@ struct WizardExperienceView: View {
 	
 	private func gotFeedback(selectedFeedback: ExperienceFeedback) {
 		studentData.updateExperience(experience: selectedFeedback)
+		studentData.removeAKey(keyName: "doYouKnow")
 		
 		let nextStepPage = scorewindData.createRecommendation(availableCourses: scorewindData.allCourses, studentData: studentData)
 		

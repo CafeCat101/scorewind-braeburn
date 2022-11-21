@@ -29,4 +29,8 @@ enum PlayableFeedback: Int, CaseIterable {
 		}
 	}
 	
+	func getKeyName() -> String {
+		return "playable"
+	}
+	
 }
