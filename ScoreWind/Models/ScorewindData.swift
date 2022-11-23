@@ -434,6 +434,7 @@ class ScorewindData: ObservableObject {
 		rst = rst.replacingOccurrences(of: "&nbsp;", with: " ")
 		rst = rst.replacingOccurrences(of: "</p><p>", with: "\n\n")
 		rst = rst.replacingOccurrences(of: "<br />", with: "\n")
+		rst = rst.replacingOccurrences(of: "<br>", with: "\n")
 		rst = rst.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
 		return rst
 	}
