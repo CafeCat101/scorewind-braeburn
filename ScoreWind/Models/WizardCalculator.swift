@@ -62,7 +62,8 @@ extension ScorewindData {
 					if previousCourse.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"}) {
 						let veryFirstCourse = availableCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
 						assignedCourseId = veryFirstCourse.id
-						assignedLessonId = 0
+						assignedLessonId = veryFirstCourse.lessons[0].id
+						goToWizardStep = .wizardResult
 					} else {
 						let getMiddleLesson = assignMiddleLessonInCourse(targetCourse: previousCourse)
 						assignedCourseId = getMiddleLesson["courseID"] ?? 0
@@ -75,6 +76,7 @@ extension ScorewindData {
 					if previousCourse.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"}) {
 						let veryFirstCourse = availableCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
 						assignedCourseId = veryFirstCourse.id
+						goToWizardStep = .wizardResult
 					} else {
 						assignedCourseId = assignPrevioudCourse(targetCourse: wizardPickedCourse).id
 					}
