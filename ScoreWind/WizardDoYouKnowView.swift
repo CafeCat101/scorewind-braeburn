@@ -19,46 +19,55 @@ struct WizardDoYouKnowView: View {
 	
 	var body: some View {
 		VStack {
-			Spacer()
-			VStack{
-				Text("Do you know?")
-					.font(.title3)
-					.bold()
-					.foregroundColor(Color("WizardBackArrow"))
-					.padding(EdgeInsets(top: 50, leading: 30, bottom: 30, trailing: 30))
-				Text("\(scorewindData.getListInCourse(targetText: scorewindData.wizardPickedCourse.content, listName: .requirement)[currentQuestionIndex])")
-					.padding(EdgeInsets(top: 0, leading: 30, bottom: 50, trailing: 30))
-			}
-			.background(Color("WizardFeedBack"))
-			.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
-			.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
-			
-			Spacer()
-			
-			VStack {
-				ForEach(DoYouKnowFeedback.allCases, id: \.self) {feedbackItem in
-					Text(feedbackItem.getLabel())
-						.modifier(FeedbackOptionsModifier())
-						.onTapGesture {
-							print("feedback clicked value \(feedbackItem.rawValue)")
-							feedbackScores.append(feedbackItem.rawValue)
-							print("feedback scores sum \(feedbackScores)")
-							
-							if (currentQuestionIndex + 1) < scorewindData.getListInCourse(targetText: scorewindData.wizardPickedCourse.content, listName: .requirement).count {
-								currentQuestionIndex = currentQuestionIndex + 1
-							} else {
-								studentData.updateDoYouKnow(courseID: scorewindData.wizardPickedCourse.id, feedbackValues: feedbackScores)
-								let nextStep = scorewindData.createRecommendation(availableCourses: scorewindData.allCourses, studentData: studentData)
-								
-								if nextStep != .wizardChooseInstrument {
-									stepName = nextStep
-									studentData.wizardStepNames.append(nextStep)
-								}
-							}
-							
-						}
+			if currentQuestionIndex < scorewindData.getListInCourse(targetText: scorewindData.wizardPickedCourse.content, listName: .requirement).count {
+				//show questions
+				Spacer()
+				VStack{
+					Text("Do you know?")
+						.font(.title3)
+						.bold()
+						.foregroundColor(Color("WizardBackArrow"))
+						.padding(EdgeInsets(top: 50, leading: 30, bottom: 30, trailing: 30))
+					Text("\(scorewindData.getListInCourse(targetText: scorewindData.wizardPickedCourse.content, listName: .requirement)[currentQuestionIndex])")
+						.padding(EdgeInsets(top: 0, leading: 30, bottom: 50, trailing: 30))
 				}
-			}.padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
+				.background(Color("WizardFeedBack"))
+				.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+				.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
+				
+				Spacer()
+				
+				VStack {
+					ForEach(DoYouKnowFeedback.allCases, id: \.self) {feedbackItem in
+						Text(feedbackItem.getLabel())
+							.modifier(FeedbackOptionsModifier())
+							.onTapGesture {
+								print("[debug] WizardDoYouKnowView, feedback clicked value \(feedbackItem.rawValue)")
+								feedbackScores.append(feedbackItem.rawValue)
+								print("[debug] WizardDoYouKnowView, feedback scores sum \(feedbackScores)")
+								
+								if (currentQuestionIndex+1) < scorewindData.getListInCourse(targetText: scorewindData.wizardPickedCourse.content, listName: .requirement).count {
+									currentQuestionIndex = currentQuestionIndex + 1
+								} else {
+									studentData.updateDoYouKnow(courseID: scorewindData.wizardPickedCourse.id, feedbackValues: feedbackScores)
+									let nextStep = scorewindData.createRecommendation(availableCourses: scorewindData.allCourses, studentData: studentData)
+									
+									if nextStep != .wizardChooseInstrument {
+										stepName = nextStep
+										studentData.wizardStepNames.append(nextStep)
+										//RESET SCORES AND QUESTION INDEX FOR POSSIBLE NEXT DO YOU NOW VIEW
+										currentQuestionIndex = 0
+										feedbackScores = []
+									}
+								}
+								
+							}
+					}
+				}.padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
+			}
+			
+			
+			
 		}
 		.background(Color("AppBackground"))
 		.onAppear(perform: {

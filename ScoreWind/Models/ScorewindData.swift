@@ -231,7 +231,7 @@ class ScorewindData: ObservableObject {
 				}
 			}
 		}
-		
+		print("[deubg] ScorewindData, getListCourse count \(capture.count)")
 		return capture
 	}
 	
@@ -355,7 +355,7 @@ class ScorewindData: ObservableObject {
 		var findCourse = Course()
 		if currentCourse.sortValue.isEmpty == false {
 			let sortOrderArr = currentCourse.sortValue.components(separatedBy: "-")
-			print("[debug] ScorewindData, sortOrderArr \(sortOrderArr)")
+			print("[debug] ScorewindData, course.id \(currentCourse.id), sortOrderArr \(sortOrderArr)")
 			if sortOrderArr.count > 0 {
 				let incrementNumber = (order == SearchParameter.ASC) ? 1 : -1
 				var nextSortOrderStr = ""

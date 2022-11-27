@@ -17,20 +17,27 @@ extension ScorewindData {
 		if currentStepName == Page.wizardExperience {
 			if studentData.getExperience() == ExperienceFeedback.continueLearning.rawValue {
 				if studentData.getInstrumentChoice() == InstrumentType.guitar.rawValue {
-					assignedCourseId = 96111
-					assignedLessonId = 0//95419
+					let guitar103Courses = availableCourses.filter({$0.instrument == InstrumentType.guitar.rawValue && $0.category.contains(where: {$0.name == "Guitar 103"})})
+					if guitar103Courses.count > 0 {
+						assignedCourseId = guitar103Courses.sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})[0].id //G103.1 id:96100
+						assignedLessonId = 0
+					} else {
+						//remember to handle this
+					}
 				} else if studentData.getInstrumentChoice() == InstrumentType.violin.rawValue {
-					assignedCourseId = 94882
-					assignedLessonId = 0//94949
+					let violin103Courses = availableCourses.filter({$0.instrument == InstrumentType.violin.rawValue && $0.category.contains(where: {$0.name == "Violin 103"})})
+					if violin103Courses.count > 0 {
+						assignedCourseId = violin103Courses.sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})[0].id //V103.1 id:98384
+						assignedLessonId = 0
+					} else {
+						//remember to handle this
+					}
 				}
-				
 			} else {
-				if studentData.getInstrumentChoice() == InstrumentType.guitar.rawValue {
-					assignedCourseId = 93950
-					assignedLessonId = 90696
-				} else if studentData.getInstrumentChoice() == InstrumentType.violin.rawValue {
-					assignedCourseId = 94069
-					assignedLessonId = 90662
+				let veryFirstCourse = availableCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
+				if veryFirstCourse.id > 0 {
+					assignedCourseId = veryFirstCourse.id
+					assignedLessonId = veryFirstCourse.lessons[0].id
 				}
 				goToWizardStep = .wizardResult
 			}
@@ -50,13 +57,40 @@ extension ScorewindData {
 					assignedLessonId = getLastLessonInCourse["lessonID"] ?? 0
 				} else if finalFeedback == .someOfThem {
 					// "Playable" to find the middle lesson with score in previous course
-					let getMiddleLesson = assignMiddleLessonInCourse(targetCourse: wizardPickedCourse)
-					assignedCourseId = getMiddleLesson["courseID"] ?? 0
-					assignedLessonId = getMiddleLesson["lessonID"] ?? 0
+					let previousCourse = assignPrevioudCourse(targetCourse: wizardPickedCourse)
+					
+					if previousCourse.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"}) {
+						let veryFirstCourse = availableCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
+						assignedCourseId = veryFirstCourse.id
+						assignedLessonId = 0
+					} else {
+						let getMiddleLesson = assignMiddleLessonInCourse(targetCourse: previousCourse)
+						assignedCourseId = getMiddleLesson["courseID"] ?? 0
+						assignedLessonId = getMiddleLesson["lessonID"] ?? 0
+					}
 				} else {
 					// "Do you know" to previous course
-					assignedCourseId = assignPrevioudCourse(targetCourse: wizardPickedCourse)
+					let previousCourse = assignPrevioudCourse(targetCourse: wizardPickedCourse)
+					
+					if previousCourse.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"}) {
+						let veryFirstCourse = availableCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
+						assignedCourseId = veryFirstCourse.id
+					} else {
+						assignedCourseId = assignPrevioudCourse(targetCourse: wizardPickedCourse).id
+					}
+					
 					assignedLessonId = 0
+					
+					/**FOR GIVING THE APP TO ESIN AND RICARDO ONLY**/
+					/*if studentData.getInstrumentChoice() == InstrumentType.guitar.rawValue {
+						assignedCourseId = 93950
+						assignedLessonId = 90696
+					} else if studentData.getInstrumentChoice() == InstrumentType.violin.rawValue {
+						assignedCourseId = 94069
+						assignedLessonId = 90662
+					}
+					goToWizardStep = .wizardResult*/
+					/***********************************************/
 				}
 			}
 		}
@@ -70,25 +104,28 @@ extension ScorewindData {
 		
 		if assignedLessonId > 0 {
 			wizardPickedLesson = wizardPickedCourse.lessons.first(where: {$0.id == assignedLessonId}) ?? Lesson()
-			wizardPickedTimestamps = (allTimestamps.first(where: {$0.id == assignedCourseId})?.lessons.first(where: {$0.id == assignedLessonId})!.timestamps)!
+			wizardPickedTimestamps = (allTimestamps.first(where: {$0.id == assignedCourseId})?.lessons.first(where: {$0.id == assignedLessonId})!.timestamps) ?? []
 			print("[debug] createRecommendation, assignLessonId \(assignedLessonId)")
 		} else {
 			wizardPickedLesson = Lesson()
 			wizardPickedTimestamps = []
 		}
 		
-		
-		if assignedCourseId > 0 && assignedLessonId > 0 {
-			goToWizardStep = .wizardPlayable
-		} else {
-			goToWizardStep = .wizardDoYouKnow
+		if goToWizardStep != .wizardResult {
+			if assignedCourseId > 0 && assignedLessonId > 0 {
+				goToWizardStep = .wizardPlayable
+			} else {
+				goToWizardStep = .wizardDoYouKnow
+			}
 		}
+		
+		print("[debug] createRecommendation, goToWizardStep \(goToWizardStep)")
 		return goToWizardStep
 	}
 	
 	private func findSortOrderString(targetCourse: Course, order: SearchParameter) -> String {
-		let sortOrderArr = currentCourse.sortValue.components(separatedBy: "-")
-		print("[debug] WizardCalculator, sortOrderArr \(sortOrderArr)")
+		let sortOrderArr = targetCourse.sortValue.components(separatedBy: "-")
+		print("[debug] WizardCalculator, course.id \(targetCourse.id), sortOrderArr \(sortOrderArr)")
 		var sortOrderStr = ""
 		
 		if sortOrderArr.count > 0 {
@@ -107,15 +144,15 @@ extension ScorewindData {
 		return sortOrderStr
 	}
 	
-	private func assignPrevioudCourse(targetCourse: Course) -> Int {
+	private func assignPrevioudCourse(targetCourse: Course) -> Course {
 		var findCourse = Course()
 		if targetCourse.sortValue.isEmpty == false {
 			let previoudSortValue = findSortOrderString(targetCourse: targetCourse, order: .DESC)
 			if previoudSortValue.isEmpty == false {
-				findCourse = allCourses.first(where: {cleanSortOrder(sortValue: $0.sortValue) == previoudSortValue && $0.instrument == currentCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: currentCourse.category, depth: 2)}) ?? Course()
+				findCourse = allCourses.first(where: {cleanSortOrder(sortValue: $0.sortValue) == previoudSortValue && $0.instrument == targetCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: targetCourse.category, depth: 2)}) ?? Course()
 			}
 		}
-		return findCourse.id
+		return findCourse
 	}
 	
 	private func assignLastLessonInCourse(targetCourse: Course) -> [String:Int] {
@@ -169,7 +206,7 @@ extension ScorewindData {
 		let sortedScores = calculateScore.sorted(by: {$0.value < $1.value})
 		print("[debug] getDoYouKnowScore, sortedScores \(sortedScores)")
 		return sortedScores[0].key
-		
 	}
+
 
 }

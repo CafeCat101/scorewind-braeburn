@@ -37,7 +37,24 @@ class ScoreWindTests: XCTestCase {
 	}
 	
 	func testcreateRecommendation() throws {
+		//=>test guitar:do you know
+		//reset wizard data
+		studentData.removeAKey(keyName: "experience")
+		studentData.removeAKey(keyName: "doYouKnow")
+		studentData.removeAKey(keyName: "playable")
 		
+		//wizardInstrumentView
+		studentData.wizardStepNames = [.wizardChooseInstrument]
+		studentData.updateInstrumentChoice(instrument: .guitar)
+		studentData.wizardStepNames.append(Page.wizardExperience)
+		
+		//wizardExperienceView
+		studentData.updateExperience(experience: .continueLearning)
+		
+		let nextStepPage = scorewindData.createRecommendation(availableCourses: scorewindData.allCourses, studentData: studentData)
+		if nextStepPage != .wizardChooseInstrument {
+			studentData.wizardStepNames.append(nextStepPage)
+		}
 	}
 	
 }

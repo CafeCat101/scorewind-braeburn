@@ -62,6 +62,9 @@ struct WizardInstrumentView: View {
 		.background(Color("AppBackground"))
 		.onAppear(perform: {
 			studentData.wizardStepNames = [.wizardChooseInstrument]
+			studentData.removeAKey(keyName: "experience")
+			studentData.removeAKey(keyName: "doYouKnow")
+			studentData.removeAKey(keyName: "playable")
 		})
 	}
 	

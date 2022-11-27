@@ -145,7 +145,10 @@ struct WizardPlayableView: View {
 	
 	private func setupPlayer(withoutScoreViewer: Bool){
 		if withoutScoreViewer == false {
+			//viewModel.videoPlayer = AVPlayer(url: URL(string: decodeVideoURL(videoURL: scorewindData.wizardPickedLesson.video))!)
 			viewModel.videoPlayer = AVPlayer(url: URL(string: decodeVideoURL(videoURL: scorewindData.wizardPickedLesson.video))!)
+			//viewModel.videoPlayer?.play()
+			
 			viewModel.videoPlayer!.addPeriodicTimeObserver(forInterval: CMTime(value: 1, timescale: 3), queue: .main, using: { time in
 				let catchTime = time.seconds
 				
@@ -154,7 +157,12 @@ struct WizardPlayableView: View {
 				//print("[debug] LessonView, setupPlayer, ready to play")
 				print("find measure:"+String(atMeasure))
 			})
+			
+			if viewModel.viewedTimestampRecs!.count > 0 {
+				viewModel.playerGoTo(timestamp: 0.0)
+			}
 		} else {
+			/*
 			let downloadableVideoURL = URL(string: scorewindData.wizardPickedLesson.videoMP4.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!)!
 			let wizardVideoURL = Bundle.main.resourceURL!.appendingPathComponent("WizardVideos/\(downloadableVideoURL.lastPathComponent)")
 			print("[debug] WizardPlayableView, wizardVideoUrl.path \(wizardVideoURL.path)")
@@ -162,6 +170,9 @@ struct WizardPlayableView: View {
 				viewModel.videoPlayer = AVPlayer(url: wizardVideoURL)
 				viewModel.videoPlayer?.play()
 			}
+			 */
+			viewModel.videoPlayer = AVPlayer(url: URL(string: decodeVideoURL(videoURL: scorewindData.wizardPickedLesson.video))!)
+			viewModel.videoPlayer?.play()
 		}
 		
 	}

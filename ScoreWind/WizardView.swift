@@ -58,15 +58,21 @@ struct WizardView: View {
 			.overlay(alignment:.leading, content: {
 				//::NAVIGATE BACK
 				if studentData.wizardStepNames.count > 1 && studentData.playableViewVideoOnly && userRole == .student {
-					Label("Previous step", systemImage: "chevron.backward.circle.fill")
+					//original back one step icon chevron.backward.circle.fill
+					Label("Previous step", systemImage: "restart.circle.fill")
 						.padding([.leading], 15)
 						.font(.title3)
 						.labelStyle(.iconOnly)
 						.onTapGesture(perform: {
+							//back to instrument
+							studentData.wizardStepNames.removeAll()
+							stepName = Page.wizardChooseInstrument
+							/*
+							//one step back
 							studentData.wizardStepNames.removeLast()
 							print("[debug] WizardView, wizardStepNames \(studentData.wizardStepNames)")
 							stepName = studentData.wizardStepNames[(studentData.wizardStepNames.count-1)]
-							
+							*/
 						})
 					
 				}
