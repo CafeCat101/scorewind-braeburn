@@ -76,12 +76,14 @@ extension ScorewindData {
 					if previousCourse.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"}) {
 						let veryFirstCourse = availableCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
 						assignedCourseId = veryFirstCourse.id
+						assignedLessonId = veryFirstCourse.lessons[0].id
 						goToWizardStep = .wizardResult
 					} else {
 						assignedCourseId = assignPrevioudCourse(targetCourse: wizardPickedCourse).id
+						assignedLessonId = 0
 					}
 					
-					assignedLessonId = 0
+					
 					
 					/**FOR GIVING THE APP TO ESIN AND RICARDO ONLY**/
 					/*if studentData.getInstrumentChoice() == InstrumentType.guitar.rawValue {
