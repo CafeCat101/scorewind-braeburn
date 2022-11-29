@@ -55,6 +55,11 @@ extension ScorewindData {
 					let getLastLessonInCourse = assignLastLessonInCourse(targetCourse: wizardPickedCourse)
 					assignedCourseId = getLastLessonInCourse["courseID"] ?? 0
 					assignedLessonId = getLastLessonInCourse["lessonID"] ?? 0
+					
+					if assignedLessonId == 0 {
+						let nextCourse = assignNextCourse(targetCourse: wizardPickedCourse)
+						assignedCourseId = nextCourse.id
+					}
 				} else if finalFeedback == .someOfThem {
 					// "Playable" to find the middle lesson with score in previous course
 					let previousCourse = assignPrevioudCourse(targetCourse: wizardPickedCourse)
@@ -68,6 +73,10 @@ extension ScorewindData {
 						let getMiddleLesson = assignMiddleLessonInCourse(targetCourse: previousCourse)
 						assignedCourseId = getMiddleLesson["courseID"] ?? 0
 						assignedLessonId = getMiddleLesson["lessonID"] ?? 0
+						
+						if assignedLessonId == 0 {
+							assignedCourseId = previousCourse.id
+						}
 					}
 				} else {
 					// "Do you know" to previous course
@@ -154,6 +163,17 @@ extension ScorewindData {
 			let previoudSortValue = findSortOrderString(targetCourse: targetCourse, order: .DESC)
 			if previoudSortValue.isEmpty == false {
 				findCourse = allCourses.first(where: {cleanSortOrder(sortValue: $0.sortValue) == previoudSortValue && $0.instrument == targetCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: targetCourse.category, depth: 2)}) ?? Course()
+			}
+		}
+		return findCourse
+	}
+	
+	private func assignNextCourse(targetCourse: Course) -> Course {
+		var findCourse = Course()
+		if targetCourse.sortValue.isEmpty == false {
+			let nextSortValue = findSortOrderString(targetCourse: targetCourse, order: .ASC)
+			if nextSortValue.isEmpty == false {
+				findCourse = allCourses.first(where: {cleanSortOrder(sortValue: $0.sortValue) == nextSortValue && $0.instrument == targetCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: targetCourse.category, depth: 2)}) ?? Course()
 			}
 		}
 		return findCourse
