@@ -16,6 +16,7 @@ class StudentData: ObservableObject {
 	private var userDefaults = UserDefaults.standard
 	@Published var wizardStepNames:[Page] = []
 	@Published var playableViewVideoOnly = true
+	var wizardRange:[WizardPicked] = []
 	
 	/*
 	 DATA FOR MY COURSES

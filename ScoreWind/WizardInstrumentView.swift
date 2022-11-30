@@ -65,6 +65,7 @@ struct WizardInstrumentView: View {
 			studentData.removeAKey(keyName: "experience")
 			studentData.removeAKey(keyName: "doYouKnow")
 			studentData.removeAKey(keyName: "playable")
+			studentData.wizardRange = []
 		})
 	}
 	

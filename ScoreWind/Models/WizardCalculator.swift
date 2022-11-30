@@ -124,6 +124,8 @@ extension ScorewindData {
 			wizardPickedTimestamps = []
 		}
 		
+		studentData.wizardRange.append(makeWizardPicked(courseID: assignedCourseId, lessonID: assignedLessonId, availableCourses: availableCourses))
+		
 		if goToWizardStep != .wizardResult {
 			if assignedCourseId > 0 && assignedLessonId > 0 {
 				goToWizardStep = .wizardPlayable
@@ -133,7 +135,25 @@ extension ScorewindData {
 		}
 		
 		print("[debug] createRecommendation, goToWizardStep \(goToWizardStep)")
+		print("[debug] createRecommendation, wizardRange \(studentData.wizardRange)")
 		return goToWizardStep
+	}
+	
+	private func makeWizardPicked(courseID: Int, lessonID: Int, availableCourses: [Course]) -> WizardPicked {
+		let theCourse = availableCourses.first(where: {$0.id == courseID}) ?? Course()
+		
+		var wizardPicked = WizardPicked()
+		if theCourse.id > 0 {
+			wizardPicked.courseID = courseID
+			wizardPicked.lessonID = lessonID
+			wizardPicked.courseSortValue = theCourse.sortValue
+			let theLesson = theCourse.lessons.first(where: {$0.id == lessonID}) ?? Lesson()
+			if theLesson.id > 0 {
+				wizardPicked.lessonSortValue = theLesson.sortValue
+			}
+		}
+		
+		return wizardPicked
 	}
 	
 	private func findSortOrderString(targetCourse: Course, order: SearchParameter) -> String {

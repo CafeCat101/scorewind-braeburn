@@ -46,7 +46,7 @@ struct Course: Codable, Identifiable{
 		shortDescription = ""
 		instrument = ""
 		level = "beginner"
-		sortValue = "1"
+		sortValue = ""
 		duration = "1d"
 		lessons = [Lesson()]
 		
@@ -110,6 +110,6 @@ struct Lesson: Codable, Identifiable{
 		scoreViewer = "lesson/scoreViewer"
 		image = "lesson/image"
 		step = 1
-		sortValue = "1"
+		sortValue = ""
 	}
 }
