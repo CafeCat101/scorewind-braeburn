@@ -41,7 +41,7 @@ struct WizardExperienceView: View {
 	private func gotFeedback(selectedFeedback: ExperienceFeedback) {
 		studentData.updateExperience(experience: selectedFeedback)
 		
-		let nextStepPage = scorewindData.createRecommendation(availableCourses: scorewindData.allCourses, studentData: studentData)
+		let nextStepPage = scorewindData.createRecommendation(studentData: studentData)
 		
 		if nextStepPage != .wizardChooseInstrument {
 			stepName = nextStepPage

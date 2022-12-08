@@ -50,7 +50,7 @@ struct WizardDoYouKnowView: View {
 									currentQuestionIndex = currentQuestionIndex + 1
 								} else {
 									studentData.updateDoYouKnow(courseID: scorewindData.wizardPickedCourse.id, feedbackValues: feedbackScores)
-									let nextStep = scorewindData.createRecommendation(availableCourses: scorewindData.allCourses, studentData: studentData)
+									let nextStep = scorewindData.createRecommendation(studentData: studentData)
 									
 									if nextStep != .wizardChooseInstrument {
 										stepName = nextStep

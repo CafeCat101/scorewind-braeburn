@@ -8,7 +8,7 @@
 import Foundation
 
 extension ScorewindData {
-	func createRecommendation(availableCourses:[Course], studentData: StudentData) -> Page {
+	func createRecommendation(studentData: StudentData) -> Page {
 		var assignedCourseId = 0
 		var assignedLessonId = 0
 		var goToWizardStep:Page = .wizardChooseInstrument
@@ -17,7 +17,7 @@ extension ScorewindData {
 		if currentStepName == Page.wizardExperience {
 			if studentData.getExperience() == ExperienceFeedback.continueLearning.rawValue {
 				if studentData.getInstrumentChoice() == InstrumentType.guitar.rawValue {
-					let guitar103Courses = availableCourses.filter({$0.instrument == InstrumentType.guitar.rawValue && $0.category.contains(where: {$0.name == "Guitar 103"})})
+					let guitar103Courses = allCourses.filter({$0.instrument == InstrumentType.guitar.rawValue && $0.category.contains(where: {$0.name == "Guitar 103"})})
 					if guitar103Courses.count > 0 {
 						assignedCourseId = guitar103Courses.sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})[0].id //G103.1 id:96100
 						assignedLessonId = 0
@@ -25,7 +25,7 @@ extension ScorewindData {
 						//remember to handle this
 					}
 				} else if studentData.getInstrumentChoice() == InstrumentType.violin.rawValue {
-					let violin103Courses = availableCourses.filter({$0.instrument == InstrumentType.violin.rawValue && $0.category.contains(where: {$0.name == "Violin 103"})})
+					let violin103Courses = allCourses.filter({$0.instrument == InstrumentType.violin.rawValue && $0.category.contains(where: {$0.name == "Violin 103"})})
 					if violin103Courses.count > 0 {
 						assignedCourseId = violin103Courses.sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})[0].id //V103.1 id:98384
 						assignedLessonId = 0
@@ -34,7 +34,7 @@ extension ScorewindData {
 					}
 				}
 			} else {
-				let veryFirstCourse = availableCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
+				let veryFirstCourse = allCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
 				if veryFirstCourse.id > 0 {
 					assignedCourseId = veryFirstCourse.id
 					assignedLessonId = veryFirstCourse.lessons[0].id
@@ -65,7 +65,7 @@ extension ScorewindData {
 					let previousCourse = assignPrevioudCourse(targetCourse: wizardPickedCourse)
 					
 					if previousCourse.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"}) {
-						let veryFirstCourse = availableCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
+						let veryFirstCourse = allCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
 						assignedCourseId = veryFirstCourse.id
 						assignedLessonId = veryFirstCourse.lessons[0].id
 						goToWizardStep = .wizardResult
@@ -83,7 +83,7 @@ extension ScorewindData {
 					let previousCourse = assignPrevioudCourse(targetCourse: wizardPickedCourse)
 					
 					if previousCourse.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"}) {
-						let veryFirstCourse = availableCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
+						let veryFirstCourse = allCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
 						assignedCourseId = veryFirstCourse.id
 						assignedLessonId = veryFirstCourse.lessons[0].id
 						goToWizardStep = .wizardResult
@@ -91,25 +91,27 @@ extension ScorewindData {
 						assignedCourseId = assignPrevioudCourse(targetCourse: wizardPickedCourse).id
 						assignedLessonId = 0
 					}
-					
-					
-					
-					/**FOR GIVING THE APP TO ESIN AND RICARDO ONLY**/
-					/*if studentData.getInstrumentChoice() == InstrumentType.guitar.rawValue {
-						assignedCourseId = 93950
-						assignedLessonId = 90696
-					} else if studentData.getInstrumentChoice() == InstrumentType.violin.rawValue {
-						assignedCourseId = 94069
-						assignedLessonId = 90662
-					}
-					goToWizardStep = .wizardResult*/
-					/***********************************************/
 				}
 			}
 		}
 		
+		if currentStepName == .wizardPlayable {
+			let currentPlayableFeedback = studentData.getPlayable().first(where: {$0.key == String(wizardPickedCourse.id)})
+			if currentPlayableFeedback?.value as! Int == 0 {
+				//course level up
+			} else if currentPlayableFeedback?.value as! Int == 1 {
+				//lesson level up
+			} else if currentPlayableFeedback?.value as! Int == 2 {
+				//go to go to wizard result
+			} else if currentPlayableFeedback?.value as! Int == 3 {
+				//lesson level down
+			} else if currentPlayableFeedback?.value as! Int == 4 {
+				//course level down
+			}
+		}
+		
 		if assignedCourseId > 0 {
-			wizardPickedCourse = availableCourses.first(where: {$0.id == assignedCourseId}) ?? Course()
+			wizardPickedCourse = allCourses.first(where: {$0.id == assignedCourseId}) ?? Course()
 			print("[debug] createRecommendation, assignCourseId \(assignedCourseId)")
 		} else {
 			wizardPickedCourse = Course()
@@ -124,7 +126,7 @@ extension ScorewindData {
 			wizardPickedTimestamps = []
 		}
 		
-		studentData.wizardRange.append(makeWizardPicked(courseID: assignedCourseId, lessonID: assignedLessonId, availableCourses: availableCourses))
+		studentData.wizardRange.append(makeWizardPicked(courseID: assignedCourseId, lessonID: assignedLessonId))
 		
 		if goToWizardStep != .wizardResult {
 			if assignedCourseId > 0 && assignedLessonId > 0 {
@@ -139,8 +141,8 @@ extension ScorewindData {
 		return goToWizardStep
 	}
 	
-	private func makeWizardPicked(courseID: Int, lessonID: Int, availableCourses: [Course]) -> WizardPicked {
-		let theCourse = availableCourses.first(where: {$0.id == courseID}) ?? Course()
+	private func makeWizardPicked(courseID: Int, lessonID: Int) -> WizardPicked {
+		let theCourse = allCourses.first(where: {$0.id == courseID}) ?? Course()
 		
 		var wizardPicked = WizardPicked()
 		if theCourse.id > 0 {
@@ -233,6 +235,10 @@ extension ScorewindData {
 		return result
 	}
 	
+	private func assignLessonInNextLevel(targetCourse: Course, targetLesson: Lesson) {
+		
+	}
+	
 	private func getDoYouKnowScore(answers:[Int]) -> DoYouKnowFeedback {
 		print("[debug] getDoYouKnowScore, answers \(answers)")
 		let scoreTotal = answers.reduce(0,+)
@@ -251,6 +257,8 @@ extension ScorewindData {
 		print("[debug] getDoYouKnowScore, sortedScores \(sortedScores)")
 		return sortedScores[0].key
 	}
+	
+	
 
 
 }

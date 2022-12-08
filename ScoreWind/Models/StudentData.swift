@@ -305,6 +305,17 @@ class StudentData: ObservableObject {
 		
 		useriCloudKeyValueStore.synchronize()
 	}
+	
+	func getPlayable() -> [String:Any] {
+		return useriCloudKeyValueStore.dictionary(forKey: "playable") ?? [:]
+	}
+	
+	func updatePlayable(courseID: Int, feedbackValue: Int) {
+		 var lastPlayable = getPlayable()
+		lastPlayable.updateValue(feedbackValue, forKey: String(courseID))
+		useriCloudKeyValueStore.set(lastPlayable, forKey: "playable")
+		useriCloudKeyValueStore.synchronize()
+	}
 
 	func getWizardDiscovered() -> [String:Any] {
 		return useriCloudKeyValueStore.dictionary(forKey: "wizardDiscovered") ?? [:]

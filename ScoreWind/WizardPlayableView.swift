@@ -139,8 +139,13 @@ struct WizardPlayableView: View {
 	
 	private func feedbackTagAction(feedback: PlayableFeedback) {
 		print("feedback clicked value \(feedback.rawValue)")
-		stepName = .wizardResult
-		studentData.wizardStepNames.append(stepName)
+		studentData.updatePlayable(courseID: scorewindData.wizardPickedCourse.id, feedbackValue: feedback.rawValue)
+		
+		let nextStep = scorewindData.createRecommendation(studentData: studentData)
+		if nextStep != .wizardChooseInstrument {
+			stepName = nextStep
+			studentData.wizardStepNames.append(nextStep)
+		}
 	}
 	
 	private func setupPlayer(withoutScoreViewer: Bool){
