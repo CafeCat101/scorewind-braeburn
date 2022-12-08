@@ -13,6 +13,7 @@ extension ScorewindData {
 		var assignedLessonId = 0
 		var goToWizardStep:Page = .wizardChooseInstrument
 		let currentStepName = studentData.wizardStepNames[studentData.wizardStepNames.count-1]
+		var currentFinalFeedbackValue = 0
 		
 		if currentStepName == Page.wizardExperience {
 			if studentData.getExperience() == ExperienceFeedback.continueLearning.rawValue {
@@ -47,7 +48,8 @@ extension ScorewindData {
 			print("[debug] createRecommendation, getDoYouKnow \(studentData.getDoYouKnow())")
 			let getCurrentDoYouKnow = studentData.getDoYouKnow().first(where: {$0.key == String(wizardPickedCourse.id)})
 			let finalFeedback = getDoYouKnowScore(answers: getCurrentDoYouKnow?.value as! [Int])
-			print("[debug] createRecommendation, finalFeedback \(finalFeedback)")
+			print("[debug] createRecommendation, finalFeedback \(finalFeedback)(\(finalFeedback.rawValue))")
+			currentFinalFeedbackValue = finalFeedback.rawValue
 			
 			if wizardPickedCourse.id > 0 {
 				if finalFeedback == .allOfThem {
@@ -126,7 +128,9 @@ extension ScorewindData {
 			wizardPickedTimestamps = []
 		}
 		
-		studentData.wizardRange.append(makeWizardPicked(courseID: assignedCourseId, lessonID: assignedLessonId))
+		if (currentStepName != Page.wizardChooseInstrument) && (currentStepName != Page.wizardExperience) {
+			studentData.wizardRange.append(makeWizardPicked(courseID: assignedCourseId, lessonID: assignedLessonId, feedbackValue: currentFinalFeedbackValue))
+		}
 		
 		if goToWizardStep != .wizardResult {
 			if assignedCourseId > 0 && assignedLessonId > 0 {
@@ -141,7 +145,7 @@ extension ScorewindData {
 		return goToWizardStep
 	}
 	
-	private func makeWizardPicked(courseID: Int, lessonID: Int) -> WizardPicked {
+	private func makeWizardPicked(courseID: Int, lessonID: Int, feedbackValue: Int) -> WizardPicked {
 		let theCourse = allCourses.first(where: {$0.id == courseID}) ?? Course()
 		
 		var wizardPicked = WizardPicked()
@@ -153,6 +157,7 @@ extension ScorewindData {
 			if theLesson.id > 0 {
 				wizardPicked.lessonSortValue = theLesson.sortValue
 			}
+			wizardPicked.feedbackValue = feedbackValue
 		}
 		
 		return wizardPicked

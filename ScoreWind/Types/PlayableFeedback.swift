@@ -8,11 +8,11 @@
 import Foundation
 
 enum PlayableFeedback: Int, CaseIterable {
-	case easyPeasy = 0
-	case comfortable = 1
-	case canLearn = 2
-	case littleDifficult = 3
-	case veryHard = 4
+	case easyPeasy = 5
+	case comfortable = 4
+	case canLearn = 3
+	case littleDifficult = 2
+	case veryHard = 1
 	
 	func getLabel() -> String {
 		switch self {

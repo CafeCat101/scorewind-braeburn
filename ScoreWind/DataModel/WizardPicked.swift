@@ -11,11 +11,13 @@ struct WizardPicked {
 	var lessonID: Int
 	var courseSortValue: String
 	var lessonSortValue: String
+	var feedbackValue: Int
 	
 	init() {
 		courseID = 0
 		lessonID = 0
 		courseSortValue = ""
 		lessonSortValue = ""
+		feedbackValue = 0
 	}
 }
