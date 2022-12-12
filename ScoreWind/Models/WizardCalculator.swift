@@ -64,7 +64,7 @@ extension ScorewindData {
 					}
 				} else if finalFeedback == .someOfThem {
 					// "Playable" to find the middle lesson with score in previous course
-					let previousCourse = assignPrevioudCourse(targetCourse: wizardPickedCourse)
+					let previousCourse = assignPreviousCourse(targetCourse: wizardPickedCourse)
 					
 					if previousCourse.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"}) {
 						let veryFirstCourse = allCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
@@ -82,7 +82,7 @@ extension ScorewindData {
 					}
 				} else {
 					// "Do you know" to previous course
-					let previousCourse = assignPrevioudCourse(targetCourse: wizardPickedCourse)
+					let previousCourse = assignPreviousCourse(targetCourse: wizardPickedCourse)
 					
 					if previousCourse.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"}) {
 						let veryFirstCourse = allCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
@@ -90,7 +90,7 @@ extension ScorewindData {
 						assignedLessonId = veryFirstCourse.lessons[0].id
 						goToWizardStep = .wizardResult
 					} else {
-						assignedCourseId = assignPrevioudCourse(targetCourse: wizardPickedCourse).id
+						assignedCourseId = assignPreviousCourse(targetCourse: wizardPickedCourse).id
 						assignedLessonId = 0
 					}
 				}
@@ -184,7 +184,7 @@ extension ScorewindData {
 		return sortOrderStr
 	}
 	
-	private func assignPrevioudCourse(targetCourse: Course) -> Course {
+	private func assignPreviousCourse(targetCourse: Course) -> Course {
 		var findCourse = Course()
 		if targetCourse.sortValue.isEmpty == false {
 			let previoudSortValue = findSortOrderString(targetCourse: targetCourse, order: .DESC)
@@ -240,8 +240,150 @@ extension ScorewindData {
 		return result
 	}
 	
-	private func assignLessonInNextLevel(targetCourse: Course, targetLesson: Lesson) {
+	private func assignLessonInNextLevel(targetCourse: Course, targetLesson: Lesson) -> [String: Int] {
+		var result:[String:Int] = [:]
+
+		let nextLesson:Lesson = findAdjacentLessonInCurrentCourse(targetCourse: targetCourse, targetLesson: targetLesson, direction: .ASC)
+		if nextLesson.id > 0 {
+			result["courseID"] = targetCourse.id
+			result["lessonID"] = nextLesson.id
+		} else {
+			let nextCourse = assignNextCourse(targetCourse: targetCourse)
+			for lesson in nextCourse.lessons {
+				let findTimestamps = (allTimestamps.first(where: {$0.id == nextCourse.id})?.lessons.first(where: {$0.id == lesson.id})!.timestamps)!
+				if findTimestamps.count > 0 {
+					result["courseID"] = nextCourse.id
+					result["lessonID"] = lesson.id
+					break
+				}
+			}
+		}
 		
+		return result
+	}
+	
+	private func assignLessonInPreviousLevel(targetCourse: Course, targetLesson: Lesson) -> [String:Int] {
+		var result:[String:Int] = [:]
+		
+		let previousLevelLesson:Lesson = findAdjacentLessonInCurrentCourse(targetCourse: targetCourse, targetLesson: targetLesson, direction: .DESC)
+		if previousLevelLesson.id > 0 {
+			result["courseID"] = targetCourse.id
+			result["lessonID"] = previousLevelLesson.id
+		} else {
+			let previousCourse = assignPreviousCourse(targetCourse: targetCourse)
+			for lesson in previousCourse.lessons.sorted(by: {$0.step > $1.step}) {
+				let findTimestamps = (allTimestamps.first(where: {$0.id == previousCourse.id})?.lessons.first(where: {$0.id == lesson.id})!.timestamps)!
+				if findTimestamps.count > 0 {
+					result["courseID"] = previousCourse.id
+					result["lessonID"] = lesson.id
+					break
+				}
+			}
+		}
+		
+		return result
+	}
+	
+	private func findAdjacentLessonInCurrentCourse(targetCourse: Course, targetLesson: Lesson, direction: SearchParameter) -> Lesson {
+		var result:Lesson = Lesson()
+		let levelBreakdown1 = targetLesson.sortValue.split(separator: "-")
+		var lessons:[Lesson] = []
+		if direction == .ASC {
+			lessons = (targetCourse.lessons).filter({$0.step>targetLesson.step})
+		} else {
+			lessons = (targetCourse.lessons).filter({$0.step<targetLesson.step})
+			lessons.reverse()
+		}
+		
+		var findScoreAvailable = false
+		for lesson in lessons {
+			let levelBreakDown2 = lesson.sortValue.split(separator: "-")
+			
+			if (direction == .ASC) && (levelBreakDown2[1] > levelBreakdown1[1]) {
+				findScoreAvailable = true
+			} else if (direction == .DESC) && (levelBreakDown2[1] < levelBreakdown1[1]) {
+				findScoreAvailable = true
+			}
+			
+			if findScoreAvailable {
+				let findTimestamps = (allTimestamps.first(where: {$0.id == targetCourse.id})?.lessons.first(where: {$0.id == lesson.id})!.timestamps)!
+				if findTimestamps.count > 0 {
+					result = lesson
+					break
+				}
+			}
+		}
+		
+		return result
+	}
+	
+	private func assignEquivalentLessonInNextCourseLevel(targetCourse: Course, targetLesson: Lesson) -> [String:Int]{
+		var result:[String:Int] = [:]
+		let nextCourse = assignNextCourse(targetCourse: targetCourse)
+		var nextCourseLessonLevels:[[String]] = []
+		var targetCourseLessonLevels:[[String]] = []
+		let nextCourseTimestamps = allTimestamps.filter({$0.id == nextCourse.id})
+		let targetCourseTimestamps = allTimestamps.filter({$0.id == targetCourse.id})
+		
+		//place lessons in a structure that I can compare the lesson level(sub lesson level is nexted)
+		for lesson in nextCourse.lessons {
+			if nextCourseLessonLevels.count == 0 {
+				let findTimestamps = (nextCourseTimestamps.first(where: {$0.id == nextCourse.id})?.lessons.first(where: {$0.id == lesson.id})!.timestamps)!
+				if findTimestamps.count > 0 {
+					nextCourseLessonLevels.append([lesson.sortValue])
+					break
+				}
+			} else {
+				let lastLessonLevelSaved = nextCourseLessonLevels[nextCourseLessonLevels.count-1]
+				let lastSubLevelSaved = lastLessonLevelSaved[lastLessonLevelSaved.count-1]
+				let lastSortValueBreakdown = lastSubLevelSaved.split(separator:"-")
+				let thisSortValueBreakdown = lesson.sortValue.split(separator:"-")
+				if thisSortValueBreakdown[1] == lastSortValueBreakdown[1] {
+					let findTimestamps = (nextCourseTimestamps.first(where: {$0.id == nextCourse.id})?.lessons.first(where: {$0.id == lesson.id})!.timestamps)!
+					if findTimestamps.count > 0 {
+						nextCourseLessonLevels[nextCourseLessonLevels.count-1].append(lesson.sortValue)
+						break
+					}
+				} else {
+					let findTimestamps = (nextCourseTimestamps.first(where: {$0.id == nextCourse.id})?.lessons.first(where: {$0.id == lesson.id})!.timestamps)!
+					if findTimestamps.count > 0 {
+						nextCourseLessonLevels.append([lesson.sortValue])
+						break
+					}
+				}
+			}
+		}
+		
+		for lesson in targetCourse.lessons {
+			if targetCourseLessonLevels.count == 0 {
+				let findTimestamps = (targetCourseTimestamps.first(where: {$0.id == targetCourse.id})?.lessons.first(where: {$0.id == lesson.id})!.timestamps)!
+				if findTimestamps.count > 0 {
+					targetCourseLessonLevels.append([lesson.sortValue])
+					break
+				}
+			} else {
+				let lastLessonLevelSaved = targetCourseLessonLevels[targetCourseLessonLevels.count-1]
+				let lastSubLevelSaved = lastLessonLevelSaved[lastLessonLevelSaved.count-1]
+				let lastSortValueBreakdown = lastSubLevelSaved.split(separator:"-")
+				let thisSortValueBreakdown = lesson.sortValue.split(separator:"-")
+				if thisSortValueBreakdown[1] == lastSortValueBreakdown[1] {
+					targetCourseLessonLevels[targetCourseLessonLevels.count-1].append(lesson.sortValue)
+				} else {
+					targetCourseLessonLevels.append([lesson.sortValue])
+				}
+			}
+		}
+		
+		let targetLessonLevelIndex = targetCourseLessonLevels.firstIndex(where: {$0.contains(targetLesson.sortValue)}) ?? 0
+		var setEquivalentLevel = 0
+		if targetLessonLevelIndex > 0 {
+			setEquivalentLevel = (nextCourseLessonLevels.count * targetLessonLevelIndex)/targetCourseLessonLevels.count
+		}
+		
+		result["courseID"] = nextCourse.id
+		result["lessonID"] = setEquivalentLevel
+		
+		return result
 	}
 	
 	private func getDoYouKnowScore(answers:[Int]) -> DoYouKnowFeedback {
