@@ -370,7 +370,6 @@ extension ScorewindData {
 				let findTimestamps = (nextCourseTimestamps.first(where: {$0.id == nextCourse.id})?.lessons.first(where: {$0.id == lesson.id})!.timestamps)!
 				if findTimestamps.count > 0 {
 					nextCourseLessonLevels.append([lesson.sortValue])
-					break
 				}
 			} else {
 				let lastLessonLevelSaved = nextCourseLessonLevels[nextCourseLessonLevels.count-1]
@@ -381,24 +380,23 @@ extension ScorewindData {
 					let findTimestamps = (nextCourseTimestamps.first(where: {$0.id == nextCourse.id})?.lessons.first(where: {$0.id == lesson.id})!.timestamps)!
 					if findTimestamps.count > 0 {
 						nextCourseLessonLevels[nextCourseLessonLevels.count-1].append(lesson.sortValue)
-						break
 					}
 				} else {
 					let findTimestamps = (nextCourseTimestamps.first(where: {$0.id == nextCourse.id})?.lessons.first(where: {$0.id == lesson.id})!.timestamps)!
 					if findTimestamps.count > 0 {
 						nextCourseLessonLevels.append([lesson.sortValue])
-						break
 					}
 				}
 			}
 		}
+		print("[debug] assignEquivalentLessonInNextCourseLevel, nextCourseLessonLevels.count: \(nextCourseLessonLevels.count)")
+		print("[debug] assignEquivalentLessonInNextCourseLevel, nextCourseLessonLevels \(nextCourseLessonLevels)")
 		
 		for lesson in targetCourse.lessons {
 			if targetCourseLessonLevels.count == 0 {
 				let findTimestamps = (targetCourseTimestamps.first(where: {$0.id == targetCourse.id})?.lessons.first(where: {$0.id == lesson.id})!.timestamps)!
 				if findTimestamps.count > 0 {
 					targetCourseLessonLevels.append([lesson.sortValue])
-					break
 				}
 			} else {
 				let lastLessonLevelSaved = targetCourseLessonLevels[targetCourseLessonLevels.count-1]
@@ -412,15 +410,20 @@ extension ScorewindData {
 				}
 			}
 		}
+		print("[debug] assignEquivalentLessonInNextCourseLevel, targetCourseLessonLevels.count \(targetCourseLessonLevels.count)")
+		print("[debug] assignEquivalentLessonInNextCourseLevel, targetCourseLessonLevels \(targetCourseLessonLevels)")
 		
 		let targetLessonLevelIndex = targetCourseLessonLevels.firstIndex(where: {$0.contains(targetLesson.sortValue)}) ?? 0
+		print("[debug] assignEquivalentLessonInNextCourseLevel, targetLessonLevelIndex \(targetLessonLevelIndex)")
 		var setEquivalentLevel = 0
 		if targetLessonLevelIndex > 0 {
 			setEquivalentLevel = (nextCourseLessonLevels.count * targetLessonLevelIndex)/targetCourseLessonLevels.count
 		}
+		print("[debug] assignEquivalentLessonInNextCourseLevel, setEquivalentLevel \(setEquivalentLevel)")
+		let equivalentLevel = nextCourseLessonLevels[setEquivalentLevel][0]
 		
 		result["courseID"] = nextCourse.id
-		result["lessonID"] = setEquivalentLevel
+		result["lessonID"] = nextCourse.lessons.first(where: {$0.sortValue == equivalentLevel})?.id
 		
 		return result
 	}
