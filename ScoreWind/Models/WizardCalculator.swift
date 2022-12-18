@@ -16,6 +16,7 @@ extension ScorewindData {
 		var currentFinalFeedbackValue = 0
 		
 		if currentStepName == Page.wizardExperience {
+			print("[debug] createRecommendation, Page.wizardExperience, \(studentData.getExperience())")
 			if studentData.getExperience() == ExperienceFeedback.continueLearning.rawValue {
 				if studentData.getInstrumentChoice() == InstrumentType.guitar.rawValue {
 					let guitar103Courses = allCourses.filter({$0.instrument == InstrumentType.guitar.rawValue && $0.category.contains(where: {$0.name == "Guitar 103"})})
@@ -83,6 +84,11 @@ extension ScorewindData {
 				} else {
 					// "Do you know" to previous course
 					let previousCourse = assignPreviousCourse(targetCourse: wizardPickedCourse)
+					assignedCourseId = previousCourse.id
+					assignedLessonId = 0
+					/*
+					// "Do you know" to previous course
+					let previousCourse = assignPreviousCourse(targetCourse: wizardPickedCourse)
 					
 					if previousCourse.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"}) {
 						let veryFirstCourse = allCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
@@ -93,22 +99,37 @@ extension ScorewindData {
 						assignedCourseId = assignPreviousCourse(targetCourse: wizardPickedCourse).id
 						assignedLessonId = 0
 					}
+					*/
 				}
 			}
 		}
 		
 		if currentStepName == .wizardPlayable {
-			let currentPlayableFeedback = studentData.getPlayable().first(where: {$0.key == String(wizardPickedCourse.id)})
-			if currentPlayableFeedback?.value as! Int == 0 {
-				//course level up
-			} else if currentPlayableFeedback?.value as! Int == 1 {
-				//lesson level up
-			} else if currentPlayableFeedback?.value as! Int == 2 {
-				//go to go to wizard result
-			} else if currentPlayableFeedback?.value as! Int == 3 {
-				//lesson level down
-			} else if currentPlayableFeedback?.value as! Int == 4 {
+			let currentPlayableFeedback = studentData.getPlayable().first(where: {$0.key == String(wizardPickedLesson.id)})
+			let extractFeedback = (currentPlayableFeedback?.value as! String).split(separator:"|")
+			if Int(extractFeedback[0]) == 1 {
 				//course level down
+				
+			} else if Int(extractFeedback[0]) == 2 {
+				//lesson level down
+				let lessonDown = assignLessonInPreviousLevel(targetCourse: wizardPickedCourse, targetLesson: wizardPickedLesson)
+				assignedCourseId = lessonDown["courseID"] ?? 0
+				assignedLessonId = lessonDown["lessonID"] ?? 0
+			} else if Int(extractFeedback[0]) == 3 {
+				//go to go to wizard result
+				assignedCourseId = wizardPickedCourse.id
+				assignedLessonId = wizardPickedLesson.id
+				goToWizardStep = .wizardResult
+			} else if Int(extractFeedback[0]) == 4 {
+				//lesson level up
+				let lessonUp = assignLessonInNextLevel(targetCourse: wizardPickedCourse, targetLesson: wizardPickedLesson)
+				assignedCourseId = lessonUp["courseID"] ?? 0
+				assignedLessonId = lessonUp["lessonID"] ?? 0
+			} else if Int(extractFeedback[0]) == 5 {
+				//course level up
+				let lessonCourseUp = assignEquivalentLessonInNextCourseLevel(targetCourse: wizardPickedCourse, targetLesson: wizardPickedLesson)
+				assignedCourseId = lessonCourseUp["courseID"] ?? 0
+				assignedLessonId = lessonCourseUp["lessonID"] ?? 0
 			}
 		}
 		
@@ -128,6 +149,24 @@ extension ScorewindData {
 			wizardPickedTimestamps = []
 		}
 		
+		if wizardPickedCourse.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"}) {
+			let veryFirstCourse = allCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
+			assignedCourseId = veryFirstCourse.id
+			assignedLessonId = veryFirstCourse.lessons[0].id
+			
+			wizardPickedCourse = veryFirstCourse
+			if assignedLessonId > 0 {
+				wizardPickedLesson = veryFirstCourse.lessons[0]
+				wizardPickedTimestamps = (allTimestamps.first(where: {$0.id == assignedCourseId})?.lessons.first(where: {$0.id == assignedLessonId})!.timestamps) ?? []
+			} else {
+				wizardPickedLesson = Lesson()
+				wizardPickedTimestamps = []
+			}
+			
+			goToWizardStep = .wizardResult
+		}
+		
+		//create recommendtaion reachs conclusion
 		if (currentStepName != Page.wizardChooseInstrument) && (currentStepName != Page.wizardExperience) {
 			studentData.wizardRange.append(makeWizardPicked(courseID: assignedCourseId, lessonID: assignedLessonId, feedbackValue: currentFinalFeedbackValue))
 		}

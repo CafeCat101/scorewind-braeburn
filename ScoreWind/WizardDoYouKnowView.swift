@@ -67,7 +67,7 @@ struct WizardDoYouKnowView: View {
 			}
 			
 			
-			
+			Text("course:\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.wizardPickedCourse.title))").font(.footnote)
 		}
 		.background(Color("AppBackground"))
 		.onAppear(perform: {

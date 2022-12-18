@@ -310,9 +310,10 @@ class StudentData: ObservableObject {
 		return useriCloudKeyValueStore.dictionary(forKey: "playable") ?? [:]
 	}
 	
-	func updatePlayable(courseID: Int, feedbackValue: Int) {
-		 var lastPlayable = getPlayable()
-		lastPlayable.updateValue(feedbackValue, forKey: String(courseID))
+	func updatePlayable(courseID: Int, lessonID: Int, feedbackValue: Int) {
+		var lastPlayable = getPlayable()
+		let playableValue = String(feedbackValue) + "|" + String(courseID)
+		lastPlayable.updateValue(playableValue, forKey: String(lessonID))
 		useriCloudKeyValueStore.set(lastPlayable, forKey: "playable")
 		useriCloudKeyValueStore.synchronize()
 	}

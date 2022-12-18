@@ -105,6 +105,7 @@ struct WizardPlayableView: View {
 							}.padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
 						}
 					}
+					Text("lesson:\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.wizardPickedLesson.title))").font(.footnote)
 				}
 				.onAppear(perform: {
 					viewModel.loadToGo = false
@@ -138,13 +139,24 @@ struct WizardPlayableView: View {
 	}
 	
 	private func feedbackTagAction(feedback: PlayableFeedback) {
+		viewModel.videoPlayer!.pause()
+		viewModel.videoPlayer!.replaceCurrentItem(with: nil)
+		studentData.playableViewVideoOnly = true
+		
 		print("feedback clicked value \(feedback.rawValue)")
-		studentData.updatePlayable(courseID: scorewindData.wizardPickedCourse.id, feedbackValue: feedback.rawValue)
+		studentData.updatePlayable(courseID: scorewindData.wizardPickedCourse.id, lessonID: scorewindData.wizardPickedLesson.id, feedbackValue: feedback.rawValue)
 		
 		let nextStep = scorewindData.createRecommendation(studentData: studentData)
 		if nextStep != .wizardChooseInstrument {
 			stepName = nextStep
 			studentData.wizardStepNames.append(nextStep)
+			
+			if nextStep == .wizardPlayable {
+				viewModel.loadToGo = false
+				viewModel.viewedLesson = scorewindData.wizardPickedLesson
+				viewModel.viewedTimestampRecs = scorewindData.wizardPickedTimestamps
+				setupPlayer(withoutScoreViewer: studentData.playableViewVideoOnly)
+			}
 		}
 	}
 	

@@ -36,14 +36,14 @@ class iCloudKeyValue: XCTestCase {
 		//remove instrument preference: instrument
 		//remove completed lessons: completedLessons
 		//remove watched lessons:watchedLessons
-		//XCTAssertNoThrow(studentDataModel.removeAKey(keyName: "completedLessons"))
-		XCTAssertNoThrow(studentDataModel.removeAKey(keyName: "watchedLessons"))
+		XCTAssertNoThrow(studentDataModel.removeAKey(keyName: "completedLessons"))
+		//XCTAssertNoThrow(studentDataModel.removeAKey(keyName: "watchedLessons"))
 		//XCTAssertNoThrow(studentDataModel.removeAKey(keyName: "favouritedCourses"))
 		studentDataModel.backendReadAllKeys()
 	}
 	
 	func testUpdateInstrumentChoice() throws {
-		XCTAssertNoThrow(studentDataModel.updateInstrumentChoice(instrument: InstrumentType.guitar))
+		XCTAssertNoThrow(studentDataModel.updateInstrumentChoice(instrument: InstrumentType.violin))
 	}
 	
 	func testGetInstrumentChoice() throws {
@@ -76,10 +76,12 @@ class iCloudKeyValue: XCTestCase {
 		XCTAssertNoThrow(print("\(studentDataModel.getFavouritedCourses())"))
 	}
 	
-	/*func testUpdateEnrolledCourses() throws {
-		let testCourseID = 12347
-		let testCourseIsCompelted = true
-		XCTAssertNoThrow(studentDataModel.updateEnrolledCourse(courseID: testCourseID, isCompleted: testCourseIsCompelted))
-		studentDataModel.backendReadAllKeys()
-	}*/
+	func testUpdateExperience() throws {
+		XCTAssertNoThrow(studentDataModel.updateExperience(experience: .continueLearning))
+		XCTAssertNoThrow(print("experience:\(studentDataModel.getExperience())"))
+	}
+	
+	func testGetExperience() throws {
+		XCTAssertNoThrow(print("experience:\(studentDataModel.getExperience())"))
+	}
 }
