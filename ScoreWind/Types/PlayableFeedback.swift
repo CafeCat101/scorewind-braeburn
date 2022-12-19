@@ -21,9 +21,9 @@ enum PlayableFeedback: Int, CaseIterable {
 		case .comfortable:
 			return "Comfortable"
 		case .canLearn:
-			return "I can learn it"
+			return "Start learning"
 		case .littleDifficult:
-			return "Little difficult"
+			return "A Little difficult"
 		case .veryHard:
 			return "Very hard"
 		}
