@@ -364,52 +364,11 @@ extension ScorewindData {
 		let nextCourseTimestamps = allTimestamps.filter({$0.id == nextCourse.id})
 		let targetCourseTimestamps = allTimestamps.filter({$0.id == targetCourse.id})
 		
-		//place lessons in a structure that I can compare the lesson level(sub lesson level is nexted)
-		for lesson in nextCourse.lessons {
-			if nextCourseLessonLevels.count == 0 {
-				let findTimestamps = (nextCourseTimestamps.first(where: {$0.id == nextCourse.id})?.lessons.first(where: {$0.id == lesson.id})!.timestamps)!
-				if findTimestamps.count > 0 {
-					nextCourseLessonLevels.append([lesson.sortValue])
-				}
-			} else {
-				let lastLessonLevelSaved = nextCourseLessonLevels[nextCourseLessonLevels.count-1]
-				let lastSubLevelSaved = lastLessonLevelSaved[lastLessonLevelSaved.count-1]
-				let lastSortValueBreakdown = lastSubLevelSaved.split(separator:"-")
-				let thisSortValueBreakdown = lesson.sortValue.split(separator:"-")
-				if thisSortValueBreakdown[1] == lastSortValueBreakdown[1] {
-					let findTimestamps = (nextCourseTimestamps.first(where: {$0.id == nextCourse.id})?.lessons.first(where: {$0.id == lesson.id})!.timestamps)!
-					if findTimestamps.count > 0 {
-						nextCourseLessonLevels[nextCourseLessonLevels.count-1].append(lesson.sortValue)
-					}
-				} else {
-					let findTimestamps = (nextCourseTimestamps.first(where: {$0.id == nextCourse.id})?.lessons.first(where: {$0.id == lesson.id})!.timestamps)!
-					if findTimestamps.count > 0 {
-						nextCourseLessonLevels.append([lesson.sortValue])
-					}
-				}
-			}
-		}
+		nextCourseLessonLevels = getLessonLevelStructure(targetCourse: nextCourse, targetTimestamps: nextCourseTimestamps)
 		print("[debug] assignEquivalentLessonInNextCourseLevel, nextCourseLessonLevels.count: \(nextCourseLessonLevels.count)")
 		print("[debug] assignEquivalentLessonInNextCourseLevel, nextCourseLessonLevels \(nextCourseLessonLevels)")
 		
-		for lesson in targetCourse.lessons {
-			if targetCourseLessonLevels.count == 0 {
-				let findTimestamps = (targetCourseTimestamps.first(where: {$0.id == targetCourse.id})?.lessons.first(where: {$0.id == lesson.id})!.timestamps)!
-				if findTimestamps.count > 0 {
-					targetCourseLessonLevels.append([lesson.sortValue])
-				}
-			} else {
-				let lastLessonLevelSaved = targetCourseLessonLevels[targetCourseLessonLevels.count-1]
-				let lastSubLevelSaved = lastLessonLevelSaved[lastLessonLevelSaved.count-1]
-				let lastSortValueBreakdown = lastSubLevelSaved.split(separator:"-")
-				let thisSortValueBreakdown = lesson.sortValue.split(separator:"-")
-				if thisSortValueBreakdown[1] == lastSortValueBreakdown[1] {
-					targetCourseLessonLevels[targetCourseLessonLevels.count-1].append(lesson.sortValue)
-				} else {
-					targetCourseLessonLevels.append([lesson.sortValue])
-				}
-			}
-		}
+		targetCourseLessonLevels = getLessonLevelStructure(targetCourse: targetCourse, targetTimestamps: targetCourseTimestamps)
 		print("[debug] assignEquivalentLessonInNextCourseLevel, targetCourseLessonLevels.count \(targetCourseLessonLevels.count)")
 		print("[debug] assignEquivalentLessonInNextCourseLevel, targetCourseLessonLevels \(targetCourseLessonLevels)")
 		
@@ -426,6 +385,29 @@ extension ScorewindData {
 		result["lessonID"] = nextCourse.lessons.first(where: {$0.sortValue == equivalentLevel})?.id
 		
 		return result
+	}
+	
+	private func getLessonLevelStructure(targetCourse: Course, targetTimestamps: [Timestamp]) -> [[String]] {
+		var targetCourseLessonLevels:[[String]] = []
+		for lesson in targetCourse.lessons {
+			if targetCourseLessonLevels.count == 0 {
+				let findTimestamps = (targetTimestamps.first(where: {$0.id == targetCourse.id})?.lessons.first(where: {$0.id == lesson.id})!.timestamps)!
+				if findTimestamps.count > 0 {
+					targetCourseLessonLevels.append([lesson.sortValue])
+				}
+			} else {
+				let lastLessonLevelSaved = targetCourseLessonLevels[targetCourseLessonLevels.count-1]
+				let lastSubLevelSaved = lastLessonLevelSaved[lastLessonLevelSaved.count-1]
+				let lastSortValueBreakdown = lastSubLevelSaved.split(separator:"-")
+				let thisSortValueBreakdown = lesson.sortValue.split(separator:"-")
+				if thisSortValueBreakdown[1] == lastSortValueBreakdown[1] {
+					targetCourseLessonLevels[targetCourseLessonLevels.count-1].append(lesson.sortValue)
+				} else {
+					targetCourseLessonLevels.append([lesson.sortValue])
+				}
+			}
+		}
+		return targetCourseLessonLevels
 	}
 	
 	private func getDoYouKnowScore(answers:[Int]) -> DoYouKnowFeedback {

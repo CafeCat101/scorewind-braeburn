@@ -15,6 +15,7 @@ struct WizardPlayableView: View {
 	@ObservedObject var studentData:StudentData
 	@StateObject var viewModel = ViewModel()
 	let screenSize: CGRect = UIScreen.main.bounds
+	@State private var rememberPlaybackTime:Double = 0.0
 	//@State private var videoOnly = true
 	
 	var body: some View {
@@ -31,6 +32,11 @@ struct WizardPlayableView: View {
 							viewModel.loadToGo = false
 							studentData.playableViewVideoOnly = true
 							setupPlayer(withoutScoreViewer: studentData.playableViewVideoOnly)
+							if rememberPlaybackTime > 0 {
+								viewModel.playerGoTo(timestamp: rememberPlaybackTime)
+							} else {
+								viewModel.playerGoTo(timestamp: findFirstPlayableTimestamp())
+							}
 						})
 					Spacer()
 				}
@@ -86,12 +92,17 @@ struct WizardPlayableView: View {
 							Spacer()
 							HStack {
 								Spacer()
-								Button("Viwe whole lesson") {
+								Button("View it with score") {
 									viewModel.videoPlayer!.pause()
 									viewModel.videoPlayer!.replaceCurrentItem(with: nil)
 									studentData.playableViewVideoOnly = false
 									viewModel.loadToGo = true
 									setupPlayer(withoutScoreViewer: studentData.playableViewVideoOnly)
+									if rememberPlaybackTime > 0 {
+										viewModel.playerGoTo(timestamp: rememberPlaybackTime)
+									} else {
+										viewModel.playerGoTo(timestamp: 0.0)
+									}
 								}
 							}
 						}.padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
@@ -112,6 +123,7 @@ struct WizardPlayableView: View {
 					viewModel.viewedLesson = scorewindData.wizardPickedLesson
 					viewModel.viewedTimestampRecs = scorewindData.wizardPickedTimestamps
 					setupPlayer(withoutScoreViewer: studentData.playableViewVideoOnly)
+					viewModel.playerGoTo(timestamp: findFirstPlayableTimestamp())
 				})
 				.onDisappear(perform: {
 					viewModel.videoPlayer!.pause()
@@ -156,6 +168,7 @@ struct WizardPlayableView: View {
 				viewModel.viewedLesson = scorewindData.wizardPickedLesson
 				viewModel.viewedTimestampRecs = scorewindData.wizardPickedTimestamps
 				setupPlayer(withoutScoreViewer: studentData.playableViewVideoOnly)
+				viewModel.playerGoTo(timestamp: findFirstPlayableTimestamp())
 			}
 		}
 	}
@@ -168,16 +181,16 @@ struct WizardPlayableView: View {
 			
 			viewModel.videoPlayer!.addPeriodicTimeObserver(forInterval: CMTime(value: 1, timescale: 3), queue: .main, using: { time in
 				let catchTime = time.seconds
-				
+				self.rememberPlaybackTime = catchTime
 				let atMeasure = findMesaureByTimestamp(videoTime: catchTime)
 				self.viewModel.valuePublisher.send(String(atMeasure))
 				//print("[debug] LessonView, setupPlayer, ready to play")
 				print("find measure:"+String(atMeasure))
 			})
 			
-			if viewModel.viewedTimestampRecs!.count > 0 {
-				viewModel.playerGoTo(timestamp: 0.0)
-			}
+			//if viewModel.viewedTimestampRecs!.count > 0 {
+			//	viewModel.playerGoTo(timestamp: 0.0)
+			//}
 		} else {
 			/*
 			let downloadableVideoURL = URL(string: scorewindData.wizardPickedLesson.videoMP4.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!)!
@@ -189,9 +202,25 @@ struct WizardPlayableView: View {
 			}
 			 */
 			viewModel.videoPlayer = AVPlayer(url: URL(string: decodeVideoURL(videoURL: scorewindData.wizardPickedLesson.video))!)
-			viewModel.videoPlayer?.play()
+			viewModel.videoPlayer!.addPeriodicTimeObserver(forInterval: CMTime(value: 1, timescale: 3), queue: .main, using: { time in
+				let catchTime = time.seconds
+				self.rememberPlaybackTime = catchTime
+			})
+			//viewModel.videoPlayer?.play()
 		}
-		
+		print("[debug] WizardPlayableView, rememberPlaybackTime \(self.rememberPlaybackTime)")
+	}
+	
+	private func findFirstPlayableTimestamp() -> Double {
+		var result = 0.0
+		for timestamp in scorewindData.wizardPickedTimestamps {
+			if timestamp.measure > 0 && (timestamp.notes == "" || timestamp.notes == "play") && timestamp.type == "piano" {
+				result = timestamp.timestamp
+				break
+			}
+		}
+		print("[debug] WizardPlayableView, findFirstPlayableTimestamp \(result)")
+		return result
 	}
 	
 	private func findMesaureByTimestamp(videoTime: Double)->Int{
