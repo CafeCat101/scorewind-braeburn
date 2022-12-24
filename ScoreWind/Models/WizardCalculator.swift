@@ -109,7 +109,9 @@ extension ScorewindData {
 			let extractFeedback = (currentPlayableFeedback?.value as! String).split(separator:"|")
 			if Int(extractFeedback[0]) == 1 {
 				//course level down
-				
+				let lessonCourseDown = assignEquivalentLessonInPreviousCourseLevel(targetCourse: wizardPickedCourse, targetLesson: wizardPickedLesson)
+				assignedCourseId = lessonCourseDown["courseID"] ?? 0
+				assignedLessonId = lessonCourseDown["lessonID"] ?? 0
 			} else if Int(extractFeedback[0]) == 2 {
 				//lesson level down
 				let lessonDown = assignLessonInPreviousLevel(targetCourse: wizardPickedCourse, targetLesson: wizardPickedLesson)
@@ -231,16 +233,25 @@ extension ScorewindData {
 				findCourse = allCourses.first(where: {cleanSortOrder(sortValue: $0.sortValue) == previoudSortValue && $0.instrument == targetCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: targetCourse.category, depth: 2)}) ?? Course()
 			}
 		}
+		
+		if findCourse.id == 0 {
+				findCourse = allCourses.first(where: {$0.instrument == targetCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: targetCourse.category, depth: 2)}) ?? Course()
+		}
+		
 		return findCourse
 	}
 	
 	private func assignNextCourse(targetCourse: Course) -> Course {
-		var findCourse = Course()
+		var findCourse = allCourses[allCourses.count-1]
 		if targetCourse.sortValue.isEmpty == false {
 			let nextSortValue = findSortOrderString(targetCourse: targetCourse, order: .ASC)
 			if nextSortValue.isEmpty == false {
 				findCourse = allCourses.first(where: {cleanSortOrder(sortValue: $0.sortValue) == nextSortValue && $0.instrument == targetCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: targetCourse.category, depth: 2)}) ?? Course()
 			}
+		}
+		
+		if findCourse.id == 0 {
+			findCourse = allCourses.last(where: {$0.instrument == targetCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: targetCourse.category, depth: 2)}) ?? Course()
 		}
 		return findCourse
 	}
@@ -384,6 +395,28 @@ extension ScorewindData {
 		result["courseID"] = nextCourse.id
 		result["lessonID"] = nextCourse.lessons.first(where: {$0.sortValue == equivalentLevel})?.id
 		
+		return result
+	}
+	
+	private func assignEquivalentLessonInPreviousCourseLevel(targetCourse: Course, targetLesson: Lesson) -> [String:Int] {
+		var result:[String:Int] = [:]
+		let previousCourse = assignPreviousCourse(targetCourse: targetCourse)
+		var previousCourseLessonLevels:[[String]] = []
+		var targetCourseLessonLevels:[[String]] = []
+		let previousCourseTimestamps = allTimestamps.filter({$0.id == previousCourse.id})
+		let targetCourseTimestamps = allTimestamps.filter({$0.id == targetCourse.id})
+		
+		previousCourseLessonLevels = getLessonLevelStructure(targetCourse: previousCourse, targetTimestamps: previousCourseTimestamps)
+		targetCourseLessonLevels = getLessonLevelStructure(targetCourse: targetCourse, targetTimestamps: targetCourseTimestamps)
+		let targetLessonLevelIndex = targetCourseLessonLevels.firstIndex(where: {$0.contains(targetLesson.sortValue)}) ?? 0
+		var setEquivalentLevel = 0
+		if targetLessonLevelIndex > 0 {
+			setEquivalentLevel = (previousCourseLessonLevels.count * targetLessonLevelIndex)/targetCourseLessonLevels.count
+		}
+		
+		let equivalentLevel = previousCourseLessonLevels[setEquivalentLevel][0]
+		result["courseID"] = previousCourse.id
+		result["lessonID"] = previousCourse.lessons.first(where: {$0.sortValue == equivalentLevel})?.id
 		return result
 	}
 	
