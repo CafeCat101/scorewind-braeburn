@@ -9,6 +9,7 @@ import Foundation
 enum ExperienceFeedback:String {
 	case starterKit = "start" //never played it, should start from 101
 	case continueLearning = "continue" //If prior wizard data exists, show this option. Start from last completed lesson or course or 103
+	case experienced = "repository"
 	
 	func getLabel() -> String{
 		switch self {
@@ -16,6 +17,8 @@ enum ExperienceFeedback:String {
 			return "I've never played it before"
 		case .continueLearning:
 			return "Continue learning"
+		case .experienced:
+			return "I'm skilled"
 		}
 	}
 	

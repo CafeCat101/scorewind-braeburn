@@ -30,6 +30,13 @@ struct WizardExperienceView: View {
 					print("choose Pick something else")
 					gotFeedback(selectedFeedback: .continueLearning)
 				}
+			
+			Text(ExperienceFeedback.experienced.getLabel())
+				.modifier(FeedbackOptionsModifier())
+				.onTapGesture {
+					print("choose Pick something else")
+					gotFeedback(selectedFeedback: .experienced)
+				}
 			Spacer()
 		}
 		.background(Color("AppBackground"))

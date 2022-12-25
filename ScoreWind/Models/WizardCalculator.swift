@@ -35,6 +35,13 @@ extension ScorewindData {
 						//remember to handle this
 					}
 				}
+			} else if studentData.getExperience() == ExperienceFeedback.experienced.rawValue {
+				let pathCourses = allCourses.filter({$0.instrument == studentData.getInstrumentChoice() && $0.category.contains(where: {$0.name == "Path"})})
+				if pathCourses.count > 0 {
+					assignedCourseId = pathCourses.sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})[0].id
+					assignedLessonId = 0
+				}
+				
 			} else {
 				let veryFirstCourse = allCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
 				if veryFirstCourse.id > 0 {
@@ -76,10 +83,6 @@ extension ScorewindData {
 						let getMiddleLesson = assignMiddleLessonInCourse(targetCourse: previousCourse)
 						assignedCourseId = getMiddleLesson["courseID"] ?? 0
 						assignedLessonId = getMiddleLesson["lessonID"] ?? 0
-						
-						if assignedLessonId == 0 {
-							assignedCourseId = previousCourse.id
-						}
 					}
 				} else {
 					// "Do you know" to previous course
@@ -204,7 +207,7 @@ extension ScorewindData {
 		return wizardPicked
 	}
 	
-	private func findSortOrderString(targetCourse: Course, order: SearchParameter) -> String {
+	/*private func findSortOrderString(targetCourse: Course, order: SearchParameter) -> String {
 		let sortOrderArr = targetCourse.sortValue.components(separatedBy: "-")
 		print("[debug] WizardCalculator, course.id \(targetCourse.id), sortOrderArr \(sortOrderArr)")
 		var sortOrderStr = ""
@@ -223,35 +226,33 @@ extension ScorewindData {
 		}
 		
 		return sortOrderStr
-	}
+	}*/
 	
 	private func assignPreviousCourse(targetCourse: Course) -> Course {
 		var findCourse = Course()
-		if targetCourse.sortValue.isEmpty == false {
-			let previoudSortValue = findSortOrderString(targetCourse: targetCourse, order: .DESC)
-			if previoudSortValue.isEmpty == false {
-				findCourse = allCourses.first(where: {cleanSortOrder(sortValue: $0.sortValue) == previoudSortValue && $0.instrument == targetCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: targetCourse.category, depth: 2)}) ?? Course()
-			}
+		let sameCategoryCourses = allCourses.filter({ $0.instrument == targetCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: targetCourse.category, depth: 2) && Int($0.sortValue)! < Int(targetCourse.sortValue)! })
+		if sameCategoryCourses.count > 0 {
+			findCourse = sameCategoryCourses.sorted(by: {Int($0.sortValue)! > Int($1.sortValue)!})[0]
 		}
 		
 		if findCourse.id == 0 {
-				findCourse = allCourses.first(where: {$0.instrument == targetCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: targetCourse.category, depth: 2)}) ?? Course()
+			let sameCategoryCourses2 = allCourses.filter({ $0.instrument == targetCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: targetCourse.category, depth: 2) })
+			findCourse = sameCategoryCourses2.sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})[0]
 		}
 		
 		return findCourse
 	}
 	
 	private func assignNextCourse(targetCourse: Course) -> Course {
-		var findCourse = allCourses[allCourses.count-1]
-		if targetCourse.sortValue.isEmpty == false {
-			let nextSortValue = findSortOrderString(targetCourse: targetCourse, order: .ASC)
-			if nextSortValue.isEmpty == false {
-				findCourse = allCourses.first(where: {cleanSortOrder(sortValue: $0.sortValue) == nextSortValue && $0.instrument == targetCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: targetCourse.category, depth: 2)}) ?? Course()
-			}
+		var findCourse = Course()
+		let sameCategoryCourses = allCourses.filter({ $0.instrument == targetCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: targetCourse.category, depth: 2) && Int($0.sortValue)! > Int(targetCourse.sortValue)! })
+		if sameCategoryCourses.count > 0 {
+			findCourse = sameCategoryCourses.sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})[0]
 		}
 		
 		if findCourse.id == 0 {
-			findCourse = allCourses.last(where: {$0.instrument == targetCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: targetCourse.category, depth: 2)}) ?? Course()
+			let sameCategoryCourses2 = allCourses.filter({ $0.instrument == targetCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: targetCourse.category, depth: 2) })
+			findCourse = sameCategoryCourses2.sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})[sameCategoryCourses.count-1]
 		}
 		return findCourse
 	}
