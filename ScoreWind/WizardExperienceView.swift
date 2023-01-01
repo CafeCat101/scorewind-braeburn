@@ -30,6 +30,7 @@ struct WizardExperienceView: View {
 					print("choose Pick something else")
 					gotFeedback(selectedFeedback: .continueLearning)
 				}
+				.padding(.bottom,20)
 			
 			Text(ExperienceFeedback.experienced.getLabel())
 				.modifier(FeedbackOptionsModifier())

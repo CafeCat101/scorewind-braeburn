@@ -63,8 +63,8 @@
 		C8782773290586590007DDC1 /* WizardExperienceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8782772290586590007DDC1 /* WizardExperienceView.swift */; };
 		C8782779290E4AD80007DDC1 /* WizardVideos in Resources */ = {isa = PBXBuildFile; fileRef = C8782778290E4AD80007DDC1 /* WizardVideos */; };
 		C878277B291670780007DDC1 /* ExperienceFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878277A291670780007DDC1 /* ExperienceFeedback.swift */; };
-		C8CA57A2292DD1730097AE07 /* scorewind_ios_xml.zip in Resources */ = {isa = PBXBuildFile; fileRef = C8CA57A1292DD1720097AE07 /* scorewind_ios_xml.zip */; };
 		C8CA57A42936F8D90097AE07 /* WizardPicked.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CA57A32936F8D90097AE07 /* WizardPicked.swift */; };
+		C8D8FE94295EA854003B3801 /* scorewind_ios_xml.zip in Resources */ = {isa = PBXBuildFile; fileRef = C8D8FE93295EA854003B3801 /* scorewind_ios_xml.zip */; };
 		C8E063F028B0E20E000B3D67 /* MyCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E063EF28B0E20E000B3D67 /* MyCourse.swift */; };
 /* End PBXBuildFile section */
 
@@ -149,8 +149,8 @@
 		C8782772290586590007DDC1 /* WizardExperienceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardExperienceView.swift; sourceTree = "<group>"; };
 		C8782778290E4AD80007DDC1 /* WizardVideos */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WizardVideos; sourceTree = "<group>"; };
 		C878277A291670780007DDC1 /* ExperienceFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperienceFeedback.swift; sourceTree = "<group>"; };
-		C8CA57A1292DD1720097AE07 /* scorewind_ios_xml.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = scorewind_ios_xml.zip; sourceTree = "<group>"; };
 		C8CA57A32936F8D90097AE07 /* WizardPicked.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardPicked.swift; sourceTree = "<group>"; };
+		C8D8FE93295EA854003B3801 /* scorewind_ios_xml.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = scorewind_ios_xml.zip; sourceTree = "<group>"; };
 		C8E063EF28B0E20E000B3D67 /* MyCourse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCourse.swift; sourceTree = "<group>"; };
 		F3441470A2546CDD3AD7E6C9 /* Pods_ScoreWind.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScoreWind.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5B8EA121B65003489B73002 /* Pods-ScoreWindTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScoreWindTests.debug.xcconfig"; path = "Target Support Files/Pods-ScoreWindTests/Pods-ScoreWindTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -229,7 +229,7 @@
 		C85F2728286F4C2B00D0A4E5 /* ScoreWind */ = {
 			isa = PBXGroup;
 			children = (
-				C8CA57A1292DD1720097AE07 /* scorewind_ios_xml.zip */,
+				C8D8FE93295EA854003B3801 /* scorewind_ios_xml.zip */,
 				C8782778290E4AD80007DDC1 /* WizardVideos */,
 				C878276F290511430007DDC1 /* Models */,
 				C85F275A286F4EF900D0A4E5 /* www */,
@@ -450,7 +450,7 @@
 				C85F272E286F4C2C00D0A4E5 /* Assets.xcassets in Resources */,
 				C8782779290E4AD80007DDC1 /* WizardVideos in Resources */,
 				C85F2759286F4EEE00D0A4E5 /* data_version.json in Resources */,
-				C8CA57A2292DD1730097AE07 /* scorewind_ios_xml.zip in Resources */,
+				C8D8FE94295EA854003B3801 /* scorewind_ios_xml.zip in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

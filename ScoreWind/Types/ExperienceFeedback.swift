@@ -16,7 +16,7 @@ enum ExperienceFeedback:String {
 		case .starterKit:
 			return "I've never played it before"
 		case .continueLearning:
-			return "Continue learning"
+			return "Continue learning, one step at a time"
 		case .experienced:
 			return "I'm skilled"
 		}
