@@ -63,6 +63,7 @@
 		C8782773290586590007DDC1 /* WizardExperienceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8782772290586590007DDC1 /* WizardExperienceView.swift */; };
 		C8782779290E4AD80007DDC1 /* WizardVideos in Resources */ = {isa = PBXBuildFile; fileRef = C8782778290E4AD80007DDC1 /* WizardVideos */; };
 		C878277B291670780007DDC1 /* ExperienceFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878277A291670780007DDC1 /* ExperienceFeedback.swift */; };
+		C87CF11F296FE84600CDA215 /* WizardLessonSearched.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87CF11E296FE84600CDA215 /* WizardLessonSearched.swift */; };
 		C8CA57A42936F8D90097AE07 /* WizardPicked.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CA57A32936F8D90097AE07 /* WizardPicked.swift */; };
 		C8D8FE94295EA854003B3801 /* scorewind_ios_xml.zip in Resources */ = {isa = PBXBuildFile; fileRef = C8D8FE93295EA854003B3801 /* scorewind_ios_xml.zip */; };
 		C8E063F028B0E20E000B3D67 /* MyCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E063EF28B0E20E000B3D67 /* MyCourse.swift */; };
@@ -149,6 +150,7 @@
 		C8782772290586590007DDC1 /* WizardExperienceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardExperienceView.swift; sourceTree = "<group>"; };
 		C8782778290E4AD80007DDC1 /* WizardVideos */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WizardVideos; sourceTree = "<group>"; };
 		C878277A291670780007DDC1 /* ExperienceFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperienceFeedback.swift; sourceTree = "<group>"; };
+		C87CF11E296FE84600CDA215 /* WizardLessonSearched.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardLessonSearched.swift; sourceTree = "<group>"; };
 		C8CA57A32936F8D90097AE07 /* WizardPicked.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardPicked.swift; sourceTree = "<group>"; };
 		C8D8FE93295EA854003B3801 /* scorewind_ios_xml.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = scorewind_ios_xml.zip; sourceTree = "<group>"; };
 		C8E063EF28B0E20E000B3D67 /* MyCourse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCourse.swift; sourceTree = "<group>"; };
@@ -333,6 +335,7 @@
 				C85F2763286F4F2E00D0A4E5 /* ScorewindTimestamp.swift */,
 				C8E063EF28B0E20E000B3D67 /* MyCourse.swift */,
 				C8CA57A32936F8D90097AE07 /* WizardPicked.swift */,
+				C87CF11E296FE84600CDA215 /* WizardLessonSearched.swift */,
 			);
 			path = DataModel;
 			sourceTree = "<group>";
@@ -578,6 +581,7 @@
 				C85F279E2877DE0C00D0A4E5 /* SearchParameter.swift in Sources */,
 				C878275328E8675F0007DDC1 /* MyCouseItemview.swift in Sources */,
 				C85F27A42879C20400D0A4E5 /* TipModalView.swift in Sources */,
+				C87CF11F296FE84600CDA215 /* WizardLessonSearched.swift in Sources */,
 				C85F2772286F4F2E00D0A4E5 /* CourseView.swift in Sources */,
 				C85F2795286F59BC00D0A4E5 /* CourseType.swift in Sources */,
 				C85F2793286F59BC00D0A4E5 /* Page.swift in Sources */,
