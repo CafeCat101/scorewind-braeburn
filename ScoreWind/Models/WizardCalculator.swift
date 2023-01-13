@@ -70,18 +70,31 @@ extension ScorewindData {
 					if assignedLessonId == 0 {
 						//:: looks like no lesson left in this course to learn
 						let nextCourse = assignNextCourse(targetCourse: wizardPickedCourse, studentData: studentData)
-						if studentData.wizardRange.contains(where: {$0.courseID == nextCourse.id && $0.lessonSortValue.isEmpty}) == false {
+						if studentData.wizardRange.contains(where: {$0.courseID == nextCourse.id }) == false {
 							assignedCourseId = nextCourse.id
 							assignedLessonId = 0
 						} else {
-							let findLessons = getNextLessons(targetCourse: wizardPickedCourse, targetLesson: wizardPickedCourse.lessons[wizardPickedCourse.lessons.count-1], useStudnetData: studentData, range: 5)
+							let lastLessonSortValue = wizardPickedCourse.lessons[wizardPickedCourse.lessons.count-1].sortValue
+							var lastLessonValue = Int(lastLessonSortValue.split(separator:"-")[1]) ?? 5
+							if lastLessonValue == 0 {
+								lastLessonValue = 1
+							}
+							let findLessons = getNextLessons(targetCourse: wizardPickedCourse, targetLesson: wizardPickedCourse.lessons[wizardPickedCourse.lessons.count-1], useStudnetData: studentData, range: lastLessonValue)
 							assignedCourseId = findLessons[0].courseID
 							assignedLessonId = findLessons[0].lesson.id
 						}
 					}
 				} else if finalFeedback == .someOfThem {
 					//:: "Playable", go few lesson levels down
-					let findLessons = getPreviousLessons(targetCourse: wizardPickedCourse, targetLesson: wizardPickedCourse.lessons[0], useStudnetData: studentData, range: 3)
+					let lastLessonSortValue = wizardPickedCourse.lessons[wizardPickedCourse.lessons.count-1].sortValue
+					var lastLessonValue = Int(lastLessonSortValue.split(separator:"-")[1]) ?? 6
+					if lastLessonValue == 0 {
+						lastLessonValue = 1
+					} else {
+						lastLessonValue = Int(lastLessonValue/2)
+					}
+					var findLessons = getPreviousLessons(targetCourse: wizardPickedCourse, targetLesson: wizardPickedCourse.lessons[0], useStudnetData: studentData, range: lastLessonValue)
+					findLessons.reverse()
 					assignedCourseId = findLessons[0].courseID
 					assignedLessonId = findLessons[0].lesson.id
 					
@@ -107,11 +120,17 @@ extension ScorewindData {
 				} else {
 					//:: go DoYouKnow or IsPlayable. Go 1 course level down or few lesson levels down.
 					let previousCourse = assignPreviousCourse(targetCourse: wizardPickedCourse, studentData: studentData)
-					if studentData.wizardRange.contains(where: {$0.courseID == previousCourse.id && $0.lessonSortValue.isEmpty}) == false {
+					if studentData.wizardRange.contains(where: {$0.courseID == previousCourse.id}) == false {
 						assignedCourseId = previousCourse.id
 						assignedLessonId = 0
 					} else {
-						let findLessons = getPreviousLessons(targetCourse: wizardPickedCourse, targetLesson: wizardPickedCourse.lessons[0], useStudnetData: studentData, range: 5)
+						let lastLessonSortValue = wizardPickedCourse.lessons[wizardPickedCourse.lessons.count-1].sortValue
+						var lastLessonValue = Int(lastLessonSortValue.split(separator:"-")[1]) ?? 10
+						if lastLessonValue == 0 {
+							//StepByStep before 101's lesson sort value is 122-0-0
+							lastLessonValue = 1
+						}
+						let findLessons = getPreviousLessons(targetCourse: wizardPickedCourse, targetLesson: wizardPickedCourse.lessons[0], useStudnetData: studentData, range: lastLessonValue)
 						assignedCourseId = findLessons[0].courseID
 						assignedLessonId = findLessons[0].lesson.id
 					}
@@ -134,7 +153,13 @@ extension ScorewindData {
 				assignedLessonId = lessonCourseDown["lessonID"] ?? 0
 				 */
 				//:: very hard, go many steps down
-				findLessons = getPreviousLessons(targetCourse: wizardPickedCourse, targetLesson: wizardPickedLesson, useStudnetData: studentData, range: 10)
+				let lastLessonSortValue = wizardPickedCourse.lessons[wizardPickedCourse.lessons.count-1].sortValue
+				var lessonLevelValue = Int(lastLessonSortValue.split(separator:"-")[1]) ?? 10
+				if lessonLevelValue == 0 {
+					lessonLevelValue = 1
+				}
+				findLessons = getPreviousLessons(targetCourse: wizardPickedCourse, targetLesson: wizardPickedLesson, useStudnetData: studentData, range: lessonLevelValue)
+				findLessons.reverse()
 
 			} else if Int(extractFeedback[0]) == 2 {
 				/*
@@ -169,12 +194,19 @@ extension ScorewindData {
 				assignedLessonId = lessonCourseUp["lessonID"] ?? 0
 				 */
 				//:: easy peasy, go many steps up
-				findLessons = getNextLessons(targetCourse: wizardPickedCourse, targetLesson: wizardPickedLesson, useStudnetData: studentData, range: 10)
+				let lastLessonSortValue = wizardPickedCourse.lessons[wizardPickedCourse.lessons.count-1].sortValue
+				var lessonLevelValue = Int(lastLessonSortValue.split(separator:"-")[1]) ?? 10
+				if lessonLevelValue == 0 {
+					lessonLevelValue = 1
+				}
+				findLessons = getNextLessons(targetCourse: wizardPickedCourse, targetLesson: wizardPickedLesson, useStudnetData: studentData, range: lessonLevelValue)
+				findLessons.reverse()
 			}
 			
 			if findLessons.count > 0 {
 				assignedCourseId = findLessons[0].courseID
-				if areLessonsInCourseAsked(targetCourseID: assignedCourseId, range: studentData.wizardRange) == false {
+				//if areLessonsInCourseAsked(targetCourseID: assignedCourseId, range: studentData.wizardRange) == false {
+				if studentData.wizardRange.contains(where: {$0.courseID == assignedCourseId}) == false {
 					assignedLessonId = 0
 				} else {
 					assignedLessonId = findLessons[0].lesson.id
@@ -685,9 +717,12 @@ extension ScorewindData {
 	}
 	
 	private func getNextLessons(targetCourse: Course, targetLesson: Lesson, useStudnetData: StudentData, range: Int) -> [WizardLessonSearched]{
+		print("[debug] wizardCalcaultor, getNextLessons, range \(range)")
 		var lessons:[WizardLessonSearched] = []
 		var nextCourses = allCourses.filter({ $0.instrument == targetCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: targetCourse.category, depth: 2) && Int($0.sortValue)! >= Int(targetCourse.sortValue)! })
 		
+		nextCourses = nextCourses.sorted(by: { Int($0.sortValue)! < Int($1.sortValue)!})
+		print("[debug] wizardCalcaultor, getNextLessons, nextCourses[0].title \(nextCourses[0].title)")
 		nextCourses = excludeCoursesCompleted(targetCourse: nextCourses, useStudentData: useStudnetData)
 		lessons = appendLessonsFromCourses(targetLessonStep:targetLesson.step ,courseCollection: nextCourses, useStudnetData: useStudnetData, limit: range, appendingOrder: .ASC)
 		
@@ -695,10 +730,11 @@ extension ScorewindData {
 	}
 	
 	private func getPreviousLessons(targetCourse: Course, targetLesson: Lesson, useStudnetData: StudentData, range: Int) -> [WizardLessonSearched] {
+		print("[debug] wizardCalcaultor, getPreviousLessons, range \(range)")
 		var lessons:[WizardLessonSearched] = []
 		var previousCourses = allCourses.filter({ $0.instrument == targetCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: targetCourse.category, depth: 2) && Int($0.sortValue)! <= Int(targetCourse.sortValue)! })
 		
-		previousCourses.reverse()
+		previousCourses = previousCourses.sorted(by: {Int($0.sortValue)! > Int($1.sortValue)!})
 		previousCourses = excludeCoursesCompleted(targetCourse: previousCourses, useStudentData: useStudnetData)
 		lessons = appendLessonsFromCourses(targetLessonStep:targetLesson.step ,courseCollection: previousCourses, useStudnetData: useStudnetData, limit: range, appendingOrder: .DESC)
 		
@@ -720,12 +756,14 @@ extension ScorewindData {
 	private func appendLessonsFromCourses(targetLessonStep: Int,courseCollection: [Course], useStudnetData: StudentData, limit: Int, appendingOrder: SearchParameter) -> [WizardLessonSearched] {
 		var lessons:[WizardLessonSearched] = []
 		
+		//courseCollection has the current wizardPickedCourse
 		if courseCollection.count > 0 {
 			for course in courseCollection {
 				print("[debug] appendLessonsFromCourses, course.id \(course.title)")
 				if course.category.contains(where: {$0.name == "Methods"}) && course.category.contains(where: {$0.name == "Step By Step"}) && course.category.count == 2 {
 					if course.id == courseCollection[0].id {
-						break
+						//StepByStep before 101 only last lesson is revelant so there is no need to process other lesson in current course
+						continue
 					}
 					
 					var lessonsInCourse = [course.lessons[course.lessons.count-1]]
@@ -754,27 +792,34 @@ extension ScorewindData {
 					if lessonsInCourse.count > 0 {
 						for lesson in lessonsInCourse {
 							print("[debug] appendLessonsFromCourses, StepByStep or Path course, lesson.step \(lesson.step):targetLessonStep \(targetLessonStep)")
-							if appendingOrder == .ASC {
-								if lesson.step <= targetLessonStep {
-									break
-								}
-							} else {
-								if lesson.step >= targetLessonStep {
-									break
+							if course.id == courseCollection[0].id {
+								//becasue courseCollection[0] is the current wizardPickedCourse, don't process the lesson level before or after wizardPickedLesson
+								if appendingOrder == .ASC {
+									if lesson.step <= targetLessonStep {
+										continue
+									}
+								} else {
+									if lesson.step >= targetLessonStep {
+										continue
+									}
 								}
 							}
 							
 							let sortValues = lesson.sortValue.split(separator:"-")
-							if lessons.contains(where: {$0.lesson.sortValue.contains(sortValues[0]+"-"+sortValues[1])} ) == false {
-								if checkIfLessonPlayable(targetCourseID: course.id, targetLesson: lesson) {
-									lessons.append(WizardLessonSearched(courseID: course.id, lesson: lesson))
-									print("[debug] appendLessonsFromCourses, StepByStep or Path course, lessons.count \(lessons.count):\(limit)")
-									if lessons.count >= limit {
-										break
-									}
+							print("[debug] appendLessonsFromCourses, StepByStep or Path course, lesson.sortValue \(sortValues[0])-\(sortValues[1])")
+							let lessonsAtSameLessonLevel = useStudnetData.wizardRange.filter({ $0.lessonSortValue.contains(sortValues[0]+"-"+sortValues[1]) })
+							print("[debug] appendLessonsFromCourses, StepByStep or Path course, lessonsAtSameLessonLevel.count \(lessonsAtSameLessonLevel.count)")
+							if lessonsAtSameLessonLevel.count > 0 {
+								print("[debug] appendLessonsFromCourses, StepByStep or Path course, wizardRange contains more than 1 \(sortValues[0])-\(sortValues[1])")
+								continue
+							}
+							
+							if checkIfLessonPlayable(targetCourseID: course.id, targetLesson: lesson) {
+								lessons.append(WizardLessonSearched(courseID: course.id, lesson: lesson))
+								print("[debug] appendLessonsFromCourses, StepByStep or Path course, lessons.count \(lessons.count):\(limit)")
+								if lessons.count >= limit {
+									break
 								}
-							} else {
-								print("[debug] appendLessonsFromCourses, StepByStep or Path course, sortValue not contain \(sortValues[0])-\(sortValues[1])")
 							}
 						}
 					}
