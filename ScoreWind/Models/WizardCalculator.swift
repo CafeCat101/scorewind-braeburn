@@ -13,7 +13,7 @@ extension ScorewindData {
 		var assignedLessonId = 0
 		var goToWizardStep:Page = .wizardChooseInstrument
 		let currentStepName = studentData.wizardStepNames[studentData.wizardStepNames.count-1]
-		var currentFinalFeedbackValue = 0
+		var currentFinalFeedbackValue = 0.0
 		
 		if currentStepName == Page.wizardExperience {
 			print("[debug] createRecommendation, Page.wizardExperience, \(studentData.getExperience())")
@@ -58,7 +58,7 @@ extension ScorewindData {
 			let getCurrentDoYouKnow = studentData.getDoYouKnow().first(where: {$0.key == String(wizardPickedCourse.id)})
 			let finalFeedback = getDoYouKnowScore(answers: getCurrentDoYouKnow?.value as! [Int])
 			print("[debug] createRecommendation, finalFeedback \(finalFeedback)(\(finalFeedback.rawValue))")
-			currentFinalFeedbackValue = finalFeedback.rawValue
+			currentFinalFeedbackValue = Double(finalFeedback.rawValue)
 			
 			if wizardPickedCourse.id > 0 {
 				if finalFeedback == .allOfThem {
@@ -142,7 +142,7 @@ extension ScorewindData {
 		if currentStepName == .wizardPlayable {
 			let currentPlayableFeedback = studentData.getPlayable().first(where: {$0.key == String(wizardPickedLesson.id)})
 			let extractFeedback = (currentPlayableFeedback?.value as! String).split(separator:"|")
-			currentFinalFeedbackValue = Int(extractFeedback[0])!
+			currentFinalFeedbackValue = Double(extractFeedback[0])!
 			var findLessons:[WizardLessonSearched] = []
 			
 			if Int(extractFeedback[0]) == 1 {
@@ -253,7 +253,12 @@ extension ScorewindData {
 			
 		}
 		
-		//setup wizard view for this step
+		//:: register range feedbackvalue of current step
+		if currentStepName != Page.wizardChooseInstrument && studentData.wizardRange.count > 0 {
+			studentData.wizardRange[studentData.wizardRange.count-1].feedbackValue = currentFinalFeedbackValue
+		}
+		
+		//:: assign next step's wizard view
 		if goToWizardStep != .wizardResult {
 			if assignedCourseId > 0 && assignedLessonId > 0 {
 				goToWizardStep = .wizardPlayable
@@ -261,9 +266,9 @@ extension ScorewindData {
 				goToWizardStep = .wizardDoYouKnow
 			}
 			
-			//register range becasue the recommendation at this step is completed.
-			if (currentStepName != Page.wizardChooseInstrument) && (currentStepName != Page.wizardExperience) {
-				studentData.wizardRange.append(makeWizardPicked(courseID: assignedCourseId, lessonID: assignedLessonId, feedbackValue: currentFinalFeedbackValue))
+			//:: register range for the next step becasue the recommendation at this step is completed.
+			if currentStepName != Page.wizardChooseInstrument {
+				studentData.wizardRange.append(WizardPicked(allCourses: allCourses, courseID: assignedCourseId, lessonID: assignedLessonId, feedbackValue:0.0))
 			}
 		}
 		
@@ -273,6 +278,7 @@ extension ScorewindData {
 		return goToWizardStep
 	}
 	
+	/*
 	private func makeWizardPicked(courseID: Int, lessonID: Int, feedbackValue: Int) -> WizardPicked {
 		let theCourse = allCourses.first(where: {$0.id == courseID}) ?? Course()
 		
@@ -290,6 +296,7 @@ extension ScorewindData {
 		
 		return wizardPicked
 	}
+	 */
 	
 	private func assignPreviousCourse(targetCourse: Course, studentData: StudentData) -> Course {
 		var findCourse = Course()
@@ -832,6 +839,14 @@ extension ScorewindData {
 		}
 		
 		return lessons
+	}
+	
+	private func convertDoYouKnowFeedback(feedbackValue: Int) -> Double {
+		print("[debug] wizardCalcaultor, convertDoYouKnowFeedback, feedbaclValue \(feedbackValue)")
+		print("[debug] wizardCalcaultor, convertDoYouKnowFeedback, PlayableFeedback.allCases.count \(PlayableFeedback.allCases.count)")
+		print("[debug] wizardCalcaultor, convertDoYouKnowFeedback, DoYouKnowFeedback.allCases.count \(DoYouKnowFeedback.allCases.count)")
+		let originalDouble = Double((PlayableFeedback.allCases.count*feedbackValue))/Double(DoYouKnowFeedback.allCases.count)
+		return round(originalDouble * 10) / 10.0
 	}
 
 

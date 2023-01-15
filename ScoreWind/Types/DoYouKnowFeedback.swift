@@ -6,7 +6,9 @@
 //
 
 import Foundation
-
+/**
+ The "Good to go" answer (allOfThem) needs to have the same value as PlayableFeedback's "Good to go" answer(can learn)
+ */
 enum DoYouKnowFeedback: Int, CaseIterable {
 	case allOfThem = 3
 	case someOfThem = 2
