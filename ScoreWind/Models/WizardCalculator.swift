@@ -36,7 +36,7 @@ extension ScorewindData {
 					}
 				}
 			} else if studentData.getExperience() == ExperienceFeedback.experienced.rawValue {
-				let pathCourses = allCourses.filter({$0.instrument == studentData.getInstrumentChoice() && $0.category.contains(where: {$0.name == "Path"})})
+				let pathCourses = allCourses.filter({$0.instrument == studentData.getInstrumentChoice() && $0.category.contains(where: {$0.name == CourseType.path.getCategoryName()})})
 				if pathCourses.count > 0 {
 					let veryFirstPathCourse = pathCourses.sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})[0]
 					assignedCourseId = veryFirstPathCourse.id
@@ -44,11 +44,14 @@ extension ScorewindData {
 				}
 				
 			} else {
-				let veryFirstCourse = allCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
+				let uncompletedLessons = getUncompletedLessonsByType(courseType: .noSpecific, lessonCount: 1, useStudentData: studentData)
+				/*let veryFirstCourse = allCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
 				if veryFirstCourse.id > 0 {
 					assignedCourseId = veryFirstCourse.id
 					assignedLessonId = veryFirstCourse.lessons[0].id
-				}
+				}*/
+				assignedCourseId = uncompletedLessons[0].courseID
+				assignedLessonId = uncompletedLessons[0].lessonID
 				goToWizardStep = .wizardResult
 			}
 		}
@@ -214,17 +217,19 @@ extension ScorewindData {
 			}
 		}
 		
-		//setup wizard picked course object
-		if assignedCourseId > 0 {
-			wizardPickedCourse = allCourses.first(where: {$0.id == assignedCourseId}) ?? Course()
-			print("[debug] createRecommendation, assignCourseId \(assignedCourseId)")
-		}
-		
-		//setup wizard picked lesson object and its teimstamps
-		if assignedLessonId > 0 {
-			wizardPickedLesson = wizardPickedCourse.lessons.first(where: {$0.id == assignedLessonId}) ?? Lesson()
-			wizardPickedTimestamps = (allTimestamps.first(where: {$0.id == assignedCourseId})?.lessons.first(where: {$0.id == assignedLessonId})!.timestamps) ?? []
-			print("[debug] createRecommendation, assignLessonId \(assignedLessonId)")
+		if (studentData.wizardRange.count > 10) && (studentData.getExperience() != ExperienceFeedback.starterKit.rawValue) {
+			let checkCompletedLessonStatus:Double = Double(studentData.getTotalCompletedLessonCount())/5
+			if ((checkCompletedLessonStatus  - checkCompletedLessonStatus.rounded(.down) < 1) && (checkCompletedLessonStatus  - checkCompletedLessonStatus.rounded(.down) > 0)) == false {
+				let explorer = explorerAlgorithm(useStudentData: studentData)
+				assignedCourseId = explorer["courseID"] ?? 0
+				assignedLessonId = explorer["lessonID"] ?? 0
+			} else {
+				let lastCourseInRange = allCourses.first(where: {$0.id == studentData.wizardRange.last?.courseID}) ?? Course()
+				let assesment = assesmentAlgorithm(useStudentData: studentData, exampleCourse: lastCourseInRange)
+				assignedCourseId = assesment["courseID"] ?? 0
+				assignedLessonId = assesment["lessonID"] ?? 0
+			}
+			goToWizardStep = .wizardResult
 		}
 		
 		if assignedCourseId == 0 && assignedLessonId == 0 {
@@ -233,24 +238,38 @@ extension ScorewindData {
 				goToWizardStep = .wizardResult
 			}
 		} else {
-			//101 and 102 is a package deal, reassign wizard picked course to the beginning
-			if wizardPickedCourse.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"}) {
-				let veryFirstCourse = allCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
-				assignedCourseId = veryFirstCourse.id
-				assignedLessonId = veryFirstCourse.lessons[0].id
+			//setup wizard picked course object
+			if assignedCourseId > 0 {
+				wizardPickedCourse = allCourses.first(where: {$0.id == assignedCourseId}) ?? Course()
 				
-				wizardPickedCourse = veryFirstCourse
-				if assignedLessonId > 0 {
-					wizardPickedLesson = veryFirstCourse.lessons[0]
-					wizardPickedTimestamps = (allTimestamps.first(where: {$0.id == assignedCourseId})?.lessons.first(where: {$0.id == assignedLessonId})!.timestamps) ?? []
-				} else {
-					wizardPickedLesson = Lesson()
-					wizardPickedTimestamps = []
+				//101 and 102 is a package deal, reassign wizard picked course to any not completed one between 101~102
+				if (wizardPickedCourse.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"}) && (studentData.getExperience() != ExperienceFeedback.starterKit.rawValue)) {
+					var beginnerCoursePackage = allCourses.filter({$0.instrument == studentData.getInstrumentChoice() && $0.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"})}).sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})
+					beginnerCoursePackage = excludeCoursesCompleted(targetCourse: beginnerCoursePackage, useStudentData: studentData)
+					for course in beginnerCoursePackage {
+						let uncompletedLesson = excludeLessonsCompleted(targetCourseID: course.id, targetLessons: course.lessons, useStudentData: studentData)
+						if uncompletedLesson.count > 0 {
+							wizardPickedCourse = course
+							assignedCourseId = course.id
+							assignedLessonId = uncompletedLesson[0].id
+							break
+						}
+					}
+					goToWizardStep = .wizardResult
 				}
-				goToWizardStep = .wizardResult
+				
+				print("[debug] createRecommendation, assignCourseId \(assignedCourseId)")
 			}
 			
-			
+			//setup wizard picked lesson object and its teimstamps
+			if assignedLessonId > 0 {
+				wizardPickedLesson = wizardPickedCourse.lessons.first(where: {$0.id == assignedLessonId}) ?? Lesson()
+				wizardPickedTimestamps = (allTimestamps.first(where: {$0.id == assignedCourseId})?.lessons.first(where: {$0.id == assignedLessonId})!.timestamps) ?? []
+				print("[debug] createRecommendation, assignLessonId \(assignedLessonId)")
+			} else {
+				wizardPickedLesson = Lesson()
+				wizardPickedTimestamps = []
+			}
 		}
 		
 		//:: register range feedbackvalue of current step
@@ -372,8 +391,10 @@ extension ScorewindData {
 		
 		if findCourseInMine?.completedLessons.count ?? 0 > 0 {
 			for lessonItem in findCourseInMine?.completedLessons ?? [] {
-				processLessons.removeAll(where: {$0.id == lessonItem})
+				print("[debug] wizardCalculator, excldueLessonsCompleted, completedLessonItem \(lessonItem)")
+				processLessons.removeAll(where: {$0.scorewindID == lessonItem})
 			}
+			print("[debug] wizardCalculator, excldueLessonsCompleted, processLessons.count \(processLessons.count)")
 		}
 		
 		return processLessons
@@ -847,6 +868,91 @@ extension ScorewindData {
 		print("[debug] wizardCalcaultor, convertDoYouKnowFeedback, DoYouKnowFeedback.allCases.count \(DoYouKnowFeedback.allCases.count)")
 		let originalDouble = Double((PlayableFeedback.allCases.count*feedbackValue))/Double(DoYouKnowFeedback.allCases.count)
 		return round(originalDouble * 10) / 10.0
+	}
+	
+	private func explorerAlgorithm(useStudentData: StudentData) -> [String:Int] {
+		var result:[String:Int] = [:]
+		var sortedWizardRange:[WizardPicked] = useStudentData.wizardRange
+		
+		var sumFeedback = 0.0
+		for rangeItem in sortedWizardRange {
+			sumFeedback = sumFeedback + rangeItem.feedbackValue
+		}
+		
+		let averageFeedbackValue = sumFeedback / Double(sortedWizardRange.count)
+
+		print("[debug] wizardCalcaultor, explorerAlgorithm, sorted \(sortedWizardRange)")
+		
+		sortedWizardRange = sortedWizardRange.sorted(by: {$0.sortHelper < $1.sortHelper}).filter({$0.feedbackValue < averageFeedbackValue})
+		
+		result["courseID"] = sortedWizardRange[0].courseID
+		result["lessonID"] = sortedWizardRange[0].lessonID
+		return result
+	}
+	
+	private func assesmentAlgorithm(useStudentData: StudentData, exampleCourse: Course) -> [String:Int] {
+		var result:[String:Int] = [:]
+		let sortedWizardRange:[WizardPicked] = useStudentData.wizardRange
+		
+		let itemWithHighestFeedbackValue = sortedWizardRange.max(by: {$0.feedbackValue < $1.feedbackValue})
+		let narrowSortedWizardRange = sortedWizardRange.filter({$0.feedbackValue <= itemWithHighestFeedbackValue!.feedbackValue})
+		let averageSortHelperValue = (narrowSortedWizardRange[0].sortHelper + narrowSortedWizardRange[narrowSortedWizardRange.count-1].sortHelper)/2
+		let extractCourseSortValue:Int = Int(averageSortHelperValue.rounded(.down))
+		
+		var coursesTroProcess = allCourses.filter({ $0.instrument == exampleCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: exampleCourse.category, depth: 2) && Int($0.sortValue)! >= extractCourseSortValue })
+		
+		coursesTroProcess = excludeCoursesCompleted(targetCourse: coursesTroProcess, useStudentData: useStudentData).sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})
+		
+		for course in coursesTroProcess {
+			let findUncompletedLessons = excludeLessonsCompleted(targetCourseID: course.id, targetLessons: course.lessons, useStudentData: useStudentData)
+			if findUncompletedLessons.count > 0 {
+				result["courseID"] = course.id
+				result["lessonID"] = findUncompletedLessons[0].id
+				break
+			}
+		}
+		
+		return result
+	}
+	
+	private func getUncompletedLessonsByType(courseType: CourseType = .noSpecific, lessonCount: Int, useStudentData: StudentData) -> [WizardPicked]{
+		var uncompletedLessons:[WizardPicked] = []
+		var sortedCourses = allCourses.filter({$0.instrument == useStudentData.getInstrumentChoice()}).sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})
+		
+		if courseType == .stepByStep {
+			sortedCourses = allCourses.filter({ $0.category.contains(where: {$0.name == "Methods"}) && $0.category.contains(where: {$0.name == CourseType.stepByStep.getCategoryName()}) })
+		} else if courseType == .path {
+			sortedCourses = allCourses.filter({ $0.category.contains(where: {$0.name == "Methods"}) && $0.category.contains(where: {$0.name == CourseType.path.getCategoryName()}) && $0.category.count == 2 })
+		}
+		
+		sortedCourses = excludeCoursesCompleted(targetCourse: sortedCourses, useStudentData: useStudentData)
+		outerLoop:for course in sortedCourses {
+			print("[debug] wizardCalculator, getUncompletedLessonsByType, course \(course.title)")
+			for lesson in excludeLessonsCompleted(targetCourseID: course.id, targetLessons: course.lessons, useStudentData: useStudentData) {
+				print("[debug] wizardCalculator, getUncompletedLessonsByType, lesson \(lesson.title)")
+				uncompletedLessons.append(WizardPicked(allCourses: [course], courseID: course.id, lessonID: lesson.id, feedbackValue: 0.0))
+				print("[debug] wizardCalculator, getUncompletedLessonsByType, uncompletedLesson.count \(uncompletedLessons.count)")
+				if uncompletedLessons.count == lessonCount {
+					break outerLoop
+				}
+				
+			}
+		}
+		/*outerLoop:for course in sortedCourses {
+			print("====>course:\(course.title)")
+			for lesson in course.lessons {
+				if useStudentData.myCourses.contains(where: { ($0.courseID == course.id) && ($0.completedLessons.contains(where: {$0 == lesson.id}) == false) }) {
+					print("====>lesson:\(lesson.title)")
+					uncompletedLessons.append(WizardPicked(allCourses: [course], courseID: course.id, lessonID: lesson.id, feedbackValue: 0.0))
+					print("====>lesson count:\(lessonCount)")
+					if uncompletedLessons.count == lessonCount {
+						break outerLoop
+					}
+				}
+			}
+		}*/
+		
+		return uncompletedLessons
 	}
 
 

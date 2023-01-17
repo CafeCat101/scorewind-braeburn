@@ -322,4 +322,12 @@ class StudentData: ObservableObject {
 		return useriCloudKeyValueStore.dictionary(forKey: "wizardDiscovered") ?? [:]
 	}
 	
+	func getTotalCompletedLessonCount() -> Int {
+		var countLesson = 0
+		for course in myCourses {
+			countLesson = countLesson + course.completedLessons.count
+		}
+		return countLesson
+	}
+	
 }

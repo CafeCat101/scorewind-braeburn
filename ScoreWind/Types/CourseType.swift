@@ -9,5 +9,17 @@ import Foundation
 
 enum CourseType {
 	case path
-	case setByStep
+	case stepByStep
+	case noSpecific
+	
+	func getCategoryName() -> String{
+		switch self {
+		case .path:
+			return "Path"
+		case .stepByStep:
+			return "Step By Step"
+		case .noSpecific:
+			return "Method"
+		}
+	}
 }
