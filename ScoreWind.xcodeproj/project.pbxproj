@@ -64,8 +64,8 @@
 		C8782779290E4AD80007DDC1 /* WizardVideos in Resources */ = {isa = PBXBuildFile; fileRef = C8782778290E4AD80007DDC1 /* WizardVideos */; };
 		C878277B291670780007DDC1 /* ExperienceFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878277A291670780007DDC1 /* ExperienceFeedback.swift */; };
 		C87CF11F296FE84600CDA215 /* WizardLessonSearched.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87CF11E296FE84600CDA215 /* WizardLessonSearched.swift */; };
-		C87CF1212977B50F00CDA215 /* FullScreenTipModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87CF1202977B50E00CDA215 /* FullScreenTipModalView.swift */; };
 		C87CF1242978365400CDA215 /* BackgroundTransparentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87CF1232978365400CDA215 /* BackgroundTransparentView.swift */; };
+		C87CF1262979399B00CDA215 /* TipTransparentModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87CF1252979399B00CDA215 /* TipTransparentModalView.swift */; };
 		C8CA57A42936F8D90097AE07 /* WizardPicked.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CA57A32936F8D90097AE07 /* WizardPicked.swift */; };
 		C8D8FE94295EA854003B3801 /* scorewind_ios_xml.zip in Resources */ = {isa = PBXBuildFile; fileRef = C8D8FE93295EA854003B3801 /* scorewind_ios_xml.zip */; };
 		C8E063F028B0E20E000B3D67 /* MyCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E063EF28B0E20E000B3D67 /* MyCourse.swift */; };
@@ -153,8 +153,8 @@
 		C8782778290E4AD80007DDC1 /* WizardVideos */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WizardVideos; sourceTree = "<group>"; };
 		C878277A291670780007DDC1 /* ExperienceFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperienceFeedback.swift; sourceTree = "<group>"; };
 		C87CF11E296FE84600CDA215 /* WizardLessonSearched.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardLessonSearched.swift; sourceTree = "<group>"; };
-		C87CF1202977B50E00CDA215 /* FullScreenTipModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenTipModalView.swift; sourceTree = "<group>"; };
 		C87CF1232978365400CDA215 /* BackgroundTransparentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTransparentView.swift; sourceTree = "<group>"; };
+		C87CF1252979399B00CDA215 /* TipTransparentModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipTransparentModalView.swift; sourceTree = "<group>"; };
 		C8CA57A32936F8D90097AE07 /* WizardPicked.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardPicked.swift; sourceTree = "<group>"; };
 		C8D8FE93295EA854003B3801 /* scorewind_ios_xml.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = scorewind_ios_xml.zip; sourceTree = "<group>"; };
 		C8E063EF28B0E20E000B3D67 /* MyCourse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCourse.swift; sourceTree = "<group>"; };
@@ -270,8 +270,8 @@
 				C8E063EA28AE06B7000B3D67 /* DataModel */,
 				C85F272F286F4C2C00D0A4E5 /* Preview Content */,
 				C85F2798286F5A4E00D0A4E5 /* Types */,
-				C87CF1202977B50E00CDA215 /* FullScreenTipModalView.swift */,
 				C87CF1232978365400CDA215 /* BackgroundTransparentView.swift */,
+				C87CF1252979399B00CDA215 /* TipTransparentModalView.swift */,
 			);
 			path = ScoreWind;
 			sourceTree = "<group>";
@@ -599,8 +599,8 @@
 				C87CF11F296FE84600CDA215 /* WizardLessonSearched.swift in Sources */,
 				C85F2772286F4F2E00D0A4E5 /* CourseView.swift in Sources */,
 				C85F2795286F59BC00D0A4E5 /* CourseType.swift in Sources */,
-				C87CF1212977B50F00CDA215 /* FullScreenTipModalView.swift in Sources */,
 				C85F2793286F59BC00D0A4E5 /* Page.swift in Sources */,
+				C87CF1262979399B00CDA215 /* TipTransparentModalView.swift in Sources */,
 				C85F2781286F4F2E00D0A4E5 /* MyTheme.swift in Sources */,
 				C85F277B286F4F2E00D0A4E5 /* HTMLString.swift in Sources */,
 				C85F2797286F59BC00D0A4E5 /* DownloadStatus.swift in Sources */,

@@ -63,7 +63,7 @@ struct WizardExperienceView: View {
 		.fullScreenCover(isPresented: $showStepTip, onDismiss: {
 			goToNextStep()
 		}, content: {
-			wizardTip(showStepTip: $showStepTip, tipContent: $tipContent)
+			TipTransparentModalView(showStepTip: $showStepTip, tipContent: $tipContent)
 		})
 	}
 
@@ -81,42 +81,10 @@ struct WizardExperienceView: View {
 		
 		let hideTips:[String] = userDefaults.object(forKey: "hideTips") as? [String] ?? []
 		if hideTips.contains(Tip.wizardExperience.rawValue) == false {
-			//tipContent = AnyView(testTip(choise: selectedFeedback))
 			tipContent = AnyView(makeTipView(showStepTip: $showStepTip, choise: selectedFeedback))
 			showStepTip = true
 		} else {
 			goToNextStep()
-		}
-	}
-	
-	struct testTip: View {
-		var choise: ExperienceFeedback
-		let screenSize: CGRect = UIScreen.main.bounds
-		var body: some View {
-			VStack {
-				Text("\(choise.getLabel())")
-				.font(.headline)
-				.modifier(StepExplainingText())
-				
-				if choise == ExperienceFeedback.continueLearning {
-					Text("One step at a time, and you are learning well.\n\nHowever, sometimes you are just wondering what's ahead of you. Maybe you want to take on some challenges.\n\nThere is no time to hesitate. Let's go!")
-						.modifier(StepExplainingText())
-				} else if choise == ExperienceFeedback.experienced {
-					Text("You are skillfull. You can navigate new pieces faster.\nThis step will take you to explore over 400 pieces organized by different techniques in our repositories. Enjoy!")
-						.modifier(StepExplainingText())
-				} else {
-					Text("Scorewind has over 1000 lessons organized by their difficulties. This step will show you the lessons yet completed ahead of you.")
-						.modifier(StepExplainingText())
-				}
-				
-				/*
-				Text("[example]One step at a time, and you are learning well.\n\nHowever, sometimes you are just wondering what's ahead of you. Maybe you want to take on some challenges.\n\nThere is no time to hesitate. Let's go!")
-					.modifier(StepExplainingText())*/
-
-			}.background {
-				RoundedRectangle(cornerRadius: 26)
-					.foregroundColor(Color("AppYellow"))
-				.frame(width: screenSize.width*0.9, height: screenSize.height*0.7)}
 		}
 	}
 	
@@ -153,11 +121,6 @@ struct WizardExperienceView: View {
 						Text("Scorewind has over 1000 lessons organized by their difficulties. This step will show you the lessons yet completed ahead of you.")
 							.modifier(StepExplainingText())
 					}
-					
-					/*
-					Text("[example]One step at a time, and you are learning well.\n\nHowever, sometimes you are just wondering what's ahead of you. Maybe you want to take on some challenges.\n\nThere is no time to hesitate. Let's go!")
-						.modifier(StepExplainingText())*/
-
 				}.background {
 					RoundedRectangle(cornerRadius: 26)
 						.foregroundColor(Color("AppYellow"))
@@ -171,7 +134,7 @@ struct WizardExperienceView: View {
 					}, label: {
 						Text("OK").frame(minWidth:150)
 					})
-					.foregroundColor(Color("LessonSheet"))
+					.foregroundColor(Color("LessonListStatusIcon"))
 					.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
 					.background {
 						RoundedRectangle(cornerRadius: 26)
@@ -213,65 +176,7 @@ struct WizardExperienceView_Previews: PreviewProvider {
 
 
 
-struct wizardTip: View {
-	@Binding var showStepTip:Bool
-	@Binding var tipContent:AnyView
-	//let screenSize: CGRect = UIScreen.main.bounds
-	//@State private var userDefaults = UserDefaults.standard
-	
-	var body: some View {
-		VStack {
-			VStack{
-			}.frame(maxWidth: .infinity, maxHeight: .infinity)
-				.background(Color.black)//.foregroundColor(Color.white)
-			 .opacity(0.77)
-			 .overlay(content: {
-				 tipContent
-				 /*
-				 VStack{
-					 Spacer()
-					 tipContent
-					 Spacer()
-					 VStack{
-						 Button(action: {
-							 print("ok")
-							 showStepTip = false
-						 }, label: {
-							 Text("OK")
-						 })
-						 .foregroundColor(Color("LessonSheet"))
-						 .padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
-						 .background {
-							 RoundedRectangle(cornerRadius: 26)
-								 .foregroundColor(Color("AppYellow"))
-						 }
-						 
-						 Button(action: {
-							 print("don't show me again")
-							 var hideTips:[String] = userDefaults.object(forKey: "hideTips") as? [String] ?? []
-							 if hideTips.contains(Tip.wizardExperience.rawValue) == false {
-								 hideTips.append(Tip.wizardExperience.rawValue)
-								 userDefaults.set(hideTips,forKey: "hideTips")
-							 }
-							 
-							 showStepTip = false
-						 }, label: {
-							 Text("Don't show me again")
-						 }).foregroundColor(Color("LessonSheet"))
-							 .padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
-								.background {
-									RoundedRectangle(cornerRadius: 26)
-										.foregroundColor(Color("BadgeScoreAvailable"))
-								}
-					 }
-				 }*/
-			 })
-			 .onTapGesture {
-				 showStepTip = false
-			 }
-		}.background(BackgroundTransparentView())
-	}
-}
+
 
 
 
