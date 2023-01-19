@@ -18,38 +18,32 @@ extension ScorewindData {
 		if currentStepName == Page.wizardExperience {
 			print("[debug] createRecommendation, Page.wizardExperience, \(studentData.getExperience())")
 			if studentData.getExperience() == ExperienceFeedback.continueLearning.rawValue {
+				var sortedCourses = allCourses.filter({$0.instrument == studentData.getInstrumentChoice() && $0.category.contains(where: {$0.name == CourseType.stepByStep.getCategoryName()})}).sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})
 				if studentData.getInstrumentChoice() == InstrumentType.guitar.rawValue {
-					let guitar103Courses = allCourses.filter({$0.instrument == InstrumentType.guitar.rawValue && $0.category.contains(where: {$0.name == "Guitar 103"})})
-					if guitar103Courses.count > 0 {
-						assignedCourseId = guitar103Courses.sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})[0].id //G103.1 id:96100
-						assignedLessonId = 0
-					} else {
-						//remember to handle this
-					}
-				} else if studentData.getInstrumentChoice() == InstrumentType.violin.rawValue {
-					let violin103Courses = allCourses.filter({$0.instrument == InstrumentType.violin.rawValue && $0.category.contains(where: {$0.name == "Violin 103"})})
-					if violin103Courses.count > 0 {
-						assignedCourseId = violin103Courses.sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})[0].id //V103.1 id:98384
-						assignedLessonId = 0
-					} else {
-						//remember to handle this
-					}
+					sortedCourses = sortedCourses.filter({$0.category.contains(where: {$0.name == "Guitar 101"}) == false && $0.category.contains(where: {$0.name == "Guitar 102"}) == false})
+				} else {
+					sortedCourses = sortedCourses.filter({$0.category.contains(where: {$0.name == "Violin 101"}) == false && $0.category.contains(where: {$0.name == "Violin 102"}) == false})
 				}
+				
+				sortedCourses = excludeCoursesCompleted(targetCourse: sortedCourses, useStudentData: studentData)
+				
+				let uncompletedLessons = getUncompletedLessonsFromCourses(sortedCourses: sortedCourses, lessonCount: 1, useStudentData: studentData)
+				if uncompletedLessons.count > 0 {
+					assignedCourseId = uncompletedLessons[0].courseID
+					assignedLessonId = 0
+				}
+				
 			} else if studentData.getExperience() == ExperienceFeedback.experienced.rawValue {
-				let pathCourses = allCourses.filter({$0.instrument == studentData.getInstrumentChoice() && $0.category.contains(where: {$0.name == CourseType.path.getCategoryName()})})
-				if pathCourses.count > 0 {
-					let veryFirstPathCourse = pathCourses.sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})[0]
-					assignedCourseId = veryFirstPathCourse.id
-					assignedLessonId = veryFirstPathCourse.lessons[1].id
+				let pathCourses = allCourses.filter({$0.instrument == studentData.getInstrumentChoice() && $0.category.contains(where: {$0.name == CourseType.path.getCategoryName()})}).sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})
+				let uncompletedLessons = getUncompletedLessonsFromCourses(sortedCourses: pathCourses, lessonCount: 1, useStudentData: studentData, onlyPlayable: true)
+				if uncompletedLessons.count > 0 {
+					assignedCourseId = uncompletedLessons[0].courseID
+					assignedLessonId = uncompletedLessons[0].lessonID
 				}
 				
 			} else {
-				let uncompletedLessons = getUncompletedLessonsByType(courseType: .noSpecific, lessonCount: 1, useStudentData: studentData)
-				/*let veryFirstCourse = allCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
-				if veryFirstCourse.id > 0 {
-					assignedCourseId = veryFirstCourse.id
-					assignedLessonId = veryFirstCourse.lessons[0].id
-				}*/
+				let sortedCourses = allCourses.filter({$0.instrument == studentData.getInstrumentChoice()}).sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})
+				let uncompletedLessons = getUncompletedLessonsFromCourses(sortedCourses: sortedCourses, lessonCount: 1, useStudentData: studentData)
 				assignedCourseId = uncompletedLessons[0].courseID
 				assignedLessonId = uncompletedLessons[0].lessonID
 				goToWizardStep = .wizardResult
@@ -100,26 +94,7 @@ extension ScorewindData {
 					findLessons.reverse()
 					assignedCourseId = findLessons[0].courseID
 					assignedLessonId = findLessons[0].lesson.id
-					
-					/*
-					let previousCourse = assignPreviousCourse(targetCourse: wizardPickedCourse, studentData: studentData)
-					if previousCourse.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"}) {
-						let veryFirstCourse = allCourses.first(where: {$0.instrument == studentData.getInstrumentChoice() && $0.sortValue == "1"}) ?? Course()
-						assignedCourseId = veryFirstCourse.id
-						assignedLessonId = veryFirstCourse.lessons[0].id
-						goToWizardStep = .wizardResult
-					} else {
-						if previousCourse.category.contains(where: {$0.name == "Methods"}) && previousCourse.category.contains(where: {$0.name == "Step By Step"}) && previousCourse.category.count == 2 {
-							//this is the step by step made before 101 series
-							assignedCourseId = previousCourse.id
-							assignedLessonId = previousCourse.lessons.last?.id ?? 0
-						} else {
-							let getMiddleLesson = assignMiddleLessonInCourse(targetCourse: previousCourse, useStudentData: studentData)
-							assignedCourseId = getMiddleLesson["courseID"] ?? 0
-							assignedLessonId = getMiddleLesson["lessonID"] ?? 0
-						}
-					}
-					 */
+
 				} else {
 					//:: go DoYouKnow or IsPlayable. Go 1 course level down or few lesson levels down.
 					let previousCourse = assignPreviousCourse(targetCourse: wizardPickedCourse, studentData: studentData)
@@ -149,12 +124,6 @@ extension ScorewindData {
 			var findLessons:[WizardLessonSearched] = []
 			
 			if Int(extractFeedback[0]) == 1 {
-				/*
-				//course level down
-				let lessonCourseDown = assignEquivalentLessonInPreviousCourseLevel(targetCourse: wizardPickedCourse, targetLesson: wizardPickedLesson, studentData: studentData)
-				assignedCourseId = lessonCourseDown["courseID"] ?? 0
-				assignedLessonId = lessonCourseDown["lessonID"] ?? 0
-				 */
 				//:: very hard, go many steps down
 				let lastLessonSortValue = wizardPickedCourse.lessons[wizardPickedCourse.lessons.count-1].sortValue
 				var lessonLevelValue = Int(lastLessonSortValue.split(separator:"-")[1]) ?? 10
@@ -165,13 +134,6 @@ extension ScorewindData {
 				findLessons.reverse()
 
 			} else if Int(extractFeedback[0]) == 2 {
-				/*
-				//lesson level down
-				let lessonDown = assignLessonInPreviousLevel(targetCourse: wizardPickedCourse, targetLesson: wizardPickedLesson, studentData: studentData)
-				assignedCourseId = lessonDown["courseID"] ?? 0
-				assignedLessonId = lessonDown["lessonID"] ?? 0
-				 */
-				
 				//:: a little difficult, go 1 step down
 				findLessons = getPreviousLessons(targetCourse: wizardPickedCourse, targetLesson: wizardPickedLesson, useStudnetData: studentData, range: 1)
 			} else if Int(extractFeedback[0]) == 3 {
@@ -180,22 +142,10 @@ extension ScorewindData {
 				assignedLessonId = wizardPickedLesson.id
 				goToWizardStep = .wizardResult
 			} else if Int(extractFeedback[0]) == 4 {
-				/*
-				//lesson level up
-				let lessonUp = assignLessonInNextLevel(targetCourse: wizardPickedCourse, targetLesson: wizardPickedLesson, studentData: studentData)
-				assignedCourseId = lessonUp["courseID"] ?? 0
-				assignedLessonId = lessonUp["lessonID"] ?? 0
-				 */
 				//:: comfortable, go 1 level up
 				findLessons = getNextLessons(targetCourse: wizardPickedCourse, targetLesson: wizardPickedLesson, useStudnetData: studentData, range: 1)
 				
 			} else if Int(extractFeedback[0]) == 5 {
-				/*
-				//course level up
-				let lessonCourseUp = assignEquivalentLessonInNextCourseLevel(targetCourse: wizardPickedCourse, targetLesson: wizardPickedLesson, studentData: studentData)
-				assignedCourseId = lessonCourseUp["courseID"] ?? 0
-				assignedLessonId = lessonCourseUp["lessonID"] ?? 0
-				 */
 				//:: easy peasy, go many steps up
 				let lastLessonSortValue = wizardPickedCourse.lessons[wizardPickedCourse.lessons.count-1].sortValue
 				var lessonLevelValue = Int(lastLessonSortValue.split(separator:"-")[1]) ?? 10
@@ -297,26 +247,6 @@ extension ScorewindData {
 		return goToWizardStep
 	}
 	
-	/*
-	private func makeWizardPicked(courseID: Int, lessonID: Int, feedbackValue: Int) -> WizardPicked {
-		let theCourse = allCourses.first(where: {$0.id == courseID}) ?? Course()
-		
-		var wizardPicked = WizardPicked()
-		if theCourse.id > 0 {
-			wizardPicked.courseID = courseID
-			wizardPicked.lessonID = lessonID
-			wizardPicked.courseSortValue = theCourse.sortValue
-			let theLesson = theCourse.lessons.first(where: {$0.id == lessonID}) ?? Lesson()
-			if theLesson.id > 0 {
-				wizardPicked.lessonSortValue = theLesson.sortValue
-			}
-			wizardPicked.feedbackValue = feedbackValue
-		}
-		
-		return wizardPicked
-	}
-	 */
-	
 	private func assignPreviousCourse(targetCourse: Course, studentData: StudentData) -> Course {
 		var findCourse = Course()
 		var sameCategoryCourses = allCourses.filter({ $0.instrument == targetCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: targetCourse.category, depth: 2) && Int($0.sortValue)! < Int(targetCourse.sortValue)! })
@@ -342,22 +272,7 @@ extension ScorewindData {
 		return findCourse
 	}
 	
-	private func areLessonsInCourseAsked(targetCourseID: Int, range: [WizardPicked]) -> Bool {
-		let theCourse = allCourses.first(where: {$0.id == targetCourseID}) ?? Course()
-		var askedCount = 0
-		
-		for lesson in theCourse.lessons {
-			if range.contains(where: {$0.courseID == theCourse.id && $0.lessonID == lesson.id}) {
-				askedCount = askedCount + 1
-			}
-		}
-		
-		if askedCount == 0 {
-			return false
-		} else {
-			return true
-		}
-	}
+
 	
 	/*
 	 Exclude courses have all lessons marked completed
@@ -419,310 +334,6 @@ extension ScorewindData {
 			}
 		}
 		return result
-	}
-	
-	/*
-	 Use case: from DoYouKnow view-some what familiar. It's asking the middle lesson from course in previous level
-	 */
-	private func assignMiddleLessonInCourse(targetCourse: Course, useStudentData: StudentData) -> [String:Int] {
-		var result:[String:Int] = [:]
-		var lessonWithScore:[Int] = []
-		var targetLessons = targetCourse.lessons
-		
-		//:: only ask lesson not completed and not asked yet
-		targetLessons = excludeLessonsAsked(targetLessons: targetLessons, useStudentData: useStudentData)
-		targetLessons = excludeLessonsCompleted(targetCourseID: targetCourse.id, targetLessons: targetLessons, useStudentData: useStudentData)
-		
-		for lesson in targetLessons {
-			if checkIfLessonPlayable(targetCourseID: targetCourse.id, targetLesson: lesson) {
-				lessonWithScore.append(lesson.id)
-			}
-		}
-		
-		if lessonWithScore.count > 0 {
-			//:: found lessons with playable bars, calculate the index in the middle
-			result["courseID"] = targetCourse.id
-			var middleIndex:Double = Double((lessonWithScore.count/2))
-			middleIndex.round(.towardZero)
-			result["lessonID"] = lessonWithScore[Int(middleIndex)]
-		} else {
-			//:: prompt DoYouKnow view instead
-			result["courseID"] = targetCourse.id
-			result["lessonID"] = 0
-		}
-		
-		return result
-	}
-	
-	/*
-	 Find lesson in next level in current course first. If it's not available, find it in the course in next level.
-	 */
-	private func assignLessonInNextLevel(targetCourse: Course, targetLesson: Lesson, studentData: StudentData) -> [String: Int] {
-		var result:[String:Int] = [:]
-
-		let nextLesson:Lesson = findAdjacentLessonInCurrentCourse(targetCourse: targetCourse, targetLesson: targetLesson, direction: .ASC, useStudentData: studentData)
-		if nextLesson.id > 0 {
-			result["courseID"] = targetCourse.id
-			result["lessonID"] = nextLesson.id
-		} else {
-			let nextCourse = assignNextCourse(targetCourse: targetCourse, studentData: studentData)
-			
-			if nextCourse.id == 0 {
-				 //:: can't find course in next level, probably the end of it.
-				result["courseID"] = 0
-				result["lessonID"] = 0
-			} else{
-				if nextCourse.category.contains(where: {$0.name == "Methods"}) && nextCourse.category.contains(where: {$0.name == "Step By Step"}) && nextCourse.category.count == 2 {
-					//:: step by step course made before 101 series is found(speical case), only the last lesson is revelent to the wizard
-					 
-					let sameCategoryCourses = allCourses.filter({ $0.instrument == targetCourse.instrument && $0.category.contains(where: {$0.name == "Method"}) && $0.category.contains(where: {$0.name == "Step By Step"}) && $0.category.count == 2 && Int($0.sortValue)! > Int(targetCourse.sortValue)! })
-					for courseItem in sameCategoryCourses {
-						let lastLessonID = courseItem.lessons.last?.id ?? 0
-						
-						if studentData.myCourses.contains(where: {$0.courseID == courseItem.id && $0.completedLessons.contains(where: {$0 == lastLessonID})}) == false && studentData.wizardRange.contains(where: {$0.lessonID == lastLessonID}) {
-							//:: verify the last lesson it not completed and ot not asked yet
-							//:: no need to prompt DoYouKnow because only the lsat lesson is revelent
-							result["courseID"] = courseItem.id
-							result["lessonID"] = lastLessonID
-							break
-						}
-					}
-					
-				} else {
-					//:: find lesson from course in next level, only process those not completed and not being asked
-					var processLessons = nextCourse.lessons
-					processLessons = excludeLessonsAsked(targetLessons: processLessons, useStudentData: studentData)
-					processLessons = excludeLessonsCompleted(targetCourseID: targetCourse.id, targetLessons: processLessons, useStudentData: studentData)
-					
-					for lesson in processLessons {
-						let findTimestamps = (allTimestamps.first(where: {$0.id == nextCourse.id})?.lessons.first(where: {$0.id == lesson.id})!.timestamps)!
-						let playableBars = findTimestamps.filter({($0.notes == "" || $0.notes == "play") && $0.type == "piano"})
-						if findTimestamps.count > 0 && playableBars.count > 0 {
-							//:: only show the lesson has playable bar availalbe
-							let anyPlayableLessonAsked = studentData.wizardRange.contains(where: { ($0.courseID == nextCourse.id) && ($0.lessonSortValue.isEmpty == false)} )
-							if anyPlayableLessonAsked {
-								result["courseID"] = nextCourse.id
-								result["lessonID"] = lesson.id
-								break
-							} else {
-								//:: if this course has not been asked in DoYouKnow view, prompt DoYouKnow view
-								result["courseID"] = nextCourse.id
-								result["lessonID"] = 0
-								break
-							}
-						}
-					}
-				}
-			}
-		}
-		
-		return result
-	}
-	
-	private func assignLessonInPreviousLevel(targetCourse: Course, targetLesson: Lesson, studentData: StudentData) -> [String:Int] {
-		var result:[String:Int] = [:]
-		
-		let previousLevelLesson:Lesson = findAdjacentLessonInCurrentCourse(targetCourse: targetCourse, targetLesson: targetLesson, direction: .DESC, useStudentData: studentData)
-		if previousLevelLesson.id > 0 {
-			result["courseID"] = targetCourse.id
-			result["lessonID"] = previousLevelLesson.id
-		} else {
-			let previousCourse = assignPreviousCourse(targetCourse: targetCourse, studentData: studentData)
-			
-			if previousCourse.id == 0 {
-				//at first course, no course before this
-				result["courseID"] = 0
-				result["lessonID"] = 0
-			} else {
-				if studentData.wizardRange.contains(where: {$0.courseID == previousCourse.id}) == true {
-					if previousCourse.category.contains(where: {$0.name == "Methods"}) && previousCourse.category.contains(where: {$0.name == "Step By Step"}) && previousCourse.category.count == 2 {
-						//this is the step by step made before 101 series
-						result["courseID"] = previousCourse.id
-						result["lessonID"] = previousCourse.lessons.last?.id ?? 0
-					} else {
-						for lesson in previousCourse.lessons.sorted(by: {$0.step > $1.step}) {
-							let findTimestamps = (allTimestamps.first(where: {$0.id == previousCourse.id})?.lessons.first(where: {$0.id == lesson.id})!.timestamps)!
-							let playableBars = findTimestamps.filter({($0.notes == "" || $0.notes == "play") && $0.type == "piano"})
-							if findTimestamps.count > 0 && playableBars.count > 0 {
-								result["courseID"] = previousCourse.id
-								result["lessonID"] = lesson.id
-								break
-							}
-						}
-					}
-				} else {
-					result["courseID"] = previousCourse.id
-					result["lessonID"] = 0
-				}
-				
-			}
-		}
-		
-		return result
-	}
-	
-	private func findAdjacentLessonInCurrentCourse(targetCourse: Course, targetLesson: Lesson, direction: SearchParameter, useStudentData: StudentData) -> Lesson {
-		var result:Lesson = Lesson()
-		let levelBreakdown1 = targetLesson.sortValue.split(separator: "-")
-		
-		var processLessons = targetCourse.lessons
-		processLessons = excludeLessonsAsked(targetLessons: processLessons, useStudentData: useStudentData)
-		processLessons = excludeLessonsCompleted(targetCourseID: targetCourse.id, targetLessons: processLessons, useStudentData: useStudentData)
-		
-		if Int(levelBreakdown1[1]) == 0 && Int(levelBreakdown1[2]) == 0 {
-			//the StepByStep made before 101 series only the last lesson has level meaning to wizard
-		} else {
-			var lessons:[Lesson] = []
-			if direction == .ASC {
-				lessons = (processLessons).filter({$0.step>targetLesson.step})
-			} else {
-				lessons = (processLessons).filter({$0.step<targetLesson.step})
-				lessons.reverse()
-			}
-			
-			var findScoreAvailable = false
-			for lesson in lessons {
-				let levelBreakDown2 = lesson.sortValue.split(separator: "-")
-				
-				if (direction == .ASC) && ( Int(levelBreakDown2[1])! > Int(levelBreakdown1[1])! ) {
-					findScoreAvailable = true
-				} else if (direction == .DESC) && ( Int(levelBreakDown2[1])! < Int(levelBreakdown1[1])! ) {
-					findScoreAvailable = true
-				}
-				
-				if findScoreAvailable {
-					let findTimestamps = (allTimestamps.first(where: {$0.id == targetCourse.id})?.lessons.first(where: {$0.id == lesson.id})!.timestamps)!
-					let playableBars = findTimestamps.filter({($0.notes == "" || $0.notes == "play") && $0.type == "piano"})
-					if findTimestamps.count > 0 && playableBars.count > 0 {
-						result = lesson
-						break
-					}
-				}
-			}
-		}
-		
-		
-		return result
-	}
-	
-	private func assignEquivalentLessonInNextCourseLevel(targetCourse: Course, targetLesson: Lesson, studentData: StudentData) -> [String:Int]{
-		var result:[String:Int] = [:]
-		let nextCourse = assignNextCourse(targetCourse: targetCourse, studentData: studentData)
-		
-		if nextCourse.id == 0 {
-			//no more course after the target
-			result["courseID"] = 0
-			result["lessonID"] = 0
-		} else {
-			if studentData.wizardRange.contains(where: {$0.courseID == nextCourse.id}) == true {
-				if nextCourse.category.contains(where: {$0.name == "Methods"}) && nextCourse.category.contains(where: {$0.name == "Step By Step"}) && nextCourse.category.count == 2 {
-					//this is the step by step made before 101 series
-					result["courseID"] = nextCourse.id
-					result["lessonID"] = nextCourse.lessons.last?.id
-				} else {
-					var nextCourseLessonLevels:[[String]] = []
-					var targetCourseLessonLevels:[[String]] = []
-					let nextCourseTimestamps = allTimestamps.filter({$0.id == nextCourse.id})
-					let targetCourseTimestamps = allTimestamps.filter({$0.id == targetCourse.id})
-					
-					nextCourseLessonLevels = getLessonLevelStructure(targetCourse: nextCourse, targetTimestamps: nextCourseTimestamps)
-					print("[debug] assignEquivalentLessonInNextCourseLevel, nextCourseLessonLevels.count: \(nextCourseLessonLevels.count)")
-					print("[debug] assignEquivalentLessonInNextCourseLevel, nextCourseLessonLevels \(nextCourseLessonLevels)")
-					
-					targetCourseLessonLevels = getLessonLevelStructure(targetCourse: targetCourse, targetTimestamps: targetCourseTimestamps)
-					print("[debug] assignEquivalentLessonInNextCourseLevel, targetCourseLessonLevels.count \(targetCourseLessonLevels.count)")
-					print("[debug] assignEquivalentLessonInNextCourseLevel, targetCourseLessonLevels \(targetCourseLessonLevels)")
-					
-					let targetLessonLevelIndex = targetCourseLessonLevels.firstIndex(where: {$0.contains(targetLesson.sortValue)}) ?? 0
-					print("[debug] assignEquivalentLessonInNextCourseLevel, targetLessonLevelIndex \(targetLessonLevelIndex)")
-					var setEquivalentLevel = 0
-					if targetLessonLevelIndex > 0 {
-						setEquivalentLevel = (nextCourseLessonLevels.count * targetLessonLevelIndex)/targetCourseLessonLevels.count
-					}
-					print("[debug] assignEquivalentLessonInNextCourseLevel, setEquivalentLevel \(setEquivalentLevel)")
-					let equivalentLevel = nextCourseLessonLevels[setEquivalentLevel][0]
-					
-					result["courseID"] = nextCourse.id
-					result["lessonID"] = nextCourse.lessons.first(where: {$0.sortValue == equivalentLevel})?.id
-				}
-			} else {
-				result["courseID"] = nextCourse.id
-				result["lessonID"] = 0
-			}
-			
-		}
-		
-		
-		return result
-	}
-	
-	private func assignEquivalentLessonInPreviousCourseLevel(targetCourse: Course, targetLesson: Lesson, studentData: StudentData) -> [String:Int] {
-		var result:[String:Int] = [:]
-		let previousCourse = assignPreviousCourse(targetCourse: targetCourse, studentData: studentData)
-		
-		if previousCourse.id == 0 {
-			//at first course, no course before this
-			result["courseID"] = 0
-			result["lessonID"] = 0
-		} else {
-			if studentData.wizardRange.contains(where: {$0.courseID == previousCourse.id}) == true {
-				if previousCourse.category.contains(where: {$0.name == "Methods"}) && previousCourse.category.contains(where: {$0.name == "Step By Step"}) && previousCourse.category.count == 2 {
-					//this is the step by step made before 101 series
-					result["courseID"] = previousCourse.id
-					result["lessonID"] = previousCourse.lessons.last?.id
-				} else {
-					var previousCourseLessonLevels:[[String]] = []
-					var targetCourseLessonLevels:[[String]] = []
-					let previousCourseTimestamps = allTimestamps.filter({$0.id == previousCourse.id})
-					let targetCourseTimestamps = allTimestamps.filter({$0.id == targetCourse.id})
-					
-					previousCourseLessonLevels = getLessonLevelStructure(targetCourse: previousCourse, targetTimestamps: previousCourseTimestamps)
-					targetCourseLessonLevels = getLessonLevelStructure(targetCourse: targetCourse, targetTimestamps: targetCourseTimestamps)
-					let targetLessonLevelIndex = targetCourseLessonLevels.firstIndex(where: {$0.contains(targetLesson.sortValue)}) ?? 0
-					var setEquivalentLevel = 0
-					if targetLessonLevelIndex > 0 {
-						setEquivalentLevel = (previousCourseLessonLevels.count * targetLessonLevelIndex)/targetCourseLessonLevels.count
-					}
-					
-					let equivalentLevel = previousCourseLessonLevels[setEquivalentLevel][0]
-					result["courseID"] = previousCourse.id
-					result["lessonID"] = previousCourse.lessons.first(where: {$0.sortValue == equivalentLevel})?.id
-				}
-			} else {
-				result["courseID"] = previousCourse.id
-				result["lessonID"] = 0
-			}
-		}
-		
-		return result
-	}
-	
-	private func getLessonLevelStructure(targetCourse: Course, targetTimestamps: [Timestamp]) -> [[String]] {
-		var targetCourseLessonLevels:[[String]] = []
-		for lesson in targetCourse.lessons {
-			let findTimestamps = (targetTimestamps.first(where: {$0.id == targetCourse.id})?.lessons.first(where: {$0.id == lesson.id})!.timestamps)!
-			let playableBars = findTimestamps.filter({($0.notes == "" || $0.notes == "play") && $0.type == "piano"})
-			
-			if targetCourseLessonLevels.count == 0 {
-				if findTimestamps.count > 0 && playableBars.count > 0 {
-					targetCourseLessonLevels.append([lesson.sortValue])
-				}
-			} else {
-				let lastLessonLevelSaved = targetCourseLessonLevels[targetCourseLessonLevels.count-1]
-				let lastSubLevelSaved = lastLessonLevelSaved[lastLessonLevelSaved.count-1]
-				let lastSortValueBreakdown = lastSubLevelSaved.split(separator:"-")
-				let thisSortValueBreakdown = lesson.sortValue.split(separator:"-")
-				
-				if findTimestamps.count > 0 && playableBars.count > 0 {
-					if thisSortValueBreakdown[1] == lastSortValueBreakdown[1] {
-						targetCourseLessonLevels[targetCourseLessonLevels.count-1].append(lesson.sortValue)
-					} else {
-						targetCourseLessonLevels.append([lesson.sortValue])
-					}
-				}
-			}
-		}
-		return targetCourseLessonLevels
 	}
 	
 	private func getDoYouKnowScore(answers:[Int]) -> DoYouKnowFeedback {
@@ -915,45 +526,34 @@ extension ScorewindData {
 		return result
 	}
 	
-	private func getUncompletedLessonsByType(courseType: CourseType = .noSpecific, lessonCount: Int, useStudentData: StudentData) -> [WizardPicked]{
+	private func getUncompletedLessonsFromCourses(sortedCourses:[Course], lessonCount: Int, useStudentData: StudentData, onlyPlayable: Bool = false) -> [WizardPicked] {
 		var uncompletedLessons:[WizardPicked] = []
-		var sortedCourses = allCourses.filter({$0.instrument == useStudentData.getInstrumentChoice()}).sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})
-		
-		if courseType == .stepByStep {
-			sortedCourses = allCourses.filter({ $0.category.contains(where: {$0.name == "Methods"}) && $0.category.contains(where: {$0.name == CourseType.stepByStep.getCategoryName()}) })
-		} else if courseType == .path {
-			sortedCourses = allCourses.filter({ $0.category.contains(where: {$0.name == "Methods"}) && $0.category.contains(where: {$0.name == CourseType.path.getCategoryName()}) && $0.category.count == 2 })
-		}
-		
+		var sortedCourses = sortedCourses
+		print("[debug] wizardCalculator, getUncompletedLessonsFromCourses, onlyPlayable true")
 		sortedCourses = excludeCoursesCompleted(targetCourse: sortedCourses, useStudentData: useStudentData)
 		outerLoop:for course in sortedCourses {
-			print("[debug] wizardCalculator, getUncompletedLessonsByType, course \(course.title)")
+			print("[debug] wizardCalculator, getUncompletedLessonsFromCourses, course \(course.title)")
 			for lesson in excludeLessonsCompleted(targetCourseID: course.id, targetLessons: course.lessons, useStudentData: useStudentData) {
-				print("[debug] wizardCalculator, getUncompletedLessonsByType, lesson \(lesson.title)")
-				uncompletedLessons.append(WizardPicked(allCourses: [course], courseID: course.id, lessonID: lesson.id, feedbackValue: 0.0))
-				print("[debug] wizardCalculator, getUncompletedLessonsByType, uncompletedLesson.count \(uncompletedLessons.count)")
+				print("[debug] wizardCalculator, getUncompletedLessonsFromCourses, lesson \(lesson.title)")
+				
+				if onlyPlayable {
+					
+					if checkIfLessonPlayable(targetCourseID: course.id, targetLesson: lesson) {
+						uncompletedLessons.append(WizardPicked(allCourses: [course], courseID: course.id, lessonID: lesson.id, feedbackValue: 0.0))
+					}
+				} else {
+					uncompletedLessons.append(WizardPicked(allCourses: [course], courseID: course.id, lessonID: lesson.id, feedbackValue: 0.0))
+				}
+
+				print("[debug] wizardCalculator, getUncompletedLessonsFromCourses, uncompletedLesson.count \(uncompletedLessons.count)")
 				if uncompletedLessons.count == lessonCount {
 					break outerLoop
 				}
 				
 			}
 		}
-		/*outerLoop:for course in sortedCourses {
-			print("====>course:\(course.title)")
-			for lesson in course.lessons {
-				if useStudentData.myCourses.contains(where: { ($0.courseID == course.id) && ($0.completedLessons.contains(where: {$0 == lesson.id}) == false) }) {
-					print("====>lesson:\(lesson.title)")
-					uncompletedLessons.append(WizardPicked(allCourses: [course], courseID: course.id, lessonID: lesson.id, feedbackValue: 0.0))
-					print("====>lesson count:\(lessonCount)")
-					if uncompletedLessons.count == lessonCount {
-						break outerLoop
-					}
-				}
-			}
-		}*/
-		
 		return uncompletedLessons
 	}
-
-
+	
+	
 }
