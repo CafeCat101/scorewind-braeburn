@@ -14,11 +14,11 @@ enum ExperienceFeedback:String {
 	func getLabel() -> String{
 		switch self {
 		case .starterKit:
-			return "I've never played it before"
+			return "Take me to the beginning of the unpaved journey."
 		case .continueLearning:
-			return "Continue learning, one step at a time"
+			return "Feeling adventurous.\nI want to explore!"
 		case .experienced:
-			return "I'm skilled"
+			return "I'm skilled.\nGo to explore the repositories now."
 		}
 	}
 	

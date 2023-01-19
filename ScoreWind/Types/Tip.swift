@@ -11,4 +11,5 @@ enum Tip:String {
 	case lessonView = "lessonView"
 	case myCourseView = "myCourseView"
 	case wizardView = "wizardView"
+	case wizardExperience = "wizardExperience"
 }
