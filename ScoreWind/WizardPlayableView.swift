@@ -24,7 +24,7 @@ struct WizardPlayableView: View {
 				HStack {
 					Label("Back to video clip", systemImage: "chevron.backward.circle")
 						.padding([.leading], 15)
-						.font(.title3)
+						//.font(.title3)
 						.labelStyle(.titleAndIcon)
 						.onTapGesture(perform: {
 							viewModel.videoPlayer!.pause()
@@ -41,11 +41,19 @@ struct WizardPlayableView: View {
 					Spacer()
 				}
 			}
-			Text("How do you feel about playing this? \nTab the bar to hear!")
-				.font(.title3)
+			Text("How do you feel about playing this?")
+				.font(.headline)
 				.foregroundColor(Color("WizardBackArrow"))
 				.bold()
 				.padding(EdgeInsets(top: 5, leading: 30, bottom: 0, trailing: 15))
+			
+			if studentData.playableViewVideoOnly == false {
+				Text("Tab the bar to hear!")
+					.font(.subheadline)
+					.foregroundColor(Color("WizardBackArrow"))
+					.bold()
+					.padding(EdgeInsets(top: 1, leading: 30, bottom: 0, trailing: 15))
+			}
 			
 			
 			GeometryReader { reader in

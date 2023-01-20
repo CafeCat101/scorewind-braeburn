@@ -167,7 +167,7 @@ extension ScorewindData {
 			}
 		}
 		
-		if (studentData.wizardRange.count > 10) && (studentData.getExperience() != ExperienceFeedback.starterKit.rawValue) {
+		if (studentData.wizardRange.count >= 10) && (studentData.getExperience() != ExperienceFeedback.starterKit.rawValue) {
 			let checkCompletedLessonStatus:Double = Double(studentData.getTotalCompletedLessonCount())/5
 			if ((checkCompletedLessonStatus  - checkCompletedLessonStatus.rounded(.down) < 1) && (checkCompletedLessonStatus  - checkCompletedLessonStatus.rounded(.down) > 0)) == false {
 				let explorer = explorerAlgorithm(useStudentData: studentData)

@@ -13,6 +13,8 @@ struct WizardView: View {
 	@State private var userRole:UserRole = .student
 	@State private var stepName:Page = .wizardChooseInstrument
 	@ObservedObject var studentData:StudentData
+	let screenSize: CGRect = UIScreen.main.bounds
+	@State private var showProgress = true
 	
 	var body: some View {
 		VStack {
@@ -35,31 +37,41 @@ struct WizardView: View {
 				}*/
 			HStack {
 				Spacer()
-					Label(getWizardViewTitle(), systemImage: "music.note")
-						.labelStyle(.titleAndIcon)
-						.foregroundColor(Color("AppBlackDynamic"))
-						.contextMenu {
-							Button(action: {
-								userRole = .student
-								stepName = .wizardChooseInstrument
-							}){
-								Label("I'm a student", systemImage: "face.smiling")
-									.labelStyle(.titleAndIcon)
-							}
-							Button(action: {
-								userRole = .teacher
-							}){
-								Label("Teachers only", systemImage: "brain.head.profile")
-									.labelStyle(.titleAndIcon)
-							}
+				Label("Wizard", systemImage: "music.note")
+					.labelStyle(.titleOnly)
+					.foregroundColor(Color("AppBlackDynamic"))
+					.contextMenu {
+						Button(action: {
+							userRole = .student
+							stepName = .wizardChooseInstrument
+						}){
+							Label("I'm a student", systemImage: "face.smiling")
+								.labelStyle(.titleAndIcon)
 						}
+						Button(action: {
+							userRole = .teacher
+						}){
+							Label("Teachers only", systemImage: "brain.head.profile")
+								.labelStyle(.titleAndIcon)
+						}
+					}
+					.onTapGesture {
+						if studentData.wizardStepNames.count > 1 && studentData.playableViewVideoOnly && userRole == .student {
+							//back to instrument
+							studentData.wizardStepNames.removeAll()
+							stepName = Page.wizardChooseInstrument
+						}
+					}
+				if showProgress {
+					wizardProgressView()
+				}
+				
 				Spacer()
 			}
 			.overlay(alignment:.leading, content: {
-				//::NAVIGATE BACK
+				//:: to navigate back
 				if studentData.wizardStepNames.count > 1 && studentData.playableViewVideoOnly && userRole == .student {
-					//original back one step icon chevron.backward.circle.fill
-					Label("Previous step", systemImage: "restart.circle.fill")
+					Label("Restart", systemImage: "goforward")
 						.padding([.leading], 15)
 						.font(.title3)
 						.labelStyle(.iconOnly)
@@ -77,6 +89,7 @@ struct WizardView: View {
 					
 				}
 			})
+			.padding([.bottom], 5)
 			
 			if userRole == .teacher {
 				WizardTeacherView(selectedTab: $selectedTab)
@@ -90,7 +103,14 @@ struct WizardView: View {
 				} else if stepName == .wizardPlayable {
 					WizardPlayableView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
 				} else if stepName == .wizardResult {
-					WizardResultView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
+					WizardResultView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData).onAppear{
+						DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+							withAnimation{
+								showProgress = false
+							}
+						}
+					}
+					
 				}
 			}
 			
@@ -101,11 +121,6 @@ struct WizardView: View {
 		.onAppear(perform: {
 			stepName = .wizardChooseInstrument
 			print("[debug] WizardView, wizardStepNames \(studentData.wizardStepNames)")
-			/*
-			DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-				userRole = "teacher"
-			}
-			 */
 		})
 	}
 	
@@ -121,7 +136,33 @@ struct WizardView: View {
 		} else {
 			return "Wizard (Teachers only)"
 		}
-		
+	}
+	
+	@ViewBuilder
+	private func wizardProgressView() -> some View {
+		RoundedRectangle(cornerRadius: 4)
+			.foregroundColor(.gray)
+			.frame(width:screenSize.width*0.6+10,height:10)
+			.overlay(alignment:.leading,content: {
+				if stepName == .wizardChooseInstrument {
+					RoundedRectangle(cornerRadius: 4)
+						.foregroundColor(Color("AppYellow"))
+						.frame(width:screenSize.width*0.6*(0.3/10.0),height:10)
+				} else if stepName == .wizardExperience {
+					RoundedRectangle(cornerRadius: 4)
+						.foregroundColor(Color("AppYellow"))
+						.frame(width:screenSize.width*0.6*(0.8/10.0),height:10)
+				} else if stepName == .wizardResult {
+					RoundedRectangle(cornerRadius: 4)
+						.foregroundColor(Color("AppYellow"))
+						.frame(width:screenSize.width*0.6+10,height:10)
+				} else {
+					RoundedRectangle(cornerRadius: 4)
+						.foregroundColor(Color("AppYellow"))
+						.frame(width:screenSize.width*0.6*(Double(studentData.wizardRange.count)/10.0),height:10)
+				}
+				
+			})
 	}
 
 }

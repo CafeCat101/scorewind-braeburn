@@ -18,7 +18,7 @@ struct WizardInstrumentView: View {
 			Spacer()
 			HStack {
 				Spacer()
-				Text("Which instrument do you want to learn?")
+				Text("Choose your instrument")
 					.font(.title3)
 					.foregroundColor(Color("WizardBackArrow"))
 					.bold()
