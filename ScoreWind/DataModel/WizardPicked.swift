@@ -6,7 +6,7 @@
 //
 
 import Foundation
-struct WizardPicked {
+struct WizardPicked: Hashable {
 	var courseID: Int
 	var lessonID: Int
 	var courseSortValue: String

@@ -18,6 +18,7 @@ extension ScorewindData {
 		if currentStepName == Page.wizardExperience {
 			print("[debug] createRecommendation, Page.wizardExperience, \(studentData.getExperience())")
 			if studentData.getExperience() == ExperienceFeedback.continueLearning.rawValue {
+				//:: find first uncompleted lesson since 103 as base course and base lesson
 				var sortedCourses = allCourses.filter({$0.instrument == studentData.getInstrumentChoice() && $0.category.contains(where: {$0.name == CourseType.stepByStep.getCategoryName()})}).sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})
 				if studentData.getInstrumentChoice() == InstrumentType.guitar.rawValue {
 					sortedCourses = sortedCourses.filter({$0.category.contains(where: {$0.name == "Guitar 101"}) == false && $0.category.contains(where: {$0.name == "Guitar 102"}) == false})
@@ -34,6 +35,7 @@ extension ScorewindData {
 				}
 				
 			} else if studentData.getExperience() == ExperienceFeedback.experienced.rawValue {
+				//:: find first uncompleted lesson in path courses as base course and lesson
 				let pathCourses = allCourses.filter({$0.instrument == studentData.getInstrumentChoice() && $0.category.contains(where: {$0.name == CourseType.path.getCategoryName()})}).sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})
 				let uncompletedLessons = getUncompletedLessonsFromCourses(sortedCourses: pathCourses, lessonCount: 1, useStudentData: studentData, onlyPlayable: true)
 				if uncompletedLessons.count > 0 {
@@ -42,8 +44,10 @@ extension ScorewindData {
 				}
 				
 			} else {
+				//:: idea is showing users all uncompleted lesson from level low to high
 				let sortedCourses = allCourses.filter({$0.instrument == studentData.getInstrumentChoice()}).sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})
-				let uncompletedLessons = getUncompletedLessonsFromCourses(sortedCourses: sortedCourses, lessonCount: 1, useStudentData: studentData)
+				let uncompletedLessons = getUncompletedLessonsFromCourses(sortedCourses: sortedCourses, lessonCount: 10, useStudentData: studentData)
+				studentData.wizardRange = uncompletedLessons
 				assignedCourseId = uncompletedLessons[0].courseID
 				assignedLessonId = uncompletedLessons[0].lessonID
 				goToWizardStep = .wizardResult
@@ -137,7 +141,7 @@ extension ScorewindData {
 				//:: a little difficult, go 1 step down
 				findLessons = getPreviousLessons(targetCourse: wizardPickedCourse, targetLesson: wizardPickedLesson, useStudnetData: studentData, range: 1)
 			} else if Int(extractFeedback[0]) == 3 {
-				//go to go to wizard result
+				//:: ends here, go to go to wizard result
 				assignedCourseId = wizardPickedCourse.id
 				assignedLessonId = wizardPickedLesson.id
 				goToWizardStep = .wizardResult
@@ -188,7 +192,7 @@ extension ScorewindData {
 				goToWizardStep = .wizardResult
 			}
 		} else {
-			//setup wizard picked course object
+			//:: setup wizard picked course object
 			if assignedCourseId > 0 {
 				wizardPickedCourse = allCourses.first(where: {$0.id == assignedCourseId}) ?? Course()
 				
@@ -211,7 +215,7 @@ extension ScorewindData {
 				print("[debug] createRecommendation, assignCourseId \(assignedCourseId)")
 			}
 			
-			//setup wizard picked lesson object and its teimstamps
+			//:: setup wizard picked lesson object and its teimstamps
 			if assignedLessonId > 0 {
 				wizardPickedLesson = wizardPickedCourse.lessons.first(where: {$0.id == assignedLessonId}) ?? Lesson()
 				wizardPickedTimestamps = (allTimestamps.first(where: {$0.id == assignedCourseId})?.lessons.first(where: {$0.id == assignedLessonId})!.timestamps) ?? []
