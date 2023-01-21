@@ -67,6 +67,10 @@
 		C87CF1242978365400CDA215 /* BackgroundTransparentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87CF1232978365400CDA215 /* BackgroundTransparentView.swift */; };
 		C87CF1262979399B00CDA215 /* TipTransparentModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87CF1252979399B00CDA215 /* TipTransparentModalView.swift */; };
 		C87CF12829794F0100CDA215 /* WizardCalculatorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87CF12729794F0100CDA215 /* WizardCalculatorHelper.swift */; };
+		C87CF12A297B969200CDA215 /* WizardResultPathView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87CF129297B969200CDA215 /* WizardResultPathView.swift */; };
+		C87CF12C297C42A700CDA215 /* WizardLearningPathItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87CF12B297C42A700CDA215 /* WizardLearningPathItem.swift */; };
+		C87CF12E297C487A00CDA215 /* WizardResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87CF12D297C487A00CDA215 /* WizardResult.swift */; };
+		C87CF130297C4C9F00CDA215 /* WizardCalculatorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87CF12F297C4C9F00CDA215 /* WizardCalculatorHelper.swift */; };
 		C8CA57A42936F8D90097AE07 /* WizardPicked.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CA57A32936F8D90097AE07 /* WizardPicked.swift */; };
 		C8D8FE94295EA854003B3801 /* scorewind_ios_xml.zip in Resources */ = {isa = PBXBuildFile; fileRef = C8D8FE93295EA854003B3801 /* scorewind_ios_xml.zip */; };
 		C8E063F028B0E20E000B3D67 /* MyCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E063EF28B0E20E000B3D67 /* MyCourse.swift */; };
@@ -157,6 +161,10 @@
 		C87CF1232978365400CDA215 /* BackgroundTransparentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTransparentView.swift; sourceTree = "<group>"; };
 		C87CF1252979399B00CDA215 /* TipTransparentModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipTransparentModalView.swift; sourceTree = "<group>"; };
 		C87CF12729794F0100CDA215 /* WizardCalculatorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardCalculatorHelper.swift; sourceTree = "<group>"; };
+		C87CF129297B969200CDA215 /* WizardResultPathView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardResultPathView.swift; sourceTree = "<group>"; };
+		C87CF12B297C42A700CDA215 /* WizardLearningPathItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardLearningPathItem.swift; sourceTree = "<group>"; };
+		C87CF12D297C487A00CDA215 /* WizardResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardResult.swift; sourceTree = "<group>"; };
+		C87CF12F297C4C9F00CDA215 /* WizardCalculatorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardCalculatorHelper.swift; sourceTree = "<group>"; };
 		C8CA57A32936F8D90097AE07 /* WizardPicked.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardPicked.swift; sourceTree = "<group>"; };
 		C8D8FE93295EA854003B3801 /* scorewind_ios_xml.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = scorewind_ios_xml.zip; sourceTree = "<group>"; };
 		C8E063EF28B0E20E000B3D67 /* MyCourse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCourse.swift; sourceTree = "<group>"; };
@@ -268,6 +276,7 @@
 				C878276928FC25030007DDC1 /* WizardResultView.swift */,
 				C878275D28F1A04E0007DDC1 /* WizardTeacherView.swift */,
 				C85F2771286F4F2E00D0A4E5 /* WizardView.swift */,
+				C87CF129297B969200CDA215 /* WizardResultPathView.swift */,
 				C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */,
 				C8E063EA28AE06B7000B3D67 /* DataModel */,
 				C85F272F286F4C2C00D0A4E5 /* Preview Content */,
@@ -333,6 +342,12 @@
 				C85F276F286F4F2E00D0A4E5 /* FileManager.swift */,
 				C85F2764286F4F2E00D0A4E5 /* ViewModel.swift */,
 				C878277029054B380007DDC1 /* WizardCalculator.swift */,
+				C8E063EF28B0E20E000B3D67 /* MyCourse.swift */,
+				C8CA57A32936F8D90097AE07 /* WizardPicked.swift */,
+				C87CF11E296FE84600CDA215 /* WizardLessonSearched.swift */,
+				C87CF12B297C42A700CDA215 /* WizardLearningPathItem.swift */,
+				C87CF12D297C487A00CDA215 /* WizardResult.swift */,
+				C87CF12F297C4C9F00CDA215 /* WizardCalculatorHelper.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -350,9 +365,6 @@
 				C85F2766286F4F2E00D0A4E5 /* ScorewindCourse.swift */,
 				C85F276C286F4F2E00D0A4E5 /* DownloadItem.swift */,
 				C85F2763286F4F2E00D0A4E5 /* ScorewindTimestamp.swift */,
-				C8E063EF28B0E20E000B3D67 /* MyCourse.swift */,
-				C8CA57A32936F8D90097AE07 /* WizardPicked.swift */,
-				C87CF11E296FE84600CDA215 /* WizardLessonSearched.swift */,
 			);
 			path = DataModel;
 			sourceTree = "<group>";
@@ -588,13 +600,17 @@
 				C85F277A286F4F2E00D0A4E5 /* ScorewindCourse.swift in Sources */,
 				C85F272A286F4C2B00D0A4E5 /* ScoreWindApp.swift in Sources */,
 				C85F277C286F4F2E00D0A4E5 /* ScorewindData.swift in Sources */,
+				C87CF12E297C487A00CDA215 /* WizardResult.swift in Sources */,
 				C85F279C2871846200D0A4E5 /* BlankTabView.swift in Sources */,
 				C878276028F404320007DDC1 /* WizardInstrumentView.swift in Sources */,
 				C85F277D286F4F2E00D0A4E5 /* StudentData.swift in Sources */,
+				C87CF130297C4C9F00CDA215 /* WizardCalculatorHelper.swift in Sources */,
 				C85F2784286F4F2E00D0A4E5 /* DownloadManager.swift in Sources */,
+				C87CF12A297B969200CDA215 /* WizardResultPathView.swift in Sources */,
 				C85F2777286F4F2E00D0A4E5 /* ScorewindTimestamp.swift in Sources */,
 				C87CF12829794F0100CDA215 /* WizardCalculatorHelper.swift in Sources */,
 				C85F27A228795A8E00D0A4E5 /* Tip.swift in Sources */,
+				C87CF12C297C42A700CDA215 /* WizardLearningPathItem.swift in Sources */,
 				C85F2780286F4F2E00D0A4E5 /* DownloadItem.swift in Sources */,
 				C85F2783286F4F2E00D0A4E5 /* FileManager.swift in Sources */,
 				C85F279E2877DE0C00D0A4E5 /* SearchParameter.swift in Sources */,

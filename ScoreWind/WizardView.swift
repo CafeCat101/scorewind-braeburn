@@ -119,7 +119,12 @@ struct WizardView: View {
 		}
 		.background(Color("AppBackground"))
 		.onAppear(perform: {
-			stepName = .wizardChooseInstrument
+			if studentData.wizardRange.count > 0 {
+				stepName = .wizardResult
+			} else {
+				stepName = .wizardChooseInstrument
+			}
+			
 			print("[debug] WizardView, wizardStepNames \(studentData.wizardStepNames)")
 		})
 	}

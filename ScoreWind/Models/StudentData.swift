@@ -17,6 +17,7 @@ class StudentData: ObservableObject {
 	@Published var wizardStepNames:[Page] = []
 	@Published var playableViewVideoOnly = true
 	var wizardRange:[WizardPicked] = []
+	//var wizardLearningPath:
 	
 	/*
 	 DATA FOR MY COURSES

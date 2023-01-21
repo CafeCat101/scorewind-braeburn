@@ -7,9 +7,17 @@
 
 import Foundation
 enum ExperienceFeedback:String {
-	case starterKit = "start" //never played it, should start from 101
-	case continueLearning = "continue" //If prior wizard data exists, show this option. Start from last completed lesson or course or 103
-	case experienced = "repository"
+	case starterKit = "start" //always start from first uncompleted lesson
+	case continueLearning = "continue" //use calculation to explore uncompleted lessons, take challanges
+	case experienced = "repository" //to explore uncompleted path course and lessons
+	
+	var rawToCase: String {
+		switch self {
+		case .starterKit: return "start"
+		case .continueLearning: return "continue"
+		case .experienced: return "repository"
+		}
+	}
 	
 	func getLabel() -> String{
 		switch self {

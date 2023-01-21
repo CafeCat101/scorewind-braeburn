@@ -6,7 +6,8 @@
 //
 
 import Foundation
-struct WizardPicked: Hashable {
+struct WizardPicked: Hashable, Identifiable {
+	let id:UUID = UUID()
 	var courseID: Int
 	var lessonID: Int
 	var courseSortValue: String
