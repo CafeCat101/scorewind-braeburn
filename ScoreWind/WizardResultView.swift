@@ -14,14 +14,13 @@ struct WizardResultView: View {
 	@ObservedObject var studentData:StudentData
 	@State private var dummyLearningPath:[String] = ["Course1","Course2","Course3"]
 	@State private var showMeMore:Bool = false
-	@State private var thisWizardResult:WizardResult = WizardResult(getAllCourses: [], getAllTimestamps: [])
 	
 	
 	var body: some View {
 		ScrollView(.vertical) {
 			VStack {
 				HStack {
-					Text(thisWizardResult.resultTitle)
+					Text(studentData.wizardResult.resultTitle)
 						.font(.title)
 						.bold()
 					Spacer()
@@ -29,7 +28,7 @@ struct WizardResultView: View {
 				
 				if showMeMore == false {
 					Spacer()
-					Text(thisWizardResult.resultExplaination)
+					Text(studentData.wizardResult.resultExplaination)
 					//Text("\n\nTo learn more about the findings, please click \"Tell me more\""+". Thank you!")
 					Spacer()
 				}
@@ -112,14 +111,14 @@ struct WizardResultView: View {
 					
 					VStack {
 						HStack {
-							Text(thisWizardResult.learningPathTitle)
+							Text(studentData.wizardResult.learningPathTitle)
 								.font(.title2)
 								.bold()
 							Spacer()
 						}.padding([.top,.bottom], 15)
-						Text(thisWizardResult.learningPathExplaination)
+						Text(studentData.wizardResult.learningPathExplaination)
 						
-						WizardResultPathView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData, thisLearningPath: getLearningPath())
+						WizardResultPathView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
 						
 					}
 					
@@ -132,30 +131,9 @@ struct WizardResultView: View {
 			.padding([.leading, .trailing], 15)
 			.onAppear(perform: {
 				print("[debug] WizardResultView.onAppear, wizardStepNames \(studentData.wizardStepNames)")
-				thisWizardResult = WizardResult(getAllCourses: scorewindData.allCourses, getAllTimestamps: scorewindData.allTimestamps)
 			})
 		}
-	}
-	
-	private func getLearningPath() -> [WizardLearningPathItem] {
-		let getExperience = experienceFeedbackToCase(caseValue: studentData.getExperience())
-		return thisWizardResult.getLearningPath(wizardRange: studentData.wizardRange, experienceType: getExperience)
-	}
-	
-	private func experienceFeedbackToCase(caseValue: String) -> ExperienceFeedback {
-		switch caseValue {
-		case ExperienceFeedback.starterKit.rawValue:
-			return .starterKit
-		case ExperienceFeedback.continueLearning.rawValue:
-			return .continueLearning
-		case ExperienceFeedback.experienced.rawValue:
-			return .experienced
-		default:
-			return .starterKit
-		}
-	}
-	
-	
+	}	
 }
 
 struct WizardResult_Previews: PreviewProvider {

@@ -245,6 +245,10 @@ extension ScorewindData {
 				studentData.wizardRange.append(WizardPicked(theCourse: wizardPickedCourse, theLesson: wizardPickedLesson, sortHelper: helper.lessonSortToSortHelper(courseSortValue: wizardPickedCourse.sortValue, lessonStepValue: wizardPickedLesson.step), feedbackValue: 0.0))
 				//studentData.wizardRange.append(WizardPicked(allCourses: allCourses, courseID: assignedCourseId, lessonID: assignedLessonId, feedbackValue:0.0))
 			}
+		} else {
+			studentData.wizardResult = WizardResult(getAllCourses: allCourses, getAllTimestamps: allTimestamps)
+			let getExperience = helper.experienceFeedbackToCase(caseValue: studentData.getExperience())
+			studentData.wizardResult.learningPath = helper.setLearningPath(wizardRange: studentData.wizardRange, experienceType: getExperience)
 		}
 		
 		
