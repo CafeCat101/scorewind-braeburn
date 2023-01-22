@@ -13,6 +13,7 @@ struct WizardLearningPathItem: Identifiable {
 	var sortHelper: Double
 	var feedbackValue: Double
 	var showCourseTitle: Bool
+	var startHere: Bool
 	
 	init() {
 		course = Course()
@@ -20,5 +21,6 @@ struct WizardLearningPathItem: Identifiable {
 		sortHelper = 0.0
 		feedbackValue = 0.0
 		showCourseTitle = false
+		startHere = false
 	}
 }

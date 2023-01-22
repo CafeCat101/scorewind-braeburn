@@ -9,7 +9,7 @@ import Foundation
 
 extension ScorewindData {
 	func createRecommendation(studentData: StudentData) -> Page {
-		let helper = WizardCalculatorHelper()
+		let helper = WizardCalculatorHelper(allCourses: allCourses, allTimestamps: allTimestamps)
 		var assignedCourseId = 0
 		var assignedLessonId = 0
 		var goToWizardStep:Page = .wizardChooseInstrument
@@ -242,7 +242,8 @@ extension ScorewindData {
 			
 			//:: register range for the next step becasue the recommendation at this step is completed.
 			if currentStepName != Page.wizardChooseInstrument {
-				studentData.wizardRange.append(WizardPicked(allCourses: allCourses, courseID: assignedCourseId, lessonID: assignedLessonId, feedbackValue:0.0))
+				studentData.wizardRange.append(WizardPicked(theCourse: wizardPickedCourse, theLesson: wizardPickedLesson, sortHelper: helper.lessonSortToSortHelper(courseSortValue: wizardPickedCourse.sortValue, lessonStepValue: wizardPickedLesson.step), feedbackValue: 0.0))
+				//studentData.wizardRange.append(WizardPicked(allCourses: allCourses, courseID: assignedCourseId, lessonID: assignedLessonId, feedbackValue:0.0))
 			}
 		}
 		

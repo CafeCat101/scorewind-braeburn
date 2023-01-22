@@ -6,7 +6,40 @@
 //
 
 import Foundation
-class WizardCalculatorHelper:ScorewindData {
+struct WizardCalculatorHelper {
+	var allCourses:[Course]
+	var allTimestamps:[Timestamp]
+	
+	init(allCourses: [Course], allTimestamps:[Timestamp]) {
+		self.allCourses = allCourses
+		self.allTimestamps = allTimestamps
+	}
+	
+	private func courseCategoryToString(courseCategories: [CourseCategory], depth: Int) -> String {
+		var categoryReOrder:[String] = []
+		let rootCategory = courseCategories.first(where: {$0.parent == 0}) ?? CourseCategory()
+		if rootCategory.id > 0 {
+			categoryReOrder.append(rootCategory.name)
+			var matchCategoryId = rootCategory.id
+			var findCategory = CourseCategory()
+			let getDepth = (depth < 1) ? 1 : depth
+			for _ in 0..<courseCategories.count-1 {
+				if categoryReOrder.count < getDepth {
+					//!! only look for two levels in category now
+					findCategory = courseCategories.first(where: {$0.parent == matchCategoryId}) ?? CourseCategory()
+					if findCategory.id > 0 {
+						matchCategoryId = findCategory.id
+						categoryReOrder.append(findCategory.name)
+					}
+				} else {
+					break
+				}
+			}
+		}
+		categoryReOrder.remove(at: 0)
+		return categoryReOrder.joined(separator: ", ")
+	}
+	
 	func assignPreviousCourse(targetCourse: Course, studentData: StudentData) -> Course {
 		var findCourse = Course()
 		var sameCategoryCourses = allCourses.filter({ $0.instrument == targetCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: targetCourse.category, depth: 2) && Int($0.sortValue)! < Int(targetCourse.sortValue)! })
@@ -88,7 +121,7 @@ class WizardCalculatorHelper:ScorewindData {
 		
 		for lesson in currentLessons.sorted(by: {$0.step > $1.step}) {
 			if checkIfLessonPlayable(targetCourseID: targetCourse.id, targetLesson: lesson) {
-				result["courseID"] = wizardPickedCourse.id
+				result["courseID"] = targetCourse.id
 				result["lessonID"] = lesson.id
 				break
 			}
@@ -299,10 +332,12 @@ class WizardCalculatorHelper:ScorewindData {
 				if onlyPlayable {
 					
 					if checkIfLessonPlayable(targetCourseID: course.id, targetLesson: lesson) {
-						uncompletedLessons.append(WizardPicked(allCourses: [course], courseID: course.id, lessonID: lesson.id, feedbackValue: 0.0))
+						uncompletedLessons.append(WizardPicked(theCourse: course, theLesson: lesson, sortHelper: lessonSortToSortHelper(courseSortValue: course.sortValue, lessonStepValue: lesson.step), feedbackValue: 0.0))
+						//uncompletedLessons.append(WizardPicked(allCourses: [course], courseID: course.id, lessonID: lesson.id, feedbackValue: 0.0))
 					}
 				} else {
-					uncompletedLessons.append(WizardPicked(allCourses: [course], courseID: course.id, lessonID: lesson.id, feedbackValue: 0.0))
+					uncompletedLessons.append(WizardPicked(theCourse: course, theLesson: lesson, sortHelper: lessonSortToSortHelper(courseSortValue: course.sortValue, lessonStepValue: lesson.step), feedbackValue: 0.0))
+					//uncompletedLessons.append(WizardPicked(allCourses: [course], courseID: course.id, lessonID: lesson.id, feedbackValue: 0.0))
 				}
 
 				print("[debug] wizardCalculator, getUncompletedLessonsFromCourses, uncompletedLesson.count \(uncompletedLessons.count)")
@@ -313,5 +348,14 @@ class WizardCalculatorHelper:ScorewindData {
 			}
 		}
 		return uncompletedLessons
+	}
+	
+	func lessonSortToSortHelper(courseSortValue:String, lessonStepValue: Int) -> Double {
+		let intToString = String(lessonStepValue)
+		var initialNumber:Int = 1
+		for _ in 1...intToString.count {
+			initialNumber = initialNumber*10
+		}
+		return Double(courseSortValue)! + Double(lessonStepValue)/Double(initialNumber)
 	}
 }

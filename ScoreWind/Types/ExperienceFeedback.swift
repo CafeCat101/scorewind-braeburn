@@ -11,14 +11,6 @@ enum ExperienceFeedback:String {
 	case continueLearning = "continue" //use calculation to explore uncompleted lessons, take challanges
 	case experienced = "repository" //to explore uncompleted path course and lessons
 	
-	var rawToCase: String {
-		switch self {
-		case .starterKit: return "start"
-		case .continueLearning: return "continue"
-		case .experienced: return "repository"
-		}
-	}
-	
 	func getLabel() -> String{
 		switch self {
 		case .starterKit:
@@ -29,6 +21,8 @@ enum ExperienceFeedback:String {
 			return "I'm skilled.\nGo to explore the repositories now."
 		}
 	}
+	
+	
 	
 	func getKeyName() -> String {
 		return "experience"
