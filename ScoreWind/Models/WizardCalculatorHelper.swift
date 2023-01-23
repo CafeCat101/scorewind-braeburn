@@ -371,31 +371,4 @@ struct WizardCalculatorHelper {
 			return .starterKit
 		}
 	}
-	
-	func setLearningPath(wizardRange: [WizardPicked], experienceType: ExperienceFeedback) -> [WizardLearningPathItem] {
-		//let calculatorHelper = WizardCalculatorHelper()
-		let sortedWizardRange = wizardRange.sorted(by: {$0.sortHelper < $1.sortHelper})
-		var learningPath:[WizardLearningPathItem] = []
-		print("[debug] WizardResult, getLearningPath sortedWizardRange.count \(sortedWizardRange.count)")
-		for i in 0..<sortedWizardRange.count {
-			//print("[debug] WizardResult, getLearningPath allCourse.count \(calculatorHelper.allCourses.count)")
-			var learningPathItem = WizardLearningPathItem()
-			learningPathItem.course = allCourses.first(where: {$0.id == sortedWizardRange[i].courseID}) ?? Course()
-			learningPathItem.lesson = learningPathItem.course.lessons.first(where: {$0.id == sortedWizardRange[i].lessonID}) ?? Lesson()
-			learningPathItem.feedbackValue = sortedWizardRange[i].feedbackValue
-			learningPathItem.sortHelper = sortedWizardRange[i].sortHelper
-			if i == 0 {
-				learningPathItem.showCourseTitle = true
-				learningPathItem.startHere = true
-			} else {
-				if sortedWizardRange[i].courseID != sortedWizardRange[i-1].courseID {
-					learningPathItem.showCourseTitle = true
-				}
-			}
-			learningPath.append(learningPathItem)
-		}
-		
-		
-		return learningPath
-	}
 }

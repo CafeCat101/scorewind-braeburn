@@ -246,15 +246,66 @@ extension ScorewindData {
 				//studentData.wizardRange.append(WizardPicked(allCourses: allCourses, courseID: assignedCourseId, lessonID: assignedLessonId, feedbackValue:0.0))
 			}
 		} else {
-			studentData.wizardResult = WizardResult(getAllCourses: allCourses, getAllTimestamps: allTimestamps)
-			let getExperience = helper.experienceFeedbackToCase(caseValue: studentData.getExperience())
-			studentData.wizardResult.learningPath = helper.setLearningPath(wizardRange: studentData.wizardRange, experienceType: getExperience)
+			studentData.wizardResult = WizardResult()
+			studentData.wizardResult.learningPath = setLearningPath(helper:helper, useStudentData: studentData)//wizardRange: studentData.wizardRange, experienceType: getExperience)
 		}
 		
 		
 		print("[debug] createRecommendation, goToWizardStep \(goToWizardStep)")
 		print("[debug] createRecommendation, wizardRange \(studentData.wizardRange)")
 		return goToWizardStep
+	}
+	func setLearningPath(helper:WizardCalculatorHelper, useStudentData: StudentData) -> [WizardLearningPathItem] {
+	//func setLearningPath(helper:WizardCalculatorHelper, wizardRange: [WizardPicked], experienceType: ExperienceFeedback) -> [WizardLearningPathItem] {
+		let experienceType = helper.experienceFeedbackToCase(caseValue: useStudentData.getExperience())
+		var sortedWizardRange = useStudentData.wizardRange.sorted(by: {$0.sortHelper < $1.sortHelper})
+		var learningPath:[WizardLearningPathItem] = []
+		
+		if experienceType == .continueLearning || experienceType == .experienced {
+			var searchLessons:[WizardLessonSearched] = []
+			searchLessons.append(WizardLessonSearched(courseID: wizardPickedCourse.id, lesson: wizardPickedLesson))
+			searchLessons.append(contentsOf: helper.getNextLessons(targetCourse: wizardPickedCourse, targetLesson: wizardPickedLesson, useStudnetData: useStudentData, range: 9))
+			
+			if searchLessons.count > 0 {
+				sortedWizardRange = []
+				for item in searchLessons {
+					let course = allCourses.first(where: {$0.id == item.courseID}) ?? Course()
+					if course.id > 0 {
+						let itemFromRange = useStudentData.wizardRange.first(where: {$0.courseID == course.id && $0.lessonID == item.lesson.id})
+						let getFeedbackValueFromRange = itemFromRange?.feedbackValue ?? 0.0
+						var setSortHelperValue = itemFromRange?.sortHelper ?? 0.0
+						if setSortHelperValue == 0.0 {
+							setSortHelperValue = helper.lessonSortToSortHelper(courseSortValue: course.sortValue, lessonStepValue: item.lesson.step)
+						}
+						sortedWizardRange.append(WizardPicked(theCourse: course, theLesson: item.lesson, sortHelper: setSortHelperValue, feedbackValue: getFeedbackValueFromRange))
+					}
+					
+				}
+			}
+		}
+		
+		for i in 0..<sortedWizardRange.count {
+			//print("[debug] WizardResult, getLearningPath allCourse.count \(calculatorHelper.allCourses.count)")
+			var learningPathItem = WizardLearningPathItem()
+			learningPathItem.course = allCourses.first(where: {$0.id == sortedWizardRange[i].courseID}) ?? Course()
+			learningPathItem.lesson = learningPathItem.course.lessons.first(where: {$0.id == sortedWizardRange[i].lessonID}) ?? Lesson()
+			learningPathItem.feedbackValue = sortedWizardRange[i].feedbackValue
+			learningPathItem.sortHelper = sortedWizardRange[i].sortHelper
+			if sortedWizardRange[i].courseID == wizardPickedCourse.id && sortedWizardRange[i].lessonID == wizardPickedLesson.id {
+				learningPathItem.startHere = true
+			}
+			if i == 0 {
+				learningPathItem.showCourseTitle = true
+			} else {
+				if sortedWizardRange[i].courseID != sortedWizardRange[i-1].courseID {
+					learningPathItem.showCourseTitle = true
+				}
+			}
+			learningPath.append(learningPathItem)
+		}
+		
+		
+		return learningPath
 	}
 	
 	

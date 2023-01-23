@@ -38,6 +38,23 @@ struct WizardResultPathView: View {
 				.padding([.leading, .trailing], 15)
 				.background(Color("BadgeWatchLearn"))
 				.cornerRadius(25)
+				.onTapGesture {
+					scorewindData.currentCourse = scorewindData.wizardPickedCourse
+					scorewindData.currentView = Page.course
+					self.selectedTab = "TCourse"
+					scorewindData.currentLesson = scorewindData.wizardPickedCourse.lessons[0]
+					scorewindData.setCurrentTimestampRecs()
+					//scorewindData.lastViewAtScore = true
+					scorewindData.lastPlaybackTime = 0.0
+					scorewindData.lessonChanged = true
+				}
+		}
+		
+		if (scorewindData.wizardPickedCourse.lessons[0].id != pathItem.lesson.id) && (studentData.wizardResult.learningPath[0].lesson.id == pathItem.lesson.id) {
+			Label("Next", systemImage: "arrow.down")
+				.labelStyle(.iconOnly)
+			Label("Next", systemImage: "arrow.down")
+				.labelStyle(.iconOnly)
 		}
 		
 		if startHere {
@@ -45,10 +62,10 @@ struct WizardResultPathView: View {
 				Label(title: {
 					Text("Start here")
 					.bold()
-					.foregroundColor(Color("LessonSheet"))
+					.foregroundColor(.yellow)
 				}, icon: {
 						Image(systemName: "paperplane.circle")
-						.foregroundColor(Color("LessonSheet"))
+						.foregroundColor(.yellow)
 				}).padding([.bottom],-5)
 				Text(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.lesson.title))
 					.modifier(lessonItemInPath())
@@ -110,7 +127,7 @@ struct WizardResultPathView: View {
 struct WizardResultPathView_Previews: PreviewProvider {
 	@State static var tab = "TWizard"
 	@State static var step:Page = .wizardResult
-	@State static var wizardResult: WizardResult = WizardResult(getAllCourses: [], getAllTimestamps: [])
+	@State static var wizardResult: WizardResult = WizardResult()
 	
 	static var previews: some View {
 		WizardResultPathView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())

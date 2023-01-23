@@ -17,7 +17,7 @@ class StudentData: ObservableObject {
 	@Published var wizardStepNames:[Page] = []
 	@Published var playableViewVideoOnly = true
 	var wizardRange:[WizardPicked] = []
-	var wizardResult:WizardResult = WizardResult(getAllCourses: [], getAllTimestamps: [])
+	var wizardResult:WizardResult = WizardResult()
 	
 	/*
 	 DATA FOR MY COURSES

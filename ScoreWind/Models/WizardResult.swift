@@ -15,13 +15,9 @@ struct WizardResult {
 	var resultExplaination: String
 	var learningPathTitle: String
 	var learningPathExplaination: String
-	var allCourses:[Course]
-	var allTimestamps:[Timestamp]
 	var learningPath:[WizardLearningPathItem]
 	
-	init(getAllCourses:[Course], getAllTimestamps:[Timestamp]) {
-		allCourses = getAllCourses
-		allTimestamps = getAllTimestamps
+	init() {
 		resultTitle = "Discovered a lesson!"
 		resultExplaination = "You've completed the wizard. Scorewind found a lesson for you."
 		learningPathTitle = "Your leaninr path"
