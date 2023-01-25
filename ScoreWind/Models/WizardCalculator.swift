@@ -83,8 +83,11 @@ extension ScorewindData {
 								lastLessonValue = 1
 							}
 							let findLessons = helper.getNextLessons(targetCourse: wizardPickedCourse, targetLesson: wizardPickedCourse.lessons[wizardPickedCourse.lessons.count-1], useStudnetData: studentData, range: lastLessonValue)
-							assignedCourseId = findLessons[0].courseID
-							assignedLessonId = findLessons[0].lesson.id
+							if findLessons.count > 0 {
+								assignedCourseId = findLessons[0].courseID
+								assignedLessonId = findLessons[0].lesson.id
+							}
+							
 						}
 					}
 				} else if finalFeedback == .someOfThem {
@@ -98,9 +101,10 @@ extension ScorewindData {
 					}
 					var findLessons = helper.getPreviousLessons(targetCourse: wizardPickedCourse, targetLesson: wizardPickedCourse.lessons[0], useStudnetData: studentData, range: lastLessonValue)
 					findLessons.reverse()
-					assignedCourseId = findLessons[0].courseID
-					assignedLessonId = findLessons[0].lesson.id
-
+					if findLessons.count > 0 {
+						assignedCourseId = findLessons[0].courseID
+						assignedLessonId = findLessons[0].lesson.id
+					}
 				} else {
 					//:: go DoYouKnow or IsPlayable. Go 1 course level down or few lesson levels down.
 					let previousCourse = helper.assignPreviousCourse(targetCourse: wizardPickedCourse, studentData: studentData)
@@ -115,10 +119,11 @@ extension ScorewindData {
 							lastLessonValue = 1
 						}
 						let findLessons = helper.getPreviousLessons(targetCourse: wizardPickedCourse, targetLesson: wizardPickedCourse.lessons[0], useStudnetData: studentData, range: lastLessonValue)
-						assignedCourseId = findLessons[0].courseID
-						assignedLessonId = findLessons[0].lesson.id
+						if findLessons.count > 0 {
+							assignedCourseId = findLessons[0].courseID
+							assignedLessonId = findLessons[0].lesson.id
+						}
 					}
-					
 				}
 			}
 		}
@@ -193,9 +198,27 @@ extension ScorewindData {
 			goToWizardStep = .wizardResult
 		}
 		
+		//:: in case of no course or lesson is found but the wizardRange has some data(mostly happen when trying to find something easy in path course),
+		//:: use the last doable lesson in it.
+		if assignedCourseId == 0 && assignedLessonId == 0 && studentData.wizardRange.count > 0 {
+			var sortedWizardRange = studentData.wizardRange.sorted(by: {$0.sortHelper > $1.sortHelper})
+			sortedWizardRange.removeAll(where: {$0.feedbackValue < Double(PlayableFeedback.canLearn.rawValue)})
+			if sortedWizardRange.count > 0 {
+				assignedCourseId = sortedWizardRange[0].courseID
+				if sortedWizardRange[0].lessonID > 0 {
+					assignedLessonId = sortedWizardRange[0].lessonID
+				} else {
+					let useCourse = allCourses.first(where: {$0.id == assignedCourseId}) ?? Course()
+					assignedLessonId = useCourse.lessons[0].id
+				}
+			}
+			explainResult = "This lesson is forgotten. Let's check it out!"
+			goToWizardStep = .wizardResult
+		}
+		
 		if assignedCourseId == 0 && assignedLessonId == 0 {
 			if goToWizardStep != .wizardResult {
-				//:: explain->wizard doesn't have any lesson to recommend
+				//:: explain->wizard doesn't have any lesson to recommend, probably all lessons are completed
 				explainResult = "Oooh~Scorewind doesn't have more new lessons for you now."
 				goToWizardStep = .wizardResult
 			}
