@@ -20,7 +20,7 @@ struct WizardResult {
 	init() {
 		resultTitle = "Discovered a lesson!"
 		resultExplaination = "You've completed the wizard. Scorewind found a lesson for you."
-		learningPathTitle = "Your leaninr path"
+		learningPathTitle = "Your learning path"
 		learningPathExplaination = "These are some lessons that await for you to complete them."
 		learningPath = []
 	}

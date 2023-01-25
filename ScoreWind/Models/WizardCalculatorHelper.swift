@@ -239,9 +239,11 @@ struct WizardCalculatorHelper {
 							
 							let sortValues = lesson.sortValue.split(separator:"-")
 							print("[debug] appendLessonsFromCourses, StepByStep or Path course, lesson.sortValue \(sortValues[0])-\(sortValues[1])")
-							let lessonsAtSameLessonLevel = useStudnetData.wizardRange.filter({ $0.lessonSortValue.contains(sortValues[0]+"-"+sortValues[1]) })
+							//let lessonsAtSameLessonLevel = useStudnetData.wizardRange.filter({ $0.lessonSortValue.contains(sortValues[0]+"-"+sortValues[1]) })
+							let lessonsAtSameLessonLevel = useStudnetData.wizardRange.filter({isLessonLevelTheSame(sourceValue: lesson.sortValue, targetValue: $0.lessonSortValue)})
 							print("[debug] appendLessonsFromCourses, StepByStep or Path course, lessonsAtSameLessonLevel.count \(lessonsAtSameLessonLevel.count)")
 							if lessonsAtSameLessonLevel.count > 0 {
+								//if any lesson in this level has been added to the range, don't ask again(don't add so range won't have lessons at the same level)
 								print("[debug] appendLessonsFromCourses, StepByStep or Path course, wizardRange contains more than 1 \(sortValues[0])-\(sortValues[1])")
 								continue
 							}
@@ -264,6 +266,20 @@ struct WizardCalculatorHelper {
 		}
 		
 		return lessons
+	}
+	
+	private func isLessonLevelTheSame(sourceValue:String, targetValue:String) -> Bool {
+		let sourceValueArr = sourceValue.split(separator:"-")
+		let targetValueArr = targetValue.split(separator:"-")
+		if sourceValueArr.count >= 2 && targetValueArr.count >= 2 {
+			if Int(sourceValueArr[0]) == Int(targetValueArr[0]) && Int(sourceValueArr[1]) == Int(targetValueArr[1]) {
+				return true
+			} else {
+				return false
+			}
+		} else {
+			return false
+		}
 	}
 	
 	private func convertDoYouKnowFeedback(feedbackValue: Int) -> Double {

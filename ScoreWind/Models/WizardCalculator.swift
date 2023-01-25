@@ -15,6 +15,7 @@ extension ScorewindData {
 		var goToWizardStep:Page = .wizardChooseInstrument
 		let currentStepName = studentData.wizardStepNames[studentData.wizardStepNames.count-1]
 		var currentFinalFeedbackValue = 0.0
+		var explainResult = ""
 		
 		if currentStepName == Page.wizardExperience {
 			print("[debug] createRecommendation, Page.wizardExperience, \(studentData.getExperience())")
@@ -145,6 +146,8 @@ extension ScorewindData {
 				//:: ends here, go to go to wizard result
 				assignedCourseId = wizardPickedCourse.id
 				assignedLessonId = wizardPickedLesson.id
+				//:: explain->you've choosen...
+				explainResult = "Looks like you found a lesson. Go ahread!"
 				goToWizardStep = .wizardResult
 			} else if Int(extractFeedback[0]) == 4 {
 				//:: comfortable, go 1 level up
@@ -178,18 +181,22 @@ extension ScorewindData {
 				let explorer = helper.explorerAlgorithm(useStudentData: studentData)
 				assignedCourseId = explorer["courseID"] ?? 0
 				assignedLessonId = explorer["lessonID"] ?? 0
+				explainResult = "It's time to take a little challenges. Good luck!"
 			} else {
 				let lastCourseInRange = allCourses.first(where: {$0.id == studentData.wizardRange.last?.courseID}) ?? Course()
 				let assesment = helper.assesmentAlgorithm(useStudentData: studentData, exampleCourse: lastCourseInRange)
 				assignedCourseId = assesment["courseID"] ?? 0
 				assignedLessonId = assesment["lessonID"] ?? 0
+				explainResult = "Hi explorer, Scorewind found a lesson that may be your interest."
 			}
+			//:: explain->hi explorer, it's time to challange or repositioning your level.
 			goToWizardStep = .wizardResult
 		}
 		
 		if assignedCourseId == 0 && assignedLessonId == 0 {
 			if goToWizardStep != .wizardResult {
-				//here is where wizard doesn't have lesson to recommend
+				//:: explain->wizard doesn't have any lesson to recommend
+				explainResult = "Oooh~Scorewind doesn't have more new lessons for you now."
 				goToWizardStep = .wizardResult
 			}
 		} else {
@@ -197,7 +204,7 @@ extension ScorewindData {
 			if assignedCourseId > 0 {
 				wizardPickedCourse = allCourses.first(where: {$0.id == assignedCourseId}) ?? Course()
 				
-				//101 and 102 is a package deal, reassign wizard picked course to any not completed one between 101~102
+				//:: 101 and 102 is a package deal, reassign wizard picked course to any not completed one between 101~102
 				if (wizardPickedCourse.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"}) && (studentData.getExperience() != ExperienceFeedback.starterKit.rawValue)) {
 					var beginnerCoursePackage = allCourses.filter({$0.instrument == studentData.getInstrumentChoice() && $0.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"})}).sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})
 					beginnerCoursePackage = helper.excludeCoursesCompleted(targetCourse: beginnerCoursePackage, useStudentData: studentData)
@@ -210,6 +217,8 @@ extension ScorewindData {
 							break
 						}
 					}
+					//:: explain->101~102 is the essentail package, don't miss it.
+					explainResult = "Series 101 to 102 is an essential package for you to get your hands on your instrument more easily. Don't miss it!"
 					goToWizardStep = .wizardResult
 				}
 				
@@ -247,7 +256,12 @@ extension ScorewindData {
 			}
 		} else {
 			studentData.wizardResult = WizardResult()
-			studentData.wizardResult.learningPath = setLearningPath(helper:helper, useStudentData: studentData)//wizardRange: studentData.wizardRange, experienceType: getExperience)
+			studentData.wizardResult.learningPath = setLearningPath(helper:helper, useStudentData: studentData)
+			if studentData.getExperience() == ExperienceFeedback.continueLearning.rawValue || studentData.getExperience() == ExperienceFeedback.experienced.rawValue {
+				studentData.wizardResult.resultTitle = "A lesson to explore!"
+				studentData.wizardResult.resultExplaination = explainResult
+				studentData.wizardResult.learningPathExplaination = "Start here and into the near future. These are lessons that await for you to explore them."
+			}
 		}
 		
 		
@@ -255,8 +269,8 @@ extension ScorewindData {
 		print("[debug] createRecommendation, wizardRange \(studentData.wizardRange)")
 		return goToWizardStep
 	}
+	
 	func setLearningPath(helper:WizardCalculatorHelper, useStudentData: StudentData) -> [WizardLearningPathItem] {
-	//func setLearningPath(helper:WizardCalculatorHelper, wizardRange: [WizardPicked], experienceType: ExperienceFeedback) -> [WizardLearningPathItem] {
 		let experienceType = helper.experienceFeedbackToCase(caseValue: useStudentData.getExperience())
 		var sortedWizardRange = useStudentData.wizardRange.sorted(by: {$0.sortHelper < $1.sortHelper})
 		var learningPath:[WizardLearningPathItem] = []
