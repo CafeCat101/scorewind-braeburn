@@ -6,21 +6,26 @@
 //
 
 import Foundation
-struct WizardLearningPathItem: Identifiable {
-	let id:UUID = UUID()
-	var course: Course
-	var lesson: Lesson
+struct WizardLearningPathItem: Identifiable, Codable {
+	var id: UUID
+	var courseID: Int
+	var lessonID: Int
 	var sortHelper: Double
 	var feedbackValue: Double
 	var showCourseTitle: Bool
 	var startHere: Bool
+	var courseTitle: String
+	var lessonTitle: String
 	
 	init() {
-		course = Course()
-		lesson = Lesson()
+		id = UUID()
+		courseID = 0
+		lessonID = 0
 		sortHelper = 0.0
 		feedbackValue = 0.0
 		showCourseTitle = false
 		startHere = false
+		courseTitle = "Course"
+		lessonTitle = "Lesson"
 	}
 }

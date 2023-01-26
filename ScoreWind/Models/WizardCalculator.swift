@@ -241,7 +241,7 @@ extension ScorewindData {
 						}
 					}
 					//:: explain->101~102 is the essentail package, don't miss it.
-					explainResult = "Series 101 to 102 is an essential package for you to get your hands on your instrument more easily. Don't miss it!"
+					explainResult = "Series 101 to 102 is an essential package for you to get your hands on the instrument more easily. Don't miss it!"
 					goToWizardStep = .wizardResult
 				}
 				
@@ -281,13 +281,18 @@ extension ScorewindData {
 			studentData.wizardResult = WizardResult()
 			studentData.wizardResult.learningPath = setLearningPath(helper:helper, useStudentData: studentData)
 			if studentData.getExperience() == ExperienceFeedback.continueLearning.rawValue || studentData.getExperience() == ExperienceFeedback.experienced.rawValue {
-				studentData.wizardResult.resultTitle = "A lesson to explore!"
+				if studentData.getExperience() == ExperienceFeedback.continueLearning.rawValue {
+					studentData.wizardResult.resultTitle = "A lesson to explore!"
+				} else {
+					studentData.wizardResult.resultTitle = "A lesson from repositories"
+				}
+				
 				studentData.wizardResult.resultExplaination = explainResult
 				studentData.wizardResult.learningPathExplaination = "Start here and into the near future. These are lessons that await for you to explore them."
 			}
 		}
 		
-		
+		studentData.updateWizardResult(result: studentData.wizardResult)
 		print("[debug] createRecommendation, goToWizardStep \(goToWizardStep)")
 		print("[debug] createRecommendation, wizardRange \(studentData.wizardRange)")
 		return goToWizardStep
@@ -324,8 +329,12 @@ extension ScorewindData {
 		for i in 0..<sortedWizardRange.count {
 			//print("[debug] WizardResult, getLearningPath allCourse.count \(calculatorHelper.allCourses.count)")
 			var learningPathItem = WizardLearningPathItem()
-			learningPathItem.course = allCourses.first(where: {$0.id == sortedWizardRange[i].courseID}) ?? Course()
-			learningPathItem.lesson = learningPathItem.course.lessons.first(where: {$0.id == sortedWizardRange[i].lessonID}) ?? Lesson()
+			let findCourse = allCourses.first(where: {$0.id == sortedWizardRange[i].courseID}) ?? Course()
+			let findLesson = findCourse.lessons.first(where: {$0.id == sortedWizardRange[i].lessonID}) ?? Lesson()
+			learningPathItem.courseID = findCourse.id
+			learningPathItem.courseTitle = findCourse.title
+			learningPathItem.lessonID = findLesson.id
+			learningPathItem.lessonTitle = findLesson.title
 			learningPathItem.feedbackValue = sortedWizardRange[i].feedbackValue
 			learningPathItem.sortHelper = sortedWizardRange[i].sortHelper
 			if sortedWizardRange[i].courseID == wizardPickedCourse.id && sortedWizardRange[i].lessonID == wizardPickedLesson.id {

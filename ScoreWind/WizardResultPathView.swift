@@ -17,7 +17,7 @@ struct WizardResultPathView: View {
 			ForEach(studentData.wizardResult.learningPath) { pathItem in
 				pathItemView(pathItem: pathItem, startHere: pathItem.startHere)
 				
-				if pathItem.lesson.id != studentData.wizardResult.learningPath[studentData.wizardResult.learningPath.count - 1].lesson.id {
+				if pathItem.lessonID != studentData.wizardResult.learningPath[studentData.wizardResult.learningPath.count - 1].lessonID {
 					HStack {
 						Spacer()
 						Label("Next", systemImage: "arrow.down")
@@ -32,7 +32,7 @@ struct WizardResultPathView: View {
 	@ViewBuilder
 	private func pathItemView(pathItem: WizardLearningPathItem, startHere: Bool) -> some View {
 		if pathItem.showCourseTitle {
-			Text("Course: \(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.course.title))")
+			Text("Course: \(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.courseTitle))")
 				.foregroundColor(Color("LessonSheet"))
 				.frame(maxWidth: .infinity, minHeight: 60)
 				.padding([.leading, .trailing], 15)
@@ -50,7 +50,7 @@ struct WizardResultPathView: View {
 				}
 		}
 		
-		if (scorewindData.wizardPickedCourse.lessons[0].id != pathItem.lesson.id) && (studentData.wizardResult.learningPath[0].lesson.id == pathItem.lesson.id) {
+		if (scorewindData.wizardPickedCourse.lessons[0].id != pathItem.lessonID) && (studentData.wizardResult.learningPath[0].lessonID == pathItem.lessonID) {
 			Label("Next", systemImage: "arrow.down")
 				.labelStyle(.iconOnly)
 			Label("Next", systemImage: "arrow.down")
@@ -67,22 +67,20 @@ struct WizardResultPathView: View {
 						Image(systemName: "paperplane.circle")
 						.foregroundColor(.yellow)
 				}).padding([.bottom],-5)
-				Text(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.lesson.title))
+				Text(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.lessonTitle))
 					.modifier(lessonItemInPath())
 					.onTapGesture {
-						goToLesson(toCourse: pathItem.course, toLesson: pathItem.lesson)
+						goToLesson(toCourseID: pathItem.courseID, toLessonID: pathItem.lessonID)
 					}
-				/*Label("Start here", systemImage:"paperplane.circle")
-				 .foregroundColor(Color("LessonSheet"))*/
 			}
 			.background {
 				RoundedRectangle(cornerRadius: 26)
 				.foregroundColor(Color("BadgeWatchLearn"))}
 		} else {
-			Text(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.lesson.title))
+			Text(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.lessonTitle))
 				.modifier(lessonItemInPath())
 				.onTapGesture {
-					goToLesson(toCourse: pathItem.course, toLesson: pathItem.lesson)
+					goToLesson(toCourseID: pathItem.courseID, toLessonID: pathItem.lessonID)
 				}
 		}
 	}
@@ -98,11 +96,14 @@ struct WizardResultPathView: View {
 		}
 	}
 
-	private func goToLesson(toCourse: Course, toLesson: Lesson) {
-		if toLesson.id > 0 {
-			scorewindData.currentCourse = toCourse
+	private func goToLesson(toCourseID: Int, toLessonID: Int) {
+		let theCourse = scorewindData.allCourses.first(where: {$0.id == toCourseID}) ?? Course()
+		let theLesson = theCourse.lessons.first(where: {$0.id == toLessonID}) ?? Lesson()
+		
+		if theLesson.id > 0 {
+			scorewindData.currentCourse = theCourse
 			
-			scorewindData.currentLesson = toLesson
+			scorewindData.currentLesson = theLesson
 			scorewindData.setCurrentTimestampRecs()
 			scorewindData.lastPlaybackTime = 0.0
 			self.selectedTab = "TLesson"

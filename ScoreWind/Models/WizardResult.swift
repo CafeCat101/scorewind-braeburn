@@ -9,8 +9,8 @@
  */
 import Foundation
 
-struct WizardResult {
-	let id:UUID = UUID()
+struct WizardResult: Codable {
+	var id:UUID
 	var resultTitle: String
 	var resultExplaination: String
 	var learningPathTitle: String
@@ -18,6 +18,7 @@ struct WizardResult {
 	var learningPath:[WizardLearningPathItem]
 	
 	init() {
+		id = UUID()
 		resultTitle = "Discovered a lesson!"
 		resultExplaination = "You've completed the wizard. Scorewind found a lesson for you."
 		learningPathTitle = "Your learning path"

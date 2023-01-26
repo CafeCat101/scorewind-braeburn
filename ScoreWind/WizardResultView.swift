@@ -14,7 +14,9 @@ struct WizardResultView: View {
 	@ObservedObject var studentData:StudentData
 	@State private var dummyLearningPath:[String] = ["Course1","Course2","Course3"]
 	@State private var showMeMore:Bool = false
-	
+	@State private var showStepTip = false
+	@State private var tipContent:AnyView = AnyView(Text("Tip"))
+	@State private var userDefaults = UserDefaults.standard
 	
 	var body: some View {
 		ScrollView(.vertical) {
@@ -130,11 +132,84 @@ struct WizardResultView: View {
 			.background(Color("AppBackground"))
 			.padding([.leading, .trailing], 15)
 			.onAppear(perform: {
-				print("[debug] WizardResultView.onAppear, wizardStepNames \(studentData.wizardStepNames)")
+				print("[debug] WizardResultView.onAppear, wizardResult.learningPath.count \(studentData.wizardResult.learningPath.count)")
+				
 			})
 		}
-	}	
+		.onAppear(perform: {
+			let hideTips:[String] = userDefaults.object(forKey: "hideTips") as? [String] ?? []
+			if hideTips.contains(Page.wizardResult.rawValue) == false {
+				tipContent = AnyView(makeTipView(showStepTip: $showStepTip))
+				showStepTip = true
+			}
+		})
+		.fullScreenCover(isPresented: $showStepTip, content: {
+			TipTransparentModalView(showStepTip: $showStepTip, tipContent: $tipContent)
+		})
+	}
+	
+	struct makeTipView: View {
+		@Binding var showStepTip:Bool
+		let screenSize: CGRect = UIScreen.main.bounds
+		@State private var userDefaults = UserDefaults.standard
+		
+		var body: some View {
+			VStack{
+				Spacer()
+				//tip content ==>
+				VStack {
+					Text("You've completed the wizard!")
+					.font(.headline)
+					.modifier(StepExplainingText())
+					
+					Text("You can always restart the wizard again by click the \(Image(systemName: "goforward")) button in the top left corner.")
+						.modifier(StepExplainingText())
+					Text("Your last result is also saved, so you can revisit it whenever you want.")
+						.modifier(StepExplainingText())
+				}.background {
+					RoundedRectangle(cornerRadius: 26)
+						.foregroundColor(Color("AppYellow"))
+					.frame(width: screenSize.width*0.9)}
+				//<===
+				Spacer()
+				VStack{
+					Button(action: {
+						print("ok")
+						showStepTip = false
+					}, label: {
+						Text("OK").frame(minWidth:150)
+					})
+					.foregroundColor(Color("LessonListStatusIcon"))
+					.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
+					.background {
+						RoundedRectangle(cornerRadius: 26)
+							.foregroundColor(Color("AppYellow"))
+					}
+					Spacer().frame(maxHeight:20)
+					Button(action: {
+						print("don't show me again")
+						var hideTips:[String] = userDefaults.object(forKey: "hideTips") as? [String] ?? []
+						if hideTips.contains(Page.wizardResult.rawValue) == false {
+							hideTips.append(Page.wizardResult.rawValue)
+							userDefaults.set(hideTips,forKey: "hideTips")
+						}
+						
+						showStepTip = false
+					}, label: {
+						Text("Don't show me again").frame(minWidth:150)
+					}).foregroundColor(Color("LessonSheet"))
+						.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
+						 .background {
+							 RoundedRectangle(cornerRadius: 26)
+								 .foregroundColor(Color("BadgeScoreAvailable"))
+						 }
+				}
+			}
+		}
+	}
 }
+
+
 
 struct WizardResult_Previews: PreviewProvider {
 	@State static var tab = "TWizard"

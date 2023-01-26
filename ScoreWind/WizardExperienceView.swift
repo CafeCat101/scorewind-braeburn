@@ -88,14 +88,6 @@ struct WizardExperienceView: View {
 		}
 	}
 	
-	struct StepExplainingText: ViewModifier {
-		func body(content: Content) -> some View {
-			content
-				.foregroundColor(Color("LessonListStatusIcon"))
-				.padding(EdgeInsets(top: 18, leading: 40, bottom: 18, trailing: 40))
-		}
-	}
-	
 	struct makeTipView: View {
 		@Binding var showStepTip:Bool
 		var choise: ExperienceFeedback

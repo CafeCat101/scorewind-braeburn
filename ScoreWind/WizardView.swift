@@ -70,7 +70,7 @@ struct WizardView: View {
 			}
 			.overlay(alignment:.leading, content: {
 				//:: to navigate back
-				if studentData.wizardStepNames.count > 1 && studentData.playableViewVideoOnly && userRole == .student {
+				if (studentData.wizardStepNames.count > 1 || stepName == .wizardResult) && studentData.playableViewVideoOnly && userRole == .student {
 					Label("Restart", systemImage: "goforward")
 						.padding([.leading], 15)
 						.font(.title3)
@@ -119,7 +119,12 @@ struct WizardView: View {
 		}
 		.background(Color("AppBackground"))
 		.onAppear(perform: {
-			if studentData.wizardRange.count > 0 {
+			if studentData.getWizardResult().learningPath.count > 0 {
+				studentData.wizardResult = studentData.getWizardResult()
+				let getPickedItem = studentData.wizardResult.learningPath.first(where: {$0.startHere == true})
+				scorewindData.wizardPickedCourse = scorewindData.allCourses.first(where: {$0.id == getPickedItem?.courseID}) ?? Course()
+				scorewindData.wizardPickedLesson = scorewindData.wizardPickedCourse.lessons.first(where: {$0.id == getPickedItem?.lessonID}) ?? Lesson()
+				scorewindData.wizardPickedTimestamps = (scorewindData.allTimestamps.first(where: {$0.id == getPickedItem?.courseID})?.lessons.first(where: {$0.id == getPickedItem?.lessonID})!.timestamps) ?? []
 				stepName = .wizardResult
 			} else {
 				stepName = .wizardChooseInstrument
@@ -170,6 +175,14 @@ struct WizardView: View {
 			})
 	}
 
+}
+
+struct StepExplainingText: ViewModifier {
+	func body(content: Content) -> some View {
+		content
+			.foregroundColor(Color("LessonListStatusIcon"))
+			.padding(EdgeInsets(top: 18, leading: 40, bottom: 18, trailing: 40))
+	}
 }
 
 struct WizardView_Previews: PreviewProvider {

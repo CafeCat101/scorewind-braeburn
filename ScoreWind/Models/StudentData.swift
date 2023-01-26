@@ -318,10 +318,6 @@ class StudentData: ObservableObject {
 		useriCloudKeyValueStore.set(lastPlayable, forKey: "playable")
 		useriCloudKeyValueStore.synchronize()
 	}
-
-	func getWizardDiscovered() -> [String:Any] {
-		return useriCloudKeyValueStore.dictionary(forKey: "wizardDiscovered") ?? [:]
-	}
 	
 	func getTotalCompletedLessonCount() -> Int {
 		var countLesson = 0
@@ -329,6 +325,41 @@ class StudentData: ObservableObject {
 			countLesson = countLesson + course.completedLessons.count
 		}
 		return countLesson
+	}
+	
+	func updateWizardResult(result: WizardResult) {
+		do {
+			let encoder = JSONEncoder()
+			let data = try encoder.encode(result)
+			useriCloudKeyValueStore.set(data, forKey: "wizardResult")
+			useriCloudKeyValueStore.synchronize()
+		} catch {
+			print("unable to encode result \(error)")
+		}
+	}
+	
+	func getWizardResult() -> WizardResult {
+		var wizardResult = WizardResult()
+		
+		if let data = useriCloudKeyValueStore.data(forKey: "wizardResult") {
+			do {
+				let decoder = JSONDecoder()
+				let result = try decoder.decode(WizardResult.self, from:data)
+				//print("result title \(result.resultTitle)")
+				//print("result, first course title in learningPath \(result.learningPath[0].course.title)")
+				wizardResult.resultTitle = result.resultTitle
+				wizardResult.resultExplaination = result.resultExplaination
+				wizardResult.learningPathTitle = result.learningPathTitle
+				wizardResult.learningPathExplaination = result.learningPathExplaination
+				wizardResult.learningPath = result.learningPath
+				return wizardResult
+			} catch {
+				wizardResult = WizardResult()
+				print("unable to decode wizardResult \(error)")
+			}
+		}
+		
+		return wizardResult
 	}
 	
 }

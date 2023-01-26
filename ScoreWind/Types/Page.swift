@@ -7,15 +7,15 @@
 
 import Foundation
 
-enum Page {
-	case wizard
-	case myCourses //CoursesForYou
-	case course
-	case lesson
-	case lessonFullScreen
-	case wizardChooseInstrument
-	case wizardExperience
-	case wizardDoYouKnow
-	case wizardPlayable
-	case wizardResult
+enum Page:String {
+	case wizard = "wizardView"
+	case myCourses = "myCoursesView" //CoursesForYou
+	case course = "courseView"
+	case lesson = "lessonView"
+	case lessonFullScreen = "lessonFullScreen"
+	case wizardChooseInstrument = "wizardChooseInstrument"
+	case wizardExperience = "wizardExperience"
+	case wizardDoYouKnow = "wizardDoYouKnow"
+	case wizardPlayable = "wizardPlayable"
+	case wizardResult = "wizardResult"
 }
