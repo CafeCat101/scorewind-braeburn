@@ -35,39 +35,12 @@ class ScoreWindTests: XCTestCase {
 		print(scorewindData.needToCheckVersion())
 	}
 	
-	func testcreateRecommendation() throws {
-		//=>test guitar:playable, target:lesson in previous level in current course
-		
-		studentData.removeAKey(keyName: "experience")
-		studentData.removeAKey(keyName: "doYouKnow")
-		studentData.removeAKey(keyName: "playable")
-		
-		studentData.wizardStepNames = [Page.wizardChooseInstrument]
-		studentData.updateInstrumentChoice(instrument: .violin)
-
-		studentData.wizardStepNames.append(.wizardExperience)
-		studentData.updateExperience(experience: .continueLearning)
-		
-		studentData.wizardStepNames.append(.wizardDoYouKnow)
-		scorewindData.wizardPickedCourse = scorewindData.allCourses.first(where: {$0.id == 96100}) ?? Course()
-		print("TEST, wizardPickedCourse.id \(scorewindData.allCourses.count)")
-		let feedbackScores:[Int] = [3,3,3]
-		studentData.updateDoYouKnow(courseID: 96100, feedbackValues: feedbackScores)
-		XCTAssertNoThrow(studentData.backendReadAllKeys())
-		XCTAssertNoThrow(print("next step:\(scorewindData.createRecommendation(studentData: studentData))"))
-		
-		/*studentData.wizardStepNames.append(.wizardPlayable)
-		scorewindData.wizardPickedCourse = scorewindData.allCourses.first(where: {$0.id == 96100}) ?? Course()
-		scorewindData.wizardPickedLesson = scorewindData.wizardPickedCourse.lessons.first(where: {$0.id == 13768}) ?? Lesson()
-		studentData.updatePlayable(courseID: 96100, lessonID: 13768, feedbackValue: 2)*/
-		
-		
+	func testReadAllMyKeys() throws {
+		XCTAssertNoThrow(studentData.readAllUserDefaultKeys(keys: []))
 	}
 	
-	func testReadAllKeys() throws {
-		XCTAssertNoThrow(studentData.backendReadAllKeys())
+	func testRemoveAUserDefaultKey() throws {
+		XCTAssertNoThrow(studentData.removeAUserDefaultKey(keyName: "hideTips"))
 	}
-	
-
 	
 }

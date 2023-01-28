@@ -15,17 +15,17 @@ struct CourseView: View {
 	@Binding var selectedTab:String
 	@State private var selectedSection = courseSection.lessons
 	@ObservedObject var downloadManager:DownloadManager
-	//@State private var showDownloadAlert = false
 	@State private var startPos:CGPoint = .zero
-	@State private var isSwipping = true
 	@State private var scrollOffset:CGFloat = .zero
 	@State private var dragOffset:CGFloat = .zero
 	@State private var underlineScrollOffset:CGFloat = .zero
-	@State private var vScrolling = false
 	@ObservedObject var studentData:StudentData
 	@State private var isFavourite = false
 	@State private var pageCount:CGFloat = 2.0//3.0
 	@State private var turncateTitle = false
+	@State private var showStepTip = false
+	@State private var tipContent:AnyView = AnyView(Text("Tip"))
+	@State private var userDefaults = UserDefaults.standard
 	
 	var body: some View {
 		if scorewindData.currentCourse.id > 0 {
@@ -278,6 +278,9 @@ struct CourseView: View {
 					.frame(width:screenSize.width)
 					.edgesIgnoringSafeArea(.bottom)
 			})
+			.fullScreenCover(isPresented: $showStepTip, content: {
+				TipTransparentModalView(showStepTip: $showStepTip, tipContent: $tipContent)
+			})
 			.onAppear(perform: {
 				print("[debug] CourseView, dragOffset \(dragOffset)")
 				underlineScrollOffset = 0-screenSize.width/pageCount
@@ -295,6 +298,8 @@ struct CourseView: View {
 						}
 					}
 				}
+				
+				handleTip()
 			})
 		} else {
 			VStack {
@@ -318,6 +323,34 @@ struct CourseView: View {
 			}
 		}
 		
+	}
+	
+	private func handleTip() {
+		let hideTips:[String] = userDefaults.object(forKey: "hideTips") as? [String] ?? []
+		if hideTips.contains(Tip.courseview.rawValue) == false {
+			tipContent = AnyView(TipContentMakerView(showStepTip: $showStepTip, hideTipValue: Tip.courseview.rawValue, tipMainContent: AnyView(tipHere())))
+			showStepTip = true
+			
+		}
+	}
+	
+	@ViewBuilder
+	private func tipHere() -> some View {
+		VStack {
+			Text("Let's check out what lessons in this course!")
+			.font(.headline)
+			.modifier(StepExplainingText())
+			
+			Text("You can \(Image(systemName: "suit.heart")) bookmark this course as one of your favourite courses.")
+				.modifier(StepExplainingText())
+			Text("Or \(Image(systemName: "arrow.down.circle")) download the content of the course for offline usage.")
+				.modifier(StepExplainingText())
+			Text("Of course, you can learn many wonderful things by clicking here \(Image(systemName: "info.circle")). Enjoy!")
+				.modifier(StepExplainingText())
+		}.background {
+			RoundedRectangle(cornerRadius: 26)
+				.foregroundColor(Color("AppYellow"))
+			.frame(width: UIScreen.main.bounds.width*0.9)}
 	}
 	
 	@ViewBuilder

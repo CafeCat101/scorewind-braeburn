@@ -119,6 +119,28 @@ class StudentData: ObservableObject {
 		}
 	}
 	
+	func readAllUserDefaultKeys(keys:[String]) {
+		for(key,value) in userDefaults.dictionaryRepresentation() {
+			print("=====\(key)======")
+			print("\(value)")
+		}
+	}
+	
+	func removeAUserDefaultKey(keyName: String){
+		userDefaults.removeObject(forKey: keyName)
+		var matchCount = 0
+		for(key,value) in userDefaults.dictionaryRepresentation() {
+			if key == keyName {
+				matchCount = matchCount + 1
+				print("=====\(key) is still here======")
+				print("\(value)")
+			}
+		}
+		if matchCount == 0 {
+			print("=====\(keyName) is removed======")
+		}
+	}
+	
 	func updateMyCourses(allCourses:[Course]) {
 		print("[debug] StudentData, myCourses")
 		myCourses.removeAll()

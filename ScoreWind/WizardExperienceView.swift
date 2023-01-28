@@ -81,78 +81,34 @@ struct WizardExperienceView: View {
 		
 		let hideTips:[String] = userDefaults.object(forKey: "hideTips") as? [String] ?? []
 		if hideTips.contains(Tip.wizardExperience.rawValue) == false {
-			tipContent = AnyView(makeTipView(showStepTip: $showStepTip, choise: selectedFeedback))
+			tipContent = AnyView(TipContentMakerView(showStepTip: $showStepTip, hideTipValue: Tip.wizardExperience.rawValue, tipMainContent: AnyView(tipHere(choise: selectedFeedback))))
 			showStepTip = true
 		} else {
 			goToNextStep()
 		}
 	}
 	
-	struct makeTipView: View {
-		@Binding var showStepTip:Bool
-		var choise: ExperienceFeedback
-		let screenSize: CGRect = UIScreen.main.bounds
-		@State private var userDefaults = UserDefaults.standard
-		
-		var body: some View {
-			VStack{
-				Spacer()
-				//tip content ==>
-				VStack {
-					Text("\(choise.getLabel())")
-					.font(.headline)
+	@ViewBuilder
+	private func tipHere(choise: ExperienceFeedback) -> some View {
+		VStack {
+			Text("\(choise.getLabel())")
+			.font(.headline)
+			.modifier(StepExplainingText())
+			
+			if choise == ExperienceFeedback.continueLearning {
+				Text("One step at a time, and you are learning well.\n\nHowever, sometimes you are just wondering what's ahead of you. Maybe you want to take on some challenges.\n\nThere is no time to hesitate. Let's go!")
 					.modifier(StepExplainingText())
-					
-					if choise == ExperienceFeedback.continueLearning {
-						Text("One step at a time, and you are learning well.\n\nHowever, sometimes you are just wondering what's ahead of you. Maybe you want to take on some challenges.\n\nThere is no time to hesitate. Let's go!")
-							.modifier(StepExplainingText())
-					} else if choise == ExperienceFeedback.experienced {
-						Text("You are skillfull. You can navigate new pieces faster.\nThis step will take you to explore over 400 pieces organized by different techniques in our repositories. Enjoy!")
-							.modifier(StepExplainingText())
-					} else {
-						Text("Scorewind has over 1000 lessons organized by their difficulties. This step will show you the lessons yet completed ahead of you.")
-							.modifier(StepExplainingText())
-					}
-				}.background {
-					RoundedRectangle(cornerRadius: 26)
-						.foregroundColor(Color("AppYellow"))
-					.frame(width: screenSize.width*0.9)}
-				//<===
-				Spacer()
-				VStack{
-					Button(action: {
-						print("ok")
-						showStepTip = false
-					}, label: {
-						Text("OK").frame(minWidth:150)
-					})
-					.foregroundColor(Color("LessonListStatusIcon"))
-					.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
-					.background {
-						RoundedRectangle(cornerRadius: 26)
-							.foregroundColor(Color("AppYellow"))
-					}
-					Spacer().frame(maxHeight:20)
-					Button(action: {
-						print("don't show me again")
-						var hideTips:[String] = userDefaults.object(forKey: "hideTips") as? [String] ?? []
-						if hideTips.contains(Tip.wizardExperience.rawValue) == false {
-							hideTips.append(Tip.wizardExperience.rawValue)
-							userDefaults.set(hideTips,forKey: "hideTips")
-						}
-						
-						showStepTip = false
-					}, label: {
-						Text("Don't show me again").frame(minWidth:150)
-					}).foregroundColor(Color("LessonSheet"))
-						.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
-						 .background {
-							 RoundedRectangle(cornerRadius: 26)
-								 .foregroundColor(Color("BadgeScoreAvailable"))
-						 }
-				}
+			} else if choise == ExperienceFeedback.experienced {
+				Text("You are skillfull. You can navigate new pieces faster.\nThis step will take you to explore over 400 pieces organized by different techniques in our repositories. Enjoy!")
+					.modifier(StepExplainingText())
+			} else {
+				Text("Scorewind has over 1000 lessons organized by their difficulties. This step will show you the lessons yet completed ahead of you.")
+					.modifier(StepExplainingText())
 			}
-		}
+		}.background {
+			RoundedRectangle(cornerRadius: 26)
+				.foregroundColor(Color("AppYellow"))
+			.frame(width: screenSize.width*0.9)}
 	}
   
 	
