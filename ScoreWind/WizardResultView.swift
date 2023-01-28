@@ -140,7 +140,15 @@ struct WizardResultView: View {
 			let hideTips:[String] = userDefaults.object(forKey: "hideTips") as? [String] ?? []
 			if hideTips.contains(Page.wizardResult.rawValue) == false {
 				tipContent = AnyView(makeTipView(showStepTip: $showStepTip))
-				showStepTip = true
+				if studentData.getExperience() == ExperienceFeedback.starterKit.rawValue {
+					//:: delay tip a little because starterkit doesn't have steps
+					DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+						showStepTip = true
+					}
+				} else {
+					showStepTip = true
+				}
+				
 			}
 		})
 		.fullScreenCover(isPresented: $showStepTip, content: {
@@ -158,7 +166,7 @@ struct WizardResultView: View {
 				Spacer()
 				//tip content ==>
 				VStack {
-					Text("You've completed the wizard!")
+					Text("The place to discover new lessons!")
 					.font(.headline)
 					.modifier(StepExplainingText())
 					

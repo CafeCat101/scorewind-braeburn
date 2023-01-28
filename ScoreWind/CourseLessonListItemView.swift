@@ -17,18 +17,16 @@ struct CourseLessonListItemView: View {
 	var body: some View {
 		VStack {
 			HStack {
-				Button(action: {
-					scorewindData.currentLesson = lesson
-					scorewindData.setCurrentTimestampRecs()
-					scorewindData.lastPlaybackTime = 0.0
-					self.selectedTab = "TLesson"
-					scorewindData.lessonChanged = true
-				}) {
-					Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
-						.multilineTextAlignment(.leading)
-						.foregroundColor(.black)
-					
-				}
+				Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
+					.multilineTextAlignment(.leading)
+					.foregroundColor(.black)
+					.onTapGesture {
+						scorewindData.currentLesson = lesson
+						scorewindData.setCurrentTimestampRecs()
+						scorewindData.lastPlaybackTime = 0.0
+						self.selectedTab = "TLesson"
+						scorewindData.lessonChanged = true
+					}
 				Spacer()
 				downloadIconView(getLessonID: lesson.id)
 					.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
