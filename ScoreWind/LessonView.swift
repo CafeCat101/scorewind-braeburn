@@ -26,6 +26,7 @@ struct LessonView: View {
 	@State private var showScoreZoomIcon = false
 	@State private var savePlayerPlayable = false
 	@ObservedObject var studentData:StudentData
+	@State private var userDefaults = UserDefaults.standard
 	
 	var body: some View {
 		VStack {
@@ -197,6 +198,7 @@ struct LessonView: View {
 			checkCurrentLessonCompleted()
 			setNextLesson()
 			setPreviousLesson()
+			userDefaults.set(scorewindData.currentLesson.id,forKey: "lastViewedLesson")
 			print("[debug] LessonView onAppear,showLessonSheet \(scorewindData.showLessonTextOverlay)")
 		})
 		.onDisappear(perform: {

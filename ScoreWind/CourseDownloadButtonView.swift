@@ -57,7 +57,7 @@ struct CourseDownloadButtonView: View {
 				})
 			}, message: {
 				if getStatus == DownloadStatus.notInQueue {
-					Text("128 MB course content will be downloaded into your device. Continue?")
+					Text("All videos and socres in this course will be downloaded into your device. Continue?")
 				} else {
 					Text("After removing downloads, you can not take course offline. Continue?")
 				}

@@ -13,6 +13,7 @@ struct HomeView: View {
 	@ObservedObject var downloadManager: DownloadManager
 	@Environment(\.scenePhase) var scenePhase
 	@StateObject var studentData = StudentData()
+	@State private var userDefaults = UserDefaults.standard
 	
 	var body: some View {
 		if scorewindData.currentView != Page.lessonFullScreen {
@@ -28,19 +29,6 @@ struct HomeView: View {
 						Image(systemName: "note.text")
 						Text("Course")
 					}.tag("TCourse")
-				/*if scorewindData.currentCourse.id > 0 {
-					CourseView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData)
-						.tabItem {
-							Image(systemName: "note.text")
-							Text("Course")
-						}.tag("TCourse")
-				} else {
-					BlankTabView(message: "It's time to discover courses!. When you want to check out the course you visit last time, here is the place for you.")
-						.tabItem {
-							Image(systemName: "note.text")
-							Text("Course")
-						}.tag("TCourse")
-				}*/
 				
 				if scorewindData.currentLesson.id > 0 {
 					LessonView(downloadManager: downloadManager, studentData: studentData)
@@ -74,6 +62,19 @@ struct HomeView: View {
 					studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 				}
 				downloadManager.appState = .active
+				
+				let lastViewedCourseID:Int = userDefaults.object(forKey: "lastViewedCourse") as? Int ?? 0
+				if lastViewedCourseID > 0 {
+					scorewindData.currentCourse = scorewindData.allCourses.first(where: {$0.id == lastViewedCourseID}) ?? Course()
+				}
+				let lastViewedLessonID:Int = userDefaults.object(forKey: "lastViewedLesson") as? Int ?? 0
+				if lastViewedLessonID > 0 {
+					scorewindData.currentLesson = scorewindData.currentCourse.lessons.first(where: {$0.id == lastViewedLessonID}) ?? Lesson()
+					scorewindData.setCurrentTimestampRecs()
+					scorewindData.lastPlaybackTime = 0.0
+				} else if lastViewedCourseID > 0 && lastViewedLessonID == 0 {
+					
+				}
 				//<<<<==
 			}
 			.onChange(of: scenePhase, perform: { newPhase in

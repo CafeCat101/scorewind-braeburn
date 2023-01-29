@@ -40,7 +40,7 @@ struct CourseView: View {
 								turncateTitle.toggle()
 							}
 						}
-						//.truncationMode(.tail)
+					//.truncationMode(.tail)
 					Spacer()
 				}
 				.padding(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 15))
@@ -49,24 +49,24 @@ struct CourseView: View {
 				//show course section menus
 				HStack {
 					/*
-					Button(action: {
-						selectedSection = courseSection.overview
-						withAnimation {
-							scrollOffset = getNewOffset(goToSection: selectedSection)
-							dragOffset = 0
-						}
-						
-					}) {
-						Text("Overview")
-							.font(.headline)
-							.fontWeight(.semibold)
-							.foregroundColor(selectedSection == courseSection.overview ? Color("ActiveCourseSectionTitle") : Color.gray)
-					}
-					.frame(width: screenSize.width/pageCount)
+					 Button(action: {
+					 selectedSection = courseSection.overview
+					 withAnimation {
+					 scrollOffset = getNewOffset(goToSection: selectedSection)
+					 dragOffset = 0
+					 }
 					 
-					
-					Spacer()
-						.frame(width:5)
+					 }) {
+					 Text("Overview")
+					 .font(.headline)
+					 .fontWeight(.semibold)
+					 .foregroundColor(selectedSection == courseSection.overview ? Color("ActiveCourseSectionTitle") : Color.gray)
+					 }
+					 .frame(width: screenSize.width/pageCount)
+					 
+					 
+					 Spacer()
+					 .frame(width:5)
 					 */
 					
 					Button(action: {
@@ -115,21 +115,21 @@ struct CourseView: View {
 				//show sections in course
 				HStack {
 					/*
-					//Overview section
-					HTMLString(htmlContent: scorewindData.removeWhatsNext(Text: overViewContent()))
-						.frame(width:screenSize.width)
+					 //Overview section
+					 HTMLString(htmlContent: scorewindData.removeWhatsNext(Text: overViewContent()))
+					 .frame(width:screenSize.width)
 					 */
 					
 					//Lessons section
 					VStack {
 						ScrollViewReader { proxy in
 							/*HStack {
-								Text("Category: ").bold() + Text("\(scorewindData.courseCategoryToString(courseCategories: scorewindData.currentCourse.category, depth: 3))")
-								Spacer()
-							}.padding(EdgeInsets(top: 8, leading: 15, bottom: 8, trailing: 15))*/
+							 Text("Category: ").bold() + Text("\(scorewindData.courseCategoryToString(courseCategories: scorewindData.currentCourse.category, depth: 3))")
+							 Spacer()
+							 }.padding(EdgeInsets(top: 8, leading: 15, bottom: 8, trailing: 15))*/
 							//show course progress
 							courseProgressView()
-							.padding(EdgeInsets(top: 8, leading: 15, bottom: 8, trailing: 15))
+								.padding(EdgeInsets(top: 8, leading: 15, bottom: 8, trailing: 15))
 							
 							HStack {
 								Text("\(scorewindData.currentCourse.lessons.count) Lessons ").bold()
@@ -195,7 +195,7 @@ struct CourseView: View {
 									withAnimation {
 										proxy.scrollTo(scorewindData.currentLesson.scorewindID, anchor: .top)
 									}
-								
+									
 								}
 							})
 						}
@@ -257,16 +257,16 @@ struct CourseView: View {
 							// Scroll to where user dragged
 							print("[debug] CourseView, onDragEnded, translation.width \(event.translation.width)")
 							//if event.translation.width>50 {
-								scrollOffset += event.translation.width
-								dragOffset = 0
-								
-								underlineScrollOffset -= event.translation.width/pageCount
-								
-								// Animate snapping
-								withAnimation {
-									scrollOffset = getNewOffset()
-									print("HStack DragGesture.onEnded scrollOffset \(scrollOffset)")
-								}
+							scrollOffset += event.translation.width
+							dragOffset = 0
+							
+							underlineScrollOffset -= event.translation.width/pageCount
+							
+							// Animate snapping
+							withAnimation {
+								scrollOffset = getNewOffset()
+								print("HStack DragGesture.onEnded scrollOffset \(scrollOffset)")
+							}
 							//}
 							
 						})
@@ -300,6 +300,8 @@ struct CourseView: View {
 				}
 				
 				handleTip()
+				
+				userDefaults.set(scorewindData.currentCourse.id,forKey: "lastViewedCourse")
 			})
 		} else {
 			VStack {
@@ -330,7 +332,6 @@ struct CourseView: View {
 		if hideTips.contains(Tip.courseview.rawValue) == false {
 			tipContent = AnyView(TipContentMakerView(showStepTip: $showStepTip, hideTipValue: Tip.courseview.rawValue, tipMainContent: AnyView(tipHere())))
 			showStepTip = true
-			
 		}
 	}
 	
@@ -338,8 +339,8 @@ struct CourseView: View {
 	private func tipHere() -> some View {
 		VStack {
 			Text("Let's check out what lessons in this course!")
-			.font(.headline)
-			.modifier(StepExplainingText())
+				.font(.headline)
+				.modifier(StepExplainingText())
 			
 			Text("You can \(Image(systemName: "suit.heart")) bookmark this course as one of your favourite courses.")
 				.modifier(StepExplainingText())
@@ -382,7 +383,7 @@ struct CourseView: View {
 						Circle()
 							.foregroundColor(Color.gray)
 							.background(Circle().foregroundColor(Color.white))
-							.frame(width:CGFloat(number),height:10)}
+						.frame(width:CGFloat(number),height:10)}
 				}
 			}
 		}
@@ -471,8 +472,8 @@ struct CourseView: View {
 	
 	private func overViewContent() -> String {
 		/*
-		let setDuration = scorewindData.currentCourse.duration ?? "n/a"
-		return "<b>Category:</b>&nbsp;\(scorewindData.courseCategoryToString(courseCategories: scorewindData.currentCourse.category, depth: 3))<br><b>Level:&nbsp;</b>\(scorewindData.currentCourse.level)<br><b>Duration:&nbsp;</b>\(setDuration)\(scorewindData.currentCourse.content)"
+		 let setDuration = scorewindData.currentCourse.duration ?? "n/a"
+		 return "<b>Category:</b>&nbsp;\(scorewindData.courseCategoryToString(courseCategories: scorewindData.currentCourse.category, depth: 3))<br><b>Level:&nbsp;</b>\(scorewindData.currentCourse.level)<br><b>Duration:&nbsp;</b>\(setDuration)\(scorewindData.currentCourse.content)"
 		 */
 		return "<h3>About this course</h3><b>Category:</b>&nbsp;\(scorewindData.courseCategoryToString(courseCategories: scorewindData.currentCourse.category, depth: 3))<br>\(scorewindData.currentCourse.content)"
 	}
@@ -506,15 +507,15 @@ struct CourseView: View {
 		// Set final offset (snapping to item)]
 		if goToSection != nil {
 			/*if goToSection == courseSection.continue {
-				index = 0.0
-				underlineScrollOffset = screenSize.width/pageCount
-			} else if goToSection == courseSection.lessons {
-				index = 1.0
-				underlineScrollOffset = 0
-			} else {
-				index = 2.0
-				underlineScrollOffset = 0-screenSize.width/pageCount
-			}*/
+			 index = 0.0
+			 underlineScrollOffset = screenSize.width/pageCount
+			 } else if goToSection == courseSection.lessons {
+			 index = 1.0
+			 underlineScrollOffset = 0
+			 } else {
+			 index = 2.0
+			 underlineScrollOffset = 0-screenSize.width/pageCount
+			 }*/
 			if goToSection == courseSection.continue {
 				index = 0.0
 				underlineScrollOffset = (screenSize.width/2)/pageCount
@@ -524,15 +525,15 @@ struct CourseView: View {
 			}
 		} else {
 			/*if index == 2.0 {
-				selectedSection = courseSection.overview
-				underlineScrollOffset = 0-screenSize.width/pageCount
-			} else if index == 1.0 {
-				selectedSection = courseSection.lessons
-				underlineScrollOffset = 0
-			} else if index == 0.0 {
-				selectedSection = courseSection.continue
-				underlineScrollOffset = screenSize.width/pageCount
-			}*/
+			 selectedSection = courseSection.overview
+			 underlineScrollOffset = 0-screenSize.width/pageCount
+			 } else if index == 1.0 {
+			 selectedSection = courseSection.lessons
+			 underlineScrollOffset = 0
+			 } else if index == 0.0 {
+			 selectedSection = courseSection.continue
+			 underlineScrollOffset = screenSize.width/pageCount
+			 }*/
 			if index == 1.0 {
 				selectedSection = courseSection.lessons
 				underlineScrollOffset = 0 - (screenSize.width/2)/pageCount
@@ -557,16 +558,16 @@ struct CourseView: View {
 			return 0-(contentWidth/2)/CGFloat(sectionCount)
 		}
 		/*
-		if goToSection == courseSection.lessons {
-			underlineScrollOffset = 0
-			return .zero
-		} else if goToSection == courseSection.continue {
-			underlineScrollOffset = 0+screenSize.width/pageCount
-			return 0-(contentWidth/CGFloat(sectionCount))
-		} else {
-			underlineScrollOffset = 0-screenSize.width/pageCount
-			return contentWidth/CGFloat(sectionCount)
-		}
+		 if goToSection == courseSection.lessons {
+		 underlineScrollOffset = 0
+		 return .zero
+		 } else if goToSection == courseSection.continue {
+		 underlineScrollOffset = 0+screenSize.width/pageCount
+		 return 0-(contentWidth/CGFloat(sectionCount))
+		 } else {
+		 underlineScrollOffset = 0-screenSize.width/pageCount
+		 return contentWidth/CGFloat(sectionCount)
+		 }
 		 */
 	}
 	
@@ -582,7 +583,7 @@ struct CourseView: View {
 			
 		}
 	}
-
+	
 }
 
 struct CourseView_Previews: PreviewProvider {
