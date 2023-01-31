@@ -13,30 +13,6 @@ struct WizardTeacherView: View {
 	
 	var body: some View {
 		List {
-			/*
-			Section(header: Text("All")) {
-				ForEach(scorewindData.allCourses) { course in
-					Button(action: {
-						scorewindData.currentCourse = course
-						scorewindData.currentView = Page.course
-						self.selectedTab = "TCourse"
-						scorewindData.currentLesson = scorewindData.currentCourse.lessons[0]
-						scorewindData.setCurrentTimestampRecs()
-						//scorewindData.lastViewAtScore = true
-						scorewindData.lastPlaybackTime = 0.0
-					}) {
-						if course.id == scorewindData.currentCourse.id {
-							Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
-								.foregroundColor(Color("WizardListTextHighlight"))
-						} else {
-							Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
-								.foregroundColor(Color("MyCourseItemText"))
-						}
-						
-					}
-				}
-			}
-			 */
 			Section(header: Text("Guitar - Step By Step")) {
 				ForEach(guitarCourses(type: "step")) { course in
 					Button(action: {

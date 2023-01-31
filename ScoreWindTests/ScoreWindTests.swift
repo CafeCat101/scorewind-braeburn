@@ -40,6 +40,8 @@ class ScoreWindTests: XCTestCase {
 	}
 	
 	func testRemoveAUserDefaultKey() throws {
+		XCTAssertNoThrow(studentData.removeAUserDefaultKey(keyName: "lastViewedLesson"))
+		XCTAssertNoThrow(studentData.removeAUserDefaultKey(keyName: "lastViewedCourse"))
 		XCTAssertNoThrow(studentData.removeAUserDefaultKey(keyName: "hideTips"))
 	}
 	

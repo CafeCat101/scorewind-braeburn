@@ -152,7 +152,7 @@ extension ScorewindData {
 				assignedCourseId = wizardPickedCourse.id
 				assignedLessonId = wizardPickedLesson.id
 				//:: explain->you've choosen...
-				explainResult = "Looks like you found a lesson. Go ahread!"
+				explainResult = "Looks like you found a lesson. Go ahead!"
 				goToWizardStep = .wizardResult
 			} else if Int(extractFeedback[0]) == 4 {
 				//:: comfortable, go 1 level up

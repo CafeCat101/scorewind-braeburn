@@ -30,8 +30,13 @@ struct HomeView: View {
 						Text("Course")
 					}.tag("TCourse")
 				
-				if scorewindData.currentLesson.id > 0 {
-					LessonView(downloadManager: downloadManager, studentData: studentData)
+				LessonView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData)
+					.tabItem {
+						Image(systemName: "note")
+						Text("Lesson")
+					}.tag("TLesson")
+				/*if scorewindData.currentLesson.id > 0 {
+					LessonView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData)
 						.tabItem {
 							Image(systemName: "note")
 							Text("Lesson")
@@ -42,7 +47,7 @@ struct HomeView: View {
 							Image(systemName: "note")
 							Text("Lesson")
 						}.tag("TLesson")
-				}
+				}*/
 				
 				MyCoursesView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData)
 					.tabItem {

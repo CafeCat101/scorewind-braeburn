@@ -346,7 +346,7 @@ struct CourseView: View {
 				.modifier(StepExplainingText())
 			Text("Or \(Image(systemName: "arrow.down.circle")) download the content of the course for offline usage.")
 				.modifier(StepExplainingText())
-			Text("Of course, you can learn many wonderful things by clicking here \(Image(systemName: "info.circle")). Enjoy!")
+			Text("Of course, you can also learn more about this course by clicking here \(Image(systemName: "info.circle")). Enjoy!")
 				.modifier(StepExplainingText())
 		}.background {
 			RoundedRectangle(cornerRadius: 26)
