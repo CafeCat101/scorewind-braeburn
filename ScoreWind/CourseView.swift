@@ -282,7 +282,7 @@ struct CourseView: View {
 				TipTransparentModalView(showStepTip: $showStepTip, tipContent: $tipContent)
 			})
 			.onAppear(perform: {
-				print("[debug] CourseView, dragOffset \(dragOffset)")
+				print("[debug] CourseView, onAppear, dragOffset \(dragOffset)")
 				underlineScrollOffset = 0-screenSize.width/pageCount
 				scrollOffset = getSectionOffset(goToSection: selectedSection)
 				if studentData.getFavouritedCourses().contains(where: { Int($0.key) == scorewindData.currentCourse.id}) {
@@ -341,7 +341,8 @@ struct CourseView: View {
 			Text("Let's check out what lessons in this course!")
 				.font(.headline)
 				.modifier(StepExplainingText())
-			
+			Text("You can \(Image(systemName: "hand.tap")) tap the course title to see its full title.")
+				.modifier(StepExplainingText())
 			Text("You can \(Image(systemName: "suit.heart")) bookmark this course as one of your favourite courses.")
 				.modifier(StepExplainingText())
 			Text("Or \(Image(systemName: "arrow.down.circle")) download the content of the course for offline usage.")
