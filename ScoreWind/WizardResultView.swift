@@ -162,11 +162,12 @@ struct WizardResultView: View {
 			Text("The place to discover new lessons!")
 			.font(.headline)
 			.modifier(StepExplainingText())
-			
-			Text("You can always restart the wizard again by click the \(Image(systemName: "goforward")) button in the top left corner.")
-				.modifier(StepExplainingText())
-			Text("Your last result is also saved, so you can revisit it whenever you want.")
-				.modifier(StepExplainingText())
+			VStack(alignment:.leading) {
+				Text("You can always restart the wizard again by click the \(Image(systemName: "goforward")) button in the top left corner.")
+					.modifier(TipExplainingParagraph())
+				Text("Your last result is also saved, so you can revisit it whenever you want.")
+					.modifier(TipExplainingParagraph())
+			}.padding([.bottom], 18)
 		}.background {
 			RoundedRectangle(cornerRadius: 26)
 				.foregroundColor(Color("AppYellow"))

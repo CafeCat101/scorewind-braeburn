@@ -185,6 +185,14 @@ struct StepExplainingText: ViewModifier {
 	}
 }
 
+struct TipExplainingParagraph: ViewModifier {
+	func body(content: Content) -> some View {
+		content
+			.foregroundColor(Color("LessonListStatusIcon"))
+			.padding(EdgeInsets(top: 4, leading: 40, bottom: 4, trailing: 40))
+	}
+}
+
 struct WizardView_Previews: PreviewProvider {
 	@State static var tab = "TWizard"
 	static var previews: some View {

@@ -99,7 +99,7 @@ struct WizardExperienceView: View {
 				Text("One step at a time, and you are learning well.\n\nHowever, sometimes you are just wondering what's ahead of you. Maybe you want to take on some challenges.\n\nThere is no time to hesitate. Let's go!")
 					.modifier(StepExplainingText())
 			} else if choise == ExperienceFeedback.experienced {
-				Text("You are skillfull. You can navigate new pieces faster.\nThis step will take you to explore over 400 pieces organized by different techniques in our repositories. Enjoy!")
+				Text("You are skillfull. You can navigate new pieces faster.\n\nThis step will take you to explore over 400 pieces organized by different techniques in our repositories. Enjoy!")
 					.modifier(StepExplainingText())
 			} else {
 				Text("Scorewind has over 1000 lessons organized by their difficulties. This step will show you the lessons yet completed ahead of you.")
