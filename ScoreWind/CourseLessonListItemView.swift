@@ -13,6 +13,7 @@ struct CourseLessonListItemView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@ObservedObject var downloadManager:DownloadManager
 	@ObservedObject var studentData:StudentData
+	@Binding var showLessonView: Bool
 	
 	var body: some View {
 		VStack {
@@ -24,8 +25,9 @@ struct CourseLessonListItemView: View {
 						scorewindData.currentLesson = lesson
 						scorewindData.setCurrentTimestampRecs()
 						scorewindData.lastPlaybackTime = 0.0
-						self.selectedTab = "TLesson"
+						//self.selectedTab = "TLesson"
 						scorewindData.lessonChanged = true
+						showLessonView = true
 					}
 				Spacer()
 				downloadIconView(getLessonID: lesson.id)
@@ -78,6 +80,6 @@ struct CourseLessonListItemView: View {
 struct CourseLessonListItemView_Previews: PreviewProvider {
 	@State static var tab = "TCourse"
 	static var previews: some View {
-		CourseLessonListItemView(selectedTab:$tab, lesson: Lesson(), downloadManager: DownloadManager(), studentData: StudentData()).environmentObject(ScorewindData())
+		CourseLessonListItemView(selectedTab:$tab, lesson: Lesson(), downloadManager: DownloadManager(), studentData: StudentData(), showLessonView: .constant(false)).environmentObject(ScorewindData())
 	}
 }

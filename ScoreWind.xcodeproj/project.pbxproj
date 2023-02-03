@@ -48,6 +48,7 @@
 		C85F27A42879C20400D0A4E5 /* TipModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F27A32879C20400D0A4E5 /* TipModalView.swift */; };
 		C85F27A8287A775E00D0A4E5 /* TipLimit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F27A7287A775E00D0A4E5 /* TipLimit.swift */; };
 		C868CA0729856F9300724D2D /* TipContentMakerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C868CA0629856F9300724D2D /* TipContentMakerView.swift */; };
+		C868CA09298BB64B00724D2D /* LessonView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = C868CA08298BB64B00724D2D /* LessonView2.swift */; };
 		C878275328E8675F0007DDC1 /* MyCouseItemview.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878275228E8675F0007DDC1 /* MyCouseItemview.swift */; };
 		C878275728E8861C0007DDC1 /* CourseLessonListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878275628E8861C0007DDC1 /* CourseLessonListItemView.swift */; };
 		C878275928E88B8E0007DDC1 /* CourseDownloadButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878275828E88B8E0007DDC1 /* CourseDownloadButtonView.swift */; };
@@ -142,6 +143,7 @@
 		C85F27A7287A775E00D0A4E5 /* TipLimit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipLimit.swift; sourceTree = "<group>"; };
 		C85F27A9287A7C9C00D0A4E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C868CA0629856F9300724D2D /* TipContentMakerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipContentMakerView.swift; sourceTree = "<group>"; };
+		C868CA08298BB64B00724D2D /* LessonView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonView2.swift; sourceTree = "<group>"; };
 		C878275228E8675F0007DDC1 /* MyCouseItemview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCouseItemview.swift; sourceTree = "<group>"; };
 		C878275628E8861C0007DDC1 /* CourseLessonListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseLessonListItemView.swift; sourceTree = "<group>"; };
 		C878275828E88B8E0007DDC1 /* CourseDownloadButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDownloadButtonView.swift; sourceTree = "<group>"; };
@@ -263,6 +265,7 @@
 				C85F276A286F4F2E00D0A4E5 /* LessonSheetView.swift */,
 				C85F276B286F4F2E00D0A4E5 /* LessonTextView.swift */,
 				C85F276E286F4F2E00D0A4E5 /* LessonView.swift */,
+				C868CA08298BB64B00724D2D /* LessonView2.swift */,
 				C85F2760286F4F2E00D0A4E5 /* MyCoursesView.swift */,
 				C878275228E8675F0007DDC1 /* MyCouseItemview.swift */,
 				C85F276D286F4F2E00D0A4E5 /* MyTheme.swift */,
@@ -596,6 +599,7 @@
 				C85F27A8287A775E00D0A4E5 /* TipLimit.swift in Sources */,
 				C878276A28FC25030007DDC1 /* WizardResultView.swift in Sources */,
 				C878275728E8861C0007DDC1 /* CourseLessonListItemView.swift in Sources */,
+				C868CA09298BB64B00724D2D /* LessonView2.swift in Sources */,
 				C85F2774286F4F2E00D0A4E5 /* MyCoursesView.swift in Sources */,
 				C85F277A286F4F2E00D0A4E5 /* ScorewindCourse.swift in Sources */,
 				C85F272A286F4C2B00D0A4E5 /* ScoreWindApp.swift in Sources */,

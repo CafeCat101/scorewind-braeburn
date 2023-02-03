@@ -26,6 +26,7 @@ struct CourseView: View {
 	@State private var showStepTip = false
 	@State private var tipContent:AnyView = AnyView(Text("Tip"))
 	@State private var userDefaults = UserDefaults.standard
+	@State private var showLessonView = false
 	
 	var body: some View {
 		if scorewindData.currentCourse.id > 0 {
@@ -179,7 +180,7 @@ struct CourseView: View {
 							
 							ScrollView {
 								ForEach(scorewindData.currentCourse.lessons){ lesson in
-									CourseLessonListItemView(selectedTab: $selectedTab, lesson: lesson, downloadManager: downloadManager, studentData: studentData)
+									CourseLessonListItemView(selectedTab: $selectedTab, lesson: lesson, downloadManager: downloadManager, studentData: studentData, showLessonView: $showLessonView)
 										.padding(EdgeInsets(top: 10, leading: 10, bottom: 15, trailing: 10))
 										.background{
 											RoundedRectangle(cornerRadius: 10)
@@ -280,6 +281,9 @@ struct CourseView: View {
 			})
 			.fullScreenCover(isPresented: $showStepTip, content: {
 				TipTransparentModalView(showStepTip: $showStepTip, tipContent: $tipContent)
+			})
+			.fullScreenCover(isPresented: $showLessonView, content: {
+				LessonView2(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData, showLessonView: $showLessonView)
 			})
 			.onAppear(perform: {
 				print("[debug] CourseView, onAppear, dragOffset \(dragOffset)")
