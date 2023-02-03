@@ -17,6 +17,7 @@ struct WizardResultView: View {
 	@State private var showStepTip = false
 	@State private var tipContent:AnyView = AnyView(Text("Tip"))
 	@State private var userDefaults = UserDefaults.standard
+	@Binding var showLessonView:Bool
 	
 	var body: some View {
 		ScrollView(.vertical) {
@@ -62,7 +63,8 @@ struct WizardResultView: View {
 					scorewindData.currentLesson = scorewindData.wizardPickedLesson
 					scorewindData.setCurrentTimestampRecs()
 					scorewindData.lastPlaybackTime = 0.0
-					self.selectedTab = "TLesson"
+					self.selectedTab = "TCourse"
+					showLessonView = true
 					scorewindData.lessonChanged = true
 				}
 				.background {
@@ -120,7 +122,7 @@ struct WizardResultView: View {
 						}.padding([.top,.bottom], 15)
 						Text(studentData.wizardResult.learningPathExplaination)
 						
-						WizardResultPathView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
+						WizardResultPathView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData, showLessonView: $showLessonView)
 						
 					}
 					
@@ -182,7 +184,7 @@ struct WizardResult_Previews: PreviewProvider {
 	@State static var step:Page = .wizardResult
 	
 	static var previews: some View {
-		WizardResultView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
+		WizardResultView(selectedTab: $tab, stepName: $step, studentData: StudentData(), showLessonView: .constant(false)).environmentObject(ScorewindData())
 	}
 }
 

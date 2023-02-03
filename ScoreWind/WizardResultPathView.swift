@@ -12,6 +12,8 @@ struct WizardResultPathView: View {
 	@Binding var selectedTab:String
 	@Binding var stepName:Page
 	@ObservedObject var studentData:StudentData
+	@Binding var showLessonView:Bool
+	
 	var body: some View {
 		VStack {
 			ForEach(studentData.wizardResult.learningPath) { pathItem in
@@ -106,7 +108,8 @@ struct WizardResultPathView: View {
 			scorewindData.currentLesson = theLesson
 			scorewindData.setCurrentTimestampRecs()
 			scorewindData.lastPlaybackTime = 0.0
-			self.selectedTab = "TLesson"
+			self.selectedTab = "TCourse"
+			showLessonView = true
 			scorewindData.lessonChanged = true
 		}
 	}
@@ -131,6 +134,6 @@ struct WizardResultPathView_Previews: PreviewProvider {
 	@State static var wizardResult: WizardResult = WizardResult()
 	
 	static var previews: some View {
-		WizardResultPathView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
+		WizardResultPathView(selectedTab: $tab, stepName: $step, studentData: StudentData(), showLessonView: .constant(false)).environmentObject(ScorewindData())
 	}
 }

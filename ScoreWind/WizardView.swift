@@ -15,6 +15,7 @@ struct WizardView: View {
 	@ObservedObject var studentData:StudentData
 	let screenSize: CGRect = UIScreen.main.bounds
 	@State private var showProgress = true
+	@Binding var showLessonView:Bool
 	
 	var body: some View {
 		VStack {
@@ -103,7 +104,7 @@ struct WizardView: View {
 				} else if stepName == .wizardPlayable {
 					WizardPlayableView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
 				} else if stepName == .wizardResult {
-					WizardResultView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData).onAppear{
+					WizardResultView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData, showLessonView: $showLessonView).onAppear{
 						DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
 							withAnimation{
 								showProgress = false
@@ -197,8 +198,8 @@ struct WizardView_Previews: PreviewProvider {
 	@State static var tab = "TWizard"
 	static var previews: some View {
 		Group {
-			WizardView(selectedTab: $tab, studentData: StudentData()).environmentObject(ScorewindData())
-			WizardView(selectedTab: $tab, studentData: StudentData()).environmentObject(ScorewindData()).environment(\.colorScheme, .dark)
+			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false)).environmentObject(ScorewindData())
+			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false)).environmentObject(ScorewindData()).environment(\.colorScheme, .dark)
 		}
 		
 	}

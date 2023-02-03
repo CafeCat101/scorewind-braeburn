@@ -26,7 +26,7 @@ struct CourseView: View {
 	@State private var showStepTip = false
 	@State private var tipContent:AnyView = AnyView(Text("Tip"))
 	@State private var userDefaults = UserDefaults.standard
-	@State private var showLessonView = false
+	@Binding var showLessonView:Bool
 	
 	var body: some View {
 		if scorewindData.currentCourse.id > 0 {
@@ -597,7 +597,7 @@ struct CourseView: View {
 struct CourseView_Previews: PreviewProvider {
 	@State static var tab = "TCourse"
 	static var previews: some View {
-		CourseView(selectedTab: $tab, downloadManager: DownloadManager(), studentData: StudentData()).environmentObject(ScorewindData())
+		CourseView(selectedTab: $tab, downloadManager: DownloadManager(), studentData: StudentData(), showLessonView: .constant(false)).environmentObject(ScorewindData())
 	}
 }
 

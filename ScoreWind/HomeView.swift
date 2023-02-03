@@ -14,27 +14,22 @@ struct HomeView: View {
 	@Environment(\.scenePhase) var scenePhase
 	@StateObject var studentData = StudentData()
 	@State private var userDefaults = UserDefaults.standard
+	@State private var showLessonView = false
 	
 	var body: some View {
 		if scorewindData.currentView != Page.lessonFullScreen {
 			TabView(selection: $selectedTab) {
-				WizardView(selectedTab: $selectedTab, studentData: studentData)
+				WizardView(selectedTab: $selectedTab, studentData: studentData, showLessonView: $showLessonView)
 					.tabItem {
 						Image(systemName: "eyes")
 						Text("Wizard")
 					}.tag("TWizard")
 				
-				CourseView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData)
+				CourseView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData, showLessonView: $showLessonView)
 					.tabItem {
 						Image(systemName: "note.text")
 						Text("Course")
 					}.tag("TCourse")
-				
-				LessonView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData)
-					.tabItem {
-						Image(systemName: "note")
-						Text("Lesson")
-					}.tag("TLesson")
 				/*if scorewindData.currentLesson.id > 0 {
 					LessonView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData)
 						.tabItem {
