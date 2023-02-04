@@ -19,7 +19,7 @@ struct HomeView: View {
 	var body: some View {
 		if scorewindData.currentView != Page.lessonFullScreen {
 			TabView(selection: $selectedTab) {
-				WizardView(selectedTab: $selectedTab, studentData: studentData, showLessonView: $showLessonView)
+				WizardView(selectedTab: $selectedTab, studentData: studentData, showLessonView: $showLessonView, downloadManager: downloadManager)
 					.tabItem {
 						Image(systemName: "eyes")
 						Text("Wizard")

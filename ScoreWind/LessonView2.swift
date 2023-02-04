@@ -559,11 +559,11 @@ struct LessonView2: View {
 	@ViewBuilder
 	private func tipHere() -> some View {
 		VStack {
-			Text("Start learning and play together with the teacher!")
+			Text("This is the lesson.\nStart learning and play together with the teacher!")
 				.font(.headline)
 				.modifier(StepExplainingText())
 			VStack(alignment:.leading) {
-				Text("When score is availalbe, you can \(Image(systemName: "hand.tap")) tap the bar to go to any position in the video.")
+				Text("When score is availalbe in the lesson, you can \(Image(systemName: "hand.tap")) tap the bar to go to any position in the video.")
 					.modifier(TipExplainingParagraph())
 				Text("In the top right corner, \(Image(systemName: "list.bullet.circle")) is the menu where you can discover more things to do with this lesson.")
 					.modifier(TipExplainingParagraph())

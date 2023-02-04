@@ -103,10 +103,35 @@ struct MyCoursesView: View {
 						studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 					})
 				} else {
-					Spacer()
-					Text("After you've completed or watched a lesson, you can find the course for it here.")
-						.padding(15)
-					Spacer()
+					VStack {
+						Spacer()
+						Text("Looks like you haven't added any course to favourite or watched any lesson yet.")
+							.padding(15)
+						if scorewindData.currentCourse.id > 0 {
+							Text("Look at my last viewed course and lesson now.")
+								.padding(15)
+						} else {
+							Text("Ask wizard for a course or a lesson now.")
+								.padding(15)
+						}
+						
+						Button(action: {
+							if scorewindData.currentCourse.id > 0 {
+								selectedTab = "TCourse"
+							} else {
+								selectedTab = "TWizard"
+							}
+						}, label: {
+							Text("Start").frame(minWidth:150)
+						})
+						.foregroundColor(Color("LessonListStatusIcon"))
+						.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
+						.background {
+							RoundedRectangle(cornerRadius: 26)
+								.foregroundColor(Color("AppYellow"))
+						}
+						Spacer()
+					}
 				}
 			}
 			//Spacer()

@@ -16,6 +16,7 @@ struct WizardView: View {
 	let screenSize: CGRect = UIScreen.main.bounds
 	@State private var showProgress = true
 	@Binding var showLessonView:Bool
+	@ObservedObject var downloadManager:DownloadManager
 	
 	var body: some View {
 		VStack {
@@ -93,7 +94,7 @@ struct WizardView: View {
 			.padding([.bottom], 5)
 			
 			if userRole == .teacher {
-				WizardTeacherView(selectedTab: $selectedTab)
+				WizardTeacherView(selectedTab: $selectedTab, studentData: studentData, downloadManager: downloadManager)
 			} else {
 				if stepName == .wizardChooseInstrument {
 					WizardInstrumentView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
@@ -198,8 +199,8 @@ struct WizardView_Previews: PreviewProvider {
 	@State static var tab = "TWizard"
 	static var previews: some View {
 		Group {
-			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false)).environmentObject(ScorewindData())
-			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false)).environmentObject(ScorewindData()).environment(\.colorScheme, .dark)
+			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager()).environmentObject(ScorewindData())
+			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager()).environmentObject(ScorewindData()).environment(\.colorScheme, .dark)
 		}
 		
 	}

@@ -10,6 +10,11 @@ import SwiftUI
 struct WizardTeacherView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@Binding var selectedTab:String
+	@ObservedObject var studentData:StudentData
+	@ObservedObject var downloadManager:DownloadManager
+	let docsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+	@State private var showResetDataDialog = false
+	@State private var userDefaults = UserDefaults.standard
 	
 	var body: some View {
 		List {
@@ -108,9 +113,103 @@ struct WizardTeacherView: View {
 					}
 				}
 			}
+			
+			Section(header: Text("Reset Data")) {
+				Button(action: {
+					removeDataOnDevice()
+					removeDataOniCloud()
+					showResetDataDialog = true
+				}, label: {
+					Text("Remove all data").foregroundColor(Color("MyCourseItemText")).font(.headline)
+				})
+				.alert("Please restart the app now!", isPresented: $showResetDataDialog, actions: {
+					Button("ok", action:{
+						showResetDataDialog = false
+					})
+				}, message: {
+					Text("Data is removed.\n\nRemember to restart the app to see the effect.")
+				})
+				
+				Button(action: {
+					removeDataOnDevice()
+					showResetDataDialog = true
+				}, label: {
+					VStack {
+						Text("Remove all data on the device").foregroundColor(Color("MyCourseItemText")).font(.headline)
+						Text("To delete data about last viewed lesson, course, tips and downloaded video courses.").foregroundColor(Color("MyCourseItemText"))
+					}
+				})
+				.alert("Please restart the app now!", isPresented: $showResetDataDialog, actions: {
+					Button("ok", action:{
+						showResetDataDialog = false
+					})
+				}, message: {
+					Text("Data is removed.\n\nRemember to restart the app to see the effect.")
+				})
+				
+				Button(action: {
+					removeDataOniCloud()
+					showResetDataDialog = true
+				}, label: {
+					VStack {
+						Text("Remove all data on the cloud").foregroundColor(Color("MyCourseItemText")).font(.headline)
+						Text("To delete data about favourite courses, lessons you've finished or watched.\n\nThe result of wizard will also be removed.").foregroundColor(Color("MyCourseItemText"))
+					}
+				})
+				.alert("Please restart the app now!", isPresented: $showResetDataDialog, actions: {
+					Button("ok", action:{
+						showResetDataDialog = false
+					})
+				}, message: {
+					Text("Data is removed.\n\nRemember to restart the app to see the effect.")
+				})
+			}
 		}
 		.listStyle(GroupedListStyle())
 		.background(Color("LessonListTextBg"))
+	}
+	
+	private func removeDataOnDevice() {
+		studentData.removeAUserDefaultKey(keyName: "lastViewedLesson")
+		studentData.removeAUserDefaultKey(keyName: "lastViewedCourse")
+		studentData.removeAUserDefaultKey(keyName: "hideTips")
+		
+		let courseOfflineList = userDefaults.object(forKey: "courseOffline") as? [Int] ?? []
+		if courseOfflineList.count > 0 {
+			var isDirectory = ObjCBool(true)
+			for courseID in courseOfflineList {
+				if FileManager.default.fileExists(atPath: URL(string: "course\(courseID)", relativeTo: docsUrl)!.path, isDirectory: &isDirectory) {
+					do {
+						try FileManager.default.removeItem(atPath: URL(string: "course\(courseID)", relativeTo: docsUrl)!.path)
+					} catch {
+						print("[debug] WizardTeacherView, remove course/all downloaded file, catch,\(error)")
+					}
+				} else {
+					print("[debug] WizardTeacherView, \(URL(string: "course\(courseID)", relativeTo: docsUrl)!.path) doesn't exist.")
+				}
+			}
+			
+		}
+		studentData.removeAUserDefaultKey(keyName: "courseOffline")
+		studentData.removeAUserDefaultKey(keyName: "courseOfflineDate")
+		
+		studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+		studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
+	}
+	
+	private func removeDataOniCloud() {
+		studentData.removeAKey(keyName: "completedLessons")
+		studentData.removeAKey(keyName: "watchedLessons")
+		studentData.removeAKey(keyName: "favouritedCourses")
+		
+		studentData.removeAKey(keyName: "instrument")
+		studentData.removeAKey(keyName: "experience")
+		studentData.removeAKey(keyName: "doYouKnow")
+		studentData.removeAKey(keyName: "playable")
+		studentData.removeAKey(keyName: "wizardResult")
+		
+		studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+		studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 	}
 	
 	private func guitarCourses(type: String) -> [Course] {
@@ -143,6 +242,6 @@ struct WizardTeacherView: View {
 struct WizardTeacherView_Previews: PreviewProvider {
 	@State static var tab = "TWizard"
 	static var previews: some View {
-		WizardTeacherView(selectedTab: $tab).environmentObject(ScorewindData())
+		WizardTeacherView(selectedTab: $tab, studentData: StudentData(), downloadManager: DownloadManager()).environmentObject(ScorewindData())
 	}
 }

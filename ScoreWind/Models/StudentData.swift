@@ -110,6 +110,7 @@ class StudentData: ObservableObject {
 	
 	func removeAKey(keyName:String){
 		useriCloudKeyValueStore.removeObject(forKey: keyName)
+		useriCloudKeyValueStore.synchronize()
 	}
 	
 	func backendReadAllKeys(){

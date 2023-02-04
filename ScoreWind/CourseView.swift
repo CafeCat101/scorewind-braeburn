@@ -358,7 +358,7 @@ struct CourseView: View {
 	@ViewBuilder
 	private func tipHere() -> some View {
 		VStack {
-			Text("Let's check out what lessons in this course!")
+			Text("This is the course.\nLet's check out what lessons the course has here!")
 				.font(.headline)
 				.modifier(StepExplainingText())
 			VStack(alignment:.leading) {

@@ -38,8 +38,15 @@ struct WizardExperienceView: View {
 				.modifier(FeedbackOptionsModifier())
 				.onTapGesture {
 					print("choose \(ExperienceFeedback.continueLearning.rawValue)")
+					
+					/*if studentData.getWizardResult().learningPath.count == 0 || scorewindData.wizardPickedCourse.id == 0 || scorewindData.wizardPickedLesson.id == 0 {
+						//:: never done the wizard before, set the picked course and lesson to the very first one
+						let sortedCourses = scorewindData.allCourses.filter({$0.instrument == studentData.getInstrumentChoice()}).sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})
+						scorewindData.wizardPickedCourse = sortedCourses[0]
+						scorewindData.wizardPickedLesson = scorewindData.wizardPickedCourse.lessons[0]
+						scorewindData.wizardPickedTimestamps = (scorewindData.allTimestamps.first(where: {$0.id == scorewindData.wizardPickedCourse.id})?.lessons.first(where: {$0.id == scorewindData.wizardPickedLesson.id})!.timestamps) ?? []
+					}*/
 					gotFeedback(selectedFeedback: .continueLearning)
-
 				}
 				.padding(.bottom,20)
 			
