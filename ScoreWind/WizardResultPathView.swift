@@ -17,7 +17,7 @@ struct WizardResultPathView: View {
 	var body: some View {
 		VStack {
 			ForEach(studentData.wizardResult.learningPath) { pathItem in
-				pathItemView(pathItem: pathItem, startHere: pathItem.startHere)
+				pathItemView(pathItem: pathItem)
 				
 				if pathItem.lessonID != studentData.wizardResult.learningPath[studentData.wizardResult.learningPath.count - 1].lessonID {
 					HStack {
@@ -32,7 +32,7 @@ struct WizardResultPathView: View {
 	}
 	
 	@ViewBuilder
-	private func pathItemView(pathItem: WizardLearningPathItem, startHere: Bool) -> some View {
+	private func pathItemView(pathItem: WizardLearningPathItem) -> some View {
 		if pathItem.showCourseTitle {
 			Text("Course: \(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.courseTitle))")
 				.foregroundColor(Color("LessonSheet"))
@@ -41,14 +41,7 @@ struct WizardResultPathView: View {
 				.background(Color("BadgeWatchLearn"))
 				.cornerRadius(25)
 				.onTapGesture {
-					scorewindData.currentCourse = scorewindData.wizardPickedCourse
-					scorewindData.currentView = Page.course
-					self.selectedTab = "TCourse"
-					scorewindData.currentLesson = scorewindData.wizardPickedCourse.lessons[0]
-					scorewindData.setCurrentTimestampRecs()
-					//scorewindData.lastViewAtScore = true
-					scorewindData.lastPlaybackTime = 0.0
-					scorewindData.lessonChanged = true
+					goToCourse(toCourseID: pathItem.courseID)
 				}
 		}
 		
@@ -59,7 +52,7 @@ struct WizardResultPathView: View {
 				.labelStyle(.iconOnly)
 		}
 		
-		if startHere {
+		if pathItem.startHere {
 			VStack {
 				Label(title: {
 					Text("Start here")
@@ -112,6 +105,17 @@ struct WizardResultPathView: View {
 			showLessonView = true
 			scorewindData.lessonChanged = true
 		}
+	}
+	
+	private func goToCourse(toCourseID: Int) {
+		let theCourse = scorewindData.allCourses.first(where: {$0.id == toCourseID}) ?? Course()
+		let theLesson = theCourse.lessons[0]
+		scorewindData.currentCourse = theCourse
+		scorewindData.currentLesson = theLesson
+		scorewindData.setCurrentTimestampRecs()
+		scorewindData.lastPlaybackTime = 0.0
+		self.selectedTab = "TCourse"
+		scorewindData.lessonChanged = true
 	}
 	
 	private func experienceFeedbackToCase(caseValue: String) -> ExperienceFeedback {
