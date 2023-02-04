@@ -13,7 +13,8 @@ struct WizardTeacherView: View {
 	@ObservedObject var studentData:StudentData
 	@ObservedObject var downloadManager:DownloadManager
 	let docsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
-	@State private var showResetDataDialog = false
+	@State private var resetAllAlert = false
+	@State private var resetTipAlert = false
 	@State private var userDefaults = UserDefaults.standard
 	
 	var body: some View {
@@ -113,14 +114,14 @@ struct WizardTeacherView: View {
 					}
 				}
 			}
-			
+			/*
 			Section(header: Text("Reset Data")) {
 				Button(action: {
 					removeDataOnDevice()
 					removeDataOniCloud()
 					showResetDataDialog = true
 				}, label: {
-					Text("Remove all data").foregroundColor(Color("MyCourseItemText")).font(.headline)
+					Text("Remove all data").foregroundColor(Color("MyCourseItemText"))
 				})
 				.alert("Please restart the app now!", isPresented: $showResetDataDialog, actions: {
 					Button("ok", action:{
@@ -131,6 +132,20 @@ struct WizardTeacherView: View {
 				})
 				
 				Button(action: {
+					studentData.removeAUserDefaultKey(keyName: "hideTips")
+					showResetDataDialog = true
+				}, label: {
+					Text("Remove viewed tip data only").foregroundColor(Color("MyCourseItemText"))
+				})
+				.alert("Remove viewed tip data", isPresented: $showResetDataDialog, actions: {
+					Button("ok", action:{
+						showResetDataDialog = false
+					})
+				}, message: {
+					Text("All tips are visible again now.")
+				})
+				
+				/*Button(action: {
 					removeDataOnDevice()
 					showResetDataDialog = true
 				}, label: {
@@ -162,11 +177,51 @@ struct WizardTeacherView: View {
 					})
 				}, message: {
 					Text("Data is removed.\n\nRemember to restart the app to see the effect.")
-				})
+				})*/
 			}
+			 */
 		}
 		.listStyle(GroupedListStyle())
 		.background(Color("LessonListTextBg"))
+		
+		Button(action: {
+			removeDataOnDevice()
+			removeDataOniCloud()
+			resetAllAlert = true
+		}, label: {
+			Text("Remove all data")
+				.foregroundColor(Color("MyCourseItemText"))
+				.padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
+				.background(Color("MyCourseItem"))
+				.cornerRadius(15)
+		})
+		.padding([.bottom],15)
+		.alert("Please restart the app now!", isPresented: $resetAllAlert, actions: {
+			Button("ok", action:{
+				resetAllAlert = false
+			})
+		}, message: {
+			Text("Data is removed.\n\nRemember to restart the app to see the effect or the app will crash.")
+		})
+		
+		Button(action: {
+			studentData.removeAUserDefaultKey(keyName: "hideTips")
+			resetTipAlert = true
+		}, label: {
+			Text("Remove viewed tip data only").foregroundColor(Color("MyCourseItemText"))
+				.foregroundColor(Color("MyCourseItemText"))
+				.padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
+				.background(Color("MyCourseItem"))
+				.cornerRadius(15)
+		})
+		.padding([.bottom],15)
+		.alert("Remove viewed tip data", isPresented: $resetTipAlert, actions: {
+			Button("ok", action:{
+				resetTipAlert = false
+			})
+		}, message: {
+			Text("All tips are visible again now.")
+		})
 	}
 	
 	private func removeDataOnDevice() {
@@ -193,8 +248,8 @@ struct WizardTeacherView: View {
 		studentData.removeAUserDefaultKey(keyName: "courseOffline")
 		studentData.removeAUserDefaultKey(keyName: "courseOfflineDate")
 		
-		studentData.updateMyCourses(allCourses: scorewindData.allCourses)
-		studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
+		//studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+		//studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 	}
 	
 	private func removeDataOniCloud() {
@@ -208,8 +263,8 @@ struct WizardTeacherView: View {
 		studentData.removeAKey(keyName: "playable")
 		studentData.removeAKey(keyName: "wizardResult")
 		
-		studentData.updateMyCourses(allCourses: scorewindData.allCourses)
-		studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
+		//studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+		//studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 	}
 	
 	private func guitarCourses(type: String) -> [Course] {
