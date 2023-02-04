@@ -302,8 +302,9 @@ struct CourseView: View {
 						}
 					}
 				}
-				
-				handleTip()
+				if showLessonView == false {
+					handleTip()
+				}
 				
 				userDefaults.set(scorewindData.currentCourse.id,forKey: "lastViewedCourse")
 			})
@@ -312,7 +313,7 @@ struct CourseView: View {
 				Label("Scorewind", systemImage: "music.note")
 					.labelStyle(.titleAndIcon)
 				Spacer()
-				Text("Ask wizard for a course now.")
+				Text("Ask wizard for a course or a lesson now.")
 					.padding(15)
 				Button(action: {
 					selectedTab = "TWizard"

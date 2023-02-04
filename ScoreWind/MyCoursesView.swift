@@ -17,6 +17,8 @@ struct MyCoursesView: View {
 	@ObservedObject var studentData:StudentData
 	@State private var listFilterDownloaded = false
 	@State private var listFilterFavourite = false
+	@State private var tipContent:AnyView = AnyView(Text("Tip"))
+	@State private var userDefaults = UserDefaults.standard
 	
 	var body: some View {
 		VStack {
@@ -110,25 +112,41 @@ struct MyCoursesView: View {
 			//Spacer()
 		}
 		.background(Color("AppBackground"))
+		.fullScreenCover(isPresented: $showTip, content: {
+			TipTransparentModalView(showStepTip: $showTip, tipContent: $tipContent)
+		})
 		.onAppear(perform: {
 			print("[debug] MyCourseView, onAppear")
-			
-			//DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-				//withAnimation {
-					//studentData.myCourses = scorewindData.studentData.myCourses
-					//print("[debug] MyCourseView, getMyCourses.count \(studentData.myCourses.count)")
-				//}
-				
-			//}
-			
-			if scorewindData.getTipCount(tipType: .myCourseView) < 1 {
-				scorewindData.currentTip = .myCourseView
-				showTip = true
-			}
+			handleTip()
 		})
-		.fullScreenCover(isPresented: $showTip, content: {
-			TipModalView()
-		})
+	}
+	
+	private func handleTip() {
+		let hideTips:[String] = userDefaults.object(forKey: "hideTips") as? [String] ?? []
+		if hideTips.contains(Tip.myCourseView.rawValue) == false {
+			print("[debug] MyCourseView, handleTip \(hideTips)")
+			tipContent = AnyView(TipContentMakerView(showStepTip: $showTip, hideTipValue: Tip.myCourseView.rawValue, tipMainContent: AnyView(tipHere())))
+			showTip = true
+		}
+	}
+	
+	@ViewBuilder
+	private func tipHere() -> some View {
+		VStack {
+			Text("You'll find all of your favorite courses, lessons you've watched, and lessons you've finished here.")
+				.font(.headline)
+				.modifier(StepExplainingText())
+			VStack(alignment:.leading) {
+				Text("Meanwhile, you can also use \"Downloaded\" filter tag to access the offline courses quickly.")
+					.modifier(TipExplainingParagraph())
+				Text("Enjoy!")
+					.modifier(TipExplainingParagraph())
+			}.padding([.bottom],18)
+			
+		}.background {
+			RoundedRectangle(cornerRadius: 26)
+				.foregroundColor(Color("AppYellow"))
+			.frame(width: UIScreen.main.bounds.width*0.9)}
 	}
 	
 	private func courseItemVisibility(courseID: Int) -> Bool {
@@ -164,9 +182,6 @@ struct MyCoursesView: View {
 					return false
 				}
 			}
-
-			
-			
 		}
 	}
 	
