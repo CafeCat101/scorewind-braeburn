@@ -275,9 +275,24 @@ struct CourseView: View {
 			}
 			.background(Color("AppBackground"))
 			.sheet(isPresented: $showOverview, content: {
-				HTMLString(htmlContent: scorewindData.removeWhatsNext(Text: overViewContent()))
-					.frame(width:screenSize.width)
-					.edgesIgnoringSafeArea(.bottom)
+				VStack {
+					HStack {
+						Text("About this course")
+							.font(.title2)
+							.padding(15)
+						Spacer()
+						Label("Close", systemImage: "xmark.circle")
+							.labelStyle(.iconOnly)
+							.font(.title2)
+							.padding(15)
+							.onTapGesture {
+								showOverview = false
+							}
+					}
+					HTMLString(htmlContent: scorewindData.removeWhatsNext(Text: overViewContent()))
+				}
+				.frame(width:screenSize.width)
+				.edgesIgnoringSafeArea(.bottom)
 			})
 			.fullScreenCover(isPresented: $showStepTip, content: {
 				TipTransparentModalView(showStepTip: $showStepTip, tipContent: $tipContent)
@@ -484,7 +499,7 @@ struct CourseView: View {
 		 let setDuration = scorewindData.currentCourse.duration ?? "n/a"
 		 return "<b>Category:</b>&nbsp;\(scorewindData.courseCategoryToString(courseCategories: scorewindData.currentCourse.category, depth: 3))<br><b>Level:&nbsp;</b>\(scorewindData.currentCourse.level)<br><b>Duration:&nbsp;</b>\(setDuration)\(scorewindData.currentCourse.content)"
 		 */
-		return "<h3>About this course</h3><b>Category:</b>&nbsp;\(scorewindData.courseCategoryToString(courseCategories: scorewindData.currentCourse.category, depth: 3))<br>\(scorewindData.currentCourse.content)"
+		return "<b>Category:</b>&nbsp;\(scorewindData.courseCategoryToString(courseCategories: scorewindData.currentCourse.category, depth: 3))<br>\(scorewindData.currentCourse.content)"
 	}
 	
 	private func getNewOffset(goToSection:courseSection? = nil) -> CGFloat{

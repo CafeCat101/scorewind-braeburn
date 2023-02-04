@@ -46,10 +46,18 @@ struct LessonView2: View {
 				Menu {
 					lessonViewMenuContent()
 				} label: {
-					Label(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title), systemImage: "list.bullet.circle")
-						.foregroundColor(Color("AppBlackDynamic"))
-						.labelStyle(.titleOnly)
-						.truncationMode(.tail)
+					HStack {
+						Spacer()
+						Label(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title), systemImage: "list.bullet.circle")
+							.foregroundColor(Color("AppBlackDynamic"))
+							.labelStyle(.titleOnly)
+							.truncationMode(.tail)
+						if isCurrentLessonCompleted {
+							Label("Completed", systemImage: "checkmark.circle.fill")
+								.labelStyle(.iconOnly)
+								.foregroundColor(Color("AppBlackDynamic"))
+						}
+					}
 				}
 				Menu {
 					lessonViewMenuContent()
@@ -186,6 +194,9 @@ struct LessonView2: View {
 			setPreviousLesson()
 			DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
 				handleTip()
+				if showLessonViewTip && scorewindData.currentLesson.videoMP4.isEmpty == false {
+					viewModel.videoPlayer?.pause()
+				}
 			}
 			userDefaults.set(scorewindData.currentLesson.id,forKey: "lastViewedLesson")
 			print("[debug] LessonView onAppear,showLessonSheet \(scorewindData.showLessonTextOverlay)")
@@ -301,7 +312,11 @@ struct LessonView2: View {
 				.padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
 			}.background(Color("LessonTextOverlay"))
 		})
-		.fullScreenCover(isPresented: $showLessonViewTip, content: {
+		.fullScreenCover(isPresented: $showLessonViewTip, onDismiss:{
+			if scorewindData.currentLesson.videoMP4.isEmpty == false {
+				viewModel.videoPlayer?.play()
+			}
+		}, content: {
 			TipTransparentModalView(showStepTip: $showLessonViewTip, tipContent: $tipContent)
 		})
 	}
