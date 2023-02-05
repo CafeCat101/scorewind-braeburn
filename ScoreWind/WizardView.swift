@@ -42,7 +42,14 @@ struct WizardView: View {
 				Label("Wizard", systemImage: "music.note")
 					.labelStyle(.titleOnly)
 					.foregroundColor(Color("AppBlackDynamic"))
-					.contextMenu {
+					.onTapGesture(count:3, perform: {
+						if userRole == .student {
+							userRole = .teacher
+						} else {
+							userRole = .student
+						}
+					})
+					/*.contextMenu {
 						Button(action: {
 							userRole = .student
 							stepName = .wizardChooseInstrument
@@ -63,7 +70,7 @@ struct WizardView: View {
 							studentData.wizardStepNames.removeAll()
 							stepName = Page.wizardChooseInstrument
 						}
-					}
+					}*/
 				if showProgress {
 					wizardProgressView()
 				}

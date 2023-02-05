@@ -416,12 +416,6 @@ class ScorewindData: ObservableObject {
 		return categoryReOrder.joined(separator: ", ")
 	}
 	
-	func getTipCount(tipType: Tip) -> Int {
-		var tipCount = 0
-		tipCount = UserDefaults.standard.object(forKey: tipType.rawValue) as? Int ?? 0
-		return tipCount
-	}
-	
 	func courseContentNoHtml(content:String) -> String {
 		var rst = content
 		rst = rst.replacingOccurrences(of: "\n", with: "")

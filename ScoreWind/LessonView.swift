@@ -206,10 +206,6 @@ struct LessonView: View {
 				showScoreZoomIcon = false
 			})
 			.sheet(isPresented: $scorewindData.showLessonTextOverlay, onDismiss: {
-				if scorewindData.getTipCount(tipType: .lessonView) < 1 {
-					scorewindData.currentTip = .lessonView
-					showTip = true
-				}
 				if scorewindData.currentLesson.videoMP4.isEmpty == false {
 					viewModel.videoPlayer?.play()
 				}

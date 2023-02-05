@@ -196,12 +196,12 @@ struct WizardTeacherView: View {
 				.cornerRadius(15)
 		})
 		.padding([.bottom],15)
-		.alert("Please restart the app now!", isPresented: $resetAllAlert, actions: {
+		.alert("Please REINSTALL the app now!", isPresented: $resetAllAlert, actions: {
 			Button("ok", action:{
 				resetAllAlert = false
 			})
 		}, message: {
-			Text("Data is removed.\n\nRemember to restart the app to see the effect or the app will crash.")
+			Text("Data is removed.\n\nRemember to reinstall the app again to avoid crashing the app.")
 		})
 		
 		Button(action: {
@@ -247,6 +247,7 @@ struct WizardTeacherView: View {
 		}
 		studentData.removeAUserDefaultKey(keyName: "courseOffline")
 		studentData.removeAUserDefaultKey(keyName: "courseOfflineDate")
+		studentData.removeAUserDefaultKey(keyName: "dataVersion")
 		
 		//studentData.updateMyCourses(allCourses: scorewindData.allCourses)
 		//studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
