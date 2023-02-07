@@ -127,22 +127,7 @@ struct WizardView: View {
 			Divider()
 		}
 		.background(Color("AppBackground"))
-		.onAppear(perform: {
-			if studentData.getWizardResult().learningPath.count > 0 {
-				studentData.wizardResult = studentData.getWizardResult()
-				let getPickedItem = studentData.wizardResult.learningPath.first(where: {$0.startHere == true}) ?? WizardLearningPathItem()
-				if getPickedItem.courseID > 0 && getPickedItem.lessonID > 0 {
-					scorewindData.wizardPickedCourse = scorewindData.allCourses.first(where: {$0.id == getPickedItem.courseID}) ?? Course()
-					scorewindData.wizardPickedLesson = scorewindData.wizardPickedCourse.lessons.first(where: {$0.id == getPickedItem.lessonID}) ?? Lesson()
-					scorewindData.wizardPickedTimestamps = (scorewindData.allTimestamps.first(where: {$0.id == getPickedItem.courseID})?.lessons.first(where: {$0.id == getPickedItem.lessonID})!.timestamps) ?? []
-					stepName = .wizardResult
-				} else {
-					stepName = .wizardChooseInstrument
-				}
-			} else {
-				stepName = .wizardChooseInstrument
-			}
-			
+		.onAppear(perform: {			
 			print("[debug] WizardView, wizardStepNames \(studentData.wizardStepNames)")
 		})
 	}

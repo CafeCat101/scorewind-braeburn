@@ -278,7 +278,6 @@ extension ScorewindData {
 				//studentData.wizardRange.append(WizardPicked(allCourses: allCourses, courseID: assignedCourseId, lessonID: assignedLessonId, feedbackValue:0.0))
 			}
 		} else {
-			studentData.wizardResult = WizardResult()
 			studentData.wizardResult.learningPath = setLearningPath(helper:helper, useStudentData: studentData)
 			if studentData.getExperience() == ExperienceFeedback.continueLearning.rawValue || studentData.getExperience() == ExperienceFeedback.experienced.rawValue {
 				if studentData.getExperience() == ExperienceFeedback.continueLearning.rawValue {
@@ -292,7 +291,7 @@ extension ScorewindData {
 			}
 		}
 		
-		studentData.updateWizardResult(result: studentData.wizardResult)
+		
 		print("[debug] createRecommendation, goToWizardStep \(goToWizardStep)")
 		print("[debug] createRecommendation, wizardRange \(studentData.wizardRange)")
 		return goToWizardStep

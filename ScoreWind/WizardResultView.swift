@@ -139,23 +139,49 @@ struct WizardResultView: View {
 			})
 		}
 		.onAppear(perform: {
-			let hideTips:[String] = userDefaults.object(forKey: "hideTips") as? [String] ?? []
-			if hideTips.contains(Tip.wizardResult.rawValue) == false {
-				tipContent = AnyView(TipContentMakerView(showStepTip: $showStepTip, hideTipValue: Tip.wizardResult.rawValue, tipMainContent: AnyView(tipHere())))
-				if studentData.getExperience() == ExperienceFeedback.starterKit.rawValue {
-					//:: delay tip a little because starterkit doesn't have steps
-					DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-						showStepTip = true
+			print("[debug] WizardResultView, onAppear, icloud wizardResult \(studentData.getWizardResult())")
+			print("[debug] WizardResultView, onAppear, local wizardResult \(studentData.wizardResult)")
+			if studentData.wizardRange.count > 0 && studentData.wizardResult.learningPath.count > 0 && studentData.getWizardResult().learningPath.count == 0 {
+				//:: from finishing the wizard, wizardPicked is already assigned from createRecommendation
+				studentData.updateWizardResult(result: studentData.wizardResult)
+				handleTip()
+			} else if studentData.getWizardResult().learningPath.count > 0 {
+				//:: probably has wizardResult on iCloud, unlless the app crashes
+					studentData.wizardResult = studentData.getWizardResult()
+					let getPickedItem = studentData.wizardResult.learningPath.first(where: {$0.startHere == true}) ?? WizardLearningPathItem()
+					if getPickedItem.courseID > 0 && getPickedItem.lessonID > 0 {
+						scorewindData.wizardPickedCourse = scorewindData.allCourses.first(where: {$0.id == getPickedItem.courseID}) ?? Course()
+						scorewindData.wizardPickedLesson = scorewindData.wizardPickedCourse.lessons.first(where: {$0.id == getPickedItem.lessonID}) ?? Lesson()
+						scorewindData.wizardPickedTimestamps = (scorewindData.allTimestamps.first(where: {$0.id == getPickedItem.courseID})?.lessons.first(where: {$0.id == getPickedItem.lessonID})!.timestamps) ?? []
+						handleTip()
+					} else {
+						stepName = Page.wizardChooseInstrument
 					}
-				} else {
-					showStepTip = true
-				}
-				
+			} else {
+				stepName = Page.wizardChooseInstrument
 			}
+			
+			
+			
 		})
 		.fullScreenCover(isPresented: $showStepTip, content: {
 			TipTransparentModalView(showStepTip: $showStepTip, tipContent: $tipContent)
 		})
+	}
+	
+	private func handleTip() {
+		let hideTips:[String] = userDefaults.object(forKey: "hideTips") as? [String] ?? []
+		if hideTips.contains(Tip.wizardResult.rawValue) == false {
+			tipContent = AnyView(TipContentMakerView(showStepTip: $showStepTip, hideTipValue: Tip.wizardResult.rawValue, tipMainContent: AnyView(tipHere())))
+			if studentData.getExperience() == ExperienceFeedback.starterKit.rawValue {
+				//:: delay tip a little because starterkit doesn't have steps
+				DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+					showStepTip = true
+				}
+			} else {
+				showStepTip = true
+			}
+		}
 	}
 	
 	@ViewBuilder

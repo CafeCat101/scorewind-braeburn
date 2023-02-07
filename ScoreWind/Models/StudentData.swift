@@ -18,6 +18,10 @@ class StudentData: ObservableObject {
 	@Published var playableViewVideoOnly = true
 	var wizardRange:[WizardPicked] = []
 	var wizardResult:WizardResult = WizardResult()
+	private var wizardInstrumentChoice: String = ""
+	private var wizardExperienceChoice: String = ""
+	private var wizardDoYouKnowChoice:[String:Any] = [:]
+	private var wizardPlayableChoice:[String:Any] = [:]
 	
 	/*
 	 DATA FOR MY COURSES
@@ -301,45 +305,53 @@ class StudentData: ObservableObject {
 	 */
 	
 	func getInstrumentChoice()->String{
-		return useriCloudKeyValueStore.string(forKey:"instrument") ?? ""
+		return wizardInstrumentChoice
+		//return useriCloudKeyValueStore.string(forKey:"instrument") ?? ""
 	}
 	
 	func updateInstrumentChoice(instrument:InstrumentType) {
-		useriCloudKeyValueStore.set(instrument.rawValue, forKey: "instrument")
-		useriCloudKeyValueStore.synchronize()
+		wizardInstrumentChoice = instrument.rawValue
+		//useriCloudKeyValueStore.set(instrument.rawValue, forKey: "instrument")
+		//useriCloudKeyValueStore.synchronize()
 	}
 	
 	func getExperience()->String {
-		return useriCloudKeyValueStore.string(forKey:"experience") ?? ""
+		return wizardExperienceChoice
+		//return useriCloudKeyValueStore.string(forKey:"experience") ?? ""
 	}
 	
 	func updateExperience(experience: ExperienceFeedback) {
-		useriCloudKeyValueStore.set(experience.rawValue, forKey: "experience")
-		useriCloudKeyValueStore.synchronize()
+		wizardExperienceChoice = experience.rawValue
+		//useriCloudKeyValueStore.set(experience.rawValue, forKey: "experience")
+		//useriCloudKeyValueStore.synchronize()
 	}
 	
 	func getDoYouKnow()-> [String:Any] {
-		return useriCloudKeyValueStore.dictionary(forKey: "doYouKnow") ?? [:]
+		return wizardDoYouKnowChoice
+		//return useriCloudKeyValueStore.dictionary(forKey: "doYouKnow") ?? [:]
 	}
 	
 	func updateDoYouKnow(courseID:Int, feedbackValues:[Int]) {
-		var lastDoYouKnow = getDoYouKnow()
-		lastDoYouKnow.updateValue(feedbackValues, forKey: String(courseID))
-		useriCloudKeyValueStore.set(lastDoYouKnow, forKey: "doYouKnow")
-		
-		useriCloudKeyValueStore.synchronize()
+		wizardDoYouKnowChoice.updateValue(feedbackValues, forKey: String(courseID))
+		//var lastDoYouKnow = getDoYouKnow()
+		//lastDoYouKnow.updateValue(feedbackValues, forKey: String(courseID))
+		//useriCloudKeyValueStore.set(lastDoYouKnow, forKey: "doYouKnow")
+		//useriCloudKeyValueStore.synchronize()
 	}
 	
 	func getPlayable() -> [String:Any] {
-		return useriCloudKeyValueStore.dictionary(forKey: "playable") ?? [:]
+		return wizardPlayableChoice
+		//return useriCloudKeyValueStore.dictionary(forKey: "playable") ?? [:]
 	}
 	
 	func updatePlayable(courseID: Int, lessonID: Int, feedbackValue: Int) {
-		var lastPlayable = getPlayable()
 		let playableValue = String(feedbackValue) + "|" + String(courseID)
-		lastPlayable.updateValue(playableValue, forKey: String(lessonID))
-		useriCloudKeyValueStore.set(lastPlayable, forKey: "playable")
-		useriCloudKeyValueStore.synchronize()
+		wizardPlayableChoice.updateValue(playableValue, forKey: String(lessonID))
+		//var lastPlayable = getPlayable()
+		//let playableValue = String(feedbackValue) + "|" + String(courseID)
+		//lastPlayable.updateValue(playableValue, forKey: String(lessonID))
+		//useriCloudKeyValueStore.set(lastPlayable, forKey: "playable")
+		//useriCloudKeyValueStore.synchronize()
 	}
 	
 	func getTotalCompletedLessonCount() -> Int {

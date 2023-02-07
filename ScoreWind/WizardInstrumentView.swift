@@ -61,14 +61,20 @@ struct WizardInstrumentView: View {
 		}
 		.background(Color("AppBackground"))
 		.onAppear(perform: {
-			//:: start over, reset everything
-			studentData.wizardStepNames = [.wizardChooseInstrument]
-			studentData.removeAKey(keyName: "experience")
-			studentData.removeAKey(keyName: "doYouKnow")
-			studentData.removeAKey(keyName: "playable")
-			studentData.wizardRange = []
-			studentData.removeAKey(keyName: "wizardResult")
-			studentData.wizardResult = WizardResult()
+			if studentData.getWizardResult().learningPath.count > 0  && studentData.wizardResult.learningPath.count == 0 {
+				//has wizardResult saved on icloud before and at app launch
+				stepName = Page.wizardResult
+			} else {
+				//:: start over, reset everything
+				studentData.wizardStepNames = [.wizardChooseInstrument]
+				//studentData.removeAKey(keyName: "experience")
+				//studentData.removeAKey(keyName: "doYouKnow")
+				//studentData.removeAKey(keyName: "playable")
+				studentData.wizardRange.removeAll()
+				studentData.removeAKey(keyName: "wizardResult")
+				studentData.wizardResult = WizardResult()
+			}
+			
 		})
 	}
 	
