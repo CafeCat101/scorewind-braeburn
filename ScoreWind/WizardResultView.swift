@@ -77,7 +77,7 @@ struct WizardResultView: View {
 						showMeMore.toggle()
 					}
 				}, label: {
-					Text(showMeMore ? "Show me less" : "Tell me more")
+					Text(showMeMore ? "Hide details" : "Tell me more")
 						.foregroundColor(Color("LessonListStatusIcon"))
 						.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
 						.background(Color("AppYellow"))

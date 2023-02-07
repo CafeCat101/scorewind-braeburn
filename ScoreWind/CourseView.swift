@@ -328,7 +328,7 @@ struct CourseView: View {
 				Label("Scorewind", systemImage: "music.note")
 					.labelStyle(.titleAndIcon)
 				Spacer()
-				Text("Ask wizard for a course or a lesson now.")
+				Text(studentData.wizardResult.learningPath.count == 0 ? "Ask wizard for a course or a lesson now.":"See the course and the lesson Wizard found last time.")
 					.padding(15)
 				Button(action: {
 					selectedTab = "TWizard"

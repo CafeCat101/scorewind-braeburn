@@ -66,13 +66,14 @@ struct WizardInstrumentView: View {
 				stepName = Page.wizardResult
 			} else {
 				//:: start over, reset everything
+				studentData.resetWizrdChoice()
+				studentData.wizardRange.removeAll()
+				studentData.removeAKey(keyName: "wizardResult")
+				studentData.wizardResult = WizardResult()
 				studentData.wizardStepNames = [.wizardChooseInstrument]
 				//studentData.removeAKey(keyName: "experience")
 				//studentData.removeAKey(keyName: "doYouKnow")
 				//studentData.removeAKey(keyName: "playable")
-				studentData.wizardRange.removeAll()
-				studentData.removeAKey(keyName: "wizardResult")
-				studentData.wizardResult = WizardResult()
 			}
 			
 		})

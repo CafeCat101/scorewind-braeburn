@@ -182,12 +182,14 @@ extension ScorewindData {
 		
 		if (studentData.wizardRange.count >= 10) && (studentData.getExperience() != ExperienceFeedback.starterKit.rawValue) {
 			let checkCompletedLessonStatus:Double = Double(studentData.getTotalCompletedLessonCount())/5
-			if ((checkCompletedLessonStatus  - checkCompletedLessonStatus.rounded(.down) < 1) && (checkCompletedLessonStatus  - checkCompletedLessonStatus.rounded(.down) > 0)) == false {
+			if ((checkCompletedLessonStatus - checkCompletedLessonStatus.rounded(.down)) < 1) && ((checkCompletedLessonStatus - checkCompletedLessonStatus.rounded(.down)) > 0) {
+				//:: every 5 completed lesson, try a little harder lesssons
 				let explorer = helper.explorerAlgorithm(useStudentData: studentData)
 				assignedCourseId = explorer["courseID"] ?? 0
 				assignedLessonId = explorer["lessonID"] ?? 0
 				explainResult = "It's time to take a little challenges. Good luck!"
 			} else {
+				//:: find the closest level normally
 				let lastCourseInRange = allCourses.first(where: {$0.id == studentData.wizardRange.last?.courseID}) ?? Course()
 				let assesment = helper.assesmentAlgorithm(useStudentData: studentData, exampleCourse: lastCourseInRange)
 				assignedCourseId = assesment["courseID"] ?? 0

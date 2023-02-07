@@ -397,4 +397,11 @@ class StudentData: ObservableObject {
 		return wizardResult
 	}
 	
+	func resetWizrdChoice() {
+		wizardInstrumentChoice = ""
+		wizardExperienceChoice = ""
+		wizardDoYouKnowChoice.removeAll()
+		wizardPlayableChoice.removeAll()
+	}
+	
 }

@@ -185,8 +185,23 @@ struct WizardTeacherView: View {
 		.background(Color("LessonListTextBg"))
 		
 		Button(action: {
-			removeDataOnDevice()
 			removeDataOniCloud()
+			removeDataOnDevice()
+			
+			//:: reset in memory variable
+			studentData.myCourses.removeAll()
+			downloadManager.downloadList.removeAll()
+			
+			studentData.resetWizrdChoice()
+			studentData.wizardStepNames.removeAll()
+			studentData.wizardRange.removeAll()
+			studentData.wizardResult = WizardResult()
+			scorewindData.wizardPickedCourse = Course()
+			scorewindData.wizardPickedLesson = Lesson()
+			scorewindData.wizardPickedTimestamps.removeAll()
+			
+			scorewindData.currentCourse = Course()
+			scorewindData.currentLesson = Lesson()
 			resetAllAlert = true
 		}, label: {
 			Text("Remove all data")
@@ -196,12 +211,12 @@ struct WizardTeacherView: View {
 				.cornerRadius(15)
 		})
 		.padding([.bottom],15)
-		.alert("Please REINSTALL the app now!", isPresented: $resetAllAlert, actions: {
+		.alert("Please RESTART the app now!", isPresented: $resetAllAlert, actions: {
 			Button("ok", action:{
 				resetAllAlert = false
 			})
 		}, message: {
-			Text("Data is removed.\n\nRemember to reinstall the app again to avoid crashing the app.")
+			Text("Data is removed.\n\nRemember to restart the app to see the effect.")
 		})
 		
 		Button(action: {
