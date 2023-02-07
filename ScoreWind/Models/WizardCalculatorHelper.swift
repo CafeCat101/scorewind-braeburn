@@ -153,10 +153,12 @@ struct WizardCalculatorHelper {
 		var lessons:[WizardLessonSearched] = []
 		var nextCourses = allCourses.filter({ $0.instrument == targetCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: targetCourse.category, depth: 2) && Int($0.sortValue)! >= Int(targetCourse.sortValue)! })
 		
-		nextCourses = nextCourses.sorted(by: { Int($0.sortValue)! < Int($1.sortValue)!})
-		print("[debug] wizardCalcaultor, getNextLessons, nextCourses[0].title \(nextCourses[0].title)")
-		nextCourses = excludeCoursesCompleted(targetCourse: nextCourses, useStudentData: useStudnetData)
-		lessons = appendLessonsFromCourses(targetLessonStep:targetLesson.step ,courseCollection: nextCourses, useStudnetData: useStudnetData, limit: range, appendingOrder: .ASC)
+		if nextCourses.count > 0 {
+			nextCourses = nextCourses.sorted(by: { Int($0.sortValue)! < Int($1.sortValue)!})
+			print("[debug] wizardCalcaultor, getNextLessons, nextCourses[0].title \(nextCourses[0].title)")
+			nextCourses = excludeCoursesCompleted(targetCourse: nextCourses, useStudentData: useStudnetData)
+			lessons = appendLessonsFromCourses(targetLessonStep:targetLesson.step ,courseCollection: nextCourses, useStudnetData: useStudnetData, limit: range, appendingOrder: .ASC)
+		}
 		
 		return lessons
 	}

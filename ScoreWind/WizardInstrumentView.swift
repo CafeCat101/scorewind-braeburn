@@ -61,11 +61,14 @@ struct WizardInstrumentView: View {
 		}
 		.background(Color("AppBackground"))
 		.onAppear(perform: {
+			//:: start over, reset everything
 			studentData.wizardStepNames = [.wizardChooseInstrument]
 			studentData.removeAKey(keyName: "experience")
 			studentData.removeAKey(keyName: "doYouKnow")
 			studentData.removeAKey(keyName: "playable")
 			studentData.wizardRange = []
+			studentData.removeAKey(keyName: "wizardResult")
+			studentData.wizardResult = WizardResult()
 		})
 	}
 	

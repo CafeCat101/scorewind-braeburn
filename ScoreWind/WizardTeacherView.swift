@@ -276,7 +276,7 @@ struct WizardTeacherView: View {
 		if type == "path" {
 			allGuitarCourses = allGuitarCourses.filter({$0.category.contains(where: {$0.name == "Path"})})
 		}
-		allGuitarCourses = allGuitarCourses.sorted(by: {$0.level < $1.level})
+		allGuitarCourses = allGuitarCourses.sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})
 		return allGuitarCourses
 	}
 	
@@ -288,7 +288,7 @@ struct WizardTeacherView: View {
 		if type == "path" {
 			allViolinCourses = allViolinCourses.filter({$0.category.contains(where: {$0.name == "Path"})})
 		}
-		allViolinCourses = allViolinCourses.sorted(by: {$0.level < $1.level})
+		allViolinCourses = allViolinCourses.sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})
 		return allViolinCourses
 	}
 	
