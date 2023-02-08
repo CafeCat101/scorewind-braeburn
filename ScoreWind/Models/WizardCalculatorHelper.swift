@@ -187,7 +187,7 @@ struct WizardCalculatorHelper {
 		return result
 	}
 	
-	func appendLessonsFromCourses(targetLessonStep: Int,courseCollection: [Course], useStudnetData: StudentData, limit: Int, appendingOrder: SearchParameter) -> [WizardLessonSearched] {
+	private func appendLessonsFromCourses(targetLessonStep: Int,courseCollection: [Course], useStudnetData: StudentData, limit: Int, appendingOrder: SearchParameter) -> [WizardLessonSearched] {
 		var lessons:[WizardLessonSearched] = []
 		
 		//courseCollection has the current wizardPickedCourse
@@ -388,5 +388,57 @@ struct WizardCalculatorHelper {
 		default:
 			return .starterKit
 		}
+	}
+	
+	func getLearningPathNextLessons(targetCourse: Course, targetLesson: Lesson, useStudnetData: StudentData, range: Int) -> [WizardLessonSearched] {
+		print("[debug] wizardCalcaultorHelper, getLearningPathNextLessons, range \(range)")
+		var lessons:[WizardLessonSearched] = []
+		var nextCourses = allCourses.filter({ $0.instrument == targetCourse.instrument && courseCategoryToString(courseCategories: $0.category, depth: 2) == courseCategoryToString(courseCategories: targetCourse.category, depth: 2) && Int($0.sortValue)! >= Int(targetCourse.sortValue)! })
+		if nextCourses.count > 0 {
+			nextCourses = nextCourses.sorted(by: { Int($0.sortValue)! < Int($1.sortValue)!})
+			print("[debug] wizardCalcaultor, getNextLessons, nextCourses[0].title \(nextCourses[0].title)")
+			nextCourses = excludeCoursesCompleted(targetCourse: nextCourses, useStudentData: useStudnetData)
+			if nextCourses.count > 0 {
+			outerloop: for course in nextCourses {
+					var lessonsInCourse = course.lessons
+					lessonsInCourse = excludeLessonsCompleted(targetCourseID: course.id, targetLessons: lessonsInCourse, useStudentData: useStudnetData)
+					if lessonsInCourse.count > 0 {
+						var appendedSortValue:[String] = []
+						for lesson in lessonsInCourse {
+							print("[debug] appendLessonsFromCourses, StepByStep or Path course, lesson.step \(lesson.step):targetLessonStep \(targetLesson.step)")
+							if course.id == nextCourses[0].id {
+								//becasue courseCollection[0] is the current wizardPickedCourse, don't process the lesson level before or after wizardPickedLesson
+								if lesson.step <= targetLesson.step {
+									continue
+								}
+							}
+							
+							let sortValues = lesson.sortValue.split(separator:"-")
+							print("[debug] appendLessonsFromCourses, StepByStep or Path course, lesson.sortValue \(sortValues[0])-\(sortValues[1])")
+							//let lessonsAtSameLessonLevel = useStudnetData.wizardRange.filter({ $0.lessonSortValue.contains(sortValues[0]+"-"+sortValues[1]) })
+							let lessonsAtSameLessonLevel = appendedSortValue.filter({isLessonLevelTheSame(sourceValue: lesson.sortValue, targetValue: $0)})
+							print("[debug] appendLessonsFromCourses, StepByStep or Path course, lessonsAtSameLessonLevel.count \(lessonsAtSameLessonLevel.count)")
+							if lessonsAtSameLessonLevel.count > 0 {
+								//if any lesson in this level has been added, don't put it again(don't add so learning path won't have lessons at the same level)
+								print("[debug] appendLessonsFromCourses, StepByStep or Path course, wizardRange contains more than 1 \(sortValues[0])-\(sortValues[1])")
+								continue
+							}
+							
+							lessons.append(WizardLessonSearched(courseID: course.id, lesson: lesson))
+							appendedSortValue.append(lesson.sortValue)
+							print("[debug] appendLessonsFromCourses, StepByStep or Path course, lessons.count \(lessons.count):\(range)")
+							if lessons.count >= range {
+								break outerloop
+							}
+						}
+					}
+				}
+					
+				
+			}
+		}
+		
+		
+		return lessons
 	}
 }

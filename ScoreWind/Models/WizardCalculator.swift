@@ -300,6 +300,49 @@ extension ScorewindData {
 	}
 	
 	func setLearningPath(helper:WizardCalculatorHelper, useStudentData: StudentData) -> [WizardLearningPathItem] {
+		var learningPath:[WizardLearningPathItem] = []
+		
+		var searchLessons:[WizardLessonSearched] = []
+		searchLessons.append(WizardLessonSearched(courseID: wizardPickedCourse.id, lesson: wizardPickedLesson))
+		searchLessons.append(contentsOf: helper.getLearningPathNextLessons(targetCourse: wizardPickedCourse, targetLesson: wizardPickedLesson, useStudnetData: useStudentData, range: 9))
+		
+		for i in 0..<searchLessons.count {
+			//print("[debug] WizardResult, getLearningPath allCourse.count \(calculatorHelper.allCourses.count)")
+			var learningPathItem = WizardLearningPathItem()
+			let findCourse = allCourses.first(where: {$0.id == searchLessons[i].courseID}) ?? Course()
+			let findLesson = findCourse.lessons.first(where: {$0.id == searchLessons[i].lesson.id}) ?? Lesson()
+			learningPathItem.courseID = findCourse.id
+			learningPathItem.courseTitle = findCourse.title
+			learningPathItem.lessonID = findLesson.id
+			learningPathItem.lessonTitle = findLesson.title
+			
+			let itemFromRange = useStudentData.wizardRange.first(where: {$0.courseID == findCourse.id && $0.lessonID == findLesson.id})
+			learningPathItem.feedbackValue = itemFromRange?.feedbackValue ?? 0.0
+			
+			var setSortHelperValue = itemFromRange?.sortHelper ?? 0.0
+			if setSortHelperValue == 0.0 {
+				setSortHelperValue = helper.lessonSortToSortHelper(courseSortValue: findCourse.sortValue, lessonStepValue: findLesson.step)
+			}
+			learningPathItem.sortHelper = setSortHelperValue
+			if findCourse.id == wizardPickedCourse.id && findLesson.id == wizardPickedLesson.id {
+				learningPathItem.startHere = true
+			}
+			if i == 0 {
+				learningPathItem.showCourseTitle = true
+			} else {
+				if findCourse.id != searchLessons[i-1].courseID {
+					learningPathItem.showCourseTitle = true
+				}
+			}
+			learningPath.append(learningPathItem)
+		}
+		
+		
+		return learningPath
+	}
+	
+	/*
+	func setLearningPath(helper:WizardCalculatorHelper, useStudentData: StudentData) -> [WizardLearningPathItem] {
 		let experienceType = helper.experienceFeedbackToCase(caseValue: useStudentData.getExperience())
 		var sortedWizardRange = useStudentData.wizardRange.sorted(by: {$0.sortHelper < $1.sortHelper})
 		var learningPath:[WizardLearningPathItem] = []
@@ -353,7 +396,7 @@ extension ScorewindData {
 		
 		
 		return learningPath
-	}
+	}*/
 	
 	
 }
