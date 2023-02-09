@@ -72,8 +72,6 @@ struct HomeView: View {
 					scorewindData.currentLesson = scorewindData.currentCourse.lessons.first(where: {$0.id == lastViewedLessonID}) ?? Lesson()
 					scorewindData.setCurrentTimestampRecs()
 					scorewindData.lastPlaybackTime = 0.0
-				} else if lastViewedCourseID > 0 && lastViewedLessonID == 0 {
-					
 				}
 				//<<<<==
 			}
