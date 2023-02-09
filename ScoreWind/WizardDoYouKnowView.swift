@@ -43,7 +43,19 @@ struct WizardDoYouKnowView: View {
 							.modifier(FeedbackOptionsModifier())
 							.onTapGesture {
 								print("[debug] WizardDoYouKnowView, feedback clicked value \(feedbackItem.rawValue)")
-								feedbackScores.append(feedbackItem.rawValue)
+								if scorewindData.wizardPickedCourse.category.contains(where: {$0.name == "Guitar 103" || $0.name == "Violin 103"}) {
+									if feedbackItem == .someOfThem {
+										feedbackScores.append(DoYouKnowFeedback.allOfThem.rawValue)
+										print("[debug] WizardDoYouKnowView, feedbackScores.append \(DoYouKnowFeedback.allOfThem.rawValue)")
+									} else {
+										feedbackScores.append(feedbackItem.rawValue)
+										print("[debug] WizardDoYouKnowView, feedbackScores.append \(feedbackItem.rawValue)")
+									}
+								} else {
+									feedbackScores.append(feedbackItem.rawValue)
+									print("[debug] WizardDoYouKnowView, feedbackScores.append \(feedbackItem.rawValue)")
+								}
+								
 								print("[debug] WizardDoYouKnowView, feedback scores sum \(feedbackScores)")
 								
 								if (currentQuestionIndex+1) < scorewindData.getListInCourse(targetText: scorewindData.wizardPickedCourse.content, listName: .requirement).count {

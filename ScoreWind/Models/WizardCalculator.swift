@@ -181,8 +181,9 @@ extension ScorewindData {
 		}
 		
 		if (studentData.wizardRange.count >= 10) && (studentData.getExperience() != ExperienceFeedback.starterKit.rawValue) {
-			let checkCompletedLessonStatus:Double = Double(studentData.getTotalCompletedLessonCount())/5
-			if ((checkCompletedLessonStatus - checkCompletedLessonStatus.rounded(.down)) < 1) && ((checkCompletedLessonStatus - checkCompletedLessonStatus.rounded(.down)) > 0) {
+			let totalCompleted:Double = Double(studentData.getTotalCompletedLessonCount())
+			let checkCompletedLessonStatus:Double = totalCompleted/5
+			if (checkCompletedLessonStatus - checkCompletedLessonStatus.rounded(.down)) == 0 && totalCompleted > 0.0 {
 				//:: every 5 completed lesson, try a little harder lesssons
 				let explorer = helper.explorerAlgorithm(useStudentData: studentData)
 				assignedCourseId = explorer["courseID"] ?? 0
