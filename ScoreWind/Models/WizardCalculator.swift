@@ -62,6 +62,10 @@ extension ScorewindData {
 			let finalFeedback = helper.getDoYouKnowScore(answers: getCurrentDoYouKnow?.value as! [Int])
 			print("[debug] createRecommendation, finalFeedback \(finalFeedback)(\(finalFeedback.rawValue))")
 			currentFinalFeedbackValue = Double(finalFeedback.rawValue)
+			//:: register range feedbackvalue of current step
+			if currentStepName != Page.wizardChooseInstrument && studentData.wizardRange.count > 0 {
+				studentData.wizardRange[studentData.wizardRange.count-1].feedbackValue = currentFinalFeedbackValue
+			}
 			
 			if wizardPickedCourse.id > 0 {
 				if finalFeedback == .allOfThem {
@@ -132,6 +136,11 @@ extension ScorewindData {
 			let currentPlayableFeedback = studentData.getPlayable().first(where: {$0.key == String(wizardPickedLesson.id)})
 			let extractFeedback = (currentPlayableFeedback?.value as! String).split(separator:"|")
 			currentFinalFeedbackValue = Double(extractFeedback[0])!
+			//:: register range feedbackvalue of current step
+			if currentStepName != Page.wizardChooseInstrument && studentData.wizardRange.count > 0 {
+				studentData.wizardRange[studentData.wizardRange.count-1].feedbackValue = currentFinalFeedbackValue
+			}
+			
 			var findLessons:[WizardLessonSearched] = []
 			
 			if Int(extractFeedback[0]) == 1 {
@@ -180,7 +189,7 @@ extension ScorewindData {
 			}
 		}
 		
-		if (studentData.wizardRange.count >= 10) && (studentData.getExperience() != ExperienceFeedback.starterKit.rawValue) {
+		if (studentData.wizardRange.count > 10) && (studentData.getExperience() != ExperienceFeedback.starterKit.rawValue) {
 			let totalCompleted:Double = Double(studentData.getTotalCompletedLessonCount())
 			let checkCompletedLessonStatus:Double = totalCompleted/5
 			if (checkCompletedLessonStatus - checkCompletedLessonStatus.rounded(.down)) == 0 && totalCompleted > 0.0 {
@@ -192,7 +201,7 @@ extension ScorewindData {
 			} else {
 				//:: find the closest level normally
 				let lastCourseInRange = allCourses.first(where: {$0.id == studentData.wizardRange.last?.courseID}) ?? Course()
-				let assesment = helper.assesmentAlgorithm(useStudentData: studentData, exampleCourse: lastCourseInRange)
+				let assesment = helper.assessmentAlgorithm(useStudentData: studentData, exampleCourse: lastCourseInRange)
 				assignedCourseId = assesment["courseID"] ?? 0
 				assignedLessonId = assesment["lessonID"] ?? 0
 				explainResult = "Hi explorer, Scorewind found a lesson that may be your interest."
@@ -232,7 +241,11 @@ extension ScorewindData {
 				
 				//:: 101 and 102 is a package deal, reassign wizard picked course to any not completed one between 101~102
 				if (wizardPickedCourse.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"}) && (studentData.getExperience() != ExperienceFeedback.starterKit.rawValue)) {
-					var beginnerCoursePackage = allCourses.filter({$0.instrument == studentData.getInstrumentChoice() && $0.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"})}).sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})
+					let veryfirstCourse = getVeryfirstCourse(studentData: studentData, helper: helper)
+					wizardPickedCourse = allCourses.first(where: {$0.id == veryfirstCourse["courseID"]}) ?? Course()
+					assignedCourseId = veryfirstCourse["courseID"] ?? 0
+					assignedLessonId = veryfirstCourse["lessonID"] ?? 0
+					/*var beginnerCoursePackage = allCourses.filter({$0.instrument == studentData.getInstrumentChoice() && $0.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"})}).sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})
 					beginnerCoursePackage = helper.excludeCoursesCompleted(targetCourse: beginnerCoursePackage, useStudentData: studentData)
 					for course in beginnerCoursePackage {
 						let uncompletedLesson = helper.excludeLessonsCompleted(targetCourseID: course.id, targetLessons: course.lessons, useStudentData: studentData)
@@ -242,7 +255,7 @@ extension ScorewindData {
 							assignedLessonId = uncompletedLesson[0].id
 							break
 						}
-					}
+					}*/
 					//:: explain->101~102 is the essentail package, don't miss it.
 					explainResult = "Series 101 to 102 is an essential package for you to get your hands on the instrument more easily. Don't miss it!"
 					goToWizardStep = .wizardResult
@@ -262,10 +275,7 @@ extension ScorewindData {
 			}
 		}
 		
-		//:: register range feedbackvalue of current step
-		if currentStepName != Page.wizardChooseInstrument && studentData.wizardRange.count > 0 {
-			studentData.wizardRange[studentData.wizardRange.count-1].feedbackValue = currentFinalFeedbackValue
-		}
+
 		
 		//:: assign next step's wizard view
 		if goToWizardStep != .wizardResult {
@@ -282,25 +292,126 @@ extension ScorewindData {
 			}
 		} else {
 			studentData.wizardResult.learningPath = setLearningPath(helper:helper, useStudentData: studentData)
-			if studentData.getExperience() == ExperienceFeedback.continueLearning.rawValue || studentData.getExperience() == ExperienceFeedback.experienced.rawValue {
-				if studentData.getExperience() == ExperienceFeedback.continueLearning.rawValue {
-					studentData.wizardResult.resultTitle = "A lesson to explore!"
-				} else {
-					studentData.wizardResult.resultTitle = "A lesson from repositories"
-				}
-				
-				studentData.wizardResult.resultExplaination = explainResult
-				studentData.wizardResult.learningPathExplaination = "Start here and into the near future. These are lessons that await for you to explore them."
-			}
+			studentData.wizardResult.learningPath = setLearningPath(helper:helper, useStudentData: studentData)
+			setWizardResultText(studentData: studentData, explainResult: explainResult)
 		}
-		
 		
 		print("[debug] createRecommendation, goToWizardStep \(goToWizardStep)")
 		print("[debug] createRecommendation, wizardRange \(studentData.wizardRange)")
 		return goToWizardStep
 	}
 	
-	func setLearningPath(helper:WizardCalculatorHelper, useStudentData: StudentData) -> [WizardLearningPathItem] {
+	private func getVeryfirstCourse(studentData: StudentData, helper: WizardCalculatorHelper) -> [String:Int] {
+		var result:[String:Int] = [:]
+		var beginnerCoursePackage = allCourses.filter({$0.instrument == studentData.getInstrumentChoice() && $0.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"})}).sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})
+		beginnerCoursePackage = helper.excludeCoursesCompleted(targetCourse: beginnerCoursePackage, useStudentData: studentData)
+		if beginnerCoursePackage.count > 0 {
+			for course in beginnerCoursePackage {
+				let uncompletedLesson = helper.excludeLessonsCompleted(targetCourseID: course.id, targetLessons: course.lessons, useStudentData: studentData)
+				if uncompletedLesson.count > 0 {
+					wizardPickedCourse = course
+					result["courseID"] = course.id
+					result["lessonID"] = uncompletedLesson[0].id
+					break
+				}
+			}
+		} else {
+			let justTheFirst = allCourses.filter({$0.instrument == studentData.getInstrumentChoice() && $0.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"})}).sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})
+			result["courseID"] = justTheFirst[0].id
+			result["lessonID"] = justTheFirst[0].lessons[0].id
+		}
+		
+		return result
+	}
+	
+	func finishWizardNow(studentData : StudentData){
+		let helper = WizardCalculatorHelper(allCourses: allCourses, allTimestamps: allTimestamps)
+		var assignedCourseId = 0
+		var assignedLessonId = 0
+		var explainResult = ""
+		let currentStepName = studentData.wizardStepNames[studentData.wizardStepNames.count-1]
+		var currentFinalFeedbackValue = 0.0
+		
+		if currentStepName == .wizardDoYouKnow {
+			print("[debug] finishWizardNow, getDoYouKnow \(studentData.getDoYouKnow())")
+			let getCurrentDoYouKnow = studentData.getDoYouKnow().first(where: {$0.key == String(wizardPickedCourse.id)})
+			let finalFeedback = helper.getDoYouKnowScore(answers: getCurrentDoYouKnow?.value as! [Int])
+			print("[debug] finishWizardNow, finalFeedback \(finalFeedback)(\(finalFeedback.rawValue))")
+			currentFinalFeedbackValue = Double(finalFeedback.rawValue)
+		} else if currentStepName == .wizardPlayable {
+			let currentPlayableFeedback = studentData.getPlayable().first(where: {$0.key == String(wizardPickedLesson.id)})
+			let extractFeedback = (currentPlayableFeedback?.value as! String).split(separator:"|")
+			currentFinalFeedbackValue = Double(extractFeedback[0])!
+		}
+		
+		if currentStepName != Page.wizardChooseInstrument && studentData.wizardRange.count > 0 {
+			studentData.wizardRange[studentData.wizardRange.count-1].feedbackValue = currentFinalFeedbackValue
+		}
+		
+		if studentData.wizardRange.count >= 10 {
+			if studentData.getWizardMode() == .explore {
+				//:: every 5 completed lesson, try a little harder lesssons
+				let explorer = helper.explorerAlgorithm(useStudentData: studentData)
+				assignedCourseId = explorer["courseID"] ?? 0
+				assignedLessonId = explorer["lessonID"] ?? 0
+				explainResult = "It's time to take a little challenges. Good luck!"
+			} else {
+				//:: find the closest level normally
+				let lastCourseInRange = allCourses.first(where: {$0.id == studentData.wizardRange.last?.courseID}) ?? Course()
+				let assesment = helper.assessmentAlgorithm(useStudentData: studentData, exampleCourse: lastCourseInRange)
+				assignedCourseId = assesment["courseID"] ?? 0
+				assignedLessonId = assesment["lessonID"] ?? 0
+				explainResult = "Hi explorer, Scorewind found a lesson that may be your interest."
+			}
+		} else {
+			assignedCourseId = wizardPickedCourse.id
+			assignedLessonId = wizardPickedLesson.id
+		}
+		
+		//:: setup wizard picked course object
+		if assignedCourseId > 0 {
+			wizardPickedCourse = allCourses.first(where: {$0.id == assignedCourseId}) ?? Course()
+			
+			//:: 101 and 102 is a package deal, reassign wizard picked course to any not completed one between 101~102
+			if (wizardPickedCourse.category.contains(where: {$0.name == "Guitar 102" || $0.name == "Guitar 101" || $0.name == "Violin 101" || $0.name == "Violin 102"}) && (studentData.getExperience() != ExperienceFeedback.starterKit.rawValue)) {
+				let veryfirstCourse = getVeryfirstCourse(studentData: studentData, helper: helper)
+				wizardPickedCourse = allCourses.first(where: {$0.id == veryfirstCourse["courseID"]}) ?? Course()
+				assignedCourseId = veryfirstCourse["courseID"] ?? 0
+				assignedLessonId = veryfirstCourse["lessonID"] ?? 0
+				explainResult = "Series 101 to 102 is an essential package for you to get your hands on the instrument more easily. Don't miss it!"
+			}
+			
+			print("[debug] finishWizardNow, assignCourseId \(assignedCourseId)")
+		}
+		
+		//:: setup wizard picked lesson object and its teimstamps
+		if assignedLessonId > 0 {
+			wizardPickedLesson = wizardPickedCourse.lessons.first(where: {$0.id == assignedLessonId}) ?? Lesson()
+			wizardPickedTimestamps = (allTimestamps.first(where: {$0.id == assignedCourseId})?.lessons.first(where: {$0.id == assignedLessonId})!.timestamps) ?? []
+			print("[debug] finishWizardNow, assignLessonId \(assignedLessonId)")
+		} else {
+			wizardPickedLesson = Lesson()
+			wizardPickedTimestamps = []
+		}
+		
+		studentData.wizardResult.learningPath = setLearningPath(helper:helper, useStudentData: studentData)
+		setWizardResultText(studentData: studentData, explainResult: explainResult)
+	}
+	
+	private func setWizardResultText(studentData: StudentData, explainResult: String) {
+		if studentData.getExperience() == ExperienceFeedback.continueLearning.rawValue || studentData.getExperience() == ExperienceFeedback.experienced.rawValue {
+			if studentData.getExperience() == ExperienceFeedback.continueLearning.rawValue {
+				studentData.wizardResult.resultTitle = "A lesson to explore!"
+			} else {
+				studentData.wizardResult.resultTitle = "A lesson from repositories"
+			}
+			
+			studentData.wizardResult.resultExplaination = explainResult
+			studentData.wizardResult.learningPathExplaination = "Start here and into the near future. These are lessons that await for you to explore them."
+		}
+	}
+	
+	private func setLearningPath(helper:WizardCalculatorHelper, useStudentData: StudentData) -> [WizardLearningPathItem] {
 		var learningPath:[WizardLearningPathItem] = []
 		
 		var searchLessons:[WizardLessonSearched] = []

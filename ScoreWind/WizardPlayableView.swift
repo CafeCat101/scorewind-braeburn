@@ -71,29 +71,29 @@ struct WizardPlayableView: View {
 									Text(PlayableFeedback.easyPeasy.getLabel())
 										.modifier(FeedbackOptionsModifier())
 										.onTapGesture {
-											feedbackTagAction(feedback: .easyPeasy)
+											feedbackTapAction(feedback: .easyPeasy)
 										}
 									Text(PlayableFeedback.comfortable.getLabel())
 										.modifier(FeedbackOptionsModifier())
 										.onTapGesture {
-											feedbackTagAction(feedback: .comfortable)
+											feedbackTapAction(feedback: .comfortable)
 										}
 								}
 								Text(PlayableFeedback.canLearn.getLabel())
 									.modifier(FeedbackOptionsModifier())
 									.onTapGesture {
-										feedbackTagAction(feedback: .canLearn)
+										feedbackTapAction(feedback: .canLearn)
 									}
 								HStack {
 									Text(PlayableFeedback.littleDifficult.getLabel())
 										.modifier(FeedbackOptionsModifier())
 										.onTapGesture {
-											feedbackTagAction(feedback: .littleDifficult)
+											feedbackTapAction(feedback: .littleDifficult)
 										}
 									Text(PlayableFeedback.veryHard.getLabel())
 										.modifier(FeedbackOptionsModifier())
 										.onTapGesture {
-											feedbackTagAction(feedback: .veryHard)
+											feedbackTapAction(feedback: .veryHard)
 										}
 								}
 							}
@@ -153,12 +153,12 @@ struct WizardPlayableView: View {
 			Text(feedbackItem.getLabel())
 				.modifier(FeedbackOptionsModifier())
 				.onTapGesture {
-					feedbackTagAction(feedback: feedbackItem)
+					feedbackTapAction(feedback: feedbackItem)
 				}
 		}
 	}
 	
-	private func feedbackTagAction(feedback: PlayableFeedback) {
+	private func feedbackTapAction(feedback: PlayableFeedback) {
 		viewModel.videoPlayer!.pause()
 		viewModel.videoPlayer!.replaceCurrentItem(with: nil)
 		studentData.playableViewVideoOnly = true
@@ -166,7 +166,14 @@ struct WizardPlayableView: View {
 		print("feedback clicked value \(feedback.rawValue)")
 		studentData.updatePlayable(courseID: scorewindData.wizardPickedCourse.id, lessonID: scorewindData.wizardPickedLesson.id, feedbackValue: feedback.rawValue)
 		
-		let nextStep = scorewindData.createRecommendation(studentData: studentData)
+		var nextStep:Page
+		if studentData.wizardRange.count < 10 {
+			nextStep = scorewindData.createRecommendation(studentData: studentData)
+		} else {
+			scorewindData.finishWizardNow(studentData: studentData)
+			nextStep = Page.wizardResult
+		}
+		
 		if nextStep != .wizardChooseInstrument {
 			stepName = nextStep
 			studentData.wizardStepNames.append(nextStep)

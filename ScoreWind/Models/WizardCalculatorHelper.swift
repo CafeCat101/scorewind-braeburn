@@ -305,14 +305,28 @@ struct WizardCalculatorHelper {
 
 		print("[debug] wizardCalcaultor, explorerAlgorithm, sorted \(sortedWizardRange)")
 		
-		sortedWizardRange = sortedWizardRange.sorted(by: {$0.sortHelper < $1.sortHelper}).filter({$0.feedbackValue < averageFeedbackValue})
+		sortedWizardRange = sortedWizardRange.sorted(by: {$0.sortHelper < $1.sortHelper}).filter({$0.feedbackValue < averageFeedbackValue*0.6})
 		
 		result["courseID"] = sortedWizardRange[0].courseID
-		result["lessonID"] = sortedWizardRange[0].lessonID
+		if sortedWizardRange[0].courseID > 0 && sortedWizardRange[0].lessonID == 0 {
+			//:: this is a DoYouKnow, course item
+			let findCourse = allCourses.first(where: {$0.id == sortedWizardRange[0].courseID}) ?? Course()
+			let findUncompletedLessons = excludeLessonsCompleted(targetCourseID: findCourse.id, targetLessons: findCourse.lessons, useStudentData: useStudentData)
+			if findUncompletedLessons.count > 0 {
+				result["courseID"] = findCourse.id
+				result["lessonID"] = findUncompletedLessons[0].id
+			} else {
+				result["lessonID"] = sortedWizardRange[0].lessonID
+			}
+		} else {
+			result["lessonID"] = sortedWizardRange[0].lessonID
+		}
+		
+		useStudentData.updateWizardMode(wizardMode: .assessment)
 		return result
 	}
 	
-	func assesmentAlgorithm(useStudentData: StudentData, exampleCourse: Course) -> [String:Int] {
+	func assessmentAlgorithm(useStudentData: StudentData, exampleCourse: Course) -> [String:Int] {
 		var result:[String:Int] = [:]
 		let sortedWizardRange:[WizardPicked] = useStudentData.wizardRange
 		

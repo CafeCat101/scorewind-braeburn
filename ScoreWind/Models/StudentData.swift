@@ -404,4 +404,17 @@ class StudentData: ObservableObject {
 		wizardPlayableChoice.removeAll()
 	}
 	
+	func getWizardMode() -> WizardCalculationMode {
+		let wizardModeSaved:String = userDefaults.object(forKey: "wizardCalculationMode") as? String ?? WizardCalculationMode.assessment.rawValue
+		if wizardModeSaved == WizardCalculationMode.explore.rawValue {
+			return WizardCalculationMode.explore
+		} else {
+			return WizardCalculationMode.assessment
+		}
+	}
+	
+	func updateWizardMode(wizardMode: WizardCalculationMode) {
+		userDefaults.set(wizardMode.rawValue, forKey: "wizardCalculationMode")
+	}
+	
 }

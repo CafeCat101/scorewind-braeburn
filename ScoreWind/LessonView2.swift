@@ -38,6 +38,12 @@ struct LessonView2: View {
 					.labelStyle(.iconOnly)
 					.font(.title)
 					.onTapGesture {
+						let totalCompleted:Double = Double(studentData.getTotalCompletedLessonCount())
+						let checkCompletedLessonStatus:Double = totalCompleted/5
+						if (checkCompletedLessonStatus - checkCompletedLessonStatus.rounded(.down)) == 0 && checkCompletedLessonStatus > 0.0  {
+							studentData.updateWizardMode(wizardMode: .explore)
+						}
+						
 						showLessonView = false
 					}
 					.padding(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 8))
