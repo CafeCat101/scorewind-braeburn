@@ -7,6 +7,7 @@
 
 import SwiftUI
 import WebKit
+import StoreKit
 
 struct CourseView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
@@ -27,6 +28,8 @@ struct CourseView: View {
 	@State private var tipContent:AnyView = AnyView(Text("Tip"))
 	@State private var userDefaults = UserDefaults.standard
 	@Binding var showLessonView:Bool
+	@State private var showStore = false
+	@EnvironmentObject var store: Store
 	
 	var body: some View {
 		if scorewindData.currentCourse.id > 0 {
@@ -342,7 +345,30 @@ struct CourseView: View {
 						.foregroundColor(Color("AppYellow"))
 				}
 				Spacer()
+				if store.purchasedSubscriptions.isEmpty {
+					Group {
+						Spacer()
+						Text("View and subscribe to a Study Plan")
+							.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
+							.foregroundColor(Color("LessonListStatusIcon"))
+							.background(Color("AppYellow"))
+							.cornerRadius(26)
+							.onTapGesture {
+								showStore = true
+							}
+						Spacer()
+					}
+				}
+				
 			}
+			.modifier(storeViewCover(showStore: $showStore))
+			.onAppear(perform: {
+				if store.purchasedSubscriptions.isEmpty {
+					DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+						showStore = true
+					}
+				}
+			})
 		}
 		
 	}
@@ -605,6 +631,20 @@ struct CourseView: View {
 				content
 			}
 			
+		}
+	}
+	
+	struct storeViewCover: ViewModifier {
+		@EnvironmentObject var store: Store
+		@Binding var showStore:Bool
+		func body(content: Content) -> some View {
+			if !store.purchasedSubscriptions.isEmpty {
+				content
+			} else {
+				content.fullScreenCover(isPresented: $showStore, content: {
+					StoreView(showStore: $showStore)
+				})
+			}
 		}
 	}
 	

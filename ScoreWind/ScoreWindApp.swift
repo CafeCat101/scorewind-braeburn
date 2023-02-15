@@ -11,11 +11,13 @@ import SwiftUI
 struct ScoreWindApp: App {
 	@StateObject var scorewindData = ScorewindData()
 	@StateObject var downloadManager = DownloadManager()
+	@StateObject var store: Store = Store()
 	
 	var body: some Scene {
 		WindowGroup {
 			HomeView(downloadManager: downloadManager)
 				.environmentObject(scorewindData)
+				.environmentObject(store)
 		}
 	}
 }

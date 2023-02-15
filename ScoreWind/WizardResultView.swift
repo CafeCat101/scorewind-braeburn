@@ -58,8 +58,8 @@ struct WizardResultView: View {
 					}
 				}
 				.onTapGesture {
+					print("[debug] WizardResultView, lesson.onTapGesture")
 					scorewindData.currentCourse = scorewindData.wizardPickedCourse
-					
 					scorewindData.currentLesson = scorewindData.wizardPickedLesson
 					scorewindData.setCurrentTimestampRecs()
 					scorewindData.lastPlaybackTime = 0.0

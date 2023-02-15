@@ -15,156 +15,105 @@ struct HomeView: View {
 	@StateObject var studentData = StudentData()
 	@State private var userDefaults = UserDefaults.standard
 	@State private var showLessonView = false
+	@EnvironmentObject var store:Store
 	
 	var body: some View {
-		if scorewindData.currentView != Page.lessonFullScreen {
-			TabView(selection: $selectedTab) {
-				WizardView(selectedTab: $selectedTab, studentData: studentData, showLessonView: $showLessonView, downloadManager: downloadManager)
-					.tabItem {
-						Image(systemName: "eyes")
-						Text("Wizard")
-					}.tag("TWizard")
-				
-				CourseView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData, showLessonView: $showLessonView)
-					.tabItem {
-						Image(systemName: "note.text")
-						Text("Course")
-					}.tag("TCourse")
-				/*if scorewindData.currentLesson.id > 0 {
-					LessonView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData)
-						.tabItem {
-							Image(systemName: "note")
-							Text("Lesson")
-						}.tag("TLesson")
-				} else {
-					BlankTabView(message: "ScoreWind remembers the lesson you visit last time in the course.\nYou can find lessons in this course from lesson list in the Course Tab. When you tab the lesson title, you'll also be able to switch lesson from the menu there.")
-						.tabItem {
-							Image(systemName: "note")
-							Text("Lesson")
-						}.tag("TLesson")
-				}*/
-				
-				MyCoursesView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData)
-					.tabItem {
-						Image(systemName: "music.note.list")
-						Text("My Courses")
-					}.tag("TMyCourses")
+		TabView(selection: $selectedTab) {
+			WizardView(selectedTab: $selectedTab, studentData: studentData, showLessonView: $showLessonView, downloadManager: downloadManager)
+				.tabItem {
+					Image(systemName: "eyes")
+					Text("Wizard")
+				}.tag("TWizard")
+			
+			CourseView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData, showLessonView: $showLessonView)
+				.tabItem {
+					Image(systemName: "note.text")
+					Text("Course")
+				}.tag("TCourse")
+
+			MyCoursesView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData)
+				.tabItem {
+					Image(systemName: "music.note.list")
+					Text("My Courses")
+				}.tag("TMyCourses")
+		}
+		.ignoresSafeArea()
+		.onAppear{
+			//==>>>> app is launched...
+			print("[debug] HomeView, onAppear")
+			if downloadManager.appState == .background {
+				//hide codes here so it won't be triggered when switching full lesson screen view to tab view
+				print("[debug] HomeView, tabview, downloadManager.appState=background")
+				setupDataObjects()
+				activateDownloadVideoXML()
+				studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 			}
-			.ignoresSafeArea()
-			.onAppear{
-				//==>>>> app is launched...
-				print("[debug] HomeView, onAppear")
+			downloadManager.appState = .active
+			
+			let lastViewedCourseID:Int = userDefaults.object(forKey: "lastViewedCourse") as? Int ?? 0
+			if lastViewedCourseID > 0 {
+				scorewindData.currentCourse = scorewindData.allCourses.first(where: {$0.id == lastViewedCourseID}) ?? Course()
+			}
+			let lastViewedLessonID:Int = userDefaults.object(forKey: "lastViewedLesson") as? Int ?? 0
+			if lastViewedLessonID > 0 {
+				scorewindData.currentLesson = scorewindData.currentCourse.lessons.first(where: {$0.id == lastViewedLessonID}) ?? Lesson()
+				scorewindData.setCurrentTimestampRecs()
+				scorewindData.lastPlaybackTime = 0.0
+			}
+			//<<<<==
+		}
+		.onChange(of: scenePhase, perform: { newPhase in
+			if newPhase == .active {
+				print("[deubg] HomeView, app is active")
 				if downloadManager.appState == .background {
-					//hide codes here so it won't be triggered when switching full lesson screen view to tab view
 					print("[debug] HomeView, tabview, downloadManager.appState=background")
-					setupDataObjects()
 					activateDownloadVideoXML()
 					studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 				}
 				downloadManager.appState = .active
-				
-				let lastViewedCourseID:Int = userDefaults.object(forKey: "lastViewedCourse") as? Int ?? 0
-				if lastViewedCourseID > 0 {
-					scorewindData.currentCourse = scorewindData.allCourses.first(where: {$0.id == lastViewedCourseID}) ?? Course()
+			} else if newPhase == .inactive {
+				print("[debug] HomeView, appp is inactive")
+			} else if newPhase == .background {
+				print("[debug] HomeView, app is in the background")
+				downloadManager.appState = .background
+				if (scorewindData.currentLesson.scorewindID > 0) && (scorewindData.lastPlaybackTime >= 10) {
+					print("[debug] HomeView.onChange, .background lastPlayBackTime>=10")
+					studentData.updateWatchedLessons(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, addWatched: true)
+					studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+					studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 				}
-				let lastViewedLessonID:Int = userDefaults.object(forKey: "lastViewedLesson") as? Int ?? 0
-				if lastViewedLessonID > 0 {
-					scorewindData.currentLesson = scorewindData.currentCourse.lessons.first(where: {$0.id == lastViewedLessonID}) ?? Lesson()
-					scorewindData.setCurrentTimestampRecs()
-					scorewindData.lastPlaybackTime = 0.0
-				}
-				//<<<<==
 			}
-			.onChange(of: scenePhase, perform: { newPhase in
-				if newPhase == .active {
-					print("[deubg] HomeView, app is active")
-					if downloadManager.appState == .background {
-						print("[debug] HomeView, tabview, downloadManager.appState=background")
-						activateDownloadVideoXML()
-						studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
-					}
-					downloadManager.appState = .active
-				} else if newPhase == .inactive {
-					print("[debug] HomeView, appp is inactive")
-				} else if newPhase == .background {
-					print("[debug] HomeView, app is in the background")
-					downloadManager.appState = .background
-					if (scorewindData.currentLesson.scorewindID > 0) && (scorewindData.lastPlaybackTime >= 10) {
-						print("[debug] HomeView.onChange, .background lastPlayBackTime>=10")
-						studentData.updateWatchedLessons(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, addWatched: true)
-						studentData.updateMyCourses(allCourses: scorewindData.allCourses)
-						studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
-					}
+		})
+		.onChange(of: selectedTab, perform: { newValue in
+			print("[deubg] HomeView, onChange selectedTab\(selectedTab)")
+			if newValue == "TCourse" {
+				if hasAccessToCourses() == false {
+					scorewindData.currentCourse = Course()
+					scorewindData.currentLesson = Lesson()
+					scorewindData.currentTimestampRecs.removeAll()
 				}
-			})
-			.onChange(of: selectedTab, perform: { newValue in
-				if newValue == "TLesson" && scorewindData.currentLesson.content.isEmpty == false {
-					print("\(studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id))")
-					print("\(studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id))")
-					print("\(scorewindData.currentLesson.scorewindID)")
-				}
-			})
-			.onReceive(downloadManager.downloadTaskPublisher, perform: { clonedDownloadList in
-				print("[deubg] HomeView,onRecieve, downloadTaskPublisher:\(clonedDownloadList.count)")
-				
-				/*for courseID in clonedDownloadList {
-					print("[debug] HomeView, onRecieve - \(courseID)")
-				}*/
-				if downloadManager.compareDownloadList(downloadTargets: clonedDownloadList) == false {
-					print("[deubg] HomeView, onRecieve, cloned and original are different, call downloadXMLVideo")
-					Task {
-						print("[debug] HomeView, onRecieve, Task:downloadVideoXML")
-						do {
-							try await downloadManager.downloadVideos(allCourses: scorewindData.allCourses)
-						} catch {
-							print("[debug] HomeView, onRecieve, Task:downloadVideoXML, catch, \(error)")
-						}
-					}
-				}
-			})
-		} else {
-			/*
-			if scorewindData.currentView == Page.lessonFullScreen {
-				LessonView(downloadManager: downloadManager)
-					.onChange(of: scenePhase, perform: { newPhase in
-						if newPhase == .active {
-							print("[debug] LessonView, app is active")
-							if downloadManager.appState == .background {
-								print("[debug] LessonView, tabview, downloadManager.appState=background")
-								activateDownloadVideoXML()
-							}
-							downloadManager.appState = .active
-						} else if newPhase == .inactive {
-							print("[debug] LessonView, appp is inactive")
-						} else if newPhase == .background {
-							print("[debug] LessonView, app is in the background")
-							downloadManager.appState = .background
-							if (scorewindData.currentLesson.scorewindID > 0) && (scorewindData.lastPlaybackTime >= 0.10) {
-								scorewindData.studentData.updateWatchedLessons(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, addWatched: true)
-							}
-						}
-					})
-					.onReceive(downloadManager.downloadTaskPublisher, perform: { clonedDownloadList in
-						print("[deubg] LessonView, onRecieve, downloadTaskPublisher:\(clonedDownloadList.count)")
-						for courseID in clonedDownloadList {
-							print("[debug] LessonView, onRecieve - \(courseID)")
-						}
-						if downloadManager.compareDownloadList(downloadTargets: clonedDownloadList) == false {
-							print("[deubg] LessonView, onRecieve, cloned and original are different, call downloadXMLVideo")
-							Task {
-								print("[debug] LessonView, onRecieve, Task:downloadVideoXML")
-								do {
-									try await downloadManager.downloadVideos(allCourses: scorewindData.allCourses)
-								} catch {
-									print("[debug] LessonView, onRecieve, Task:downloadVideoXML, catch, \(error)")
-								}
-							}
-						}
-					})
-					.ignoresSafeArea(.all, edges: .bottom)
+				print("[deubg] HomeView, onChange of selectedTab, TCourse")
 			}
-			 */
-		}
+		})
+		.onReceive(downloadManager.downloadTaskPublisher, perform: { clonedDownloadList in
+			print("[deubg] HomeView,onRecieve, downloadTaskPublisher:\(clonedDownloadList.count)")
+			
+			/*for courseID in clonedDownloadList {
+			 print("[debug] HomeView, onRecieve - \(courseID)")
+			 }*/
+			if downloadManager.compareDownloadList(downloadTargets: clonedDownloadList) == false {
+				print("[deubg] HomeView, onRecieve, cloned and original are different, call downloadXMLVideo")
+				Task {
+					print("[debug] HomeView, onRecieve, Task:downloadVideoXML")
+					do {
+						try await downloadManager.downloadVideos(allCourses: scorewindData.allCourses)
+					} catch {
+						print("[debug] HomeView, onRecieve, Task:downloadVideoXML, catch, \(error)")
+					}
+				}
+			}
+		})
+		
 	}
 	
 	private func activateDownloadVideoXML() {
@@ -185,6 +134,14 @@ struct HomeView: View {
 		scorewindData.initiateTimestampsFromLocal()
 		scorewindData.initiateCoursesFromLocal()
 		studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+	}
+	
+	private func hasAccessToCourses() -> Bool {
+		if !store.purchasedSubscriptions.isEmpty {
+			return true
+		} else {
+			return false
+		}
 	}
 }
 
