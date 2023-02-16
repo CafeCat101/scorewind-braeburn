@@ -131,9 +131,36 @@ class Store: ObservableObject {
 		subscriptionGroupStatus = try? await subscriptions.first?.subscription?.status.first?.state
 	}
 	
+	func purchase(_ product: Product) async throws -> Transaction? {
+			//Begin purchasing the `Product` the user selects.
+			let result = try await product.purchase()
+
+			switch result {
+			case .success(let verification):
+					//Check whether the transaction is verified. If it isn't,
+					//this function rethrows the verification error.
+					let transaction = try checkVerified(verification)
+
+					//The transaction is verified. Deliver content to the user.
+					await updateCustomerProductStatus()
+
+					//Always finish a transaction.
+					await transaction.finish()
+
+					return transaction
+			case .userCancelled, .pending:
+					return nil
+			default:
+					return nil
+			}
+	}
 	
-	
-	
-	
-	
+	func isPurchased(_ product: Product) async throws -> Bool {
+			//Determine whether the user purchases a given product.
+		if product.type == .autoRenewable {
+			return purchasedSubscriptions.contains(product)
+		} else {
+			return false
+		}
+	}
 }

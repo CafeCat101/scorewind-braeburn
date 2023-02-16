@@ -11,6 +11,8 @@ import StoreKit
 struct StoreView: View {
 	@EnvironmentObject var store:Store
 	@Binding var showStore:Bool
+	@State var isPurchased: Bool = false
+	
 	var body: some View {
 		VStack {
 			HStack {
@@ -23,8 +25,18 @@ struct StoreView: View {
 						showStore = false
 					}
 			}
+			Text("A Study Plan").font(.title)
 			Text("This is the place where you subscribe scorewind")
+			ForEach(store.subscriptions) { product in
+				BuyItemView(product: product)
+			}
 			Spacer()
+		}
+		.onAppear {
+			Task {
+					//When this view appears, get the latest subscription status.
+				await store.updateCustomerProductStatus()
+			}
 		}
 	}
 }

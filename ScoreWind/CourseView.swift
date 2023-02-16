@@ -641,7 +641,7 @@ struct CourseView: View {
 			if !store.purchasedSubscriptions.isEmpty {
 				content
 			} else {
-				content.fullScreenCover(isPresented: $showStore, content: {
+				content.sheet(isPresented: $showStore, content: {
 					StoreView(showStore: $showStore)
 				})
 			}
