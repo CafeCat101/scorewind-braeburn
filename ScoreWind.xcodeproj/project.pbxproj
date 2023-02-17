@@ -268,6 +268,7 @@
 				C85F27A9287A7C9C00D0A4E5 /* Info.plist */,
 				C87CF1232978365400CDA215 /* BackgroundTransparentView.swift */,
 				C85F279B2871846200D0A4E5 /* BlankTabView.swift */,
+				C86F8823299DF34A0072504E /* BuyItemView.swift */,
 				C878275828E88B8E0007DDC1 /* CourseDownloadButtonView.swift */,
 				C878275628E8861C0007DDC1 /* CourseLessonListItemView.swift */,
 				C85F275E286F4F2E00D0A4E5 /* CourseView.swift */,
@@ -302,7 +303,6 @@
 				C85F272F286F4C2C00D0A4E5 /* Preview Content */,
 				C87CF1222977B5FA00CDA215 /* Tips */,
 				C85F2798286F5A4E00D0A4E5 /* Types */,
-				C86F8823299DF34A0072504E /* BuyItemView.swift */,
 			);
 			path = ScoreWind;
 			sourceTree = "<group>";
@@ -356,19 +356,19 @@
 		C878276F290511430007DDC1 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				C85F2768286F4F2E00D0A4E5 /* ScorewindData.swift */,
-				C85F2769286F4F2E00D0A4E5 /* StudentData.swift */,
 				C85F2770286F4F2E00D0A4E5 /* DownloadManager.swift */,
 				C85F276F286F4F2E00D0A4E5 /* FileManager.swift */,
+				C8E063EF28B0E20E000B3D67 /* MyCourse.swift */,
+				C85F2768286F4F2E00D0A4E5 /* ScorewindData.swift */,
+				C86F881F299AAE370072504E /* Store.swift */,
+				C85F2769286F4F2E00D0A4E5 /* StudentData.swift */,
 				C85F2764286F4F2E00D0A4E5 /* ViewModel.swift */,
 				C878277029054B380007DDC1 /* WizardCalculator.swift */,
-				C8E063EF28B0E20E000B3D67 /* MyCourse.swift */,
-				C8CA57A32936F8D90097AE07 /* WizardPicked.swift */,
-				C87CF11E296FE84600CDA215 /* WizardLessonSearched.swift */,
-				C87CF12B297C42A700CDA215 /* WizardLearningPathItem.swift */,
-				C87CF12D297C487A00CDA215 /* WizardResult.swift */,
 				C87CF12F297C4C9F00CDA215 /* WizardCalculatorHelper.swift */,
-				C86F881F299AAE370072504E /* Store.swift */,
+				C87CF12B297C42A700CDA215 /* WizardLearningPathItem.swift */,
+				C87CF11E296FE84600CDA215 /* WizardLessonSearched.swift */,
+				C8CA57A32936F8D90097AE07 /* WizardPicked.swift */,
+				C87CF12D297C487A00CDA215 /* WizardResult.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";

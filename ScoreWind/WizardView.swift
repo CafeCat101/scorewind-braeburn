@@ -106,7 +106,9 @@ struct WizardView: View {
 						DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
 							withAnimation{
 								showViewTitle = true
-								showProgress = false
+								if stepName == .wizardResult {
+									showProgress = false
+								}
 							}
 						}
 					}
@@ -160,7 +162,7 @@ struct WizardView: View {
 				} else {
 					RoundedRectangle(cornerRadius: 5)
 						.foregroundColor(Color("AppYellow"))
-						.frame(width:totalWidth*(Double(studentData.wizardRange.count)/10.0),height:10)
+						.frame(width: (totalWidth*0.95)*(Double(studentData.wizardRange.count)/10.0),height:10)
 				}
 			})
 	}

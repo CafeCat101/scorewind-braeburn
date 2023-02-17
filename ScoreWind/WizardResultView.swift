@@ -191,9 +191,9 @@ struct WizardResultView: View {
 			.font(.headline)
 			.modifier(StepExplainingText())
 			VStack(alignment:.leading) {
-				Text("You can always restart the wizard again by click the \(Image(systemName: "goforward")) button in the top left corner.")
+				Text("You can always ask ScoreWind again by click the \(Image(systemName: "goforward")) button in the top left corner.")
 					.modifier(TipExplainingParagraph())
-				Text("Your last result is also saved, so you can revisit it whenever you want.")
+				Text("Your last learning path ScoreWind found will be saved here, you can revisit it whenever you like.")
 					.modifier(TipExplainingParagraph())
 			}.padding([.bottom], 18)
 		}.background {

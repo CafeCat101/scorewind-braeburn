@@ -111,7 +111,7 @@ struct MyCoursesView: View {
 							Text("Look at my last viewed course and lesson now.")
 								.padding(15)
 						} else {
-							Text(studentData.wizardResult.learningPath.count == 0 ? "Ask wizard for a course or a lesson now.":"See the course and the lesson Wizard found last time.")
+							Text(studentData.wizardResult.learningPath.count == 0 ? "Ask ScoreWind for a course or a lesson now.":"See the course and the lesson ScoreWind found last time.")
 								.padding(15)
 						}
 						

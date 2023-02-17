@@ -20,7 +20,7 @@ struct WizardResult: Codable {
 	init() {
 		id = UUID()
 		resultTitle = "Discovered a lesson!"
-		resultExplaination = "You've completed the wizard. Scorewind found a lesson for you."
+		resultExplaination = "You've completed the configuration. ScoreWind found a lesson for you."
 		learningPathTitle = "Your learning path"
 		learningPathExplaination = "These are some lessons that await for you to complete them."
 		learningPath = []
