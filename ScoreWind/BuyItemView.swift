@@ -32,11 +32,12 @@ struct BuyItemView: View {
 				if product.subscription?.introductoryOffer?.period.value ?? 0 > 0 {
 					Text(getIntroductionLabelText(product:product))
 				}
-				Text("then...")
 			}
 			Spacer()
 			buyButton
-		}.padding([.leading,.trailing],15)
+		}
+		.padding([.leading,.trailing],15)
+		.padding([.bottom],10)
 	}
 	
 	var buyButton: some View {
@@ -111,7 +112,7 @@ struct BuyItemView: View {
 	private func getIntroductionLabelText(product: Product) -> String {
 		let value = product.subscription?.introductoryOffer?.period.value ?? 0
 		let unitFriendlyName = getFriendlyPeriodName(product.subscription!, isIntroduction: true)
-		return "Free trial \(value) \(unitFriendlyName)"
+		return "Includs free trial \(value) \(unitFriendlyName)"
 	}
 	
 	func buy() async {

@@ -24,9 +24,9 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "5.99",
+          "displayPrice" : "6",
           "familyShareable" : true,
-          "groupNumber" : 1,
+          "groupNumber" : 2,
           "internalID" : "88F9559A",
           "introductoryOffer" : {
             "internalID" : "8A6EAF36",
@@ -43,6 +43,35 @@
           "productID" : "subscription.standard",
           "recurringSubscriptionPeriod" : "P1M",
           "referenceName" : "Standard",
+          "subscriptionGroupID" : "C65AFA9A",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "12",
+          "familyShareable" : true,
+          "groupNumber" : 1,
+          "internalID" : "33F5F208",
+          "introductoryOffer" : {
+            "internalID" : "33137AF5",
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1M"
+          },
+          "localizations" : [
+            {
+              "description" : "Full access to all courses and lessons",
+              "displayName" : "Silver",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "subscription.silver",
+          "recurringSubscriptionPeriod" : "P3M",
+          "referenceName" : "Silver",
           "subscriptionGroupID" : "C65AFA9A",
           "type" : "RecurringSubscription"
         }

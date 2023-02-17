@@ -25,8 +25,10 @@ struct StoreView: View {
 						showStore = false
 					}
 			}
-			Text("A Study Plan").font(.title)
-			Text("This is the place where you subscribe scorewind")
+			Text("Your Study Plan")
+				.font(.title)
+				.padding([.bottom],30)
+			//Text("This is the place where you subscribe scorewind")
 			ForEach(store.subscriptions) { product in
 				BuyItemView(product: product)
 			}

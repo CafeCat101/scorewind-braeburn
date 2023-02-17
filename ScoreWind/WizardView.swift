@@ -18,6 +18,7 @@ struct WizardView: View {
 	@Binding var showLessonView:Bool
 	@ObservedObject var downloadManager:DownloadManager
 	@State private var showViewTitle = true
+	@Binding var showStore:Bool
 	
 	var body: some View {
 		VStack {
@@ -65,6 +66,9 @@ struct WizardView: View {
 							userRole = .student
 						}
 					})
+					Button(action: {
+						showStore = true
+					}, label: {Text("My subscription")})
 				} label: {
 					Label("ScoreWind", systemImage: "gear")
 						.font(.title3)
@@ -189,8 +193,8 @@ struct WizardView_Previews: PreviewProvider {
 	@State static var tab = "THome"
 	static var previews: some View {
 		Group {
-			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager()).environmentObject(ScorewindData())
-			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager()).environmentObject(ScorewindData()).environment(\.colorScheme, .dark)
+			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), showStore: .constant(false)).environmentObject(ScorewindData())
+			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), showStore: .constant(false)).environmentObject(ScorewindData()).environment(\.colorScheme, .dark)
 		}
 		
 	}

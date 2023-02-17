@@ -361,7 +361,7 @@ struct CourseView: View {
 				}
 				
 			}
-			.modifier(storeViewCover(showStore: $showStore))
+			.modifier(storeViewCover(showStore: $showStore, selectedTab: $selectedTab))
 			.onAppear(perform: {
 				if store.purchasedSubscriptions.isEmpty {
 					DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -631,20 +631,6 @@ struct CourseView: View {
 				content
 			}
 			
-		}
-	}
-	
-	struct storeViewCover: ViewModifier {
-		@EnvironmentObject var store: Store
-		@Binding var showStore:Bool
-		func body(content: Content) -> some View {
-			if !store.purchasedSubscriptions.isEmpty {
-				content
-			} else {
-				content.sheet(isPresented: $showStore, content: {
-					StoreView(showStore: $showStore)
-				})
-			}
 		}
 	}
 	

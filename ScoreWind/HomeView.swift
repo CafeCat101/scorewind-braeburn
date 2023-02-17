@@ -16,10 +16,11 @@ struct HomeView: View {
 	@State private var userDefaults = UserDefaults.standard
 	@State private var showLessonView = false
 	@EnvironmentObject var store:Store
+	@State private var showStore = false
 	
 	var body: some View {
 		TabView(selection: $selectedTab) {
-			WizardView(selectedTab: $selectedTab, studentData: studentData, showLessonView: $showLessonView, downloadManager: downloadManager)
+			WizardView(selectedTab: $selectedTab, studentData: studentData, showLessonView: $showLessonView, downloadManager: downloadManager, showStore: $showStore)
 				.tabItem {
 					Image(systemName: "music.note.house")
 					Text("Home")
@@ -38,6 +39,7 @@ struct HomeView: View {
 				}.tag("TMyCourses")
 		}
 		.ignoresSafeArea()
+		.modifier(storeViewCover(showStore: $showStore, selectedTab: $selectedTab))
 		.onAppear{
 			//==>>>> app is launched...
 			print("[debug] HomeView, onAppear")
@@ -145,6 +147,27 @@ struct HomeView: View {
 	}
 }
 
+struct storeViewCover: ViewModifier {
+	@EnvironmentObject var store: Store
+	@Binding var showStore:Bool
+	@Binding var selectedTab: String
+	
+	func body(content: Content) -> some View {
+		if !store.purchasedSubscriptions.isEmpty {
+			if selectedTab == "TCourse" {
+				content
+			} else {
+				content.sheet(isPresented: $showStore, content: {
+					StoreView(showStore: $showStore)
+				})
+			}
+		} else {
+			content.sheet(isPresented: $showStore, content: {
+				StoreView(showStore: $showStore)
+			})
+		}
+	}
+}
 
 struct HomeView_Previews: PreviewProvider {
 	static var previews: some View {

@@ -21,7 +21,7 @@ class Store: ObservableObject {
 	@Published private(set) var purchasedSubscriptions: [Product] = []
 	@Published private(set) var subscriptionGroupStatus: RenewalState?
 	var updateListenerTask: Task<Void, Error>? = nil
-	private let productIDs:[String] = ["subscription.standard"]
+	private let productIDs:[String] = ["subscription.standard","subscription.silver"]
 
 	init() {
 		//Initialize empty products, and then do a product request asynchronously to fill them in.
@@ -102,18 +102,20 @@ class Store: ObservableObject {
 	
 	@MainActor
 	func updateCustomerProductStatus() async {
+		print("[debug] Store, updateCustomerProductStatus()")
 		var purchasedSubscriptions: [Product] = []
-		
 		//Iterate through all of the user's purchased products.
 		for await result in Transaction.currentEntitlements {
+			print("[debug] Store, updateCustomerProductStatus result in currentEntitlements")
 			do {
 				//Check whether the transaction is verified. If it isn’t, catch `failedVerification` error.
 				let transaction = try checkVerified(result)
-				
+				print("[debug] Store, updateCustomerProductStatus, transaction.productID \(transaction.productID)")
 				//Check the `productType` of the transaction and get the corresponding product from the store.
 				if transaction.productType == .autoRenewable {
 					if let subscription = subscriptions.first(where: { $0.id == transaction.productID }) {
 						purchasedSubscriptions.append(subscription)
+						print("[debug] Store, updateCustomerProductStatus .autoRenewable corresponding product \(subscription.displayName)")
 					}
 				}
 			} catch {
