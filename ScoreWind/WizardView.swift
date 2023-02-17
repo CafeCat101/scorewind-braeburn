@@ -17,94 +17,84 @@ struct WizardView: View {
 	@State private var showProgress = true
 	@Binding var showLessonView:Bool
 	@ObservedObject var downloadManager:DownloadManager
+	@State private var showViewTitle = true
 	
 	var body: some View {
 		VStack {
-			/*
-			Label("Scorewind (\(userRole))", systemImage: "music.note")
-				.labelStyle(.titleAndIcon)
-				.contextMenu {
-					Button(action: {
-						userRole = "student"
-					}){
-						Label("I'm a student", systemImage: "face.smiling")
-							.labelStyle(.titleAndIcon)
-					}
-					Button(action: {
-						userRole = "teacher"
-					}){
-						Label("Teachers only", systemImage: "brain.head.profile")
-							.labelStyle(.titleAndIcon)
-					}
-				}*/
 			HStack {
+				if (stepName != .wizardChooseInstrument || stepName == .wizardResult) && studentData.playableViewVideoOnly && userRole == .student {
+					Label("Restart", systemImage: "goforward")
+						.font(.title3)
+						.labelStyle(.iconOnly)
+						.foregroundColor(Color("AppBlackDynamic"))
+						.onTapGesture(perform: {
+							//:: restart learning path configuration
+							studentData.wizardStepNames.removeAll()
+							stepName = Page.wizardChooseInstrument
+						})
+				}
 				Spacer()
-				Label("Wizard", systemImage: "music.note")
-					.labelStyle(.titleOnly)
-					.foregroundColor(Color("AppBlackDynamic"))
-					.onTapGesture(count:3, perform: {
+				if showViewTitle {
+					Label("ScoreWind", systemImage: "music.note")
+						.labelStyle(.titleOnly)
+						.foregroundColor(Color("AppBlackDynamic"))
+						.onTapGesture(count:3, perform: {
+							if userRole == .student {
+								userRole = .teacher
+							} else {
+								userRole = .student
+							}
+						})
+				}
+				if showProgress {
+					GeometryReader { (proxy: GeometryProxy) in
+						HStack {
+							wizardProgressView(barWidth: proxy.size.width)
+						}.onAppear(perform: {
+							print("[debug] showProgress, screensize.size.width \(screenSize.width)")
+							print("[debug] showProgress, proxy.size.width \(proxy.size.width)")
+						})
+					}.frame(height:10)
+				}
+				Spacer()
+				Menu {
+					Button("Switch role", action: {
 						if userRole == .student {
 							userRole = .teacher
 						} else {
 							userRole = .student
 						}
 					})
-					/*.contextMenu {
-						Button(action: {
-							userRole = .student
-							stepName = .wizardChooseInstrument
-						}){
-							Label("I'm a student", systemImage: "face.smiling")
-								.labelStyle(.titleAndIcon)
-						}
-						Button(action: {
-							userRole = .teacher
-						}){
-							Label("Teachers only", systemImage: "brain.head.profile")
-								.labelStyle(.titleAndIcon)
-						}
-					}
-					.onTapGesture {
-						if studentData.wizardStepNames.count > 1 && studentData.playableViewVideoOnly && userRole == .student {
-							//back to instrument
-							studentData.wizardStepNames.removeAll()
-							stepName = Page.wizardChooseInstrument
-						}
-					}*/
-				if showProgress {
-					wizardProgressView()
-				}
-				
-				Spacer()
-			}
-			.overlay(alignment:.leading, content: {
-				//:: to navigate back
-				if (studentData.wizardStepNames.count > 1 || stepName == .wizardResult) && studentData.playableViewVideoOnly && userRole == .student {
-					Label("Restart", systemImage: "goforward")
-						.padding([.leading], 15)
+				} label: {
+					Label("ScoreWind", systemImage: "gear")
 						.font(.title3)
 						.labelStyle(.iconOnly)
-						.onTapGesture(perform: {
-							//back to instrument
-							studentData.wizardStepNames.removeAll()
-							stepName = Page.wizardChooseInstrument
-							/*
-							//one step back
-							studentData.wizardStepNames.removeLast()
-							print("[debug] WizardView, wizardStepNames \(studentData.wizardStepNames)")
-							stepName = studentData.wizardStepNames[(studentData.wizardStepNames.count-1)]
-							*/
-						})
-					
+						.foregroundColor(Color("AppBlackDynamic"))
 				}
-			})
+			}
 			.padding([.bottom], 5)
+			.padding([.leading,.trailing], 15)
+			
+			/*if showProgress {
+				HStack {
+					wizardProgressView()
+				}.padding([.bottom], 5)
+			}*/
 			
 			if userRole == .teacher {
 				WizardTeacherView(selectedTab: $selectedTab, studentData: studentData, downloadManager: downloadManager)
 			} else {
 				if stepName == .wizardChooseInstrument {
 					WizardInstrumentView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
+						.onAppear(perform: {
+							showViewTitle = true
+							showProgress = true
+							DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+								withAnimation{
+									showViewTitle = false
+								}
+							}
+						})
 				} else if stepName == .wizardExperience {
 					WizardExperienceView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
 				} else if stepName == .wizardDoYouKnow {
@@ -115,6 +105,7 @@ struct WizardView: View {
 					WizardResultView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData, showLessonView: $showLessonView).onAppear{
 						DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
 							withAnimation{
+								showViewTitle = true
 								showProgress = false
 							}
 						}
@@ -147,29 +138,30 @@ struct WizardView: View {
 	}
 	
 	@ViewBuilder
-	private func wizardProgressView() -> some View {
-		RoundedRectangle(cornerRadius: 4)
+	private func wizardProgressView(barWidth: CGFloat) -> some View {
+		let totalWidth = barWidth
+		//totalWidth = screenSize.width*0.4
+		RoundedRectangle(cornerRadius: 5)
 			.foregroundColor(.gray)
-			.frame(width:screenSize.width*0.6+10,height:10)
+			.frame(width:totalWidth,height:10)
 			.overlay(alignment:.leading,content: {
 				if stepName == .wizardChooseInstrument {
-					RoundedRectangle(cornerRadius: 4)
+					RoundedRectangle(cornerRadius: 5)
 						.foregroundColor(Color("AppYellow"))
-						.frame(width:screenSize.width*0.6*(0.3/10.0),height:10)
+						.frame(width:totalWidth*(0.3/10.0),height:10)
 				} else if stepName == .wizardExperience {
-					RoundedRectangle(cornerRadius: 4)
+					RoundedRectangle(cornerRadius: 5)
 						.foregroundColor(Color("AppYellow"))
-						.frame(width:screenSize.width*0.6*(0.8/10.0),height:10)
+						.frame(width:totalWidth*(0.8/10.0),height:10)
 				} else if stepName == .wizardResult {
-					RoundedRectangle(cornerRadius: 4)
+					RoundedRectangle(cornerRadius: 5)
 						.foregroundColor(Color("AppYellow"))
-						.frame(width:screenSize.width*0.6+10,height:10)
+						.frame(width:totalWidth,height:10)
 				} else {
-					RoundedRectangle(cornerRadius: 4)
+					RoundedRectangle(cornerRadius: 5)
 						.foregroundColor(Color("AppYellow"))
-						.frame(width:screenSize.width*0.6*(Double(studentData.wizardRange.count)/10.0),height:10)
+						.frame(width:totalWidth*(Double(studentData.wizardRange.count)/10.0),height:10)
 				}
-				
 			})
 	}
 
@@ -192,7 +184,7 @@ struct TipExplainingParagraph: ViewModifier {
 }
 
 struct WizardView_Previews: PreviewProvider {
-	@State static var tab = "TWizard"
+	@State static var tab = "THome"
 	static var previews: some View {
 		Group {
 			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager()).environmentObject(ScorewindData())

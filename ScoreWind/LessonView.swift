@@ -326,7 +326,7 @@ struct LessonView: View {
 				Text("Ask wizard for a lesson now.")
 					.padding(15)
 				Button(action: {
-					selectedTab = "TWizard"
+					selectedTab = "THome"
 				}, label: {
 					Text("Start").frame(minWidth:150)
 				})

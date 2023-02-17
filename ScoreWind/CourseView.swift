@@ -328,13 +328,13 @@ struct CourseView: View {
 			})
 		} else {
 			VStack {
-				Label("Scorewind", systemImage: "music.note")
+				Label("Course", systemImage: "music.note")
 					.labelStyle(.titleAndIcon)
 				Spacer()
 				Text(studentData.wizardResult.learningPath.count == 0 ? "Ask wizard for a course or a lesson now.":"See the course and the lesson Wizard found last time.")
 					.padding(15)
 				Button(action: {
-					selectedTab = "TWizard"
+					selectedTab = "THome"
 				}, label: {
 					Text("Start").frame(minWidth:150)
 				})

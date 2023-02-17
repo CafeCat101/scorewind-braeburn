@@ -280,7 +280,7 @@ struct FeedbackOptionsModifier: ViewModifier {
 }
 
 struct WizardPlayable_Previews: PreviewProvider {
-	@State static var tab = "TWizard"
+	@State static var tab = "THome"
 	@State static var step:Page = .wizardPlayable
 	
 	static var previews: some View {

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
-	@State private var selectedTab = "TWizard"
+	@State private var selectedTab = "THome"
 	@ObservedObject var downloadManager: DownloadManager
 	@Environment(\.scenePhase) var scenePhase
 	@StateObject var studentData = StudentData()
@@ -21,9 +21,9 @@ struct HomeView: View {
 		TabView(selection: $selectedTab) {
 			WizardView(selectedTab: $selectedTab, studentData: studentData, showLessonView: $showLessonView, downloadManager: downloadManager)
 				.tabItem {
-					Image(systemName: "eyes")
-					Text("Wizard")
-				}.tag("TWizard")
+					Image(systemName: "music.note.house")
+					Text("Home")
+				}.tag("THome")
 			
 			CourseView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData, showLessonView: $showLessonView)
 				.tabItem {

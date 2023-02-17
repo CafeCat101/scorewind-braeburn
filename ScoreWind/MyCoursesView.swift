@@ -119,7 +119,7 @@ struct MyCoursesView: View {
 							if scorewindData.currentCourse.id > 0 {
 								selectedTab = "TCourse"
 							} else {
-								selectedTab = "TWizard"
+								selectedTab = "THome"
 							}
 						}, label: {
 							Text("Start").frame(minWidth:150)

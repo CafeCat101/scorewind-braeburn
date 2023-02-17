@@ -206,7 +206,7 @@ struct WizardResultView: View {
 
 
 struct WizardResult_Previews: PreviewProvider {
-	@State static var tab = "TWizard"
+	@State static var tab = "THome"
 	@State static var step:Page = .wizardResult
 	
 	static var previews: some View {

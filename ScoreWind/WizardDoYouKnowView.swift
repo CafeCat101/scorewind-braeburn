@@ -98,7 +98,7 @@ struct WizardDoYouKnowView: View {
 }
 
 struct WizardDoYouKnow_Previews: PreviewProvider {
-	@State static var tab = "TWizard"
+	@State static var tab = "THome"
 	@State static var step:Page = .wizardDoYouKnow
 	
 	static var previews: some View {

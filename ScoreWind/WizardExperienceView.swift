@@ -122,7 +122,7 @@ struct WizardExperienceView: View {
 }
 
 struct WizardExperienceView_Previews: PreviewProvider {
-	@State static var tab = "TWizard"
+	@State static var tab = "THome"
 	@State static var step:Page = .wizardChooseInstrument
 	static var previews: some View {
 		WizardExperienceView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())

@@ -74,6 +74,7 @@ struct WizardInstrumentView: View {
 				//studentData.removeAKey(keyName: "experience")
 				//studentData.removeAKey(keyName: "doYouKnow")
 				//studentData.removeAKey(keyName: "playable")
+				print("[debug] WizardInstrument, wizardStepNames \(studentData.wizardStepNames)")
 			}
 			
 		})
@@ -105,7 +106,7 @@ struct WizardInstrumentView: View {
 }
 
 struct WizardInstrument_Previews: PreviewProvider {
-	@State static var tab = "TWizard"
+	@State static var tab = "THome"
 	@State static var step:Page = .wizardChooseInstrument
 	static var previews: some View {
 		WizardInstrumentView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())

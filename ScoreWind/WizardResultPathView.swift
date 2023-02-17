@@ -133,7 +133,7 @@ struct WizardResultPathView: View {
 }
 
 struct WizardResultPathView_Previews: PreviewProvider {
-	@State static var tab = "TWizard"
+	@State static var tab = "THome"
 	@State static var step:Page = .wizardResult
 	@State static var wizardResult: WizardResult = WizardResult()
 	

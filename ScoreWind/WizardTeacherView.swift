@@ -311,7 +311,7 @@ struct WizardTeacherView: View {
 }
 
 struct WizardTeacherView_Previews: PreviewProvider {
-	@State static var tab = "TWizard"
+	@State static var tab = "THome"
 	static var previews: some View {
 		WizardTeacherView(selectedTab: $tab, studentData: StudentData(), downloadManager: DownloadManager()).environmentObject(ScorewindData())
 	}
