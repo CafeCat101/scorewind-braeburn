@@ -294,6 +294,8 @@ extension ScorewindData {
 			studentData.wizardResult.learningPath = setLearningPath(helper:helper, useStudentData: studentData)
 			studentData.wizardResult.learningPath = setLearningPath(helper:helper, useStudentData: studentData)
 			setWizardResultText(studentData: studentData, explainResult: explainResult)
+			
+			studentData.updateWizardResult(result: studentData.wizardResult)
 		}
 		
 		print("[debug] createRecommendation, goToWizardStep \(goToWizardStep)")
@@ -396,6 +398,8 @@ extension ScorewindData {
 		
 		studentData.wizardResult.learningPath = setLearningPath(helper:helper, useStudentData: studentData)
 		setWizardResultText(studentData: studentData, explainResult: explainResult)
+		
+		studentData.updateWizardResult(result: studentData.wizardResult)
 	}
 	
 	private func setWizardResultText(studentData: StudentData, explainResult: String) {

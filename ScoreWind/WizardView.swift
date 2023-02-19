@@ -11,7 +11,7 @@ struct WizardView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@Binding var selectedTab:String
 	@State private var userRole:UserRole = .student
-	@State private var stepName:Page = .wizardChooseInstrument
+	//@State private var stepName:Page = .wizardChooseInstrument
 	@ObservedObject var studentData:StudentData
 	let screenSize: CGRect = UIScreen.main.bounds
 	@State private var showProgress = true
@@ -19,6 +19,7 @@ struct WizardView: View {
 	@ObservedObject var downloadManager:DownloadManager
 	@State private var showViewTitle = true
 	@Binding var showStore:Bool
+	@Binding var stepName:Page
 	
 	var body: some View {
 		VStack {
@@ -30,6 +31,13 @@ struct WizardView: View {
 						.foregroundColor(Color("AppBlackDynamic"))
 						.onTapGesture(perform: {
 							//:: restart learning path configuration
+							studentData.resetWizrdChoice()
+							studentData.wizardRange.removeAll()
+							studentData.removeAKey(keyName: "wizardResult")
+							studentData.wizardResult = WizardResult()
+							scorewindData.wizardPickedCourse = Course()
+							scorewindData.wizardPickedLesson = Lesson()
+							scorewindData.wizardPickedTimestamps.removeAll()
 							studentData.wizardStepNames.removeAll()
 							stepName = Page.wizardChooseInstrument
 						})
@@ -126,7 +134,7 @@ struct WizardView: View {
 		}
 		.background(Color("AppBackground"))
 		.onAppear(perform: {			
-			print("[debug] WizardView, wizardStepNames \(studentData.wizardStepNames)")
+			print("[debug] WizardView, onAppear studentData.wizardResult.learningPath.count \(studentData.wizardResult.learningPath.count)")
 		})
 	}
 	
@@ -192,10 +200,12 @@ struct TipExplainingParagraph: ViewModifier {
 
 struct WizardView_Previews: PreviewProvider {
 	@State static var tab = "THome"
+	@State static var stepName:Page = .wizardChooseInstrument
+	
 	static var previews: some View {
 		Group {
-			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), showStore: .constant(false)).environmentObject(ScorewindData())
-			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), showStore: .constant(false)).environmentObject(ScorewindData()).environment(\.colorScheme, .dark)
+			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), showStore: .constant(false), stepName: $stepName).environmentObject(ScorewindData())
+			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), showStore: .constant(false), stepName: $stepName).environmentObject(ScorewindData()).environment(\.colorScheme, .dark)
 		}
 		
 	}

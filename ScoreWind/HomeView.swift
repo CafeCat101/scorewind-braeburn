@@ -17,10 +17,11 @@ struct HomeView: View {
 	@State private var showLessonView = false
 	@EnvironmentObject var store:Store
 	@State private var showStore = false
+	@State private var stepName:Page = .wizardChooseInstrument
 	
 	var body: some View {
 		TabView(selection: $selectedTab) {
-			WizardView(selectedTab: $selectedTab, studentData: studentData, showLessonView: $showLessonView, downloadManager: downloadManager, showStore: $showStore)
+			WizardView(selectedTab: $selectedTab, studentData: studentData, showLessonView: $showLessonView, downloadManager: downloadManager, showStore: $showStore, stepName: $stepName)
 				.tabItem {
 					Image(systemName: "music.note.house")
 					Text("Home")
@@ -52,6 +53,7 @@ struct HomeView: View {
 			}
 			downloadManager.appState = .active
 			
+			//:: remember last viewed course or lesson
 			let lastViewedCourseID:Int = userDefaults.object(forKey: "lastViewedCourse") as? Int ?? 0
 			if lastViewedCourseID > 0 {
 				scorewindData.currentCourse = scorewindData.allCourses.first(where: {$0.id == lastViewedCourseID}) ?? Course()
@@ -61,6 +63,22 @@ struct HomeView: View {
 				scorewindData.currentLesson = scorewindData.currentCourse.lessons.first(where: {$0.id == lastViewedLessonID}) ?? Lesson()
 				scorewindData.setCurrentTimestampRecs()
 				scorewindData.lastPlaybackTime = 0.0
+			}
+			
+			//:: decide on which step to start before any step view is called in WizardView
+			if studentData.wizardResult.learningPath.count > 0 {
+				if scorewindData.wizardPickedCourse.id == 0 || scorewindData.wizardPickedLesson.id == 0 {
+					let getPickedItem = studentData.wizardResult.learningPath.first(where: {$0.startHere == true}) ?? WizardLearningPathItem()
+				print("[debug] WizardResultView, onAppear,  pickedCourse\(getPickedItem.courseID), pickedLesson\(getPickedItem.lessonID)")
+					if getPickedItem.courseID > 0 && getPickedItem.lessonID > 0 {
+						scorewindData.wizardPickedCourse = scorewindData.allCourses.first(where: {$0.id == getPickedItem.courseID}) ?? Course()
+						scorewindData.wizardPickedLesson = scorewindData.wizardPickedCourse.lessons.first(where: {$0.id == getPickedItem.lessonID}) ?? Lesson()
+						scorewindData.wizardPickedTimestamps = (scorewindData.allTimestamps.first(where: {$0.id == getPickedItem.courseID})?.lessons.first(where: {$0.id == getPickedItem.lessonID})!.timestamps) ?? []
+					}
+				}
+				stepName = .wizardResult
+			} else {
+				stepName = .wizardChooseInstrument
 			}
 			//<<<<==
 		}
@@ -136,6 +154,7 @@ struct HomeView: View {
 		scorewindData.initiateTimestampsFromLocal()
 		scorewindData.initiateCoursesFromLocal()
 		studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+		studentData.wizardResult = studentData.getWizardResult()
 	}
 	
 	private func hasAccessToCourses() -> Bool {
