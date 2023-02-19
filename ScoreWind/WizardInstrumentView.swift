@@ -61,21 +61,35 @@ struct WizardInstrumentView: View {
 		}
 		.background(Color("AppBackground"))
 		.onAppear(perform: {
-			if studentData.getWizardResult().learningPath.count > 0  && studentData.wizardResult.learningPath.count == 0 {
-				//has wizardResult saved on icloud before and at app launch
-				stepName = Page.wizardResult
-			} else {
+			if studentData.wizardStepNames.count == 0 {
 				//:: start over, reset everything
 				studentData.resetWizrdChoice()
 				studentData.wizardRange.removeAll()
 				studentData.removeAKey(keyName: "wizardResult")
 				studentData.wizardResult = WizardResult()
 				studentData.wizardStepNames = [.wizardChooseInstrument]
-				//studentData.removeAKey(keyName: "experience")
-				//studentData.removeAKey(keyName: "doYouKnow")
-				//studentData.removeAKey(keyName: "playable")
-				print("[debug] WizardInstrument, wizardStepNames \(studentData.wizardStepNames)")
+			} else {
+				stepName = Page.wizardResult
 			}
+			/*
+			let iCloudLearningPathCount = studentData.getWizardResult().learningPath.count
+			if iCloudLearningPathCount > 0  && studentData.wizardResult.learningPath.count == 0 {
+				//has wizardResult saved on icloud before and at app launch
+				stepName = Page.wizardResult
+			} else if iCloudLearningPathCount > 0 && studentData.wizardResult.learningPath.count > 0 && studentData.wizardStepNames.count > 0 {
+				//:: after app launches, had done learning configuration before
+				stepName = Page.wizardResult
+			}
+			else {
+				//:: start over, reset everything
+				studentData.resetWizrdChoice()
+				studentData.wizardRange.removeAll()
+				studentData.removeAKey(keyName: "wizardResult")
+				studentData.wizardResult = WizardResult()
+				studentData.wizardStepNames = [.wizardChooseInstrument]
+
+				print("[debug] WizardInstrument, wizardStepNames \(studentData.wizardStepNames)")
+			}*/
 			
 		})
 	}

@@ -23,11 +23,13 @@ struct BuyItemView: View {
 	}
 	
 	var body: some View {
+		Divider()
 		HStack {
-			VStack(alignment: .leading) {
+			VStack(alignment:.leading) {
 				Text(product.displayName)
 					.bold()
 				Text(product.description)
+					.frame(alignment: .leading)
 					.padding([.bottom],10)
 				if product.subscription?.introductoryOffer?.period.value ?? 0 > 0 {
 					Text(getIntroductionLabelText(product:product))
@@ -37,39 +39,39 @@ struct BuyItemView: View {
 			buyButton
 		}
 		.padding([.leading,.trailing],15)
-		.padding([.bottom],10)
+		.padding([.bottom],20)
 	}
 	
 	var buyButton: some View {
-			Button(action: {
-					Task {
-							await buy()
-					}
-			}) {
-					if isPurchased {
-							Text(Image(systemName: "checkmark"))
-									.bold()
-									.foregroundColor(.white)
-					} else {
-						VStack {
-							Text(product.displayPrice)
-							Divider()
-							Text(getFriendlyPeriodName(product.subscription!, isIntroduction: false))
-						}
-					}
+		Button(action: {
+			Task {
+				await buy()
 			}
-			.frame(width:UIScreen.main.bounds.size.width*0.3)
-				.foregroundColor(Color("LessonListStatusIcon"))
-				.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
-				.background {
-					RoundedRectangle(cornerRadius: 26)
-						.foregroundColor(Color("AppYellow"))
+		}) {
+			if isPurchased {
+				Text(Image(systemName: "checkmark"))
+					.bold()
+					.foregroundColor(.white)
+			} else {
+				VStack {
+					Text(product.displayPrice)
+					Divider()
+					Text(getFriendlyPeriodName(product.subscription!, isIntroduction: false))
 				}
-			.onAppear {
-					Task {
-							isPurchased = (try? await store.isPurchased(product)) ?? false
-					}
 			}
+		}
+		.frame(width:UIScreen.main.bounds.size.width*0.3)
+		.foregroundColor(Color("LessonListStatusIcon"))
+		.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
+		.background {
+			RoundedRectangle(cornerRadius: 26)
+				.foregroundColor(isPurchased ? .green : Color("AppYellow"))
+		}
+		.onAppear {
+			Task {
+				isPurchased = (try? await store.isPurchased(product)) ?? false
+			}
+		}
 	}
 	
 	private func getFriendlyPeriodName(_ subscription: Product.SubscriptionInfo, isIntroduction: Bool) -> String {
@@ -112,22 +114,22 @@ struct BuyItemView: View {
 	private func getIntroductionLabelText(product: Product) -> String {
 		let value = product.subscription?.introductoryOffer?.period.value ?? 0
 		let unitFriendlyName = getFriendlyPeriodName(product.subscription!, isIntroduction: true)
-		return "Includs free trial \(value) \(unitFriendlyName)"
+		return "+ \(value) \(unitFriendlyName) free trial"
 	}
 	
 	func buy() async {
-			do {
-					if try await store.purchase(product) != nil {
-							withAnimation {
-									isPurchased = true
-							}
-					}
-			} catch StoreError.failedVerification {
-					errorTitle = "Your purchase could not be verified by the App Store."
-					isShowingError = true
-			} catch {
-					print("Failed purchase for \(product.id): \(error)")
+		do {
+			if try await store.purchase(product) != nil {
+				withAnimation {
+					isPurchased = true
+				}
 			}
+		} catch StoreError.failedVerification {
+			errorTitle = "Your purchase could not be verified by the App Store."
+			isShowingError = true
+		} catch {
+			print("Failed purchase for \(product.id): \(error)")
+		}
 	}
 }
 

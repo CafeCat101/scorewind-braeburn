@@ -106,7 +106,8 @@ struct WizardView: View {
 				} else if stepName == .wizardPlayable {
 					WizardPlayableView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
 				} else if stepName == .wizardResult {
-					WizardResultView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData, showLessonView: $showLessonView).onAppear{
+					WizardResultView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData, showLessonView: $showLessonView)
+						.onAppear{
 						DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
 							withAnimation{
 								showViewTitle = true

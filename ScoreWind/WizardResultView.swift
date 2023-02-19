@@ -133,14 +133,13 @@ struct WizardResultView: View {
 			}
 			.background(Color("AppBackground"))
 			.padding([.leading, .trailing], 15)
-			.onAppear(perform: {
-				print("[debug] WizardResultView.onAppear, wizardResult.learningPath.count \(studentData.wizardResult.learningPath.count)")
-				
-			})
 		}
 		.onAppear(perform: {
-			print("[debug] WizardResultView, onAppear, icloud wizardResult \(studentData.getWizardResult())")
-			print("[debug] WizardResultView, onAppear, local wizardResult \(studentData.wizardResult)")
+			//print("[debug] WizardResultView, onAppear, icloud wizardResult \(studentData.getWizardResult())")
+			//print("[debug] WizardResultView, onAppear, local wizardResult \(studentData.wizardResult)")
+			print("[debug] WizardResultView, onAppear, studentData.wizardRange.count \(studentData.wizardRange.count)")
+			print("[debug] WizardResultView, onAppear, studentData.getWizardResult().learningPath.count \(studentData.getWizardResult().learningPath.count)")
+			
 			if studentData.wizardRange.count > 0 && studentData.wizardResult.learningPath.count > 0 && studentData.getWizardResult().learningPath.count == 0 {
 				//:: from finishing the wizard, wizardPicked is already assigned from createRecommendation
 				studentData.updateWizardResult(result: studentData.wizardResult)
@@ -149,15 +148,18 @@ struct WizardResultView: View {
 				//:: probably has wizardResult on iCloud, unlless the app crashes
 					studentData.wizardResult = studentData.getWizardResult()
 					let getPickedItem = studentData.wizardResult.learningPath.first(where: {$0.startHere == true}) ?? WizardLearningPathItem()
+				print("[debug] WizardResultView, onAppear,  pickedCourse\(getPickedItem.courseID), pickedLesson\(getPickedItem.lessonID)")
 					if getPickedItem.courseID > 0 && getPickedItem.lessonID > 0 {
 						scorewindData.wizardPickedCourse = scorewindData.allCourses.first(where: {$0.id == getPickedItem.courseID}) ?? Course()
 						scorewindData.wizardPickedLesson = scorewindData.wizardPickedCourse.lessons.first(where: {$0.id == getPickedItem.lessonID}) ?? Lesson()
 						scorewindData.wizardPickedTimestamps = (scorewindData.allTimestamps.first(where: {$0.id == getPickedItem.courseID})?.lessons.first(where: {$0.id == getPickedItem.lessonID})!.timestamps) ?? []
 						handleTip()
 					} else {
+						studentData.wizardStepNames.removeAll()
 						stepName = Page.wizardChooseInstrument
 					}
 			} else {
+				studentData.wizardStepNames.removeAll()
 				stepName = Page.wizardChooseInstrument
 			}
 			
