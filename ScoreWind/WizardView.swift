@@ -18,7 +18,7 @@ struct WizardView: View {
 	@Binding var showLessonView:Bool
 	@ObservedObject var downloadManager:DownloadManager
 	@State private var showViewTitle = true
-	@Binding var showStore:Bool
+	@State private var showStore = false
 	@Binding var stepName:Page
 	
 	var body: some View {
@@ -76,7 +76,7 @@ struct WizardView: View {
 					})
 					Button(action: {
 						showStore = true
-					}, label: {Text("My subscription")})
+					}, label: {Text("ScoreWind subscription")})
 				} label: {
 					Label("ScoreWind", systemImage: "gear")
 						.font(.title3)
@@ -133,6 +133,7 @@ struct WizardView: View {
 			Divider()
 		}
 		.background(Color("AppBackground"))
+		.modifier(storeViewCover(showStore: $showStore, selectedTab: $selectedTab))
 		.onAppear(perform: {			
 			print("[debug] WizardView, onAppear studentData.wizardResult.learningPath.count \(studentData.wizardResult.learningPath.count)")
 		})
@@ -204,8 +205,8 @@ struct WizardView_Previews: PreviewProvider {
 	
 	static var previews: some View {
 		Group {
-			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), showStore: .constant(false), stepName: $stepName).environmentObject(ScorewindData())
-			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), showStore: .constant(false), stepName: $stepName).environmentObject(ScorewindData()).environment(\.colorScheme, .dark)
+			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), stepName: $stepName).environmentObject(ScorewindData())
+			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), stepName: $stepName).environmentObject(ScorewindData()).environment(\.colorScheme, .dark)
 		}
 		
 	}

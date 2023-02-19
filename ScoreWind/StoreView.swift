@@ -21,80 +21,82 @@ struct StoreView: View {
 	}
 	
 	var body: some View {
-		
-			VStack {
-				
-					HStack {
-						Spacer()
-						Label("Close", systemImage: "xmark.circle")
-							.labelStyle(.iconOnly)
-							.font(.title2)
-							.padding(15)
-							.onTapGesture {
-								showStore = false
-							}
-					}
-					Text("Study Plan")
-						.font(.title)
-						.padding([.bottom],20)
-					//Text("This is the place where you subscribe scorewind")
-					TabView {
-						infoTabAbout.padding(15)
-						infoTabPurchased.padding(15)
-						infoTaCancel.padding(15)
-					}
-					.tabViewStyle(.page)
-					.background(Color("AppYellow"))
-					.cornerRadius(25)
+		VStack {
+			HStack {
+				Spacer()
+				Label("Close", systemImage: "xmark.circle")
+					.labelStyle(.iconOnly)
+					.font(.title2)
 					.padding(15)
-					.frame(minHeight: 300)
-					
-					
-					if let currentSubscription = currentSubscription {
-						Text("My current subscription").font(.title2)
-							.padding([.top],10)
-						HStack {
-							VStack(alignment:.leading) {
-								Text(currentSubscription.displayName)
-									.bold()
-								Text(currentSubscription.description)
-									.frame(alignment: .leading)
-							}
-							Spacer()
-						}
-						.padding([.bottom], 10)
-						.padding([.leading,.trailing],15)
+					.onTapGesture {
+						showStore = false
 					}
-					
-					if availableSubscriptions.count > 0 {
-						ScrollView(.vertical) {
-							Text("Available subscription")
-								.font(.title2)
-								.padding([.top],10)
-							ForEach(availableSubscriptions) { product in
-								BuyItemView(product: product)
-							}
-						}
-						
-					}
-					Spacer()
-				
-				
 			}
-			.onAppear {
-				Task {
-					//When this view appears, get the latest subscription status.
-					await updateSubscriptionStatus()
+			Text("ScoreWind Subscription")
+				.font(.title)
+			//Text("This is the place where you subscribe scorewind")
+			ScrollView(.vertical) {
+				TabView {
+					infoTabAbout.padding(15)
+					infoTabPurchased.padding(15)
+					infoTaCancel.padding(15)
 				}
-			}
-			.onChange(of: store.purchasedSubscriptions) { _ in
-				Task {
-					//When `purchasedSubscriptions` changes, get the latest subscription status.
-					await updateSubscriptionStatus()
+				.tabViewStyle(.page)
+				.background(Color("AppYellow"))
+				.cornerRadius(25)
+				.padding(15)
+				.frame(height: UIScreen.main.bounds.size.height*0.4)
+				
+				if let currentSubscription = currentSubscription {
+					Text("My current subscription").font(.title2)
+						.padding([.top],10)
+					HStack {
+						VStack(alignment:.leading) {
+							Text(currentSubscription.displayName)
+								.bold()
+							Text(currentSubscription.description)
+								.frame(alignment: .leading)
+						}
+						Spacer()
+					}
+					.padding([.bottom], 10)
+					.padding([.leading,.trailing],15)
+				}
+				
+				if availableSubscriptions.count > 0 {
+					Text("Available subscription")
+						.font(.title2)
+						.padding([.top],10)
+					ForEach(availableSubscriptions) { product in
+						BuyItemView(product: product)
+					}
+					
 				}
 			}
 			
 			
+			
+			
+			
+			
+			//Spacer()
+			
+			
+		}
+		.onAppear {
+			Task {
+				//When this view appears, get the latest subscription status.
+				await updateSubscriptionStatus()
+			}
+		}
+		.onChange(of: store.purchasedSubscriptions) { _ in
+			Task {
+				//When `purchasedSubscriptions` changes, get the latest subscription status.
+				await updateSubscriptionStatus()
+			}
+		}
+		
+		
 		
 		
 	}

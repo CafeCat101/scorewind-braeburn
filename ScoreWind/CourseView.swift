@@ -348,7 +348,7 @@ struct CourseView: View {
 				if store.purchasedSubscriptions.isEmpty {
 					Group {
 						Spacer()
-						Text("View and subscribe to a Study Plan")
+						Text("View ScoreWind subscription now")
 							.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
 							.foregroundColor(Color("LessonListStatusIcon"))
 							.background(Color("AppYellow"))
@@ -366,6 +366,7 @@ struct CourseView: View {
 				if store.purchasedSubscriptions.isEmpty {
 					DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
 						showStore = true
+						print("[debug] CourseView, course id = 0, showStore \(showStore)")
 					}
 				}
 			})

@@ -16,12 +16,11 @@ struct HomeView: View {
 	@State private var userDefaults = UserDefaults.standard
 	@State private var showLessonView = false
 	@EnvironmentObject var store:Store
-	@State private var showStore = false
 	@State private var stepName:Page = .wizardChooseInstrument
 	
 	var body: some View {
 		TabView(selection: $selectedTab) {
-			WizardView(selectedTab: $selectedTab, studentData: studentData, showLessonView: $showLessonView, downloadManager: downloadManager, showStore: $showStore, stepName: $stepName)
+			WizardView(selectedTab: $selectedTab, studentData: studentData, showLessonView: $showLessonView, downloadManager: downloadManager, stepName: $stepName)
 				.tabItem {
 					Image(systemName: "music.note.house")
 					Text("Home")
@@ -40,7 +39,6 @@ struct HomeView: View {
 				}.tag("TMyCourses")
 		}
 		.ignoresSafeArea()
-		.modifier(storeViewCover(showStore: $showStore, selectedTab: $selectedTab))
 		.onAppear{
 			//==>>>> app is launched...
 			print("[debug] HomeView, onAppear")
@@ -168,6 +166,7 @@ struct HomeView: View {
 
 struct storeViewCover: ViewModifier {
 	@EnvironmentObject var store: Store
+	@EnvironmentObject var scorewindData:ScorewindData
 	@Binding var showStore:Bool
 	@Binding var selectedTab: String
 	
@@ -181,7 +180,14 @@ struct storeViewCover: ViewModifier {
 				})
 			}
 		} else {
-			content.sheet(isPresented: $showStore, content: {
+			content.sheet(isPresented: $showStore,onDismiss: {
+				if scorewindData.wizardPickedCourse.id > 0 && scorewindData.wizardPickedLesson.id > 0 {
+					scorewindData.currentCourse = scorewindData.wizardPickedCourse
+					scorewindData.currentLesson = scorewindData.wizardPickedLesson
+					scorewindData.setCurrentTimestampRecs()
+					scorewindData.lastPlaybackTime = 0.0
+				}
+			}, content: {
 				StoreView(showStore: $showStore)
 			})
 		}
