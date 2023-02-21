@@ -18,6 +18,7 @@ struct WizardResultView: View {
 	@State private var tipContent:AnyView = AnyView(Text("Tip"))
 	@State private var userDefaults = UserDefaults.standard
 	@Binding var showLessonView:Bool
+	@Binding var showStore: Bool
 	
 	var body: some View {
 		ScrollView(.vertical) {
@@ -140,7 +141,7 @@ struct WizardResultView: View {
 			print("[debug] WizardResultView, onAppear, studentData.wizardRange.count \(studentData.wizardRange.count)")
 			print("[debug] WizardResultView, onAppear, studentData.getWizardResult().learningPath.count \(studentData.getWizardResult().learningPath.count)")
 			
-			if scorewindData.wizardPickedCourse.id > 0 && scorewindData.wizardPickedLesson.id > 0 {
+			if scorewindData.wizardPickedCourse.id > 0 && scorewindData.wizardPickedLesson.id > 0 && showStore == false {
 				handleTip()
 			}
 		})
@@ -190,7 +191,7 @@ struct WizardResult_Previews: PreviewProvider {
 	@State static var step:Page = .wizardResult
 	
 	static var previews: some View {
-		WizardResultView(selectedTab: $tab, stepName: $step, studentData: StudentData(), showLessonView: .constant(false)).environmentObject(ScorewindData())
+		WizardResultView(selectedTab: $tab, stepName: $step, studentData: StudentData(), showLessonView: .constant(false), showStore: .constant(false)).environmentObject(ScorewindData())
 	}
 }
 
