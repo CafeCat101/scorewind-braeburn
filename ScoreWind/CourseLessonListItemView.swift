@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct CourseLessonListItemView: View {
+	@EnvironmentObject var scorewindData:ScorewindData
+	@EnvironmentObject var store: Store
 	@Binding var selectedTab:String
 	var lesson:Lesson
-	@EnvironmentObject var scorewindData:ScorewindData
 	@ObservedObject var downloadManager:DownloadManager
 	@ObservedObject var studentData:StudentData
 	@Binding var showLessonView: Bool
+	@Binding var showSubscriberOnlyAlert: Bool
 	
 	var body: some View {
 		VStack {
@@ -22,12 +24,16 @@ struct CourseLessonListItemView: View {
 					.multilineTextAlignment(.leading)
 					.foregroundColor(.black)
 					.onTapGesture {
-						scorewindData.currentLesson = lesson
-						scorewindData.setCurrentTimestampRecs()
-						scorewindData.lastPlaybackTime = 0.0
-						//self.selectedTab = "TLesson"
-						scorewindData.lessonChanged = true
-						showLessonView = true
+						if store.purchasedSubscriptions.isEmpty && scorewindData.wizardPickedLesson.id != lesson.id {
+							showSubscriberOnlyAlert = true
+						} else {
+							scorewindData.currentLesson = lesson
+							scorewindData.setCurrentTimestampRecs()
+							scorewindData.lastPlaybackTime = 0.0
+							//self.selectedTab = "TLesson"
+							scorewindData.lessonChanged = true
+							showLessonView = true
+						}
 					}
 				Spacer()
 				downloadIconView(getLessonID: lesson.id)
@@ -80,6 +86,6 @@ struct CourseLessonListItemView: View {
 struct CourseLessonListItemView_Previews: PreviewProvider {
 	@State static var tab = "TCourse"
 	static var previews: some View {
-		CourseLessonListItemView(selectedTab:$tab, lesson: Lesson(), downloadManager: DownloadManager(), studentData: StudentData(), showLessonView: .constant(false)).environmentObject(ScorewindData())
+		CourseLessonListItemView(selectedTab:$tab, lesson: Lesson(), downloadManager: DownloadManager(), studentData: StudentData(), showLessonView: .constant(false), showSubscriberOnlyAlert: .constant(false)).environmentObject(ScorewindData())
 	}
 }

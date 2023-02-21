@@ -11,6 +11,7 @@ import StoreKit
 
 struct CourseView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
+	@EnvironmentObject var store: Store
 	@State private var showOverview = false
 	let screenSize: CGRect = UIScreen.main.bounds
 	@Binding var selectedTab:String
@@ -29,7 +30,8 @@ struct CourseView: View {
 	@State private var userDefaults = UserDefaults.standard
 	@Binding var showLessonView:Bool
 	@State private var showStore = false
-	@EnvironmentObject var store: Store
+	@State private var showSubscriberOnlyAlert = false
+	
 	
 	var body: some View {
 		if scorewindData.currentCourse.id > 0 {
@@ -176,14 +178,20 @@ struct CourseView: View {
 									}
 								//courseDownloadButtonView()
 								
-								CourseDownloadButtonView(getStatus: downloadManager.checkDownloadStatus(courseID: scorewindData.currentCourse.id, lessonsCount: scorewindData.currentCourse.lessons.count), downloadManager: downloadManager)
+								CourseDownloadButtonView(getStatus: downloadManager.checkDownloadStatus(courseID: scorewindData.currentCourse.id, lessonsCount: scorewindData.currentCourse.lessons.count), downloadManager: downloadManager, showSubscriberOnlyAlert: $showSubscriberOnlyAlert)
 								
 								Spacer()
 							}.padding(EdgeInsets(top: 0, leading: 15, bottom: 8, trailing: 15))
 							
 							ScrollView {
 								ForEach(scorewindData.currentCourse.lessons){ lesson in
-									CourseLessonListItemView(selectedTab: $selectedTab, lesson: lesson, downloadManager: downloadManager, studentData: studentData, showLessonView: $showLessonView)
+									CourseLessonListItemView(
+										selectedTab: $selectedTab,
+										lesson: lesson,
+										downloadManager: downloadManager,
+										studentData: studentData,
+										showLessonView: $showLessonView,
+										showSubscriberOnlyAlert: $showSubscriberOnlyAlert)
 										.padding(EdgeInsets(top: 10, leading: 10, bottom: 15, trailing: 10))
 										.background{
 											RoundedRectangle(cornerRadius: 10)
@@ -303,6 +311,16 @@ struct CourseView: View {
 			.fullScreenCover(isPresented: $showLessonView, content: {
 				LessonView2(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData, showLessonView: $showLessonView)
 			})
+			.confirmationDialog("Subscription is required",
+													isPresented: $showSubscriberOnlyAlert) {
+				Button("View subscription", role: nil) {
+					showStore = true
+				}
+				Button("Later", role: .cancel, action: {})
+			} message: {
+				Text("Subscription is required")
+			}
+			.modifier(storeViewCover(showStore: $showStore, selectedTab: $selectedTab))
 			.onAppear(perform: {
 				print("[debug] CourseView, onAppear, dragOffset \(dragOffset)")
 				underlineScrollOffset = 0-screenSize.width/pageCount
@@ -320,10 +338,10 @@ struct CourseView: View {
 						}
 					}
 				}
-				if showLessonView == false {
+				if showLessonView == false && showStore == false {
+					//:: don't want to show tip again after viewStore sheet is dismissed. the default "Your purchase is all set" alert will trigger onAppear when it is dismissed.
 					handleTip()
 				}
-				
 				userDefaults.set(scorewindData.currentCourse.id,forKey: "lastViewedCourse")
 			})
 		} else {
@@ -348,7 +366,7 @@ struct CourseView: View {
 				if store.purchasedSubscriptions.isEmpty {
 					Group {
 						Spacer()
-						Text("View ScoreWind subscription now")
+						Text("View ScoreWind subscription.\nGet access to all courses and lessons now")
 							.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
 							.foregroundColor(Color("LessonListStatusIcon"))
 							.background(Color("AppYellow"))
@@ -362,14 +380,6 @@ struct CourseView: View {
 				
 			}
 			.modifier(storeViewCover(showStore: $showStore, selectedTab: $selectedTab))
-			.onAppear(perform: {
-				if store.purchasedSubscriptions.isEmpty {
-					DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-						showStore = true
-						print("[debug] CourseView, course id = 0, showStore \(showStore)")
-					}
-				}
-			})
 		}
 		
 	}
@@ -488,7 +498,11 @@ struct CourseView: View {
 						.foregroundColor(Color("MyCourseItem"))
 				}
 				.onTapGesture {
-					switchCourse(order: order)
+					if store.purchasedSubscriptions.isEmpty {
+						showSubscriberOnlyAlert = true
+					} else {
+						switchCourse(order: order)
+					}
 				}
 		} else {
 			Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.previousCourse.title))
@@ -500,7 +514,11 @@ struct CourseView: View {
 						.foregroundColor(Color("MyCourseItem"))
 				}
 				.onTapGesture {
-					switchCourse(order: order)
+					if store.purchasedSubscriptions.isEmpty {
+						showSubscriberOnlyAlert = true
+					} else {
+						switchCourse(order: order)
+					}
 				}
 		}
 	}

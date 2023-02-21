@@ -10,6 +10,7 @@ import AVKit
 
 struct LessonView2: View {
 	@EnvironmentObject var scorewindData:ScorewindData
+	@EnvironmentObject var store: Store
 	@State private var screenSize: CGRect = UIScreen.main.bounds
 	@State private var watchTime = ""
 	@StateObject var viewModel = ViewModel()
@@ -30,6 +31,7 @@ struct LessonView2: View {
 	@State private var showOverlayMenu = false
 	@State private var viewRotaionDegree = 0.0
 	@State private var tipContent:AnyView = AnyView(Text("Tip"))
+	@State private var showSubscriberOnlyAlert = false
 	
 	var body: some View {
 		VStack {
@@ -154,6 +156,9 @@ struct LessonView2: View {
 			} else {
 				Spacer()
 			}
+		}
+		.alert("Subscription is required", isPresented: $showSubscriberOnlyAlert) {
+			Button("OK", role: .cancel) { }
 		}
 		.background(Color("AppBackground"))
 		.onAppear(perform: {
@@ -446,16 +451,20 @@ struct LessonView2: View {
 		}
 		
 		Button(action: {
-			if isCurrentLessonCompleted {
-				studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: false)
-			} else{
-				studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: true)
+			if store.purchasedSubscriptions.isEmpty {
+				showSubscriberOnlyAlert = true
+			} else {
+				if isCurrentLessonCompleted {
+					studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: false)
+				} else{
+					studentData.updateCompletedLesson(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, isCompleted: true)
+				}
+				
+				studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+				studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
+				
+				checkCurrentLessonCompleted()
 			}
-			
-			studentData.updateMyCourses(allCourses: scorewindData.allCourses)
-			studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
-			
-			checkCurrentLessonCompleted()
 		}){
 			if isCurrentLessonCompleted {
 				Label("Undo finished", systemImage: "checkmark.circle.fill")

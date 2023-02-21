@@ -9,9 +9,12 @@ import SwiftUI
 
 struct CourseDownloadButtonView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
+	@EnvironmentObject var store: Store
 	var getStatus:DownloadStatus
 	@ObservedObject var downloadManager:DownloadManager
 	@State private var showDownloadAlert = false
+	@Binding var showSubscriberOnlyAlert: Bool
+	
 	
 	var body: some View {
 		Label("Downloaded", systemImage: getStatusIconName())
@@ -28,7 +31,11 @@ struct CourseDownloadButtonView: View {
 			}
 			.foregroundColor(Color("MyCourseItemText"))
 			.onTapGesture {
-				showDownloadAlert = true
+				if store.purchasedSubscriptions.isEmpty {
+					showSubscriberOnlyAlert = true
+				} else {
+					showDownloadAlert = true
+				}
 			}
 			.alert("\(getAlertDialogTitle(downloadStatus:getStatus))", isPresented: $showDownloadAlert, actions: {
 				Button("ok", action:{
@@ -159,6 +166,6 @@ struct CourseDownloadButtonView: View {
 
 struct CourseDownloadButtonView_Previews: PreviewProvider {
 	static var previews: some View {
-		CourseDownloadButtonView(getStatus: DownloadStatus.notInQueue, downloadManager: DownloadManager()).environmentObject(ScorewindData())
+		CourseDownloadButtonView(getStatus: DownloadStatus.notInQueue, downloadManager: DownloadManager(), showSubscriberOnlyAlert: .constant(false)).environmentObject(ScorewindData())
 	}
 }

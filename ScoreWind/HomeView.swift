@@ -105,11 +105,11 @@ struct HomeView: View {
 		.onChange(of: selectedTab, perform: { newValue in
 			print("[deubg] HomeView, onChange selectedTab\(selectedTab)")
 			if newValue == "TCourse" {
-				if hasAccessToCourses() == false {
+				/*if hasAccessToCourses() == false {
 					scorewindData.currentCourse = Course()
 					scorewindData.currentLesson = Lesson()
 					scorewindData.currentTimestampRecs.removeAll()
-				}
+				}*/
 				print("[deubg] HomeView, onChange of selectedTab, TCourse")
 			}
 		})
@@ -180,14 +180,7 @@ struct storeViewCover: ViewModifier {
 				})
 			}
 		} else {
-			content.sheet(isPresented: $showStore,onDismiss: {
-				if scorewindData.wizardPickedCourse.id > 0 && scorewindData.wizardPickedLesson.id > 0 {
-					scorewindData.currentCourse = scorewindData.wizardPickedCourse
-					scorewindData.currentLesson = scorewindData.wizardPickedLesson
-					scorewindData.setCurrentTimestampRecs()
-					scorewindData.lastPlaybackTime = 0.0
-				}
-			}, content: {
+			content.sheet(isPresented: $showStore, content: {
 				StoreView(showStore: $showStore)
 			})
 		}

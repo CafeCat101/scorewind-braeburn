@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WizardResultPathView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
+	@EnvironmentObject var store: Store
 	@Binding var selectedTab:String
 	@Binding var stepName:Page
 	@ObservedObject var studentData:StudentData
@@ -102,7 +103,9 @@ struct WizardResultPathView: View {
 			scorewindData.setCurrentTimestampRecs()
 			scorewindData.lastPlaybackTime = 0.0
 			self.selectedTab = "TCourse"
-			showLessonView = true
+			if !store.purchasedSubscriptions.isEmpty || (store.purchasedSubscriptions.isEmpty && scorewindData.wizardPickedLesson.id == theLesson.id) {
+				showLessonView = true
+			}
 			scorewindData.lessonChanged = true
 		}
 	}
