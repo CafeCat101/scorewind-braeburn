@@ -34,8 +34,63 @@ struct StoreView: View {
 			}
 			Text("ScoreWind Subscription")
 				.font(.title)
+				.padding([.top,.bottom], 5)
 			//Text("This is the place where you subscribe scorewind")
 			ScrollView(.vertical) {
+				VStack(alignment: .leading) {
+					Label("Unlock all lessons in the learning path and the courses.", systemImage: "circle.fill")
+					Label("Access to all the features in the courses and the lessons", systemImage: "circle.fill")
+					Label("1 month free trial.", systemImage: "circle.fill")
+					//Text("+ Unlock all lessons in the learning path and the courses.")
+						//.multilineTextAlignment(.leading)
+					//Text("+ Access to all the features in the courses and the lessons.")
+					//Text("+ 1 month free trial.")
+				}
+				.padding([.leading,.trailing], 15)
+				
+				if let currentSubscription = currentSubscription {
+					HStack {
+						Text("My current subscription")
+							.font(.title2)
+						Spacer()
+					}.padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
+					
+					VStack {
+						VStack {
+							HStack{
+								Text(currentSubscription.displayName)
+									.font(.footnote)
+									.bold()
+								Spacer()
+							}.padding([.bottom], 5)
+							if let status = status {
+									StatusInfoView(product: currentSubscription, status: status)
+							}
+						}
+						.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
+					}
+					.background(Color("MyCourseItem"))
+					.cornerRadius(15)
+					.modifier(buyItemPadding(isLastItem: true, isOnlyOne: true))
+				}
+				
+				if availableSubscriptions.count > 0 {
+					Divider()
+					HStack {
+						Text("Available subscription")
+							.font(.title2)
+						Spacer()
+					}.padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
+					ScrollView(.horizontal, showsIndicators: false) {
+						HStack {
+							ForEach(availableSubscriptions) { product in
+								BuyItemView(product: product)
+									.modifier(buyItemPadding(isLastItem: product.id == availableSubscriptions.last?.id ? true : false ,isOnlyOne: availableSubscriptions.count == 1 ? true : false))
+							}
+						}
+					}
+				}
+				
 				TabView {
 					infoTabAbout.padding(15)
 					infoTabPurchased.padding(15)
@@ -45,43 +100,8 @@ struct StoreView: View {
 				.background(Color("AppYellow"))
 				.cornerRadius(25)
 				.padding(15)
-				.frame(height: UIScreen.main.bounds.size.height*0.4)
-				
-				if let currentSubscription = currentSubscription {
-					Text("My current subscription").font(.title2)
-						.padding([.top],10)
-					HStack {
-						VStack(alignment:.leading) {
-							Text(currentSubscription.displayName)
-								.bold()
-							Text(currentSubscription.description)
-								.frame(alignment: .leading)
-						}
-						Spacer()
-					}
-					.padding([.bottom], 10)
-					.padding([.leading,.trailing],15)
-				}
-				
-				if availableSubscriptions.count > 0 {
-					Text("Available subscription")
-						.font(.title2)
-						.padding([.top],10)
-					ForEach(availableSubscriptions) { product in
-						BuyItemView(product: product)
-					}
-					
-				}
+				.frame(height: UIScreen.main.bounds.size.height*0.5)
 			}
-			
-			
-			
-			
-			
-			
-			//Spacer()
-			
-			
 		}
 		.onAppear {
 			Task {
@@ -95,10 +115,31 @@ struct StoreView: View {
 				await updateSubscriptionStatus()
 			}
 		}
-		
-		
-		
-		
+	}
+	
+	struct buyItemPadding: ViewModifier {
+		var isLastItem = false
+		var isOnlyOne = false
+		func body(content: Content) -> some View {
+			if isOnlyOne {
+				content
+					.padding([.leading, .trailing],15)
+					.padding([.top, .bottom], 10)
+					.frame(width: UIScreen.main.bounds.size.width)
+			} else {
+				if isLastItem {
+					content
+						.padding([.leading, .trailing],15)
+						.padding([.top, .bottom], 10)
+						.frame(width: UIScreen.main.bounds.size.width*0.9)
+				} else {
+					content
+						.padding([.leading],15)
+						.padding([.top, .bottom], 10)
+						.frame(width: UIScreen.main.bounds.size.width*0.9)
+				}
+			}
+		}
 	}
 	
 	@MainActor
@@ -156,22 +197,37 @@ struct StoreView: View {
 	
 	var infoTabAbout: some View {
 		VStack {
-			Text("Subscription Content").font(.title2)
-			Text("When you configure ScoreWind and let it build you a learning path, you'll have full access to the courses and lessons in it.\n\nScoreWind lessons are prepared by teachers with care, together with lesson videos and synchornized interactive scores to help you learn and practice.")
+			Text("Subscription content")
+				.font(.title2)
+				.padding([.bottom],10)
+			Text("When you configure ScoreWind to build a learning path, you'll unlock all the lessons inside it, not just the starting lesson in the learning path.\n\nBesides using synchornized interactive score viewer, with subscription, you'll also have access to feature of offline course and tracking lesson completed.")
 		}
 	}
 	
 	var infoTabPurchased: some View {
 		VStack {
-			Text("See Your Subscription").font(.title2)
+			Text("See your subscription")
+				.font(.title2)
+				.padding([.bottom],10)
 			Text("When you want to view your subscription status, go to \(Image(systemName: "music.note.house")) Home tab, and open the \(Image(systemName: "gear")) menu on the top right corner.")
 		}
 	}
 	
 	var infoTaCancel: some View {
 		VStack {
-			Text("Cancel Subscription").font(.title2)
-			Text("Here is the place to help user learn how to manage the subscription.")
+			Text("Cancel subscription")
+				.font(.title2)
+				.padding([.bottom], 10)
+			VStack(alignment:.leading) {
+				Label("Open the Settings app on your phone.", systemImage: "number.circle.fill")
+				Label("Tap your name", systemImage: "number.circle.fill")
+				Label("Tap Subscriptions", systemImage: "number.circle.fill")
+				Label("Find the ScoreWind app and tap Cancel", systemImage: "number.circle.fill")
+			}
+			.padding([.bottom],10)
+			
+			Link("For more information about it on Apple Support, click here.", destination: URL(string: "https://support.apple.com/en-us/HT202039")!)
+			//Text("Here is the place to help user learn how to manage the subscription. I'll fill up this information soon.")
 		}
 	}
 }

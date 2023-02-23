@@ -23,23 +23,27 @@ struct BuyItemView: View {
 	}
 	
 	var body: some View {
-		Divider()
-		HStack {
-			VStack(alignment:.leading) {
+		VStack {
+			HStack{
 				Text(product.displayName)
+					.font(.footnote)
 					.bold()
-				Text(product.description)
-					.frame(alignment: .leading)
-					.padding([.bottom],10)
-				if product.subscription?.introductoryOffer?.period.value ?? 0 > 0 {
-					Text(getIntroductionLabelText(product:product))
-				}
+				Spacer()
 			}
-			Spacer()
-			buyButton
+			.padding(EdgeInsets(top: 10, leading: 15, bottom: 0, trailing: 15))
+			HStack {
+				VStack {
+					Text(product.displayPrice)
+					Divider().frame(height:2)
+					Text(getFriendlyPeriodName(product.subscription!, isIntroduction: false))
+				}
+				.padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 5))
+				buyButton
+					.padding([.trailing], 15)
+			}
 		}
-		.padding([.leading,.trailing],15)
-		.padding([.bottom],20)
+		.background(Color("MyCourseItem"))
+		.cornerRadius(15)
 	}
 	
 	var buyButton: some View {
@@ -53,18 +57,14 @@ struct BuyItemView: View {
 					.bold()
 					.foregroundColor(.white)
 			} else {
-				VStack {
-					Text(product.displayPrice)
-					Divider()
-					Text(getFriendlyPeriodName(product.subscription!, isIntroduction: false))
-				}
+				Text("SUBSCRIBE\nIT")
 			}
 		}
 		.frame(width:UIScreen.main.bounds.size.width*0.3)
 		.foregroundColor(Color("LessonListStatusIcon"))
-		.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
+		.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
 		.background {
-			RoundedRectangle(cornerRadius: 26)
+			RoundedRectangle(cornerRadius: 20)
 				.foregroundColor(isPurchased ? .green : Color("AppYellow"))
 		}
 		.onAppear {
