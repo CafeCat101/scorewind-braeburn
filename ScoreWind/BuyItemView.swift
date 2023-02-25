@@ -44,6 +44,9 @@ struct BuyItemView: View {
 		}
 		.background(Color("MyCourseItem"))
 		.cornerRadius(15)
+		.alert(isPresented: $isShowingError, content: {
+				Alert(title: Text(errorTitle), message: nil, dismissButton: .default(Text("Okay")))
+		})
 	}
 	
 	var buyButton: some View {
@@ -60,7 +63,7 @@ struct BuyItemView: View {
 				Text("SUBSCRIBE\nIT")
 			}
 		}
-		.frame(width:UIScreen.main.bounds.size.width*0.3)
+		//.frame(width:UIScreen.main.bounds.size.width*0.3)
 		.foregroundColor(Color("LessonListStatusIcon"))
 		.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
 		.background {

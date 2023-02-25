@@ -101,6 +101,23 @@ struct StoreView: View {
 				.cornerRadius(25)
 				.padding(15)
 				.frame(height: UIScreen.main.bounds.size.height*0.5)
+				
+				Button(action: {
+					Task {
+							//This call displays a system prompt that asks users to authenticate with their App Store credentials.
+							//Call this function only in response to an explicit user action, such as tapping a button.
+							try? await AppStore.sync()
+					}
+				}) {
+					Text("Restore subscription")
+				}
+				.frame(width:UIScreen.main.bounds.size.width*0.8)
+				.foregroundColor(Color("ListDivider"))
+				.padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
+				.background {
+					RoundedRectangle(cornerRadius: 20)
+						.foregroundColor(.gray)
+				}
 			}
 		}
 		.onAppear {
@@ -197,10 +214,10 @@ struct StoreView: View {
 	
 	var infoTabAbout: some View {
 		VStack {
-			Text("Subscription content")
+			Text("After you subscribe...")
 				.font(.title2)
 				.padding([.bottom],10)
-			Text("When you configure ScoreWind to build a learning path, you'll unlock all the lessons inside it, not just the starting lesson in the learning path.\n\nBesides using synchornized interactive score viewer, with subscription, you'll also have access to feature of offline course and tracking lesson completed.")
+			Text("When you configure ScoreWind to build a learning path, you'll unlock all the lessons inside it, not just the starting lesson in the learning path.\n\nBesides using synchornized interactive score viewer, with subscription, you'll also have access to feature of offline course and tracking completed lessons.")
 		}
 	}
 	
