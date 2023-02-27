@@ -70,6 +70,7 @@ struct BuyItemView: View {
 			RoundedRectangle(cornerRadius: 20)
 				.foregroundColor(isPurchased ? .green : Color("AppYellow"))
 		}
+		.disabled(isPurchased)
 		.onAppear {
 			Task {
 				isPurchased = (try? await store.isPurchased(product)) ?? false
@@ -123,15 +124,19 @@ struct BuyItemView: View {
 	func buy() async {
 		do {
 			if try await store.purchase(product) != nil {
+				print("[debug] BuyItemView, buy, store.purchase(product) != ni")
 				withAnimation {
 					isPurchased = true
 				}
 			}
 		} catch StoreError.failedVerification {
+			print("[debug] BuyItemView, buy, StoreError.failedVerification")
 			errorTitle = "Your purchase could not be verified by the App Store."
 			isShowingError = true
 		} catch {
 			print("Failed purchase for \(product.id): \(error)")
+			isShowingError = true
+			errorTitle = error.localizedDescription
 		}
 	}
 }

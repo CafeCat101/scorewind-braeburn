@@ -218,7 +218,7 @@ struct StoreView: View {
 				.font(.title2)
 				.padding([.bottom],10)
 			Text("When you configure ScoreWind to build a learning path, you'll unlock all the lessons inside it, not just the starting lesson in the learning path.\n\nBesides using synchornized interactive score viewer, with subscription, you'll also have access to feature of offline course and tracking completed lessons.")
-		}
+		}.foregroundColor(Color("LessonListStatusIcon"))
 	}
 	
 	var infoTabPurchased: some View {
@@ -228,6 +228,7 @@ struct StoreView: View {
 				.padding([.bottom],10)
 			Text("When you want to view your subscription status, go to \(Image(systemName: "music.note.house")) Home tab, and open the \(Image(systemName: "gear")) menu on the top right corner.")
 		}
+		.foregroundColor(Color("LessonListStatusIcon"))
 	}
 	
 	var infoTaCancel: some View {
@@ -245,7 +246,7 @@ struct StoreView: View {
 			
 			Link("For more information about it on Apple Support, click here.", destination: URL(string: "https://support.apple.com/en-us/HT202039")!)
 			//Text("Here is the place to help user learn how to manage the subscription. I'll fill up this information soon.")
-		}
+		}.foregroundColor(Color("LessonListStatusIcon"))
 	}
 }
 

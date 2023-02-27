@@ -32,7 +32,7 @@ class Store: ObservableObject {
 	@Published private(set) var purchasedSubscriptions: [Product] = []
 	@Published private(set) var subscriptionGroupStatus: RenewalState?
 	var updateListenerTask: Task<Void, Error>? = nil
-	private let productIDs:[String] = ["subscription.standard","subscription.silver"]
+	private let productIDs:[String] = ["scorewind.standard"]//["scorewind.standard","scorewind.silver"]
 
 	init() {
 		//Initialize empty products, and then do a product request asynchronously to fill them in.

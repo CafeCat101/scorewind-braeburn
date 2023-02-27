@@ -343,6 +343,13 @@ struct CourseView: View {
 					handleTip()
 				}
 				userDefaults.set(scorewindData.currentCourse.id,forKey: "lastViewedCourse")
+				
+				if showStore == false {
+					Task {
+						//When this view appears, get the latest subscription status.
+						await store.updateCustomerProductStatus()
+					}
+				}
 			})
 		} else {
 			VStack {
