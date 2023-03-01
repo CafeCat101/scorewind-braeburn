@@ -22,7 +22,7 @@ struct WizardView: View {
 	@Binding var stepName:Page
 	
 	var body: some View {
-		VStack {
+		VStack(spacing:0) {
 			HStack {
 				if (stepName != .wizardChooseInstrument || stepName == .wizardResult) && studentData.playableViewVideoOnly && userRole == .student {
 					Label("Restart", systemImage: "goforward")
@@ -43,7 +43,7 @@ struct WizardView: View {
 						})
 				}
 				Spacer()
-				if showViewTitle {
+				/*if showViewTitle {
 					Label("ScoreWind", systemImage: "music.note")
 						.labelStyle(.titleOnly)
 						.foregroundColor(Color("AppBlackDynamic"))
@@ -65,7 +65,7 @@ struct WizardView: View {
 						})
 					}.frame(height:10)
 				}
-				Spacer()
+				Spacer()*/
 				Menu {
 					Button("Switch role", action: {
 						if userRole == .student {
@@ -82,28 +82,24 @@ struct WizardView: View {
 						.font(.title3)
 						.labelStyle(.iconOnly)
 						.foregroundColor(Color("AppBlackDynamic"))
+						.padding(.bottom,5)
 				}
 			}
 			.padding([.bottom], 5)
 			.padding([.leading,.trailing], 15)
-			
-			/*if showProgress {
-				HStack {
-					wizardProgressView()
-				}.padding([.bottom], 5)
-			}*/
-			
+
 			if userRole == .teacher {
 				WizardTeacherView(selectedTab: $selectedTab, studentData: studentData, downloadManager: downloadManager)
 			} else {
 				if stepName == .wizardChooseInstrument {
 					WizardInstrumentView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
 						.onAppear(perform: {
+							showProgress = false
 							showViewTitle = true
-							showProgress = true
 							DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
 								withAnimation{
 									showViewTitle = false
+									showProgress = true
 								}
 							}
 						})
@@ -129,6 +125,25 @@ struct WizardView: View {
 				}
 			}
 			
+			VStack {
+				if showViewTitle {
+					Label("Find courses and lessons", systemImage: "music.note")
+						.labelStyle(.titleOnly)
+						.font(.footnote)
+						.foregroundColor(Color("AppBlackDynamic"))
+				}
+				if showProgress {
+					GeometryReader { (proxy: GeometryProxy) in
+						HStack {
+							wizardProgressView(barWidth: proxy.size.width)
+						}.onAppear(perform: {
+							print("[debug] showProgress, screensize.size.width \(screenSize.width)")
+							print("[debug] showProgress, proxy.size.width \(proxy.size.width)")
+						})
+					}.frame(height:10)
+				}
+			}.padding([.bottom], 5)
+				.padding([.leading,.trailing], 15)
 			
 			Divider()
 		}
@@ -158,24 +173,24 @@ struct WizardView: View {
 		let totalWidth = barWidth
 		//totalWidth = screenSize.width*0.4
 		RoundedRectangle(cornerRadius: 5)
-			.foregroundColor(.gray)
+			.foregroundColor(Color("Dynamic/LightGray+1"))
 			.frame(width:totalWidth,height:10)
 			.overlay(alignment:.leading,content: {
 				if stepName == .wizardChooseInstrument {
 					RoundedRectangle(cornerRadius: 5)
-						.foregroundColor(Color("AppYellow"))
+						.foregroundColor(Color("WelceomView"))
 						.frame(width:totalWidth*(0.3/10.0),height:10)
 				} else if stepName == .wizardExperience {
 					RoundedRectangle(cornerRadius: 5)
-						.foregroundColor(Color("AppYellow"))
+						.foregroundColor(Color("WelceomView"))
 						.frame(width:totalWidth*(0.8/10.0),height:10)
 				} else if stepName == .wizardResult {
 					RoundedRectangle(cornerRadius: 5)
-						.foregroundColor(Color("AppYellow"))
+						.foregroundColor(Color("WelceomView"))
 						.frame(width:totalWidth,height:10)
 				} else {
 					RoundedRectangle(cornerRadius: 5)
-						.foregroundColor(Color("AppYellow"))
+						.foregroundColor(Color("WelceomView"))
 						.frame(width: (totalWidth*0.95)*(Double(studentData.wizardRange.count)/10.0),height:10)
 				}
 			})
@@ -198,7 +213,7 @@ struct TipExplainingParagraph: ViewModifier {
 			.padding(EdgeInsets(top: 4, leading: 40, bottom: 4, trailing: 40))
 	}
 }
-
+/*
 struct WizardView_Previews: PreviewProvider {
 	@State static var tab = "THome"
 	@State static var stepName:Page = .wizardChooseInstrument
@@ -210,7 +225,7 @@ struct WizardView_Previews: PreviewProvider {
 		}
 		
 	}
-}
+}*/
 
 enum UserRole {
 	case teacher

@@ -33,7 +33,7 @@
     <resources>
         <image name="logo" width="104" height="104"/>
         <namedColor name="WelceomView">
-            <color red="1" green="0.80000001192092896" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <color red="0.99215686270000003" green="0.7725490196" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

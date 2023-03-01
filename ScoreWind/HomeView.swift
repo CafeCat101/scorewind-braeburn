@@ -38,7 +38,7 @@ struct HomeView: View {
 					Text("My Courses")
 				}.tag("TMyCourses")
 		}
-		.accentColor(Color("MainGreenDynamic"))
+		.accentColor(Color("Dynamic/MainGreen"))
 		.ignoresSafeArea()
 		.onAppear{
 			//==>>>> app is launched...
@@ -187,9 +187,9 @@ struct storeViewCover: ViewModifier {
 		}
 	}
 }
-
+/*
 struct HomeView_Previews: PreviewProvider {
 	static var previews: some View {
 		HomeView(downloadManager: DownloadManager()).environmentObject(ScorewindData())
 	}
-}
+}*/
