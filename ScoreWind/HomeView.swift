@@ -38,6 +38,7 @@ struct HomeView: View {
 					Text("My Courses")
 				}.tag("TMyCourses")
 		}
+		.accentColor(Color("MainGreenDynamic"))
 		.ignoresSafeArea()
 		.onAppear{
 			//==>>>> app is launched...
