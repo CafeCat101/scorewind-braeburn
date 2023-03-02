@@ -89,7 +89,7 @@ struct WizardDoYouKnowView: View {
 			
 			Text("course:\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.wizardPickedCourse.title))").font(.footnote)
 		}
-		.background(Color("AppBackground"))
+		//.background(Color("AppBackground"))
 		.onAppear(perform: {
 			print("[debug] WizardDoYouKnowView, wizardStepNames \(studentData.wizardStepNames)")
 			currentQuestionIndex = 0

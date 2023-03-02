@@ -81,6 +81,7 @@
 		C87CF130297C4C9F00CDA215 /* WizardCalculatorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87CF12F297C4C9F00CDA215 /* WizardCalculatorHelper.swift */; };
 		C897D4C629A76BC700A21603 /* StatusInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C897D4C529A76BC700A21603 /* StatusInfoView.swift */; };
 		C897D4C929AEEF9C00A21603 /* RoundedCornerShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = C897D4C829AEEF9C00A21603 /* RoundedCornerShape.swift */; };
+		C897D4CB29B03F2F00A21603 /* Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C897D4CA29B03F2F00A21603 /* Carousel.swift */; };
 		C8CA57A42936F8D90097AE07 /* WizardPicked.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CA57A32936F8D90097AE07 /* WizardPicked.swift */; };
 		C8E063F028B0E20E000B3D67 /* MyCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E063EF28B0E20E000B3D67 /* MyCourse.swift */; };
 /* End PBXBuildFile section */
@@ -184,6 +185,7 @@
 		C87CF12F297C4C9F00CDA215 /* WizardCalculatorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardCalculatorHelper.swift; sourceTree = "<group>"; };
 		C897D4C529A76BC700A21603 /* StatusInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusInfoView.swift; sourceTree = "<group>"; };
 		C897D4C829AEEF9C00A21603 /* RoundedCornerShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCornerShape.swift; sourceTree = "<group>"; };
+		C897D4CA29B03F2F00A21603 /* Carousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Carousel.swift; sourceTree = "<group>"; };
 		C8CA57A32936F8D90097AE07 /* WizardPicked.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardPicked.swift; sourceTree = "<group>"; };
 		C8E063EF28B0E20E000B3D67 /* MyCourse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCourse.swift; sourceTree = "<group>"; };
 		F3441470A2546CDD3AD7E6C9 /* Pods_ScoreWind.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScoreWind.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -309,6 +311,7 @@
 				C87CF1222977B5FA00CDA215 /* Tips */,
 				C85F2798286F5A4E00D0A4E5 /* Types */,
 				C897D4C529A76BC700A21603 /* StatusInfoView.swift */,
+				C897D4CA29B03F2F00A21603 /* Carousel.swift */,
 			);
 			path = ScoreWind;
 			sourceTree = "<group>";
@@ -640,6 +643,7 @@
 				C85F2774286F4F2E00D0A4E5 /* MyCoursesView.swift in Sources */,
 				C85F277A286F4F2E00D0A4E5 /* ScorewindCourse.swift in Sources */,
 				C85F272A286F4C2B00D0A4E5 /* ScoreWindApp.swift in Sources */,
+				C897D4CB29B03F2F00A21603 /* Carousel.swift in Sources */,
 				C86F8824299DF34A0072504E /* BuyItemView.swift in Sources */,
 				C85F277C286F4F2E00D0A4E5 /* ScorewindData.swift in Sources */,
 				C87CF12E297C487A00CDA215 /* WizardResult.swift in Sources */,

@@ -8,13 +8,34 @@
 import SwiftUI
 import AVFoundation
 
+struct User: Identifiable, View{
+		var id = UUID().uuidString
+		var userName: String
+		var userImage: String
+	var body: some View {
+		VStack {
+			Spacer()
+			HStack {
+				Spacer()
+				Text("something,something something")
+				Spacer()
+			}
+			Spacer()
+		}
+		.background(.gray)
+		.cornerRadius(12)
+	}
+}
+
 struct WizardInstrumentView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@Binding var selectedTab:String
 	@Binding var stepName:Page
 	@ObservedObject var studentData:StudentData
 	let feedback = UIImpactFeedbackGenerator(style: .heavy)
-	
+	let screenSize = UIScreen.main.bounds.size
+	@State private var currentIndex = 0
+	@State var users: [User] = []
 	var body: some View {
 		VStack {
 			Spacer()
@@ -23,34 +44,30 @@ struct WizardInstrumentView: View {
 				Spacer()
 				Text("Choose your instrument")
 					.font(.title)
-					.foregroundColor(Color("Dynamic/MainGreen"))
+					.foregroundColor(Color("Dynamic/MainBrown+6"))
 					.bold()
 				Spacer()
 			}
 			
+			TabView {
+				displayInstrument(instrument: InstrumentType.guitar.rawValue)
+				displayInstrument(instrument: InstrumentType.violin.rawValue)
+			}
+			.tabViewStyle(.page)
+			.background(
+				RoundedRectangle(cornerRadius: CGFloat(28))
+					.foregroundColor(Color("Dynamic/LightGray"))
+					.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+			)
+			.frame(width: UIScreen.main.bounds.size.width*0.85, height: UIScreen.main.bounds.size.height*0.6)
+			
+			/*
 			GeometryReader { (proxy: GeometryProxy) in
 				HStack(spacing: 0) {
 					VStack{
 						Spacer()
 						getChoiceIcon(instrumentImage: "guitar", isSelected: isInstrumentSelected(askInstrument: .guitar)).frame(width:proxy.size.width*0.4,height:proxy.size.width*0.4)
 						Text("Guitar").font(.headline).foregroundColor(Color("Dynamic/Shadow"))
-						/*Button(action:{
-							/*feedback.impactOccurred()
-							stepName = .wizardExperience
-							studentData.updateInstrumentChoice(instrument: .guitar)
-							studentData.removeAKey(keyName: "experience")
-							studentData.wizardStepNames.append(stepName)*/
-						}){
-							Circle()
-								//.strokeBorder(Color(UIColor.systemGray5),lineWidth: 1)
-								//.background(Circle().foregroundColor(Color("WelceomView")))
-								.frame(width:proxy.size.width*0.4,height:proxy.size.width*0.4)
-								.overlay(
-									getChoiceIcon(instrumentImage: "guitar", isSelected: isInstrumentSelected(askInstrument: .guitar)).offset(x:0)
-								)
-						}
-						.frame(height:proxy.size.height*0.9)
-						.foregroundColor(Color("Dynamic/LightGray+1"))*/
 						Spacer()
 					}
 					.frame(width:proxy.size.width*0.5)
@@ -70,22 +87,6 @@ struct WizardInstrumentView: View {
 						Spacer()
 						getChoiceIcon(instrumentImage: "violin", isSelected: isInstrumentSelected(askInstrument: .violin)).frame(width:proxy.size.width*0.4,height:proxy.size.width*0.4)
 						Text("Violin").font(.headline).foregroundColor(Color("Dynamic/Shadow"))
-						/*Button(action:{
-							feedback.impactOccurred()
-							stepName = .wizardExperience
-							studentData.updateInstrumentChoice(instrument: .violin)
-							studentData.wizardStepNames.append(stepName)
-						}){
-							Circle()
-								//.strokeBorder(Color.black,lineWidth: 1)
-								//.background(Circle().foregroundColor(Color.white))
-								.frame(width:proxy.size.width*0.4,height:proxy.size.width*0.4)
-								.overlay(
-									getChoiceIcon(instrumentImage: "violin", isSelected: isInstrumentSelected(askInstrument: .violin)).offset(x:0)
-								)
-						}
-						.frame(height:proxy.size.height*0.9)
-						.foregroundColor(Color("Dynamic/LightGray"))*/
 						Spacer()
 					}
 					.frame(width:proxy.size.width*0.5)
@@ -107,65 +108,44 @@ struct WizardInstrumentView: View {
 					.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
 			)
 			.frame(width: UIScreen.main.bounds.size.width*0.85, height: UIScreen.main.bounds.size.height*0.6)
-			
-			
-			/*
-			HStack(spacing: 0) {
-				HStack {
-					Button(action:{
-						stepName = .wizardExperience
-						studentData.updateInstrumentChoice(instrument: .guitar)
-						studentData.removeAKey(keyName: "experience")
-						studentData.wizardStepNames.append(stepName)
-					}){
-						/*
-						Circle()
-							.strokeBorder(Color.black,lineWidth: 1)
-							.background(Circle().foregroundColor(Color.white))
-							.frame(width:100,height:100)
-							.overlay(
-								getChoiceIcon(instrumentImage: "instrument-guitar-icon", isSelected: isInstrumentSelected(askInstrument: .guitar))
-							)*/
-						getChoiceIcon(instrumentImage: "instrument-guitar-icon", isSelected: isInstrumentSelected(askInstrument: .guitar))
-					}.padding().shadow(radius: CGFloat(0))
-				}
-				.background(
-					RoundedCornersShape(corners: [.bottomLeft,.topLeft], radius: 16)
-						.fill(Color("LessonPlayLearnContinue"))).padding(0)
-				.frame(width:UIScreen.main.bounds.size.width*0.4, height: UIScreen.main.bounds.size.height*0.6)
-				.shadow(radius: CGFloat(5), x:-5)
-				
-				HStack(spacing: 0) {
-					Button(action:{
-						stepName = .wizardExperience
-						studentData.updateInstrumentChoice(instrument: .violin)
-						studentData.wizardStepNames.append(stepName)
-					}){
-						/*
-						Circle()
-							.strokeBorder(Color.black,lineWidth: 1)
-							.background(Circle().foregroundColor(Color.white))
-							.frame(width:100,height:100)
-							.overlay(
-								getChoiceIcon(instrumentImage: "instrument-violin-icon", isSelected: isInstrumentSelected(askInstrument: .violin))
-							)*/
-						getChoiceIcon(instrumentImage: "instrument-violin-icon", isSelected: isInstrumentSelected(askInstrument: .violin))
-					}.padding().shadow(radius: CGFloat(0))
-				}
-					.background(
-						RoundedCornersShape(corners: [.topRight, .bottomRight], radius: 16)
-						 .fill(Color("WizardFeedBack")))
-				 .frame(width:UIScreen.main.bounds.size.width*0.4, height: UIScreen.main.bounds.size.height*0.6)
-				 .shadow(radius: CGFloat(5), x:5)
-			}
-			*/
+			 */
 			Spacer()
 		}
-		.background(Color("AppBackground"))
+		//.background(Color("AppBackground"))
 		.onAppear(perform: {
 			//:: start over, reset everything
 			studentData.wizardStepNames = [.wizardChooseInstrument]
+			for index in 1...5{
+				users.append(User(userName: "User\(index)", userImage: "user\(index)"))
+			}
 		})
+	}
+	
+	@ViewBuilder
+	private func displayInstrument(instrument:String) -> some View {
+		GeometryReader { (proxy: GeometryProxy) in
+			VStack{
+				Spacer()
+				HStack {
+					Spacer()
+					getChoiceIcon(instrumentImage: instrument, isSelected: isInstrumentSelected(askInstrument: instrument == InstrumentType.guitar.rawValue ? .guitar : .violin))
+						.frame(width:proxy.size.width*0.7,height:proxy.size.width*0.7)
+						.shadow(color: Color("AppBackground"), radius: CGFloat(10))
+					Spacer()
+				}
+				Text(instrument.uppercased()).font(.headline).foregroundColor(Color("Dynamic/Shadow"))
+				Divider().frame(width: proxy.size.width*0.7)
+				
+				Spacer()
+			}
+			.onTapGesture {
+				feedback.impactOccurred()
+			 stepName = .wizardExperience
+			 studentData.updateInstrumentChoice(instrument: instrument == InstrumentType.guitar.rawValue ? .guitar : .violin)
+			 studentData.removeAKey(keyName: "experience")
+			 studentData.wizardStepNames.append(stepName)
+			}
+		}
 	}
 	
 	@ViewBuilder

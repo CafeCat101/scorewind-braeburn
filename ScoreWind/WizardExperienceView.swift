@@ -61,7 +61,7 @@ struct WizardExperienceView: View {
 				}
 			Spacer()
 		}
-		.background(Color("AppBackground"))
+		//.background(Color("AppBackground"))
 		.onAppear(perform: {
 			print("[debug] WizardExperienceView.onAppear")
 			//userDefaults.removeObject(forKey: "hideTips")

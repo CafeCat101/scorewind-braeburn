@@ -20,6 +20,7 @@ struct WizardView: View {
 	@State private var showViewTitle = true
 	@State private var showStore = false
 	@Binding var stepName:Page
+	@Environment(\.colorScheme) var colorScheme
 	
 	var body: some View {
 		VStack(spacing:0) {
@@ -73,10 +74,10 @@ struct WizardView: View {
 						} else {
 							userRole = .student
 						}
-					})
+					}).shadow(radius: CGFloat(0))
 					Button(action: {
 						showStore = true
-					}, label: {Text("ScoreWind subscription")})
+					}, label: {Text("ScoreWind subscription")}).shadow(radius: CGFloat(0))
 				} label: {
 					Label("ScoreWind", systemImage: "gear")
 						.font(.title3)
@@ -135,23 +136,38 @@ struct WizardView: View {
 				if showProgress {
 					GeometryReader { (proxy: GeometryProxy) in
 						HStack {
-							wizardProgressView(barWidth: proxy.size.width)
+							Spacer()
+							wizardProgressView(barWidth: proxy.size.width*0.85,barHeight: 10)
+							Spacer()
 						}.onAppear(perform: {
-							print("[debug] showProgress, screensize.size.width \(screenSize.width)")
-							print("[debug] showProgress, proxy.size.width \(proxy.size.width)")
+							//print("[debug] showProgress, screensize.size.width \(screenSize.width)")
+							//print("[debug] showProgress, proxy.size.width \(proxy.size.width)")
 						})
 					}.frame(height:10)
 				}
-			}.padding([.bottom], 5)
+			}.padding([.bottom], 10)
 				.padding([.leading,.trailing], 15)
 			
 			Divider()
 		}
-		.background(Color("AppBackground"))
+		.background(colorScheme == .light ? backgroundImage(colorMode: colorScheme) : backgroundImage(colorMode: colorScheme))
+		//.background(Color("AppBackground"))
 		.modifier(storeViewCover(showStore: $showStore, selectedTab: $selectedTab))
 		.onAppear(perform: {			
 			print("[debug] WizardView, onAppear studentData.wizardResult.learningPath.count \(studentData.wizardResult.learningPath.count)")
 		})
+	}
+	
+	@ViewBuilder
+	private func backgroundImage(colorMode: ColorScheme) -> some View {
+		if colorMode == .light {
+			Image("WelcomeViewBg")
+		} else {
+			Image("DarkPolygonBg")
+				.resizable()
+				.aspectRatio(contentMode: .fill)
+				.edgesIgnoringSafeArea(.all)
+		}
 	}
 	
 	private func getWizardViewTitle() -> String {
@@ -169,29 +185,30 @@ struct WizardView: View {
 	}
 	
 	@ViewBuilder
-	private func wizardProgressView(barWidth: CGFloat) -> some View {
+	private func wizardProgressView(barWidth: CGFloat, barHeight: CGFloat) -> some View {
 		let totalWidth = barWidth
 		//totalWidth = screenSize.width*0.4
 		RoundedRectangle(cornerRadius: 5)
-			.foregroundColor(Color("Dynamic/LightGray+1"))
-			.frame(width:totalWidth,height:10)
+			.foregroundColor(Color("Dynamic/LightGray"))
+			.frame(width:totalWidth,height:barHeight)
+			.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(1))
 			.overlay(alignment:.leading,content: {
 				if stepName == .wizardChooseInstrument {
 					RoundedRectangle(cornerRadius: 5)
-						.foregroundColor(Color("WelceomView"))
-						.frame(width:totalWidth*(0.3/10.0),height:10)
+						.foregroundColor(Color("Dynamic/MainBrown"))
+						.frame(width:totalWidth*(0.3/10.0),height:barHeight)
 				} else if stepName == .wizardExperience {
 					RoundedRectangle(cornerRadius: 5)
-						.foregroundColor(Color("WelceomView"))
-						.frame(width:totalWidth*(0.8/10.0),height:10)
+						.foregroundColor(Color("Dynamic/MainBrown"))
+						.frame(width:totalWidth*(0.8/10.0),height:barHeight)
 				} else if stepName == .wizardResult {
 					RoundedRectangle(cornerRadius: 5)
-						.foregroundColor(Color("WelceomView"))
-						.frame(width:totalWidth,height:10)
+						.foregroundColor(Color("Dynamic/MainBrown"))
+						.frame(width:totalWidth,height:barHeight)
 				} else {
 					RoundedRectangle(cornerRadius: 5)
-						.foregroundColor(Color("WelceomView"))
-						.frame(width: (totalWidth*0.95)*(Double(studentData.wizardRange.count)/10.0),height:10)
+						.foregroundColor(Color("Dynamic/MainBrown"))
+						.frame(width: (totalWidth*0.95)*(Double(studentData.wizardRange.count)/10.0),height:barHeight)
 				}
 			})
 	}

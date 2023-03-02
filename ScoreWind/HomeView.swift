@@ -38,9 +38,12 @@ struct HomeView: View {
 					Text("My Courses")
 				}.tag("TMyCourses")
 		}
-		.accentColor(Color("Dynamic/MainGreen"))
+		.accentColor(Color("Dynamic/MainBrown+6"))
 		.ignoresSafeArea()
 		.onAppear{
+			//UITabBar.appearance().backgroundColor = UIColor(Color("AppBackground"))
+			//;UITabBar.appearance().isTranslucent = true
+			UITabBar.appearance().unselectedItemTintColor = UIColor(Color("test"))
 			//==>>>> app is launched...
 			print("[debug] HomeView, onAppear")
 			if downloadManager.appState == .background {

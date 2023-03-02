@@ -665,7 +665,7 @@ struct CourseView: View {
 struct CourseView_Previews: PreviewProvider {
 	@State static var tab = "TCourse"
 	static var previews: some View {
-		CourseView(selectedTab: $tab, downloadManager: DownloadManager(), studentData: StudentData(), showLessonView: .constant(false)).environmentObject(ScorewindData())
+		CourseView(selectedTab: $tab, downloadManager: DownloadManager(), studentData: StudentData(), showLessonView: .constant(false)).environmentObject(ScorewindData()).environmentObject(Store())
 	}
 }
 
