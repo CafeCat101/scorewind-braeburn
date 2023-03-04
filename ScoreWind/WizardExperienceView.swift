@@ -32,142 +32,25 @@ struct WizardExperienceView: View {
 			
 			Spacer()
 			
-			//this is the vertical scroll version
-			/*
 			VStack {
-				GeometryReader { (proxy: GeometryProxy) in
-					ScrollView(.vertical) {
-						HStack {
-							Spacer()
-							VStack(spacing:0) {
-								VStack {
-									HStack {
-										Spacer()
-										Image("testImage")
-											.resizable()
-											.scaledToFit()
-										Spacer()
-									}
-								}
-								.background(
-									RoundedCornersShape(corners: [.topLeft, .topRight], radius: 28)
-										.fill(Color("test"))
-								)
-								VStack {
-									HStack {
-										Spacer()
-										Text(ExperienceFeedback.starterKit.getLabel())
-											.font(.headline)
-											.foregroundColor(Color("Dynamic/Shadow"))
-											.padding(EdgeInsets(top: 30, leading: 25, bottom: 30, trailing: 25))
-										Spacer()
-									}
-								}
-								.background(
-									RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 28)
-										.fill(Color("Dynamic/LightGray"))
-								)
-							}
-							.frame(width: proxy.size.width*0.85, height: proxy.size.height*0.6)
-							.background(
-								RoundedRectangle(cornerRadius: CGFloat(28))
-									.foregroundColor(Color("Dynamic/Shadow"))
-									.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
-							)
-							.padding(.top,10)
-							Spacer()
-						}
-						HStack {
-							Spacer()
-							VStack(spacing:0) {
-								VStack {
-									HStack {
-										Spacer()
-										Image("testImage")
-											.resizable()
-											.scaledToFit()
-										Spacer()
-									}
-								}
-								.background(
-									RoundedCornersShape(corners: [.topLeft, .topRight], radius: 28)
-										.fill(Color("test"))
-								)
-								VStack {
-									HStack {
-										Spacer()
-										Text(ExperienceFeedback.starterKit.getLabel())
-											.font(.headline)
-											.foregroundColor(Color("Dynamic/Shadow"))
-											.padding(EdgeInsets(top: 30, leading: 25, bottom: 30, trailing: 25))
-										Spacer()
-									}
-								}
-								.background(
-									RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 28)
-										.fill(Color("Dynamic/LightGray"))
-								)
-							}
-							.frame(width: proxy.size.width*0.85, height: proxy.size.height*0.6)
-							.background(
-								RoundedRectangle(cornerRadius: CGFloat(28))
-									.foregroundColor(Color("Dynamic/Shadow"))
-									.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
-							)
-							.padding(.top,10)
-							Spacer()
-						}
-						HStack {
-							Spacer()
-							VStack(spacing:0) {
-								VStack {
-									HStack {
-										Spacer()
-										Image("testImage")
-											.resizable()
-											.scaledToFit()
-										Spacer()
-									}
-								}
-								.background(
-									RoundedCornersShape(corners: [.topLeft, .topRight], radius: 28)
-										.fill(Color("test"))
-								)
-								VStack {
-									HStack {
-										Spacer()
-										Text(ExperienceFeedback.starterKit.getLabel())
-											.font(.headline)
-											.foregroundColor(Color("Dynamic/Shadow"))
-											.padding(EdgeInsets(top: 30, leading: 25, bottom: 30, trailing: 25))
-										Spacer()
-									}
-								}
-								.background(
-									RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 28)
-										.fill(Color("Dynamic/LightGray"))
-								)
-							}
-							.frame(width: proxy.size.width*0.85, height: proxy.size.height*0.6)
-							.background(
-								RoundedRectangle(cornerRadius: CGFloat(28))
-									.foregroundColor(Color("Dynamic/Shadow"))
-									.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
-							)
-							.padding(.top,10)
-							Spacer()
-						}
-						Spacer().frame(height: 30)
-					}
-				}
-			}
-			 */
-			
-			//this is the classic tab view version
-			
-			VStack {
-				GeometryReader { (proxy: GeometryProxy) in
+				//GeometryReader { (proxy: GeometryProxy) in
 					TabView {
+						displayExperience(experience: .starterKit)
+							.onTapGesture {
+								print("choose \(ExperienceFeedback.starterKit.rawValue)")
+								gotFeedback(selectedFeedback: .starterKit)
+							}
+						displayExperience(experience: .continueLearning)
+							.onTapGesture {
+								print("choose \(ExperienceFeedback.continueLearning.rawValue)")
+								gotFeedback(selectedFeedback: .continueLearning)
+							}
+						displayExperience(experience: .experienced)
+							.onTapGesture {
+								print("choose \(ExperienceFeedback.experienced.rawValue)")
+								gotFeedback(selectedFeedback: .experienced)
+							}
+						/*
 						VStack(spacing:0) {
 							VStack {
 								HStack {
@@ -275,151 +158,12 @@ struct WizardExperienceView: View {
 								.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
 						)
 						.frame(width: proxy.size.width*0.85, height: proxy.size.height*0.9)
+						 */
 					}
 					.tabViewStyle(.page)
-					/*.background(
-						RoundedRectangle(cornerRadius: CGFloat(28))
-							.foregroundColor(Color("Dynamic/LightGray"))
-							.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
-					)*/
-					
-				}
+				//}
 			}.frame(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height*0.7)
 			Spacer()
-			
-			//this is the horizontal scroll version
-			/*
-			VStack {
-				GeometryReader { (proxy: GeometryProxy) in
-					ScrollView(.horizontal) {
-						HStack {
-							VStack {
-								Spacer()
-								VStack(spacing:0) {
-									VStack {
-										HStack {
-											Spacer()
-											Image("testImage")
-												.resizable()
-												.scaledToFit()
-											Spacer()
-										}
-									}
-									.background(
-										RoundedCornersShape(corners: [.topLeft, .topRight], radius: 28)
-											.fill(Color("test"))
-									)
-									VStack {
-										HStack {
-											Spacer()
-											Text(ExperienceFeedback.starterKit.getLabel())
-												.font(.headline)
-												.foregroundColor(Color("Dynamic/Shadow"))
-												.padding(EdgeInsets(top: 30, leading: 25, bottom: 30, trailing: 25))
-											Spacer()
-										}
-									}
-									.background(
-										RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 28)
-											.fill(Color("Dynamic/LightGray"))
-									)
-								}
-								.background(
-									RoundedRectangle(cornerRadius: CGFloat(28))
-										.foregroundColor(Color("Dynamic/Shadow"))
-										.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
-								)
-								.frame(width: proxy.size.width*0.85, height: proxy.size.height*0.8)
-								.padding(.leading, 35)
-								Spacer()
-							}
-							
-							VStack {
-								Spacer()
-								VStack(spacing:0) {
-									VStack {
-										HStack {
-											Spacer()
-											Image("testImage")
-												.resizable()
-												.scaledToFit()
-											Spacer()
-										}
-									}
-									.background(
-										RoundedCornersShape(corners: [.topLeft, .topRight], radius: 28)
-											.fill(Color("test"))
-									)
-									VStack {
-										HStack {
-											Spacer()
-											Text(ExperienceFeedback.starterKit.getLabel())
-												.font(.headline)
-												.foregroundColor(Color("Dynamic/Shadow"))
-												.padding(EdgeInsets(top: 30, leading: 25, bottom: 30, trailing: 25))
-											Spacer()
-										}
-									}
-									.background(
-										RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 28)
-											.fill(Color("Dynamic/LightGray"))
-									)
-								}
-								.background(
-									RoundedRectangle(cornerRadius: CGFloat(28))
-										.foregroundColor(Color("Dynamic/Shadow"))
-										.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
-								)
-								.frame(width: proxy.size.width*0.85, height: proxy.size.height*0.8)
-								Spacer()
-							}
-							
-							VStack {
-								Spacer()
-								VStack(spacing:0) {
-									VStack {
-										HStack {
-											Spacer()
-											Image("testImage")
-												.resizable()
-												.scaledToFit()
-											Spacer()
-										}
-									}
-									.background(
-										RoundedCornersShape(corners: [.topLeft, .topRight], radius: 28)
-											.fill(Color("test"))
-									)
-									VStack {
-										HStack {
-											Spacer()
-											Text(ExperienceFeedback.starterKit.getLabel())
-												.font(.headline)
-												.foregroundColor(Color("Dynamic/Shadow"))
-												.padding(EdgeInsets(top: 30, leading: 25, bottom: 30, trailing: 25))
-											Spacer()
-										}
-									}
-									.background(
-										RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 28)
-											.fill(Color("Dynamic/LightGray"))
-									)
-								}
-								.background(
-									RoundedRectangle(cornerRadius: CGFloat(28))
-										.foregroundColor(Color("Dynamic/Shadow"))
-										.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
-								)
-								.frame(width: proxy.size.width*0.85, height: proxy.size.height*0.8)
-								.padding(.trailing, 35)
-								Spacer()
-							}
-						}
-						
-					}.frame(height: proxy.size.height)
-				}
-			}.frame(height: UIScreen.main.bounds.size.height*0.7)
-			*/
 			
 			//original buttons
 			/*
@@ -474,6 +218,59 @@ struct WizardExperienceView: View {
 		}, content: {
 			TipTransparentModalView(showStepTip: $showStepTip, tipContent: $tipContent)
 		})
+	}
+	
+	@ViewBuilder
+	private func displayExperience(experience: ExperienceFeedback) -> some View {
+		GeometryReader { (proxy: GeometryProxy) in
+			HStack {
+				Spacer()
+				VStack(spacing:0) {
+					VStack {
+						HStack {
+							Spacer()
+							Image("testImage")
+								.resizable()
+								.scaledToFit()
+							Spacer()
+						}
+					}
+					.background(
+						RoundedCornersShape(corners: [.topLeft, .topRight], radius: 28)
+							.fill(Color("test"))
+					)
+					VStack {
+						HStack {
+							Spacer()
+							VStack {
+								Text(experience.getTitle().uppercased())
+									.font(.headline)
+									.foregroundColor(Color("Dynamic/MainBrown+6"))
+								Divider()
+								Text(experience.getLabel())
+									.foregroundColor(Color("Dynamic/MainBrown+6"))
+									.multilineTextAlignment(.center)
+									//.font(.headline)
+									//.foregroundColor(Color("Dynamic/Shadow"))
+									
+							}
+							Spacer()
+						}.padding(EdgeInsets(top: 30, leading: 15, bottom: 30, trailing: 15))
+					}
+					.background(
+						RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 28)
+							.fill(Color("Dynamic/LightGray"))
+					)
+				}
+				.background(
+					RoundedRectangle(cornerRadius: CGFloat(28))
+						.foregroundColor(Color("Dynamic/Shadow"))
+						.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+				)
+				.frame(width: proxy.size.width*0.85, height: proxy.size.height*0.9)
+				Spacer()
+			}
+		}
 	}
 
 	private func goToNextStep() {

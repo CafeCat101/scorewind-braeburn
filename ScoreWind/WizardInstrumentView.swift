@@ -123,9 +123,10 @@ struct WizardInstrumentView: View {
 						Spacer()
 					}
 					Divider().frame(width: proxy.size.width*0.7)
-					Text(instrument.uppercased()).font(.headline).foregroundColor(Color("Dynamic/Shadow"))
-					
-					
+					Text(instrument.uppercased())
+						.font(.headline)
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+						//.foregroundColor(Color("Dynamic/Shadow"))
 					Spacer()
 				}
 				.frame(width: proxy.size.width*0.85, height:proxy.size.height*0.9)

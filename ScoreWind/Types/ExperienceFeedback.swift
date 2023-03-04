@@ -22,7 +22,16 @@ enum ExperienceFeedback:String {
 		}
 	}
 	
-	
+	func getTitle() -> String{
+		switch self {
+		case .starterKit:
+			return "Journey"
+		case .continueLearning:
+			return "Explore"
+		case .experienced:
+			return "Advancing"
+		}
+	}
 	
 	func getKeyName() -> String {
 		return "experience"
