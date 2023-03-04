@@ -266,19 +266,6 @@ struct WizardPlayableView: View {
 	}
 }
 
-struct FeedbackOptionsModifier: ViewModifier {
-	func body(content: Content) -> some View {
-		content
-			.foregroundColor(Color("WizardFeedbackText"))
-			.padding(EdgeInsets(top: 12, leading: 25, bottom: 12, trailing: 25))
-			.background {
-				RoundedRectangle(cornerRadius: 25)
-					.foregroundColor(Color("WizardFeedBack"))
-			}
-			.fixedSize()
-	}
-}
-
 struct WizardPlayable_Previews: PreviewProvider {
 	@State static var tab = "THome"
 	@State static var step:Page = .wizardPlayable

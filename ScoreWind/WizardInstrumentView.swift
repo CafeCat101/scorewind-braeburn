@@ -8,25 +8,6 @@
 import SwiftUI
 import AVFoundation
 
-struct User: Identifiable, View{
-		var id = UUID().uuidString
-		var userName: String
-		var userImage: String
-	var body: some View {
-		VStack {
-			Spacer()
-			HStack {
-				Spacer()
-				Text("something,something something")
-				Spacer()
-			}
-			Spacer()
-		}
-		.background(.gray)
-		.cornerRadius(12)
-	}
-}
-
 struct WizardInstrumentView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@Binding var selectedTab:String
@@ -35,7 +16,7 @@ struct WizardInstrumentView: View {
 	let feedback = UIImpactFeedbackGenerator(style: .heavy)
 	let screenSize = UIScreen.main.bounds.size
 	@State private var currentIndex = 0
-	@State var users: [User] = []
+
 	var body: some View {
 		VStack {
 			Spacer()
@@ -54,13 +35,22 @@ struct WizardInstrumentView: View {
 				displayInstrument(instrument: InstrumentType.violin.rawValue)
 			}
 			.tabViewStyle(.page)
+			.frame(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height*0.6)
+			
+			//Page dot inside the panel look
+			/*
+			TabView {
+				displayInstrument(instrument: InstrumentType.guitar.rawValue)
+				displayInstrument(instrument: InstrumentType.violin.rawValue)
+			}
+			.tabViewStyle(.page)
 			.background(
 				RoundedRectangle(cornerRadius: CGFloat(28))
 					.foregroundColor(Color("Dynamic/LightGray"))
 					.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
 			)
 			.frame(width: UIScreen.main.bounds.size.width*0.85, height: UIScreen.main.bounds.size.height*0.6)
-			
+			*/
 			/*
 			GeometryReader { (proxy: GeometryProxy) in
 				HStack(spacing: 0) {
@@ -115,35 +105,44 @@ struct WizardInstrumentView: View {
 		.onAppear(perform: {
 			//:: start over, reset everything
 			studentData.wizardStepNames = [.wizardChooseInstrument]
-			for index in 1...5{
-				users.append(User(userName: "User\(index)", userImage: "user\(index)"))
-			}
 		})
 	}
 	
 	@ViewBuilder
 	private func displayInstrument(instrument:String) -> some View {
 		GeometryReader { (proxy: GeometryProxy) in
-			VStack{
+			HStack {
 				Spacer()
-				HStack {
+				VStack {
 					Spacer()
-					getChoiceIcon(instrumentImage: instrument, isSelected: isInstrumentSelected(askInstrument: instrument == InstrumentType.guitar.rawValue ? .guitar : .violin))
-						.frame(width:proxy.size.width*0.7,height:proxy.size.width*0.7)
-						.shadow(color: Color("AppBackground"), radius: CGFloat(10))
+					HStack {
+						Spacer()
+						getChoiceIcon(instrumentImage: instrument, isSelected: isInstrumentSelected(askInstrument: instrument == InstrumentType.guitar.rawValue ? .guitar : .violin))
+							.frame(width:proxy.size.width*0.7,height:proxy.size.width*0.7)
+							.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(15))
+						Spacer()
+					}
+					Divider().frame(width: proxy.size.width*0.7)
+					Text(instrument.uppercased()).font(.headline).foregroundColor(Color("Dynamic/Shadow"))
+					
+					
 					Spacer()
 				}
-				Text(instrument.uppercased()).font(.headline).foregroundColor(Color("Dynamic/Shadow"))
-				Divider().frame(width: proxy.size.width*0.7)
-				
+				.frame(width: proxy.size.width*0.85, height:proxy.size.height*0.9)
+				.background(
+					RoundedRectangle(cornerRadius: CGFloat(28))
+						.foregroundColor(Color("Dynamic/LightGray"))
+						.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+				)
+				.padding(.top, 10)
+				.onTapGesture {
+					feedback.impactOccurred()
+				 stepName = .wizardExperience
+				 studentData.updateInstrumentChoice(instrument: instrument == InstrumentType.guitar.rawValue ? .guitar : .violin)
+				 studentData.removeAKey(keyName: "experience")
+				 studentData.wizardStepNames.append(stepName)
+				}
 				Spacer()
-			}
-			.onTapGesture {
-				feedback.impactOccurred()
-			 stepName = .wizardExperience
-			 studentData.updateInstrumentChoice(instrument: instrument == InstrumentType.guitar.rawValue ? .guitar : .violin)
-			 studentData.removeAKey(keyName: "experience")
-			 studentData.wizardStepNames.append(stepName)
 			}
 		}
 	}
@@ -176,7 +175,15 @@ struct WizardInstrumentView: View {
 struct WizardInstrument_Previews: PreviewProvider {
 	@State static var tab = "THome"
 	@State static var step:Page = .wizardChooseInstrument
+	
 	static var previews: some View {
-		WizardInstrumentView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
+		Group {
+			WizardInstrumentView(selectedTab: $tab, stepName: $step, studentData: StudentData())
+				.environmentObject(ScorewindData())
+				.environment(\.colorScheme, .light)
+			WizardInstrumentView(selectedTab: $tab, stepName: $step, studentData: StudentData())
+				.environmentObject(ScorewindData())
+				.environment(\.colorScheme, .dark)
+		}
 	}
 }

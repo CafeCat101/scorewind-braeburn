@@ -68,16 +68,23 @@ struct WizardView: View {
 				}
 				Spacer()*/
 				Menu {
-					Button("Switch role", action: {
+					Button(action: {
 						if userRole == .student {
 							userRole = .teacher
 						} else {
 							userRole = .student
 						}
-					}).shadow(radius: CGFloat(0))
+					}, label: {
+						Text("Switch role")
+					})
+					
 					Button(action: {
 						showStore = true
-					}, label: {Text("ScoreWind subscription")}).shadow(radius: CGFloat(0))
+					}, label: {
+						Text("ScoreWind subscription")
+						
+					})
+					
 				} label: {
 					Label("ScoreWind", systemImage: "gear")
 						.font(.title3)
@@ -145,7 +152,7 @@ struct WizardView: View {
 						})
 					}.frame(height:10)
 				}
-			}.padding([.bottom], 10)
+			}.padding([.top,.bottom], 10)
 				.padding([.leading,.trailing], 15)
 			
 			Divider()
@@ -230,19 +237,38 @@ struct TipExplainingParagraph: ViewModifier {
 			.padding(EdgeInsets(top: 4, leading: 40, bottom: 4, trailing: 40))
 	}
 }
-/*
+
+struct FeedbackOptionsModifier: ViewModifier {
+	func body(content: Content) -> some View {
+		content
+			.font(.headline)
+			.foregroundColor(Color("Dynamic/Shadow"))
+			.padding(EdgeInsets(top: 30, leading: 25, bottom: 30, trailing: 25))
+			/*.background {
+				RoundedRectangle(cornerRadius: 25)
+					.foregroundColor(Color("WizardFeedBack"))
+			}*/
+			.background(
+				RoundedRectangle(cornerRadius: CGFloat(28))
+					.foregroundColor(Color("Dynamic/LightGray"))
+					.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+			)
+			.fixedSize()
+	}
+}
+
 struct WizardView_Previews: PreviewProvider {
 	@State static var tab = "THome"
-	@State static var stepName:Page = .wizardChooseInstrument
+	@State static var stepName:Page = .wizardChooseInstrument//.wizardExperience
 	
 	static var previews: some View {
 		Group {
-			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), stepName: $stepName).environmentObject(ScorewindData())
-			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), stepName: $stepName).environmentObject(ScorewindData()).environment(\.colorScheme, .dark)
+			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), stepName: $stepName).environmentObject(ScorewindData()).environment(\.colorScheme, .light).environmentObject(Store())
+			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), stepName: $stepName).environmentObject(ScorewindData()).environment(\.colorScheme, .dark).environmentObject(Store())
 		}
 		
 	}
-}*/
+}
 
 enum UserRole {
 	case teacher

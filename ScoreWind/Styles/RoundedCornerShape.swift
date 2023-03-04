@@ -19,3 +19,15 @@ struct RoundedCornersShape: Shape {
 		return Path(path.cgPath)
 	}
 }
+
+
+//usage example:
+/*
+ Text("Round my corners!")
+	 .padding()
+	 .padding(.horizontal, 30)
+	 .background(
+			 RoundedCornersShape(corners: [.topLeft, .bottomRight], radius: 15)
+					 .fill(Color(UIColor.systemGray4))
+	 )
+ */
