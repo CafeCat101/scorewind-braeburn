@@ -259,7 +259,7 @@ struct FeedbackOptionsModifier: ViewModifier {
 
 struct WizardView_Previews: PreviewProvider {
 	@State static var tab = "THome"
-	@State static var stepName:Page = .wizardChooseInstrument//.wizardExperience
+	@State static var stepName:Page = .wizardExperience
 	
 	static var previews: some View {
 		Group {

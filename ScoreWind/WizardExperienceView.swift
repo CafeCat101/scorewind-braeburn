@@ -32,6 +32,138 @@ struct WizardExperienceView: View {
 			
 			Spacer()
 			
+			//this is the vertical scroll version
+			/*
+			VStack {
+				GeometryReader { (proxy: GeometryProxy) in
+					ScrollView(.vertical) {
+						HStack {
+							Spacer()
+							VStack(spacing:0) {
+								VStack {
+									HStack {
+										Spacer()
+										Image("testImage")
+											.resizable()
+											.scaledToFit()
+										Spacer()
+									}
+								}
+								.background(
+									RoundedCornersShape(corners: [.topLeft, .topRight], radius: 28)
+										.fill(Color("test"))
+								)
+								VStack {
+									HStack {
+										Spacer()
+										Text(ExperienceFeedback.starterKit.getLabel())
+											.font(.headline)
+											.foregroundColor(Color("Dynamic/Shadow"))
+											.padding(EdgeInsets(top: 30, leading: 25, bottom: 30, trailing: 25))
+										Spacer()
+									}
+								}
+								.background(
+									RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 28)
+										.fill(Color("Dynamic/LightGray"))
+								)
+							}
+							.frame(width: proxy.size.width*0.85, height: proxy.size.height*0.6)
+							.background(
+								RoundedRectangle(cornerRadius: CGFloat(28))
+									.foregroundColor(Color("Dynamic/Shadow"))
+									.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+							)
+							.padding(.top,10)
+							Spacer()
+						}
+						HStack {
+							Spacer()
+							VStack(spacing:0) {
+								VStack {
+									HStack {
+										Spacer()
+										Image("testImage")
+											.resizable()
+											.scaledToFit()
+										Spacer()
+									}
+								}
+								.background(
+									RoundedCornersShape(corners: [.topLeft, .topRight], radius: 28)
+										.fill(Color("test"))
+								)
+								VStack {
+									HStack {
+										Spacer()
+										Text(ExperienceFeedback.starterKit.getLabel())
+											.font(.headline)
+											.foregroundColor(Color("Dynamic/Shadow"))
+											.padding(EdgeInsets(top: 30, leading: 25, bottom: 30, trailing: 25))
+										Spacer()
+									}
+								}
+								.background(
+									RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 28)
+										.fill(Color("Dynamic/LightGray"))
+								)
+							}
+							.frame(width: proxy.size.width*0.85, height: proxy.size.height*0.6)
+							.background(
+								RoundedRectangle(cornerRadius: CGFloat(28))
+									.foregroundColor(Color("Dynamic/Shadow"))
+									.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+							)
+							.padding(.top,10)
+							Spacer()
+						}
+						HStack {
+							Spacer()
+							VStack(spacing:0) {
+								VStack {
+									HStack {
+										Spacer()
+										Image("testImage")
+											.resizable()
+											.scaledToFit()
+										Spacer()
+									}
+								}
+								.background(
+									RoundedCornersShape(corners: [.topLeft, .topRight], radius: 28)
+										.fill(Color("test"))
+								)
+								VStack {
+									HStack {
+										Spacer()
+										Text(ExperienceFeedback.starterKit.getLabel())
+											.font(.headline)
+											.foregroundColor(Color("Dynamic/Shadow"))
+											.padding(EdgeInsets(top: 30, leading: 25, bottom: 30, trailing: 25))
+										Spacer()
+									}
+								}
+								.background(
+									RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 28)
+										.fill(Color("Dynamic/LightGray"))
+								)
+							}
+							.frame(width: proxy.size.width*0.85, height: proxy.size.height*0.6)
+							.background(
+								RoundedRectangle(cornerRadius: CGFloat(28))
+									.foregroundColor(Color("Dynamic/Shadow"))
+									.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+							)
+							.padding(.top,10)
+							Spacer()
+						}
+						Spacer().frame(height: 30)
+					}
+				}
+			}
+			 */
+			
+			//this is the classic tab view version
 			
 			VStack {
 				GeometryReader { (proxy: GeometryProxy) in
@@ -154,7 +286,7 @@ struct WizardExperienceView: View {
 				}
 			}.frame(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height*0.7)
 			Spacer()
-
+			
 			//this is the horizontal scroll version
 			/*
 			VStack {
