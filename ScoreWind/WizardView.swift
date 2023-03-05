@@ -122,7 +122,7 @@ struct WizardView: View {
 						.onAppear{
 						DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
 							withAnimation{
-								showViewTitle = true
+								showViewTitle = false
 								if stepName == .wizardResult {
 									showProgress = false
 								}
@@ -242,17 +242,12 @@ struct FeedbackOptionsModifier: ViewModifier {
 	func body(content: Content) -> some View {
 		content
 			.font(.headline)
-			.foregroundColor(Color("Dynamic/Shadow"))
-			.padding(EdgeInsets(top: 30, leading: 25, bottom: 30, trailing: 25))
-			/*.background {
+			.foregroundColor(Color("Dynamic/MainBrown+6"))
+			.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
+			.background {
 				RoundedRectangle(cornerRadius: 25)
 					.foregroundColor(Color("WizardFeedBack"))
-			}*/
-			.background(
-				RoundedRectangle(cornerRadius: CGFloat(28))
-					.foregroundColor(Color("Dynamic/LightGray"))
-					.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
-			)
+			}
 			.fixedSize()
 	}
 }
@@ -262,9 +257,15 @@ struct WizardView_Previews: PreviewProvider {
 	@State static var stepName:Page = .wizardChooseInstrument
 	
 	static var previews: some View {
+		let previewOrientation = InterfaceOrientation.portrait
 		Group {
-			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), stepName: $stepName).environmentObject(ScorewindData()).environment(\.colorScheme, .light).environmentObject(Store())
+			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), stepName: $stepName)
+				.environmentObject(ScorewindData())
+				.environment(\.colorScheme, .light)
+				.environmentObject(Store())
+				.previewInterfaceOrientation(previewOrientation)
 			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), stepName: $stepName).environmentObject(ScorewindData()).environment(\.colorScheme, .dark).environmentObject(Store())
+				.previewInterfaceOrientation(previewOrientation)
 		}
 		
 	}

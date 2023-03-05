@@ -102,7 +102,12 @@ struct WizardDoYouKnow_Previews: PreviewProvider {
 	@State static var step:Page = .wizardDoYouKnow
 	
 	static var previews: some View {
-		WizardDoYouKnowView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
+		WizardDoYouKnowView(selectedTab: $tab, stepName: $step, studentData: StudentData())
+			.environmentObject(ScorewindData())
 		WizardDoYouKnowView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData()).environment(\.colorScheme, .dark)
+		
+		
 	}
+	
+	
 }

@@ -16,6 +16,7 @@ struct WizardInstrumentView: View {
 	let feedback = UIImpactFeedbackGenerator(style: .heavy)
 	let screenSize = UIScreen.main.bounds.size
 	@State private var currentIndex = 0
+	@Environment(\.horizontalSizeClass) var sizeClass
 
 	var body: some View {
 		VStack {
@@ -51,54 +52,6 @@ struct WizardInstrumentView: View {
 			)
 			.frame(width: UIScreen.main.bounds.size.width*0.85, height: UIScreen.main.bounds.size.height*0.6)
 			*/
-			/*
-			GeometryReader { (proxy: GeometryProxy) in
-				HStack(spacing: 0) {
-					VStack{
-						Spacer()
-						getChoiceIcon(instrumentImage: "guitar", isSelected: isInstrumentSelected(askInstrument: .guitar)).frame(width:proxy.size.width*0.4,height:proxy.size.width*0.4)
-						Text("Guitar").font(.headline).foregroundColor(Color("Dynamic/Shadow"))
-						Spacer()
-					}
-					.frame(width:proxy.size.width*0.5)
-					.background(
-						RoundedCornersShape(corners: [.topLeft, .bottomLeft], radius: 26)
-														.fill(Color("Dynamic/LightGray+1"))
-					).onTapGesture {
-						print("guitar!")
-						feedback.impactOccurred()
-					 stepName = .wizardExperience
-					 studentData.updateInstrumentChoice(instrument: .guitar)
-					 studentData.removeAKey(keyName: "experience")
-					 studentData.wizardStepNames.append(stepName)
-					}
-					
-					VStack{
-						Spacer()
-						getChoiceIcon(instrumentImage: "violin", isSelected: isInstrumentSelected(askInstrument: .violin)).frame(width:proxy.size.width*0.4,height:proxy.size.width*0.4)
-						Text("Violin").font(.headline).foregroundColor(Color("Dynamic/Shadow"))
-						Spacer()
-					}
-					.frame(width:proxy.size.width*0.5)
-					.background(
-						RoundedCornersShape(corners: [.topRight, .bottomRight], radius: 26)
-														.fill(Color("Dynamic/LightGray"))
-					)
-					.onTapGesture {
-						feedback.impactOccurred()
-						stepName = .wizardExperience
-						studentData.updateInstrumentChoice(instrument: .violin)
-						studentData.wizardStepNames.append(stepName)
-					}
-				}
-			}
-			.background(
-				RoundedRectangle(cornerRadius: CGFloat(28))
-					.foregroundColor(Color("Dynamic/Shadow"))
-					.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
-			)
-			.frame(width: UIScreen.main.bounds.size.width*0.85, height: UIScreen.main.bounds.size.height*0.6)
-			 */
 			Spacer()
 		}
 		//.background(Color("AppBackground"))
@@ -178,13 +131,18 @@ struct WizardInstrument_Previews: PreviewProvider {
 	@State static var step:Page = .wizardChooseInstrument
 	
 	static var previews: some View {
+		let previewOrientation = InterfaceOrientation.portrait
+		
 		Group {
 			WizardInstrumentView(selectedTab: $tab, stepName: $step, studentData: StudentData())
 				.environmentObject(ScorewindData())
 				.environment(\.colorScheme, .light)
+				.previewInterfaceOrientation(previewOrientation)
+			
 			WizardInstrumentView(selectedTab: $tab, stepName: $step, studentData: StudentData())
 				.environmentObject(ScorewindData())
 				.environment(\.colorScheme, .dark)
+				.previewInterfaceOrientation(previewOrientation)
 		}
 	}
 }
