@@ -152,7 +152,7 @@ struct WizardInstrumentView: View {
 	private func getChoiceIcon(instrumentImage:String, isSelected:Bool) -> some View {
 		Image(instrumentImage)
 			.resizable()
-			.scaleEffect(1)
+			.scaledToFit()
 			.overlay(
 				alignment:.bottom,
 				content: {

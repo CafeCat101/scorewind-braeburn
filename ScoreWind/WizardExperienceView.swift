@@ -50,115 +50,6 @@ struct WizardExperienceView: View {
 								print("choose \(ExperienceFeedback.experienced.rawValue)")
 								gotFeedback(selectedFeedback: .experienced)
 							}
-						/*
-						VStack(spacing:0) {
-							VStack {
-								HStack {
-									Spacer()
-									Image("testImage")
-										.resizable()
-										.scaledToFit()
-									Spacer()
-								}
-							}
-							.background(
-								RoundedCornersShape(corners: [.topLeft, .topRight], radius: 28)
-									.fill(Color("test"))
-							)
-							VStack {
-								HStack {
-									Spacer()
-									Text(ExperienceFeedback.starterKit.getLabel())
-										.font(.headline)
-										.foregroundColor(Color("Dynamic/Shadow"))
-										.padding(EdgeInsets(top: 30, leading: 25, bottom: 30, trailing: 25))
-									Spacer()
-								}
-							}
-							.background(
-								RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 28)
-									.fill(Color("Dynamic/LightGray"))
-							)
-						}
-						.background(
-							RoundedRectangle(cornerRadius: CGFloat(28))
-								.foregroundColor(Color("Dynamic/Shadow"))
-								.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
-						)
-						.frame(width: proxy.size.width*0.85, height: proxy.size.height*0.9)
-						
-						VStack(spacing:0) {
-							VStack {
-								HStack {
-									Spacer()
-									Image("testImage")
-										.resizable()
-										.scaledToFit()
-									Spacer()
-								}
-							}
-							.background(
-								RoundedCornersShape(corners: [.topLeft, .topRight], radius: 28)
-									.fill(Color("test"))
-							)
-							VStack {
-								HStack {
-									Spacer()
-									Text(ExperienceFeedback.starterKit.getLabel())
-										.font(.headline)
-										.foregroundColor(Color("Dynamic/Shadow"))
-										.padding(EdgeInsets(top: 30, leading: 25, bottom: 30, trailing: 25))
-									Spacer()
-								}
-							}
-							.background(
-								RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 28)
-									.fill(Color("Dynamic/LightGray"))
-							)
-						}
-						.background(
-							RoundedRectangle(cornerRadius: CGFloat(28))
-								.foregroundColor(Color("Dynamic/Shadow"))
-								.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
-						)
-						.frame(width: proxy.size.width*0.85, height: proxy.size.height*0.9)
-						
-						VStack(spacing:0) {
-							VStack {
-								HStack {
-									Spacer()
-									Image("testImage")
-										.resizable()
-										.scaledToFit()
-									Spacer()
-								}
-							}
-							.background(
-								RoundedCornersShape(corners: [.topLeft, .topRight], radius: 28)
-									.fill(Color("test"))
-							)
-							VStack {
-								HStack {
-									Spacer()
-									Text(ExperienceFeedback.starterKit.getLabel())
-										.font(.headline)
-										.foregroundColor(Color("Dynamic/Shadow"))
-										.padding(EdgeInsets(top: 30, leading: 25, bottom: 30, trailing: 25))
-									Spacer()
-								}
-							}
-							.background(
-								RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 28)
-									.fill(Color("Dynamic/LightGray"))
-							)
-						}
-						.background(
-							RoundedRectangle(cornerRadius: CGFloat(28))
-								.foregroundColor(Color("Dynamic/Shadow"))
-								.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
-						)
-						.frame(width: proxy.size.width*0.85, height: proxy.size.height*0.9)
-						 */
 					}
 					.tabViewStyle(.page)
 				//}
@@ -220,6 +111,20 @@ struct WizardExperienceView: View {
 		})
 	}
 	
+	private func getExperienceImageName(experience: ExperienceFeedback) -> String {
+		var imageName = "testImage"
+		
+		if experience == .starterKit {
+			imageName = "journey"
+		} else if experience == .continueLearning {
+			imageName = "explore"
+		} else {
+			imageName = "advancing"
+		}
+		
+		return imageName
+	}
+	
 	@ViewBuilder
 	private func displayExperience(experience: ExperienceFeedback) -> some View {
 		GeometryReader { (proxy: GeometryProxy) in
@@ -229,15 +134,17 @@ struct WizardExperienceView: View {
 					VStack {
 						HStack {
 							Spacer()
-							Image("testImage")
+							Image(getExperienceImageName(experience: experience))
 								.resizable()
 								.scaledToFit()
+								.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(10))
 							Spacer()
 						}
 					}
+					.frame(minHeight:proxy.size.height*0.55)
 					.background(
 						RoundedCornersShape(corners: [.topLeft, .topRight], radius: 28)
-							.fill(Color("test"))
+							.fill(Color("Dynamic/MainBrown"))
 					)
 					VStack {
 						HStack {

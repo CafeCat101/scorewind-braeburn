@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "violin_x1.png",
+      "filename" : "advancing_x1.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "violin_x2.png",
+      "filename" : "advancing_x2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "violin_x3.png",
+      "filename" : "advancing_x3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

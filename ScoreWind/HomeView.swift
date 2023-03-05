@@ -43,7 +43,7 @@ struct HomeView: View {
 		.onAppear{
 			//UITabBar.appearance().backgroundColor = UIColor(Color("AppBackground"))
 			//;UITabBar.appearance().isTranslucent = true
-			UITabBar.appearance().unselectedItemTintColor = UIColor(Color("test"))
+			UITabBar.appearance().unselectedItemTintColor = UIColor(Color("Dynamic/MainBrown"))
 			//==>>>> app is launched...
 			print("[debug] HomeView, onAppear")
 			if downloadManager.appState == .background {
