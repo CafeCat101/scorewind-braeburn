@@ -39,7 +39,7 @@ struct Course: Codable, Identifiable{
 	init(){
 		id = 0
 		title = "Scorewind Course"
-		content = "Courses are prepared to focus on a specific subject or technique and they are shaped in a progressive way for the player to get better at a given subject. Want it in a nutshell? In courses you will find unique progressive paths, designed with a step by step approach. They are available for various levels and instruments, and you will have the chance to practice specific techniques or develop stylistic interpretation based on composer."
+		content = "<h4>Highlights</h4>\n<ul>\n <li>\nLearn how to plau</li>\n <li>\nHave good time with your instrument</li>\n</ul>\n<h4>Description</h4>\nCourses are prepared to focus on a specific subject or technique and they are shaped in a progressive way for the player to get better at a given subject. Want it in a nutshell? In courses you will find unique progressive paths, designed with a step by step approach. They are available for various levels and instruments, and you will have the chance to practice specific techniques or develop stylistic interpretation based on composer.\n<h4>Requirement</h4>\n<ul>\n <li>\nHave your instrument.</li>\n <li>\nSubscribe the app</li>\n</ul>\n<h4>What's next</h4>\n<p style=\"margin-bottom: 0px;\">Next course: <a href=\"https://scorewind.com/courses/guitar-103-2-finger-2-and-3-on-one-string/#tab-course-section__overview\">Next course name</a></p>"
 		image = "course/image"
 		tag = ["tag"]
 		category = [CourseCategory()]

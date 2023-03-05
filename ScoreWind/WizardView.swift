@@ -254,7 +254,7 @@ struct FeedbackOptionsModifier: ViewModifier {
 
 struct WizardView_Previews: PreviewProvider {
 	@State static var tab = "THome"
-	@State static var stepName:Page = .wizardChooseInstrument
+	@State static var stepName:Page = .wizardDoYouKnow
 	
 	static var previews: some View {
 		let previewOrientation = InterfaceOrientation.portrait
@@ -264,6 +264,7 @@ struct WizardView_Previews: PreviewProvider {
 				.environment(\.colorScheme, .light)
 				.environmentObject(Store())
 				.previewInterfaceOrientation(previewOrientation)
+			
 			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), stepName: $stepName).environmentObject(ScorewindData()).environment(\.colorScheme, .dark).environmentObject(Store())
 				.previewInterfaceOrientation(previewOrientation)
 		}

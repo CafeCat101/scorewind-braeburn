@@ -16,6 +16,7 @@ struct WizardExperienceView: View {
 	@State private var showStepTip = false
 	@State private var tipContent:AnyView = AnyView(Text("Tip"))
 	@State private var userDefaults = UserDefaults.standard
+	let feedback = UIImpactFeedbackGenerator(style: .heavy)
 	
 	var body: some View {
 		VStack {
@@ -38,16 +39,19 @@ struct WizardExperienceView: View {
 						displayExperience(experience: .starterKit)
 							.onTapGesture {
 								print("choose \(ExperienceFeedback.starterKit.rawValue)")
+								feedback.impactOccurred()
 								gotFeedback(selectedFeedback: .starterKit)
 							}
 						displayExperience(experience: .continueLearning)
 							.onTapGesture {
 								print("choose \(ExperienceFeedback.continueLearning.rawValue)")
+								feedback.impactOccurred()
 								gotFeedback(selectedFeedback: .continueLearning)
 							}
 						displayExperience(experience: .experienced)
 							.onTapGesture {
 								print("choose \(ExperienceFeedback.experienced.rawValue)")
+								feedback.impactOccurred()
 								gotFeedback(selectedFeedback: .experienced)
 							}
 					}
