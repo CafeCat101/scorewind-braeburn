@@ -16,13 +16,38 @@ struct WizardDoYouKnowView: View {
 	let screenSize: CGRect = UIScreen.main.bounds
 	@State private var currentQuestionIndex = 0
 	@State private var feedbackScores:[Int] = []
+	let feedback = UIImpactFeedbackGenerator(style: .heavy)
 	
 	var body: some View {
 		VStack {
 			if currentQuestionIndex < scorewindData.getListInCourse(targetText: scorewindData.wizardPickedCourse.content, listName: .requirement).count {
 				//show questions
 				Spacer()
-				VStack{
+				HStack {
+					Spacer()
+					Text("Do you know?")
+						.font(.title)
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+						.bold()
+					Spacer()
+				}
+				Divider().frame(width:screenSize.width*0.85)
+				VStack {
+					Text("\(scorewindData.getListInCourse(targetText: scorewindData.wizardPickedCourse.content, listName: .requirement)[currentQuestionIndex])")
+						.font(.headline)
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+						.multilineTextAlignment(.center)
+						.padding(EdgeInsets(top: 30, leading: 15, bottom: 30, trailing: 15))
+				}
+				.frame(width:screenSize.width*0.85)
+				.background(
+					RoundedRectangle(cornerRadius: CGFloat(28))
+						.foregroundColor(Color("Dynamic/MainBrown"))
+						.opacity(0.25)
+				)
+				
+				
+				/*VStack{
 					Text("Do you know?")
 						.font(.title3)
 						.bold()
@@ -34,6 +59,7 @@ struct WizardDoYouKnowView: View {
 				.background(Color("WizardFeedBack"))
 				.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
 				.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
+				 */
 				
 				Spacer()
 				
@@ -41,8 +67,10 @@ struct WizardDoYouKnowView: View {
 					ForEach(DoYouKnowFeedback.allCases, id: \.self) {feedbackItem in
 						Text(feedbackItem.getLabel())
 							.modifier(FeedbackOptionsModifier())
+							.padding(.bottom, 10)
 							.onTapGesture {
 								print("[debug] WizardDoYouKnowView, feedback clicked value \(feedbackItem.rawValue)")
+								feedback.impactOccurred()
 								if scorewindData.wizardPickedCourse.category.contains(where: {$0.name == "Guitar 103" || $0.name == "Violin 103"}) {
 									if feedbackItem == .someOfThem {
 										feedbackScores.append(DoYouKnowFeedback.allOfThem.rawValue)
@@ -84,6 +112,8 @@ struct WizardDoYouKnowView: View {
 							}
 					}
 				}.padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
+				
+				Spacer()
 			}
 			
 			

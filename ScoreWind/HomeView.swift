@@ -193,8 +193,17 @@ struct storeViewCover: ViewModifier {
 
 struct HomeView_Previews: PreviewProvider {
 	static var previews: some View {
-		HomeView(downloadManager: DownloadManager())
-			.environmentObject(ScorewindData())
-			.environmentObject(Store())
+		Group {
+			HomeView(downloadManager: DownloadManager())
+				.environmentObject(ScorewindData())
+				.environmentObject(Store())
+				.environment(\.colorScheme, .light)
+			
+			HomeView(downloadManager: DownloadManager())
+				.environmentObject(ScorewindData())
+				.environmentObject(Store())
+				.environment(\.colorScheme, .dark)
+		}
+		
 	}
 }

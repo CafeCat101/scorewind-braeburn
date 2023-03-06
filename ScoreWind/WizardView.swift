@@ -158,7 +158,6 @@ struct WizardView: View {
 			Divider()
 		}
 		.background(colorScheme == .light ? backgroundImage(colorMode: colorScheme) : backgroundImage(colorMode: colorScheme))
-		//.background(Color("AppBackground"))
 		.modifier(storeViewCover(showStore: $showStore, selectedTab: $selectedTab))
 		.onAppear(perform: {			
 			print("[debug] WizardView, onAppear studentData.wizardResult.learningPath.count \(studentData.wizardResult.learningPath.count)")
@@ -170,7 +169,7 @@ struct WizardView: View {
 		if colorMode == .light {
 			Image("WelcomeViewBg")
 		} else {
-			Image("DarkPolygonBg")
+			Image("DarkPolygonBg2")
 				.resizable()
 				.aspectRatio(contentMode: .fill)
 				.edgesIgnoringSafeArea(.all)
@@ -241,12 +240,13 @@ struct TipExplainingParagraph: ViewModifier {
 struct FeedbackOptionsModifier: ViewModifier {
 	func body(content: Content) -> some View {
 		content
-			.font(.headline)
+			//.font(.headline)
 			.foregroundColor(Color("Dynamic/MainBrown+6"))
-			.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
+			.padding(EdgeInsets(top: 10, leading: 22, bottom: 10, trailing: 22))
 			.background {
 				RoundedRectangle(cornerRadius: 25)
-					.foregroundColor(Color("WizardFeedBack"))
+					.foregroundColor(Color("Dynamic/LightGray"))
+					.shadow(color: Color("Dynamic/ShadowLight"),radius: CGFloat(5))
 			}
 			.fixedSize()
 	}

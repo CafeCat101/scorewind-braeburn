@@ -82,7 +82,7 @@ struct WizardInstrumentView: View {
 						//.foregroundColor(Color("Dynamic/Shadow"))
 					Spacer()
 				}
-				.frame(width: proxy.size.width*0.85, height:proxy.size.height*0.9)
+				.frame(width: proxy.size.width*0.85, height:proxy.size.height-55)
 				.background(
 					RoundedRectangle(cornerRadius: CGFloat(28))
 						.foregroundColor(Color("Dynamic/LightGray"))

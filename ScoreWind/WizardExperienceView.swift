@@ -178,7 +178,7 @@ struct WizardExperienceView: View {
 						.foregroundColor(Color("Dynamic/Shadow"))
 						.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
 				)
-				.frame(width: proxy.size.width*0.85, height: proxy.size.height*0.9)
+				.frame(width: proxy.size.width*0.85, height: proxy.size.height - 55)
 				Spacer()
 			}
 		}
@@ -235,7 +235,14 @@ struct WizardExperienceView_Previews: PreviewProvider {
 	@State static var tab = "THome"
 	@State static var step:Page = .wizardChooseInstrument
 	static var previews: some View {
-		WizardExperienceView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
+		Group {
+			WizardExperienceView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
+				.environment(\.colorScheme, .light)
+			
+			WizardExperienceView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
+			.environment(\.colorScheme, .dark)
+		}
+		
 	}
 }
 
