@@ -16,11 +16,12 @@ struct WizardDoYouKnowView: View {
 	let screenSize: CGRect = UIScreen.main.bounds
 	@State private var currentQuestionIndex = 0
 	@State private var feedbackScores:[Int] = []
+	@State private var questions:[String] = []
 	let feedback = UIImpactFeedbackGenerator(style: .heavy)
 	
 	var body: some View {
 		VStack {
-			if currentQuestionIndex < scorewindData.getListInCourse(targetText: scorewindData.wizardPickedCourse.content, listName: .requirement).count {
+			if currentQuestionIndex < questions.count {
 				//show questions
 				Spacer()
 				HStack {
@@ -33,7 +34,7 @@ struct WizardDoYouKnowView: View {
 				}
 				Divider().frame(width:screenSize.width*0.85)
 				VStack {
-					Text("\(scorewindData.getListInCourse(targetText: scorewindData.wizardPickedCourse.content, listName: .requirement)[currentQuestionIndex])")
+					Text("\(questions[currentQuestionIndex])")
 						.font(.headline)
 						.foregroundColor(Color("Dynamic/MainBrown+6"))
 						.multilineTextAlignment(.center)
@@ -71,6 +72,7 @@ struct WizardDoYouKnowView: View {
 							.onTapGesture {
 								print("[debug] WizardDoYouKnowView, feedback clicked value \(feedbackItem.rawValue)")
 								feedback.impactOccurred()
+								
 								if scorewindData.wizardPickedCourse.category.contains(where: {$0.name == "Guitar 103" || $0.name == "Violin 103"}) {
 									if feedbackItem == .someOfThem {
 										feedbackScores.append(DoYouKnowFeedback.allOfThem.rawValue)
@@ -86,7 +88,7 @@ struct WizardDoYouKnowView: View {
 								
 								print("[debug] WizardDoYouKnowView, feedback scores sum \(feedbackScores)")
 								
-								if (currentQuestionIndex+1) < scorewindData.getListInCourse(targetText: scorewindData.wizardPickedCourse.content, listName: .requirement).count {
+								if (currentQuestionIndex+1) < questions.count {
 									currentQuestionIndex = currentQuestionIndex + 1
 								} else {
 									studentData.updateDoYouKnow(courseID: scorewindData.wizardPickedCourse.id, feedbackValues: feedbackScores)
@@ -105,6 +107,7 @@ struct WizardDoYouKnowView: View {
 										//RESET SCORES AND QUESTION INDEX FOR POSSIBLE NEXT DO YOU NOW VIEW
 										currentQuestionIndex = 0
 										feedbackScores = []
+										questions = scorewindData.getListInCourse(targetText: scorewindData.wizardPickedCourse.content, listName: .requirement)
 									}
 									
 								}
@@ -123,6 +126,8 @@ struct WizardDoYouKnowView: View {
 		.onAppear(perform: {
 			print("[debug] WizardDoYouKnowView, wizardStepNames \(studentData.wizardStepNames)")
 			currentQuestionIndex = 0
+			feedbackScores = []
+			questions = scorewindData.getListInCourse(targetText: scorewindData.wizardPickedCourse.content, listName: .requirement)
 		})
 	}
 }
