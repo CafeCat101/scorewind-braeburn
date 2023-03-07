@@ -16,13 +16,14 @@ struct WizardPlayableView: View {
 	@StateObject var viewModel = ViewModel()
 	let screenSize: CGRect = UIScreen.main.bounds
 	@State private var rememberPlaybackTime:Double = 0.0
+	@State private var showContentHint = false
 	//@State private var videoOnly = true
 	
 	var body: some View {
 		VStack {
 			if studentData.playableViewVideoOnly == false {
 				HStack {
-					Label("Back to video clip", systemImage: "chevron.backward.circle")
+					Label("Back to video clip", systemImage: "chevron.backward")
 						.padding([.leading], 15)
 						//.font(.title3)
 						.labelStyle(.titleAndIcon)
@@ -41,11 +42,27 @@ struct WizardPlayableView: View {
 					Spacer()
 				}
 			}
-			Text("How do you feel about playing this?")
+			/*Text("How do you feel about playing this?")
 				.font(.headline)
 				.foregroundColor(Color("WizardBackArrow"))
 				.bold()
-				.padding(EdgeInsets(top: 5, leading: 30, bottom: 0, trailing: 15))
+				.padding(EdgeInsets(top: 5, leading: 30, bottom: 0, trailing: 15))*/
+			HStack {
+				Spacer()
+				if studentData.playableViewVideoOnly {
+					Text("How do you feel about playing this?")
+						.font(.title)
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+						.bold()
+				} else {
+					Text("How do you feel about playing this?")
+						.font(.headline)
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+						.padding(.top,10)
+				}
+				Spacer()
+			}
+			Divider().frame(width:screenSize.width*0.85)
 			
 			if studentData.playableViewVideoOnly == false {
 				Text("Tab the bar to hear!")
@@ -70,6 +87,7 @@ struct WizardPlayableView: View {
 								HStack {
 									Text(PlayableFeedback.easyPeasy.getLabel())
 										.modifier(FeedbackOptionsModifier())
+										.padding(.trailing,10)
 										.onTapGesture {
 											feedbackTapAction(feedback: .easyPeasy)
 										}
@@ -78,15 +96,16 @@ struct WizardPlayableView: View {
 										.onTapGesture {
 											feedbackTapAction(feedback: .comfortable)
 										}
-								}
+								}.padding(.bottom,10)
 								Text(PlayableFeedback.canLearn.getLabel())
 									.modifier(FeedbackOptionsModifier())
 									.onTapGesture {
 										feedbackTapAction(feedback: .canLearn)
-									}
+									}.padding(.bottom,10)
 								HStack {
 									Text(PlayableFeedback.littleDifficult.getLabel())
 										.modifier(FeedbackOptionsModifier())
+										.padding(.trailing,10)
 										.onTapGesture {
 											feedbackTapAction(feedback: .littleDifficult)
 										}
@@ -95,7 +114,7 @@ struct WizardPlayableView: View {
 										.onTapGesture {
 											feedbackTapAction(feedback: .veryHard)
 										}
-								}
+								}.padding(.bottom,10)
 							}
 							Spacer()
 							HStack {
@@ -124,7 +143,11 @@ struct WizardPlayableView: View {
 							}.padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20))
 						}
 					}
-					Text("lesson:\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.wizardPickedLesson.title))").font(.footnote)
+					
+					if showContentHint {
+						Text("lesson:\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.wizardPickedLesson.title))").font(.footnote)
+					}
+					
 				}
 				.onAppear(perform: {
 					viewModel.loadToGo = false
@@ -140,7 +163,6 @@ struct WizardPlayableView: View {
 				})
 			}
 		}
-		.background(Color("AppBackground"))
 		.onAppear(perform: {
 			print("[debug] WizardPlayableView, wizardPickedCourse \(scorewindData.wizardPickedCourse.title)")
 			print("[debug] WizardPlayableView, wizardPickedLesson \(scorewindData.wizardPickedLesson.title)")
