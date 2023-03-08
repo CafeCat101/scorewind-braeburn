@@ -133,27 +133,30 @@ struct WizardView: View {
 				}
 			}
 			
-			VStack {
-				if showViewTitle {
-					Label("Find courses and lessons", systemImage: "music.note")
-						.labelStyle(.titleOnly)
-						.font(.footnote)
-						.foregroundColor(Color("AppBlackDynamic"))
+			if showViewTitle || showProgress {
+				VStack {
+					if showViewTitle {
+						Label("Find courses and lessons", systemImage: "music.note")
+							.labelStyle(.titleOnly)
+							.font(.footnote)
+							.foregroundColor(Color("AppBlackDynamic"))
+					}
+					if showProgress {
+						GeometryReader { (proxy: GeometryProxy) in
+							HStack {
+								Spacer()
+								wizardProgressView(barWidth: proxy.size.width*0.85,barHeight: 10)
+								Spacer()
+							}.onAppear(perform: {
+								//print("[debug] showProgress, screensize.size.width \(screenSize.width)")
+								//print("[debug] showProgress, proxy.size.width \(proxy.size.width)")
+							})
+						}.frame(height:10)
+					}
 				}
-				if showProgress {
-					GeometryReader { (proxy: GeometryProxy) in
-						HStack {
-							Spacer()
-							wizardProgressView(barWidth: proxy.size.width*0.85,barHeight: 10)
-							Spacer()
-						}.onAppear(perform: {
-							//print("[debug] showProgress, screensize.size.width \(screenSize.width)")
-							//print("[debug] showProgress, proxy.size.width \(proxy.size.width)")
-						})
-					}.frame(height:10)
-				}
-			}.padding([.top,.bottom], 10)
+				.padding([.top,.bottom], 10)
 				.padding([.leading,.trailing], 15)
+			}
 			
 			Divider()
 		}

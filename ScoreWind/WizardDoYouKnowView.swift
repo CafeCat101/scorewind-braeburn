@@ -18,6 +18,7 @@ struct WizardDoYouKnowView: View {
 	@State private var feedbackScores:[Int] = []
 	@State private var questions:[String] = []
 	let feedback = UIImpactFeedbackGenerator(style: .heavy)
+	@State private var showContentHint = false
 	
 	var body: some View {
 		VStack {
@@ -30,6 +31,9 @@ struct WizardDoYouKnowView: View {
 						.font(.title)
 						.foregroundColor(Color("Dynamic/MainBrown+6"))
 						.bold()
+						.onTapGesture(count:3, perform: {
+							showContentHint.toggle()
+						})
 					Spacer()
 				}
 				Divider().frame(width:screenSize.width*0.85)
@@ -53,15 +57,10 @@ struct WizardDoYouKnowView: View {
 				VStack {
 					HStack {
 						displayFeedbackItem(feedbackItem: .allOfThem, iconName: "feedbackYes")
-						
 						Spacer().frame(width:15)
-						
 						displayFeedbackItem(feedbackItem: .fewOfThem, iconName: "feedbackNo")
-
 					}
-					
 					Spacer().frame(height:15)
-					
 					displayFeedbackItem(feedbackItem: .someOfThem, iconName: "feedbackFamiliar")
 				}
 				.padding([.top, .bottom], 10)
@@ -70,7 +69,9 @@ struct WizardDoYouKnowView: View {
 			}
 			Spacer()
 			
-			Text("course:\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.wizardPickedCourse.title))").font(.footnote)
+			if showContentHint {
+				Text("course:\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.wizardPickedCourse.title))").font(.footnote)
+			}
 		}
 		.onAppear(perform: {
 			print("[debug] WizardDoYouKnowView, wizardStepNames \(studentData.wizardStepNames)")
