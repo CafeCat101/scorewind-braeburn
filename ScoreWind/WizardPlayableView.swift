@@ -132,9 +132,10 @@ struct WizardPlayableView: View {
 					}
 					.frame(width: reader.size.width, height: 70)
 					.offset(y: animate ? reader.size.height-60*6 : reader.size.height-60)
+					.opacity(animate ? 1 : 0)
 					
 					ZStack {
-						op1(feedbackItem: .veryHard ,itemTotalWidth: reader.size.width, opHasShadow:false, animated: $animate)
+						op1(feedbackItem: .veryHard, itemWidthBeforeAnimated: reader.size.width*0.80, itemWidthAfterAnimated: reader.size.width, opHasShadow:false, animated: $animate)
 					}
 					.frame(width: reader.size.width, height: 70)
 					.offset(y: animate ? reader.size.height-60*1 : reader.size.height-60)
@@ -148,7 +149,7 @@ struct WizardPlayableView: View {
 					}
 					
 					ZStack {
-						op1(feedbackItem: .littleDifficult ,itemTotalWidth: reader.size.width, opHasShadow: false, animated: $animate)
+						op1(feedbackItem: .littleDifficult, itemWidthBeforeAnimated: reader.size.width*0.80, itemWidthAfterAnimated: reader.size.width, opHasShadow: false, animated: $animate)
 					}
 					.frame(width: reader.size.width, height: 70)
 					.offset(y: animate ? reader.size.height-60*2 : reader.size.height-60)
@@ -162,7 +163,7 @@ struct WizardPlayableView: View {
 					}
 					
 					ZStack {
-						op1(feedbackItem: .canLearn ,itemTotalWidth: reader.size.width, opHasShadow: true, animated: $animate)
+						op1(feedbackItem: .canLearn, itemWidthBeforeAnimated: reader.size.width*0.80, itemWidthAfterAnimated: reader.size.width, opHasShadow: true, animated: $animate)
 					}
 					.frame(width: reader.size.width, height: 70)
 					.offset(y: animate ? reader.size.height-60*3 : reader.size.height-60)
@@ -176,7 +177,7 @@ struct WizardPlayableView: View {
 					}
 					
 					ZStack {
-						op1(feedbackItem: .comfortable ,itemTotalWidth: reader.size.width, opHasShadow: true, animated: $animate)
+						op1(feedbackItem: .comfortable, itemWidthBeforeAnimated: reader.size.width*0.90, itemWidthAfterAnimated: reader.size.width, opHasShadow: true, animated: $animate)
 					}
 					.frame(width: reader.size.width, height: 70)
 					.offset(y: animate ? reader.size.height-60*4 : reader.size.height-65)
@@ -190,7 +191,7 @@ struct WizardPlayableView: View {
 					}
 					
 					ZStack {
-						op1(feedbackItem: .easyPeasy ,itemTotalWidth: reader.size.width, opHasShadow: true, animated: $animate)
+						op1(feedbackItem: .easyPeasy ,itemWidthBeforeAnimated: reader.size.width, itemWidthAfterAnimated: reader.size.width, opHasShadow: true, animated: $animate)
 					}
 					.frame(width: reader.size.width, height: 70)
 					.offset(y: animate ? reader.size.height-60*5 : reader.size.height-70)
@@ -473,7 +474,8 @@ struct WizardPlayableView: View {
 	
 	struct op1: View {
 		let feedbackItem: PlayableFeedback
-		var itemTotalWidth: CGFloat
+		var itemWidthBeforeAnimated: CGFloat
+		var itemWidthAfterAnimated: CGFloat
 		var opHasShadow: Bool
 		@Binding var animated: Bool
 		
@@ -482,7 +484,7 @@ struct WizardPlayableView: View {
 				VStack {
 						HStack(spacing:0) {
 							HStack {
-								Image("feedbackYes")
+								Image(getItemImageName(feedbackItem: feedbackItem))
 									.resizable()
 									.scaledToFit()
 									.shadow(color: Color("Dynamic/MainBrown+6").opacity(0.5), radius: CGFloat(5))
@@ -496,7 +498,7 @@ struct WizardPlayableView: View {
 						}
 					
 				}
-				.frame(maxWidth: itemTotalWidth*0.60, maxHeight: 60)
+				.frame(maxWidth: animated ? itemWidthAfterAnimated*0.60 : itemWidthBeforeAnimated*0.60, maxHeight: 60)
 				.background {
 					if opHasShadow || animated {
 						RoundedRectangle(cornerRadius: 17)
@@ -509,6 +511,21 @@ struct WizardPlayableView: View {
 				}
 				.padding(.top, 10)
 				Spacer()
+			}
+		}
+		
+		private func getItemImageName(feedbackItem: PlayableFeedback) -> String {
+			switch feedbackItem {
+			case .easyPeasy:
+				return "feedbackYes"
+			case .comfortable:
+				return "feedbackComfortable"
+			case .canLearn:
+				return "feedbackCanLearn"
+			case .littleDifficult:
+				return "feedbackLittleDifficult"
+			case .veryHard:
+				return "feedbackNo"
 			}
 		}
 	}

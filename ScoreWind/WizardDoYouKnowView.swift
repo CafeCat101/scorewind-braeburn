@@ -114,7 +114,7 @@ struct WizardDoYouKnowView: View {
 		
 		if scorewindData.wizardPickedCourse.category.contains(where: {$0.name == "Guitar 103" || $0.name == "Violin 103"}) {
 			if feedbackItem == .someOfThem {
-				feedbackScores.append(feedbackItem.rawValue)
+				feedbackScores.append(DoYouKnowFeedback.allOfThem.rawValue)
 				print("[debug] WizardDoYouKnowView, feedbackScores.append \(feedbackItem.rawValue)")
 			} else {
 				feedbackScores.append(feedbackItem.rawValue)
