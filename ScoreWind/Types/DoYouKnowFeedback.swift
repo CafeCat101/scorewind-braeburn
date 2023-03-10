@@ -19,7 +19,7 @@ enum DoYouKnowFeedback: Int, CaseIterable {
 		case .allOfThem:
 			return "Yes"
 		case .someOfThem:
-			return "Somewhat familiar"
+			return "Somewhat Familiar"
 		case .fewOfThem:
 			return "No"
 		}

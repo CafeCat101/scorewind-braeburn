@@ -18,6 +18,7 @@ struct WizardPlayableView: View {
 	@State private var rememberPlaybackTime:Double = 0.0
 	@State private var showContentHint = false
 	@State private var animate = false
+	let feedbackImpact = UIImpactFeedbackGenerator(style: .heavy)
 	
 	var body: some View {
 		VStack {
@@ -37,10 +38,7 @@ struct WizardPlayableView: View {
 			
 			VStack {
 				HStack {
-					if studentData.playableViewVideoOnly == false {
-						Text("Tab the bar to hear!")
-							.font(.subheadline)
-					}
+					/*
 					Button(action: {
 						if studentData.playableViewVideoOnly {
 							viewModel.videoPlayer!.pause()
@@ -66,9 +64,78 @@ struct WizardPlayableView: View {
 							}
 						}
 					}, label: {
-						Text(studentData.playableViewVideoOnly == true ? "View it with score" : "Video only")
+						Label(studentData.playableViewVideoOnly == true ? "View It With Score" : "Video Only", systemImage: "music.note")
+							.foregroundColor(Color("Dynamic/MainBrown+6"))
+							.padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
+							/*.background {
+								RoundedRectangle(cornerRadius: 17)
+									.foregroundColor(Color("Dynamic/LightGray"))
+									.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+							}*/
+						/*Text(studentData.playableViewVideoOnly == true ? "View it with score" : "Video only")
+							.foregroundColor(Color("Dynamic/MainBrown+6"))
+							.padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
+							.background {
+								RoundedRectangle(cornerRadius: 17)
+									.foregroundColor(Color("Dynamic/LightGray"))
+									.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+							}*/
 					})
-				}
+					*/
+					
+					Label(studentData.playableViewVideoOnly == true ? "View It With Score" : "Video Only", systemImage: "music.note")
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+						.padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
+						.background(
+							RoundedRectangle(cornerRadius: CGFloat(17))
+								.foregroundColor(Color("Dynamic/MainBrown"))
+								.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+								.overlay {
+									RoundedRectangle(cornerRadius: 17)
+										.stroke(Color("Dynamic/ShadowLight"), lineWidth: 1)
+								}
+								.opacity(0.25)
+								
+						)
+						.onTapGesture {
+							if studentData.playableViewVideoOnly {
+								viewModel.videoPlayer!.pause()
+								viewModel.videoPlayer!.replaceCurrentItem(with: nil)
+								studentData.playableViewVideoOnly = false
+								viewModel.loadToGo = true
+								setupPlayer(withoutScoreViewer: studentData.playableViewVideoOnly)
+								if rememberPlaybackTime > 0 {
+									viewModel.playerGoTo(timestamp: rememberPlaybackTime)
+								} else {
+									viewModel.playerGoTo(timestamp: 0.0)
+								}
+							} else {
+								viewModel.videoPlayer!.pause()
+								viewModel.videoPlayer!.replaceCurrentItem(with: nil)
+								viewModel.loadToGo = false
+								studentData.playableViewVideoOnly = true
+								setupPlayer(withoutScoreViewer: studentData.playableViewVideoOnly)
+								if rememberPlaybackTime > 0 {
+									viewModel.playerGoTo(timestamp: rememberPlaybackTime)
+								} else {
+									viewModel.playerGoTo(timestamp: findFirstPlayableTimestamp())
+								}
+							}
+							
+							if animate {
+								withAnimation(Animation.spring(response: 0.2, dampingFraction: 0.4, blendDuration: 0.8).speed(0.3)) {
+									animate.toggle()
+								}
+							}
+						}
+					
+					Spacer()
+					if studentData.playableViewVideoOnly == false {
+						Text("Tab the bar to hear!")
+							.font(.subheadline)
+							.foregroundColor(Color("Dynamic/MainBrown+6"))
+					}
+				}.frame(width:screenSize.width*0.85)
 				
 				VideoPlayer(player: viewModel.videoPlayer)
 					.clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
@@ -88,19 +155,7 @@ struct WizardPlayableView: View {
 					}
 					
 				}
-				
-				
-					
-					//.frame(maxHeight: reader.size.height * 0.45)
-				/*if studentData.playableViewVideoOnly == false {
-					LessonScoreView(viewModel: viewModel)
-						.clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
-						.frame(maxWidth:screenSize.width*0.94, maxHeight: screenSize.width*0.94 * 9/16)
-						//.padding(EdgeInsets(top: 3, leading: 5, bottom: 10, trailing: 5))
-				} else {
-					Spacer()
-				}*/
-				
+
 				if studentData.playableViewVideoOnly {
 					Spacer()
 				}
@@ -149,10 +204,11 @@ struct WizardPlayableView: View {
 					}
 					
 					ZStack {
-						op1(feedbackItem: .littleDifficult, itemWidthBeforeAnimated: reader.size.width*0.80, itemWidthAfterAnimated: reader.size.width, opHasShadow: false, animated: $animate)
+						op1(feedbackItem: .littleDifficult, itemWidthBeforeAnimated: reader.size.width*0.86, itemWidthAfterAnimated: reader.size.width, opHasShadow: false, animated: $animate)
 					}
 					.frame(width: reader.size.width, height: 70)
 					.offset(y: animate ? reader.size.height-60*2 : reader.size.height-60)
+					.opacity(animate ? 1 : 0)
 					.onTapGesture {
 						if animate {
 							withAnimation(Animation.spring(response: 0.2, dampingFraction: 0.4, blendDuration: 0.8).speed(0.3)) {
@@ -209,30 +265,7 @@ struct WizardPlayableView: View {
 						
 					}
 				}.frame(height:70)
-				
-				//::the horizontal scroll layout
-				/*
-				GeometryReader { reader in
-					ScrollView(.horizontal) {
-						HStack {
-							op1(feedbackItem: .easyPeasy ,itemTotalWidth: reader.size.width)
-								.onTapGesture {
-									feedbackTapAction(feedback: .easyPeasy)
-								}
-							op1(feedbackItem: .comfortable ,itemTotalWidth: reader.size.width)
-								.onTapGesture {
-									feedbackTapAction(feedback: .comfortable)
-								}
-							op1(feedbackItem: .canLearn ,itemTotalWidth: reader.size.width)
-								.onTapGesture {
-									feedbackTapAction(feedback: .canLearn)
-								}
-						}
-					}
-				}.frame(width:screenSize.width ,height: 130)
-				*/
-					
-			
+
 				//:: the tab layout
 				/*
 				GeometryReader { reader in
@@ -259,33 +292,6 @@ struct WizardPlayableView: View {
 				}
 				*/
 				
-				/*
-				VStack {
-					GeometryReader { reader in
-						HStack(spacing:0) {
-							HStack {
-								Image("feedbackYes")
-									.resizable()
-									.padding(15)
-									.scaledToFit()
-									.shadow(color: Color("Dynamic/MainBrown+6").opacity(0.5), radius: CGFloat(5))
-							}
-							.frame(width: CGFloat(reader.size.width*0.3))
-							Text("Easy peasy")
-								.padding(.trailing,15)
-								.frame(width:reader.size.width - reader.size.width*0.3)
-						}
-					}.frame(maxHeight: 85)
-				}
-				.foregroundColor(Color("Dynamic/MainBrown+6"))
-				.background {
-					RoundedRectangle(cornerRadius: 17)
-						.foregroundColor(Color("Dynamic/LightGray"))
-						.shadow(color: Color("Dynamic/ShadowLight"),radius: CGFloat(5))
-				}
-				.padding(.top,10)
-				.frame(maxWidth: screenSize.width*0.80)
-				 */
 				if studentData.playableViewVideoOnly {
 					Spacer()
 				}
@@ -366,6 +372,8 @@ struct WizardPlayableView: View {
 	}
 	
 	private func feedbackTapAction(feedback: PlayableFeedback) {
+		feedbackImpact.impactOccurred()
+		
 		viewModel.videoPlayer!.pause()
 		viewModel.videoPlayer!.replaceCurrentItem(with: nil)
 		studentData.playableViewVideoOnly = true

@@ -25,7 +25,7 @@ struct WizardView: View {
 	var body: some View {
 		VStack(spacing:0) {
 			HStack {
-				if (stepName != .wizardChooseInstrument || stepName == .wizardResult) && studentData.playableViewVideoOnly && userRole == .student {
+				if (stepName != .wizardChooseInstrument || stepName == .wizardResult) && userRole == .student {
 					Label("Restart", systemImage: "goforward")
 						.font(.title3)
 						.labelStyle(.iconOnly)

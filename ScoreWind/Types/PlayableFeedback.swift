@@ -17,15 +17,15 @@ enum PlayableFeedback: Int, CaseIterable {
 	func getLabel() -> String {
 		switch self {
 		case .easyPeasy:
-			return "Easy peasy"
+			return "Easy Peasy"
 		case .comfortable:
 			return "Comfortable"
 		case .canLearn:
-			return "Start learning"
+			return "Start Learning"
 		case .littleDifficult:
-			return "A Little difficult"
+			return "A Little Difficult"
 		case .veryHard:
-			return "Very hard"
+			return "Very Hard"
 		}
 	}
 	
