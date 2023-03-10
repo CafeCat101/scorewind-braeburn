@@ -72,7 +72,7 @@ struct WizardPlayableView: View {
 				
 				VideoPlayer(player: viewModel.videoPlayer)
 					.clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
-					.frame(width:screenSize.width*0.94, height: screenSize.width*0.94 * 9/16)
+					.frame(width:screenSize.width*0.85, height: screenSize.width*0.85 * 9/16)
 					//.padding(EdgeInsets(top: 10, leading: 5, bottom: 0, trailing: 5))
 				if studentData.playableViewVideoOnly == false {
 					GeometryReader { scoreSpaceReader in
@@ -80,7 +80,7 @@ struct WizardPlayableView: View {
 							Spacer()
 							LessonScoreView(viewModel: viewModel)
 								.clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
-								.frame(width:screenSize.width*0.94, height:scoreSpaceReader.size.height)
+								.frame(width:screenSize.width*0.85, height:scoreSpaceReader.size.height)
 								//.padding(EdgeInsets(top: 3, leading: 5, bottom: 10, trailing: 5))
 							Spacer()
 						}
@@ -111,17 +111,17 @@ struct WizardPlayableView: View {
 							Spacer()
 							HStack {
 								Spacer()
-								Label("Close", systemImage: "xmark.circle")
+								Label("Close", systemImage: "xmark")
 									.labelStyle(.iconOnly)
 									.foregroundColor(Color("Dynamic/MainBrown+6"))
 									.padding(15)
 								Spacer()
 							}
-							.frame(width: 44)
+							.frame(width: 48)
 							.background {
 								RoundedRectangle(cornerRadius: 26)
 									.foregroundColor(Color("Dynamic/LightGray"))
-									.shadow(color: Color("Dynamic/ShadowLight"),radius: CGFloat(5))
+									.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
 							}
 							.onTapGesture {
 								withAnimation(Animation.spring(response: 0.2, dampingFraction: 0.4, blendDuration: 0.8).speed(0.3)) {
