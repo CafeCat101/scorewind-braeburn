@@ -257,7 +257,7 @@ struct FeedbackOptionsModifier: ViewModifier {
 
 struct WizardView_Previews: PreviewProvider {
 	@State static var tab = "THome"
-	@State static var stepName:Page = .wizardDoYouKnow
+	@State static var stepName:Page = .wizardPlayable
 	
 	static var previews: some View {
 		let previewOrientation = InterfaceOrientation.portrait
