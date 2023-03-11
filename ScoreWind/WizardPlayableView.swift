@@ -19,6 +19,8 @@ struct WizardPlayableView: View {
 	@State private var showContentHint = false
 	@State private var animate = false
 	let feedbackImpact = UIImpactFeedbackGenerator(style: .heavy)
+	@State private var animateVideo = true
+	let transition = AnyTransition.asymmetric(insertion: .slide, removal: .scale).combined(with: .opacity)
 	
 	var body: some View {
 		VStack {
@@ -30,6 +32,9 @@ struct WizardPlayableView: View {
 					.bold()
 					.foregroundColor(Color("Dynamic/MainBrown+6"))
 					.multilineTextAlignment(.center)
+					.onTapGesture(count:3, perform: {
+						showContentHint.toggle()
+					})
 				Spacer()
 			}
 			Divider().frame(width:screenSize.width*0.85)
@@ -83,7 +88,7 @@ struct WizardPlayableView: View {
 					})
 					*/
 					
-					Label(studentData.playableViewVideoOnly == true ? "View It With Score" : "Video Only", systemImage: "music.note")
+					Label(studentData.playableViewVideoOnly == true ? "View It With Score" : "Video Only", systemImage: studentData.playableViewVideoOnly ? "music.quarternote.3" : "person.crop.rectangle.fill")
 						.foregroundColor(Color("Dynamic/MainBrown+6"))
 						.padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
 						.background(
@@ -136,10 +141,13 @@ struct WizardPlayableView: View {
 							.foregroundColor(Color("Dynamic/MainBrown+6"))
 					}
 				}.frame(width:screenSize.width*0.85)
-				
 				VideoPlayer(player: viewModel.videoPlayer)
 					.clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
-					.frame(width:screenSize.width*0.85, height: screenSize.width*0.85 * 9/16)
+					.frame(width: animateVideo ? screenSize.width*0.85 : 0, height: screenSize.width*0.85 * 9/16)
+					.offset(x: animateVideo ? 0 : 0 - screenSize.width*0.85)
+					.opacity(animateVideo ? 1 : 0)
+					.transition(AnyTransition.asymmetric(insertion: .slide, removal: .scale).combined(with: .opacity))
+				
 					//.padding(EdgeInsets(top: 10, leading: 5, bottom: 0, trailing: 5))
 				if studentData.playableViewVideoOnly == false {
 					GeometryReader { scoreSpaceReader in
@@ -151,9 +159,7 @@ struct WizardPlayableView: View {
 								//.padding(EdgeInsets(top: 3, leading: 5, bottom: 10, trailing: 5))
 							Spacer()
 						}
-						
 					}
-					
 				}
 
 				if studentData.playableViewVideoOnly {
@@ -295,43 +301,6 @@ struct WizardPlayableView: View {
 				if studentData.playableViewVideoOnly {
 					Spacer()
 				}
-				
-				/*
-				Group {
-					HStack {
-						Text(PlayableFeedback.easyPeasy.getLabel())
-							.modifier(FeedbackOptionsModifier())
-							.padding(.trailing,10)
-							.onTapGesture {
-								feedbackTapAction(feedback: .easyPeasy)
-							}
-						Text(PlayableFeedback.comfortable.getLabel())
-							.modifier(FeedbackOptionsModifier())
-							.onTapGesture {
-								feedbackTapAction(feedback: .comfortable)
-							}
-					}.padding(.bottom,10)
-					Text(PlayableFeedback.canLearn.getLabel())
-						.modifier(FeedbackOptionsModifier())
-						.onTapGesture {
-							feedbackTapAction(feedback: .canLearn)
-						}.padding(.bottom,10)
-					HStack {
-						Text(PlayableFeedback.littleDifficult.getLabel())
-							.modifier(FeedbackOptionsModifier())
-							.padding(.trailing,10)
-							.onTapGesture {
-								feedbackTapAction(feedback: .littleDifficult)
-							}
-						Text(PlayableFeedback.veryHard.getLabel())
-							.modifier(FeedbackOptionsModifier())
-							.onTapGesture {
-								feedbackTapAction(feedback: .veryHard)
-							}
-					}.padding(.bottom,10)
-					
-				}
-				 */
 			}
 			.onAppear(perform: {
 				viewModel.loadToGo = false
@@ -356,7 +325,10 @@ struct WizardPlayableView: View {
 			print("[debug] WizardPlayableView, wizardPickedCourse \(scorewindData.wizardPickedCourse.title)")
 			print("[debug] WizardPlayableView, wizardPickedLesson \(scorewindData.wizardPickedLesson.title)")
 		})
-		
+		.onDisappear(perform: {
+			viewModel.videoPlayer!.pause()
+			viewModel.videoPlayer!.replaceCurrentItem(with: nil)
+		})
 
 	}
 	
@@ -373,6 +345,8 @@ struct WizardPlayableView: View {
 	
 	private func feedbackTapAction(feedback: PlayableFeedback) {
 		feedbackImpact.impactOccurred()
+		
+		animateVideo = false
 		
 		viewModel.videoPlayer!.pause()
 		viewModel.videoPlayer!.replaceCurrentItem(with: nil)
@@ -437,6 +411,9 @@ struct WizardPlayableView: View {
 				self.rememberPlaybackTime = catchTime
 			})
 			//viewModel.videoPlayer?.play()
+		}
+		withAnimation {
+			animateVideo = true
 		}
 		print("[debug] WizardPlayableView, rememberPlaybackTime \(self.rememberPlaybackTime)")
 	}
@@ -539,7 +516,12 @@ struct WizardPlayableView: View {
 	}
 }
 
-
+extension AnyTransition {
+		static var backslide: AnyTransition {
+				AnyTransition.asymmetric(
+						insertion: .move(edge: .trailing),
+						removal: .move(edge: .leading))}
+}
 
 struct WizardPlayable_Previews: PreviewProvider {
 	@State static var tab = "THome"
