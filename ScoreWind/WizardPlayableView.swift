@@ -95,12 +95,11 @@ struct WizardPlayableView: View {
 							RoundedRectangle(cornerRadius: CGFloat(17))
 								.foregroundColor(Color("Dynamic/MainBrown"))
 								.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+								.opacity(0.25)
 								.overlay {
 									RoundedRectangle(cornerRadius: 17)
-										.stroke(Color("Dynamic/ShadowLight"), lineWidth: 1)
+										.stroke(Color("Dynamic/DarkGray"), lineWidth: 1)
 								}
-								.opacity(0.25)
-								
 						)
 						.onTapGesture {
 							if studentData.playableViewVideoOnly {

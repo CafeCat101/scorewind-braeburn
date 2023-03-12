@@ -13,7 +13,7 @@ struct WizardResultView: View {
 	@Binding var stepName:Page
 	@ObservedObject var studentData:StudentData
 	@State private var dummyLearningPath:[String] = ["Course1","Course2","Course3"]
-	@State private var showMeMore:Bool = false
+	@State private var showMeMore:Bool = true
 	@State private var showStepTip = false
 	@State private var tipContent:AnyView = AnyView(Text("Tip"))
 	@State private var userDefaults = UserDefaults.standard
@@ -26,9 +26,10 @@ struct WizardResultView: View {
 				HStack {
 					Text(studentData.wizardResult.resultTitle)
 						.font(.title)
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
 						.bold()
 					Spacer()
-				}
+				}.padding([.leading, .trailing], 15)
 				
 				if showMeMore == false {
 					Spacer()
@@ -132,8 +133,7 @@ struct WizardResultView: View {
 				
 				
 			}
-			.background(Color("AppBackground"))
-			.padding([.leading, .trailing], 15)
+			//.padding([.leading, .trailing], 15)
 		}
 		.onAppear(perform: {
 			//print("[debug] WizardResultView, onAppear, icloud wizardResult \(studentData.getWizardResult())")
@@ -192,6 +192,19 @@ struct WizardResult_Previews: PreviewProvider {
 	
 	static var previews: some View {
 		WizardResultView(selectedTab: $tab, stepName: $step, studentData: StudentData(), showLessonView: .constant(false), showStore: .constant(false)).environmentObject(ScorewindData())
+			.environment(\.colorScheme, .light)
+			.background {
+				Image("WelcomeViewBg")
+			}
+		
+		WizardResultView(selectedTab: $tab, stepName: $step, studentData: StudentData(), showLessonView: .constant(false), showStore: .constant(false)).environmentObject(ScorewindData())
+			.environment(\.colorScheme, .dark)
+			.background(
+				Image("DarkPolygonBg2")
+					.resizable()
+					.aspectRatio(contentMode: .fill)
+					.edgesIgnoringSafeArea(.all)
+			)
 	}
 }
 
