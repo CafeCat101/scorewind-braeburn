@@ -39,7 +39,7 @@ struct HomeView: View {
 				}.tag("TMyCourses")
 		}
 		.accentColor(Color("Dynamic/MainBrown+6"))
-		.ignoresSafeArea()
+		.ignoresSafeArea(.all, edges: .bottom)
 		.onAppear{
 			//UITabBar.appearance().backgroundColor = UIColor(Color("AppBackground"))
 			//;UITabBar.appearance().isTranslucent = true
@@ -203,6 +203,15 @@ struct HomeView_Previews: PreviewProvider {
 				.environmentObject(ScorewindData())
 				.environmentObject(Store())
 				.environment(\.colorScheme, .dark)
+		}
+		
+		Group {
+			HomeView(downloadManager: DownloadManager())
+				.environmentObject(ScorewindData())
+				.environmentObject(Store())
+				.environment(\.colorScheme, .light)
+				.previewInterfaceOrientation(InterfaceOrientation.landscapeLeft)
+				.previewDisplayName("Light Landscape")
 		}
 		
 	}

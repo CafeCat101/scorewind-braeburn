@@ -257,10 +257,12 @@ struct FeedbackOptionsModifier: ViewModifier {
 
 struct WizardView_Previews: PreviewProvider {
 	@State static var tab = "THome"
-	@State static var stepName:Page = .wizardResult
+	@State static var stepName:Page = .wizardChooseInstrument
 	
 	static var previews: some View {
 		let previewOrientation = InterfaceOrientation.portrait
+		let previewLandscape = InterfaceOrientation.landscapeLeft
+		
 		Group {
 			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), stepName: $stepName)
 				.environmentObject(ScorewindData())
@@ -270,6 +272,15 @@ struct WizardView_Previews: PreviewProvider {
 			
 			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), stepName: $stepName).environmentObject(ScorewindData()).environment(\.colorScheme, .dark).environmentObject(Store())
 				.previewInterfaceOrientation(previewOrientation)
+		}
+		
+		Group {
+			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), stepName: $stepName)
+				.environmentObject(ScorewindData())
+				.environment(\.colorScheme, .light)
+				.environmentObject(Store())
+				.previewInterfaceOrientation(previewLandscape)
+				.previewDisplayName("Light Landscape")
 		}
 		
 	}

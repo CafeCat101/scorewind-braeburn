@@ -16,49 +16,37 @@ struct WizardInstrumentView: View {
 	let feedback = UIImpactFeedbackGenerator(style: .heavy)
 	let screenSize = UIScreen.main.bounds.size
 	@State private var currentIndex = 0
-	@Environment(\.horizontalSizeClass) var sizeClass
+	@Environment(\.horizontalSizeClass) var horizontalSize
 
 	var body: some View {
-		VStack {
-			Spacer()
-			
-			HStack {
+		GeometryReader { mainReader in
+			VStack {
 				Spacer()
-				Text("Choose your instrument")
-					.font(.title)
-					.foregroundColor(Color("Dynamic/MainBrown+6"))
-					.bold()
+				
+				HStack {
+					Spacer()
+					Text("Choose your instrument")
+						.font(.title)
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+						.bold()
+					Spacer()
+				}
+				TabView {
+					displayInstrument(instrument: InstrumentType.guitar.rawValue)
+					displayInstrument(instrument: InstrumentType.violin.rawValue)
+				}
+				.tabViewStyle(.page)
+				.frame(width: mainReader.size.width, height: mainReader.size.height*0.80 )
+
 				Spacer()
 			}
-			
-			TabView {
-				displayInstrument(instrument: InstrumentType.guitar.rawValue)
-				displayInstrument(instrument: InstrumentType.violin.rawValue)
-			}
-			.tabViewStyle(.page)
-			.frame(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height*0.6)
-			
-			//Page dot inside the panel look
-			/*
-			TabView {
-				displayInstrument(instrument: InstrumentType.guitar.rawValue)
-				displayInstrument(instrument: InstrumentType.violin.rawValue)
-			}
-			.tabViewStyle(.page)
-			.background(
-				RoundedRectangle(cornerRadius: CGFloat(28))
-					.foregroundColor(Color("Dynamic/LightGray"))
-					.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
-			)
-			.frame(width: UIScreen.main.bounds.size.width*0.85, height: UIScreen.main.bounds.size.height*0.6)
-			*/
-			Spacer()
+			.onAppear(perform: {
+				//:: start over, reset everything
+				studentData.wizardStepNames = [.wizardChooseInstrument]
+				print("[debug] InstrumentView, mainReader w/h \(mainReader.size.width)/\(mainReader.size.height)")
+			})
 		}
-		//.background(Color("AppBackground"))
-		.onAppear(perform: {
-			//:: start over, reset everything
-			studentData.wizardStepNames = [.wizardChooseInstrument]
-		})
+		
 	}
 	
 	@ViewBuilder
@@ -68,18 +56,38 @@ struct WizardInstrumentView: View {
 				Spacer()
 				VStack {
 					Spacer()
-					HStack {
-						Spacer()
-						getChoiceIcon(instrumentImage: instrument, isSelected: isInstrumentSelected(askInstrument: instrument == InstrumentType.guitar.rawValue ? .guitar : .violin))
-							.frame(width:proxy.size.width*0.7,height:proxy.size.width*0.7)
-							.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(15))
-						Spacer()
+					if proxy.size.height > proxy.size.width {
+						HStack {
+							Spacer()
+							getChoiceIcon(instrumentImage: instrument, isSelected: isInstrumentSelected(askInstrument: instrument == InstrumentType.guitar.rawValue ? .guitar : .violin))
+								.frame(width:proxy.size.width*0.7, height:proxy.size.width*0.7)
+								.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(15))
+							Spacer()
+						}
+						Divider().frame(width: proxy.size.width*0.7)
+						Text(instrument.uppercased())
+							.font(.headline)
+							.foregroundColor(Color("Dynamic/MainBrown+6"))
+					} else {
+						HStack {
+							Spacer()
+							HStack {
+								Spacer()
+								getChoiceIcon(instrumentImage: instrument, isSelected: isInstrumentSelected(askInstrument: instrument == InstrumentType.guitar.rawValue ? .guitar : .violin))
+									.rotationEffect(Angle(degrees: 30.0))
+									.frame(width:proxy.size.height*0.7, height:proxy.size.height*0.7)
+									.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(15))
+								Spacer()
+							}
+							Divider().frame(height: proxy.size.height*0.7)
+							Text(instrument.uppercased())
+								.font(.headline)
+								.foregroundColor(Color("Dynamic/MainBrown+6"))
+								.frame(width: proxy.size.width*0.25)
+							Spacer()
+						}
 					}
-					Divider().frame(width: proxy.size.width*0.7)
-					Text(instrument.uppercased())
-						.font(.headline)
-						.foregroundColor(Color("Dynamic/MainBrown+6"))
-						//.foregroundColor(Color("Dynamic/Shadow"))
+					
 					Spacer()
 				}
 				.frame(width: proxy.size.width*0.85, height:proxy.size.height-55)
@@ -143,6 +151,14 @@ struct WizardInstrument_Previews: PreviewProvider {
 				.environmentObject(ScorewindData())
 				.environment(\.colorScheme, .dark)
 				.previewInterfaceOrientation(previewOrientation)
+		}
+		
+		Group {
+			WizardInstrumentView(selectedTab: $tab, stepName: $step, studentData: StudentData())
+				.environmentObject(ScorewindData())
+				.environment(\.colorScheme, .light)
+				.previewInterfaceOrientation(InterfaceOrientation.landscapeLeft)
+				.previewDisplayName("Light Landscape")
 		}
 	}
 }
