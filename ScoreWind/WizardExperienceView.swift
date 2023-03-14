@@ -12,11 +12,16 @@ struct WizardExperienceView: View {
 	@Binding var selectedTab:String
 	@Binding var stepName:Page
 	@ObservedObject var studentData:StudentData
-	let screenSize: CGRect = UIScreen.main.bounds
+	//let screenSize: CGRect = UIScreen.main.bounds
 	@State private var showStepTip = false
 	@State private var tipContent:AnyView = AnyView(Text("Tip"))
 	@State private var userDefaults = UserDefaults.standard
 	let feedback = UIImpactFeedbackGenerator(style: .heavy)
+	@Environment(\.horizontalSizeClass) var horizontalSize
+	@Environment(\.verticalSizeClass) var verticalSize
+	@State private var selectedExpTab = ExperienceFeedback.starterKit.rawValue
+	//@Environment(\.mainWindowSize) var windowSize
+	//@State private var screenSize = UIScreen.main.bounds.size
 	
 	var body: some View {
 		VStack {
@@ -34,30 +39,35 @@ struct WizardExperienceView: View {
 			Spacer()
 			
 			VStack {
-				//GeometryReader { (proxy: GeometryProxy) in
-					TabView {
-						displayExperience(experience: .starterKit)
-							.onTapGesture {
-								print("choose \(ExperienceFeedback.starterKit.rawValue)")
-								feedback.impactOccurred()
-								gotFeedback(selectedFeedback: .starterKit)
-							}
-						displayExperience(experience: .continueLearning)
-							.onTapGesture {
-								print("choose \(ExperienceFeedback.continueLearning.rawValue)")
-								feedback.impactOccurred()
-								gotFeedback(selectedFeedback: .continueLearning)
-							}
-						displayExperience(experience: .experienced)
-							.onTapGesture {
-								print("choose \(ExperienceFeedback.experienced.rawValue)")
-								feedback.impactOccurred()
-								gotFeedback(selectedFeedback: .experienced)
-							}
-					}
-					.tabViewStyle(.page)
-				//}
-			}.frame(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height*0.7)
+				TabView {
+					displayExperience(experience: .starterKit)
+						.onTapGesture {
+							print("choose \(ExperienceFeedback.starterKit.rawValue)")
+							feedback.impactOccurred()
+							gotFeedback(selectedFeedback: .starterKit)
+						}
+					displayExperience(experience: .continueLearning)
+						.onTapGesture {
+							print("choose \(ExperienceFeedback.continueLearning.rawValue)")
+							feedback.impactOccurred()
+							gotFeedback(selectedFeedback: .continueLearning)
+						}
+					displayExperience(experience: .experienced)
+						.onTapGesture {
+							print("choose \(ExperienceFeedback.experienced.rawValue)")
+							feedback.impactOccurred()
+							gotFeedback(selectedFeedback: .experienced)
+						}
+				}
+				.tabViewStyle(.page)
+			}
+			.frame(width: verticalSize == .regular ? UIScreen.main.bounds.size.width : UIScreen.main.bounds.size.width*0.8, height: verticalSize == .regular ? UIScreen.main.bounds.size.height*0.7 : UIScreen.main.bounds.size.height*0.5)
+			.onChange(of: verticalSize, perform: { info in
+				print("info \(String(describing: info))")
+				print("info w:\(UIScreen.main.bounds.size.width) / h:\(UIScreen.main.bounds.size.height)")
+				selectedExpTab = ExperienceFeedback.starterKit.rawValue
+			})
+			
 			Spacer()
 			
 			//original buttons
@@ -135,50 +145,94 @@ struct WizardExperienceView: View {
 			HStack {
 				Spacer()
 				VStack(spacing:0) {
-					VStack {
+					if verticalSize == .regular && horizontalSize == .compact {
+						
+						VStack {
+							HStack {
+								Spacer()
+								Image(getExperienceImageName(experience: experience))
+									.resizable()
+									.scaledToFit()
+									.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(10))
+								Spacer()
+							}
+						}
+						.frame(minHeight:proxy.size.height*0.55)
+						.background(
+							RoundedCornersShape(corners: [.topLeft, .topRight], radius: 28)
+								.fill(Color("Dynamic/MainBrown"))
+						)
+						VStack {
+							HStack {
+								Spacer()
+								VStack {
+									Text(experience.getTitle().uppercased())
+										.font(.headline)
+										.foregroundColor(Color("Dynamic/MainBrown+6"))
+									Divider()
+									Text(experience.getLabel())
+										.foregroundColor(Color("Dynamic/MainBrown+6"))
+										.multilineTextAlignment(.center)
+										//.font(.headline)
+										//.foregroundColor(Color("Dynamic/Shadow"))
+										
+								}
+								Spacer()
+							}.padding(EdgeInsets(top: 30, leading: 15, bottom: 30, trailing: 15))
+						}
+						.background(
+							RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 28)
+								.fill(Color("Dynamic/LightGray"))
+						)
+						 
+					} else {
 						HStack {
-							Spacer()
-							Image(getExperienceImageName(experience: experience))
-								.resizable()
-								.scaledToFit()
-								.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(10))
-							Spacer()
+							VStack {
+								HStack {
+									Spacer()
+									Image(getExperienceImageName(experience: experience))
+										.resizable()
+										.scaledToFit()
+										.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(10))
+										.padding([.top,.bottom], 8)
+									Spacer()
+								}
+							}
+							.frame(minHeight:proxy.size.height*0.55)
+							.background(
+								RoundedCornersShape(corners: [.topLeft, .bottomLeft], radius: 28)
+									.fill(Color("Dynamic/MainBrown"))
+							)
+							VStack {
+								VStack {
+									Spacer()
+									Text(experience.getTitle().uppercased())
+										.font(.headline)
+										.foregroundColor(Color("Dynamic/MainBrown+6"))
+									Divider().padding([.leading,.trailing], 15)
+									Text(experience.getLabel())
+										.foregroundColor(Color("Dynamic/MainBrown+6"))
+										.multilineTextAlignment(.center)
+									Spacer()
+								}
+								
+							}
+							.background(
+								RoundedCornersShape(corners: [.bottomRight, .topRight], radius: 28)
+									.fill(Color("Dynamic/LightGray"))
+							)
 						}
 					}
-					.frame(minHeight:proxy.size.height*0.55)
-					.background(
-						RoundedCornersShape(corners: [.topLeft, .topRight], radius: 28)
-							.fill(Color("Dynamic/MainBrown"))
-					)
-					VStack {
-						HStack {
-							Spacer()
-							VStack {
-								Text(experience.getTitle().uppercased())
-									.font(.headline)
-									.foregroundColor(Color("Dynamic/MainBrown+6"))
-								Divider()
-								Text(experience.getLabel())
-									.foregroundColor(Color("Dynamic/MainBrown+6"))
-									.multilineTextAlignment(.center)
-									//.font(.headline)
-									//.foregroundColor(Color("Dynamic/Shadow"))
-									
-							}
-							Spacer()
-						}.padding(EdgeInsets(top: 30, leading: 15, bottom: 30, trailing: 15))
-					}
-					.background(
-						RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 28)
-							.fill(Color("Dynamic/LightGray"))
-					)
+					
+					
 				}
 				.background(
 					RoundedRectangle(cornerRadius: CGFloat(28))
 						.foregroundColor(Color("Dynamic/Shadow"))
 						.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
 				)
-				.frame(width: proxy.size.width*0.85, height: proxy.size.height - 55)
+				.frame(width: proxy.size.width*0.85, height: proxy.size.height - 50)// original value:55
+				.padding(.top, 8)
 				Spacer()
 			}
 		}
@@ -225,10 +279,9 @@ struct WizardExperienceView: View {
 		}.background {
 			RoundedRectangle(cornerRadius: 26)
 				.foregroundColor(Color("AppYellow"))
-			.frame(width: screenSize.width*0.9)}
+			.frame(width: UIScreen.main.bounds.size.width*0.9)}
 	}
-  
-	
+
 }
 
 struct WizardExperienceView_Previews: PreviewProvider {
@@ -238,6 +291,11 @@ struct WizardExperienceView_Previews: PreviewProvider {
 		Group {
 			WizardExperienceView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
 				.environment(\.colorScheme, .light)
+			
+			WizardExperienceView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
+				.environment(\.colorScheme, .light)
+				.previewInterfaceOrientation(InterfaceOrientation.landscapeLeft)
+				.previewDisplayName("Light Landscape")
 			
 			WizardExperienceView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
 			.environment(\.colorScheme, .dark)

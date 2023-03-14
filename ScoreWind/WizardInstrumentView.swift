@@ -68,7 +68,8 @@ struct WizardInstrumentView: View {
 				Spacer()
 				VStack {
 					Spacer()
-					if proxy.size.height > proxy.size.width {
+					if verticalSize == .regular && horizontalSize == .compact {
+						//:: portrait
 						HStack {
 							Spacer()
 							getChoiceIcon(instrumentImage: instrument, isSelected: isInstrumentSelected(askInstrument: instrument == InstrumentType.guitar.rawValue ? .guitar : .violin))
@@ -81,6 +82,7 @@ struct WizardInstrumentView: View {
 							.font(.headline)
 							.foregroundColor(Color("Dynamic/MainBrown+6"))
 					} else {
+						//:: landscape a like
 						HStack {
 							Spacer()
 							HStack {
