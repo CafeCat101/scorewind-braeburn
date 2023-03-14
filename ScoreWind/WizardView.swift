@@ -13,7 +13,6 @@ struct WizardView: View {
 	@State private var userRole:UserRole = .student
 	//@State private var stepName:Page = .wizardChooseInstrument
 	@ObservedObject var studentData:StudentData
-	let screenSize: CGRect = UIScreen.main.bounds
 	@State private var showProgress = true
 	@Binding var showLessonView:Bool
 	@ObservedObject var downloadManager:DownloadManager

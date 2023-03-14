@@ -13,18 +13,21 @@ struct WizardDoYouKnowView: View {
 	@Binding var stepName:Page
 	@ObservedObject var studentData:StudentData
 	@StateObject var viewModel = ViewModel()
-	let screenSize: CGRect = UIScreen.main.bounds
+	//let screenSize: CGRect = UIScreen.main.bounds
 	@State private var currentQuestionIndex = 0
 	@State private var feedbackScores:[Int] = []
 	@State private var questions:[String] = []
 	let feedback = UIImpactFeedbackGenerator(style: .heavy)
 	@State private var showContentHint = false
+	@Environment(\.horizontalSizeClass) var horizontalSize
+	@Environment(\.verticalSizeClass) var verticalSize
 	
 	var body: some View {
 		VStack {
 			if currentQuestionIndex < questions.count {
 				//show questions
 				Spacer()
+				
 				HStack {
 					Spacer()
 					Text("Do you know?")
@@ -36,37 +39,83 @@ struct WizardDoYouKnowView: View {
 						})
 					Spacer()
 				}
-				Divider().frame(width:screenSize.width*0.85)
+				Divider()
+					.frame(width:UIScreen.main.bounds.size.width*0.85)
 				
-				VStack {
-					Text("\(questions[currentQuestionIndex])")
-						.font(.headline)
-						.foregroundColor(Color("Dynamic/MainBrown+6"))
-						.multilineTextAlignment(.center)
-						.padding(EdgeInsets(top: 30, leading: 15, bottom: 30, trailing: 15))
+				if verticalSize == .regular && horizontalSize == .compact {
+					VStack {
+						Text("\(questions[currentQuestionIndex])")
+							.font(.headline)
+							.foregroundColor(Color("Dynamic/MainBrown+6"))
+							.multilineTextAlignment(.center)
+							.padding(EdgeInsets(top: 30, leading: 15, bottom: 30, trailing: 15))
+					}
+					.frame(width:UIScreen.main.bounds.size.width*0.85)
+					.background(
+						RoundedRectangle(cornerRadius: CGFloat(17))
+							.foregroundColor(Color("Dynamic/MainBrown"))
+							.opacity(0.25)
+					)
+					
+					Spacer()
+					
+					VStack {
+						HStack {
+							displayFeedbackItem(feedbackItem: .allOfThem, iconName: "feedbackYes")
+							Spacer().frame(width:15)
+							displayFeedbackItem(feedbackItem: .fewOfThem, iconName: "feedbackNo")
+						}
+						Spacer().frame(height:15)
+						displayFeedbackItem(feedbackItem: .someOfThem, iconName: "feedbackFamiliar")
+					}
+					.padding([.top, .bottom], 10)
+					.frame(width: UIScreen.main.bounds.size.width*0.85)
+				} else {
+					HStack {
+						Spacer()
+						ScrollView(.vertical) {
+							Spacer()
+							HStack {
+								Spacer()
+								Text("\(questions[currentQuestionIndex])")
+									.font(.headline)
+									.foregroundColor(Color("Dynamic/MainBrown+6"))
+									.multilineTextAlignment(.center)
+									.padding(EdgeInsets(top: 30, leading: 15, bottom: 30, trailing: 15))
+								Spacer()
+							}
+							Spacer()
+						}
+						//.frame(width:UIScreen.main.bounds.size.width*0.85)
+						.background(
+							RoundedRectangle(cornerRadius: CGFloat(17))
+								.foregroundColor(Color("Dynamic/MainBrown"))
+								.opacity(0.25)
+						)
+						.padding(10)
+						
+						Spacer()
+						
+						VStack {
+							HStack {
+								displayFeedbackItem(feedbackItem: .allOfThem, iconName: "feedbackYes")
+								Spacer().frame(width:15)
+								displayFeedbackItem(feedbackItem: .fewOfThem, iconName: "feedbackNo")
+							}
+							Spacer().frame(height:15)
+							displayFeedbackItem(feedbackItem: .someOfThem, iconName: "feedbackFamiliar")
+						}
+						.padding(10)
+						//.frame(width: UIScreen.main.bounds.size.width*0.85)
+						Spacer()
+					}
+					.padding([.leading,.trailing], 100)
 				}
-				.frame(width:screenSize.width*0.85)
-				.background(
-					RoundedRectangle(cornerRadius: CGFloat(17))
-						.foregroundColor(Color("Dynamic/MainBrown"))
-						.opacity(0.25)
-				)
+				
 				
 				Spacer()
-				
-				VStack {
-					HStack {
-						displayFeedbackItem(feedbackItem: .allOfThem, iconName: "feedbackYes")
-						Spacer().frame(width:15)
-						displayFeedbackItem(feedbackItem: .fewOfThem, iconName: "feedbackNo")
-					}
-					Spacer().frame(height:15)
-					displayFeedbackItem(feedbackItem: .someOfThem, iconName: "feedbackFamiliar")
-				}
-				.padding([.top, .bottom], 10)
-				.frame(width: screenSize.width*0.85)
-				
 			}
+			
 			Spacer()
 			
 			if showContentHint {
@@ -96,7 +145,7 @@ struct WizardDoYouKnowView: View {
 			.frame(maxHeight: 120)
 			Spacer()
 		}
-		.frame(minHeight: 80)
+		.frame(minHeight: verticalSize == .regular ? 80 : 60)
 		.foregroundColor(Color("Dynamic/MainBrown+6"))
 		.background {
 			RoundedRectangle(cornerRadius: 17)
@@ -165,6 +214,12 @@ struct WizardDoYouKnow_Previews: PreviewProvider {
 		WizardDoYouKnowView(selectedTab: $tab, stepName: $step, studentData: StudentData())
 			.environmentObject(scorewindData)
 			.environment(\.colorScheme, .light)
+		
+		WizardDoYouKnowView(selectedTab: $tab, stepName: $step, studentData: StudentData())
+			.environmentObject(scorewindData)
+			.environment(\.colorScheme, .light)
+			.previewInterfaceOrientation(InterfaceOrientation.landscapeLeft)
+			.previewDisplayName("Light LandscapeLeft")
 		
 		WizardDoYouKnowView(selectedTab: $tab, stepName: $step, studentData: StudentData())
 			.environmentObject(scorewindData)

@@ -285,7 +285,7 @@ struct WizardExperienceView: View {
 
 struct WizardExperienceView_Previews: PreviewProvider {
 	@State static var tab = "THome"
-	@State static var step:Page = .wizardChooseInstrument
+	@State static var step:Page = .wizardExperience
 	static var previews: some View {
 		Group {
 			WizardExperienceView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
