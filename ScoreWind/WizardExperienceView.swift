@@ -146,7 +146,6 @@ struct WizardExperienceView: View {
 				Spacer()
 				VStack(spacing:0) {
 					if verticalSize == .regular && horizontalSize == .compact {
-						
 						VStack {
 							HStack {
 								Spacer()
