@@ -93,7 +93,7 @@ struct WizardView: View {
 						.padding(.bottom,5)
 				}
 			}
-			.padding([.bottom], 5)
+			.padding([.top,.bottom], 5)
 			.padding([.leading,.trailing], 15)
 
 			if userRole == .teacher {

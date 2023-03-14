@@ -17,35 +17,47 @@ struct WizardInstrumentView: View {
 	let screenSize = UIScreen.main.bounds.size
 	@State private var currentIndex = 0
 	@Environment(\.horizontalSizeClass) var horizontalSize
+	@Environment(\.verticalSizeClass) var verticalSize
+	@State private var selectedInstrumentTab = InstrumentType.guitar.rawValue
 
 	var body: some View {
-		GeometryReader { mainReader in
-			VStack {
+		VStack {
+			Spacer()
+			
+			HStack {
 				Spacer()
-				
-				HStack {
-					Spacer()
-					Text("Choose your instrument")
-						.font(.title)
-						.foregroundColor(Color("Dynamic/MainBrown+6"))
-						.bold()
-					Spacer()
-				}
-				TabView {
-					displayInstrument(instrument: InstrumentType.guitar.rawValue)
-					displayInstrument(instrument: InstrumentType.violin.rawValue)
-				}
-				.tabViewStyle(.page)
-				.frame(width: mainReader.size.width, height: mainReader.size.height*0.80 )
-
+				Text("Choose your instrument")
+					.font(.title)
+					.foregroundColor(Color("Dynamic/MainBrown+6"))
+					.bold()
 				Spacer()
 			}
-			.onAppear(perform: {
-				//:: start over, reset everything
-				studentData.wizardStepNames = [.wizardChooseInstrument]
-				print("[debug] InstrumentView, mainReader w/h \(mainReader.size.width)/\(mainReader.size.height)")
+			
+			Spacer()
+			
+			VStack {
+				TabView(selection: $selectedInstrumentTab) {
+					displayInstrument(instrument: InstrumentType.guitar.rawValue)
+						.tag(InstrumentType.guitar.rawValue)
+					displayInstrument(instrument: InstrumentType.violin.rawValue)
+						.tag(InstrumentType.violin.rawValue)
+				}
+				.tabViewStyle(.page)
+			}
+			.frame(width: verticalSize == .regular ? UIScreen.main.bounds.size.width : UIScreen.main.bounds.size.width*0.60, height: verticalSize == .regular ? UIScreen.main.bounds.size.height*0.60 : UIScreen.main.bounds.size.height*0.5 )
+			.onChange(of: verticalSize, perform: { info in
+				print("info \(String(describing: info))")
+				print("info w:\(UIScreen.main.bounds.size.width)/h:\(UIScreen.main.bounds.size.height)")
+				selectedInstrumentTab = InstrumentType.guitar.rawValue
 			})
+
+			Spacer()
 		}
+		.onAppear(perform: {
+			//:: start over, reset everything
+			studentData.wizardStepNames = [.wizardChooseInstrument]
+			print("[debug] InstrumentView, onAppear, screenSize info w：\(UIScreen.main.bounds.size.width)/h:\(UIScreen.main.bounds.size.height)")
+		})
 		
 	}
 	
