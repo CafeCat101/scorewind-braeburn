@@ -27,7 +27,7 @@ struct WizardInstrumentView: View {
 			HStack {
 				Spacer()
 				Text("Choose your instrument")
-					.font(.title)
+					.font(verticalSize == .regular ? .title : .title2)
 					.foregroundColor(Color("Dynamic/MainBrown+6"))
 					.bold()
 				Spacer()

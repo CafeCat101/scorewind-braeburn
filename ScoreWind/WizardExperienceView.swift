@@ -30,7 +30,7 @@ struct WizardExperienceView: View {
 			HStack {
 				Spacer()
 				Text("Select an experience")
-					.font(.title)
+					.font(verticalSize == .regular ? .title : .title2)
 					.foregroundColor(Color("Dynamic/MainBrown+6"))
 					.bold()
 				Spacer()

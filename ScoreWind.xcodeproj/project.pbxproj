@@ -269,7 +269,6 @@
 		C85F2728286F4C2B00D0A4E5 /* ScoreWind */ = {
 			isa = PBXGroup;
 			children = (
-				C897D4C729AEEF6B00A21603 /* Styles */,
 				C8782778290E4AD80007DDC1 /* WizardVideos */,
 				C85F275A286F4EF900D0A4E5 /* www */,
 				C85F2753286F4CF200D0A4E5 /* ScoreWind.entitlements */,
@@ -278,6 +277,7 @@
 				C87CF1232978365400CDA215 /* BackgroundTransparentView.swift */,
 				C85F279B2871846200D0A4E5 /* BlankTabView.swift */,
 				C86F8823299DF34A0072504E /* BuyItemView.swift */,
+				C897D4CA29B03F2F00A21603 /* Carousel.swift */,
 				C878275828E88B8E0007DDC1 /* CourseDownloadButtonView.swift */,
 				C878275628E8861C0007DDC1 /* CourseLessonListItemView.swift */,
 				C85F275E286F4F2E00D0A4E5 /* CourseView.swift */,
@@ -292,6 +292,7 @@
 				C878275228E8675F0007DDC1 /* MyCouseItemview.swift */,
 				C85F276D286F4F2E00D0A4E5 /* MyTheme.swift */,
 				C85F2729286F4C2B00D0A4E5 /* ScoreWindApp.swift */,
+				C897D4C529A76BC700A21603 /* StatusInfoView.swift */,
 				C86F8821299B8A560072504E /* StoreView.swift */,
 				C868CA0629856F9300724D2D /* TipContentMakerView.swift */,
 				C85F27A32879C20400D0A4E5 /* TipModalView.swift */,
@@ -310,10 +311,8 @@
 				C8E063EA28AE06B7000B3D67 /* DataModel */,
 				C878276F290511430007DDC1 /* Models */,
 				C85F272F286F4C2C00D0A4E5 /* Preview Content */,
-				C87CF1222977B5FA00CDA215 /* Tips */,
+				C897D4C729AEEF6B00A21603 /* Styles */,
 				C85F2798286F5A4E00D0A4E5 /* Types */,
-				C897D4C529A76BC700A21603 /* StatusInfoView.swift */,
-				C897D4CA29B03F2F00A21603 /* Carousel.swift */,
 			);
 			path = ScoreWind;
 			sourceTree = "<group>";
@@ -350,17 +349,17 @@
 			children = (
 				C85F2790286F59BC00D0A4E5 /* CourseType.swift */,
 				C85F2792286F59BC00D0A4E5 /* DownloadStatus.swift */,
+				C878276728F9B8B90007DDC1 /* DoYouKnowFeedback.swift */,
+				C878277A291670780007DDC1 /* ExperienceFeedback.swift */,
 				C85F2791286F59BC00D0A4E5 /* InstrumentType.swift */,
+				C878276B29044C790007DDC1 /* ListInCourse.swift */,
+				C821817E29BEC68800F8180E /* Orientation.swift */,
 				C85F278E286F59BC00D0A4E5 /* Page.swift */,
+				C878276528F94D290007DDC1 /* PlayableFeedback.swift */,
 				C85F279D2877DE0C00D0A4E5 /* SearchParameter.swift */,
 				C85F27A128795A8E00D0A4E5 /* Tip.swift */,
 				C85F27A7287A775E00D0A4E5 /* TipLimit.swift */,
-				C878276528F94D290007DDC1 /* PlayableFeedback.swift */,
-				C878276728F9B8B90007DDC1 /* DoYouKnowFeedback.swift */,
-				C878276B29044C790007DDC1 /* ListInCourse.swift */,
-				C878277A291670780007DDC1 /* ExperienceFeedback.swift */,
 				C86F88192996166E0072504E /* WizardCalculationMode.swift */,
-				C821817E29BEC68800F8180E /* Orientation.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -385,13 +384,6 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		C87CF1222977B5FA00CDA215 /* Tips */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Tips;
-			sourceTree = "<group>";
-		};
 		C897D4C729AEEF6B00A21603 /* Styles */ = {
 			isa = PBXGroup;
 			children = (
@@ -403,8 +395,8 @@
 		C8E063EA28AE06B7000B3D67 /* DataModel */ = {
 			isa = PBXGroup;
 			children = (
-				C85F2766286F4F2E00D0A4E5 /* ScorewindCourse.swift */,
 				C85F276C286F4F2E00D0A4E5 /* DownloadItem.swift */,
+				C85F2766286F4F2E00D0A4E5 /* ScorewindCourse.swift */,
 				C85F2763286F4F2E00D0A4E5 /* ScorewindTimestamp.swift */,
 			);
 			path = DataModel;

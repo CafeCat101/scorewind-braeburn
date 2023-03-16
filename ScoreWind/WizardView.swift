@@ -115,7 +115,7 @@ struct WizardView: View {
 				} else if stepName == .wizardDoYouKnow {
 					WizardDoYouKnowView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
 				} else if stepName == .wizardPlayable {
-					WizardPlayableView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
+					WizardPlayableView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData, showProgress: $showProgress)
 				} else if stepName == .wizardResult {
 					WizardResultView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData, showLessonView: $showLessonView, showStore: $showStore)
 						.onAppear{
@@ -256,7 +256,7 @@ struct FeedbackOptionsModifier: ViewModifier {
 
 struct WizardView_Previews: PreviewProvider {
 	@State static var tab = "THome"
-	@State static var stepName:Page = .wizardDoYouKnow
+	@State static var stepName:Page = .wizardPlayable
 	
 	static var previews: some View {
 		let previewOrientation = InterfaceOrientation.portrait

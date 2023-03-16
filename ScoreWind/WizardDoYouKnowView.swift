@@ -26,12 +26,14 @@ struct WizardDoYouKnowView: View {
 		VStack {
 			if currentQuestionIndex < questions.count {
 				//show questions
-				Spacer()
+				if verticalSize == .regular && horizontalSize == .compact {
+					Spacer()
+				}
 				
 				HStack {
 					Spacer()
 					Text("Do you know?")
-						.font(.title)
+						.font(verticalSize == .regular ? .title : .title2)
 						.foregroundColor(Color("Dynamic/MainBrown+6"))
 						.bold()
 						.onTapGesture(count:3, perform: {
@@ -73,7 +75,7 @@ struct WizardDoYouKnowView: View {
 				} else {
 					HStack {
 						Spacer()
-						ScrollView(.vertical) {
+						ScrollView(.vertical, showsIndicators: false) {
 							Spacer()
 							HStack {
 								Spacer()
@@ -86,13 +88,11 @@ struct WizardDoYouKnowView: View {
 							}
 							Spacer()
 						}
-						//.frame(width:UIScreen.main.bounds.size.width*0.85)
 						.background(
 							RoundedRectangle(cornerRadius: CGFloat(17))
 								.foregroundColor(Color("Dynamic/MainBrown"))
 								.opacity(0.25)
 						)
-						.padding(10)
 						
 						Spacer()
 						
@@ -106,7 +106,6 @@ struct WizardDoYouKnowView: View {
 							displayFeedbackItem(feedbackItem: .someOfThem, iconName: "feedbackFamiliar")
 						}
 						.padding(10)
-						//.frame(width: UIScreen.main.bounds.size.width*0.85)
 						Spacer()
 					}
 					.padding([.leading,.trailing], 100)
