@@ -24,6 +24,9 @@ struct LessonScoreView: View {
 				.onAppear(perform: {
 					print(scorewindData.timestampToJson())
 				})
+				.onDisappear(perform: {
+					print("[debug] LessonScoreView, onDisappear")
+				})
 			}
 		}
 	}

@@ -141,9 +141,7 @@ struct WizardPlayableView: View {
 						
 					}
 				}
-				
-				
-				
+
 				/*
 				GeometryReader { reader in
 					ZStack {
@@ -291,10 +289,10 @@ struct WizardPlayableView: View {
 				showProgress = true
 			}
 		})
-		.onDisappear(perform: {
+		/*.onDisappear(perform: {
 			viewModel.videoPlayer!.pause()
 			viewModel.videoPlayer!.replaceCurrentItem(with: nil)
-		})
+		})*/
 		.onChange(of: verticalSize, perform: { info in
 			if info == .compact {
 				feedbackItemMaxHeight = 50.0
@@ -302,6 +300,19 @@ struct WizardPlayableView: View {
 			} else {
 				feedbackItemMaxHeight = 60.0
 				showProgress = true
+			}
+			
+			if studentData.playableViewVideoOnly == false {
+				viewModel.videoPlayer!.pause()
+				viewModel.videoPlayer!.replaceCurrentItem(with: nil)
+				studentData.playableViewVideoOnly = false
+				viewModel.loadToGo = true
+				setupPlayer(withoutScoreViewer: studentData.playableViewVideoOnly)
+				if rememberPlaybackTime > 0 {
+					viewModel.playerGoTo(timestamp: rememberPlaybackTime)
+				} else {
+					viewModel.playerGoTo(timestamp: 0.0)
+				}
 			}
 		})
 
