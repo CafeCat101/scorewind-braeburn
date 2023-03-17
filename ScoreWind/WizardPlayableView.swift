@@ -23,6 +23,7 @@ struct WizardPlayableView: View {
 	@State private var animateVideo = true
 	let transition = AnyTransition.asymmetric(insertion: .slide, removal: .scale).combined(with: .opacity)
 	@Environment(\.verticalSizeClass) var verticalSize
+	@State private var showScoreOverlay = true
 	
 	@State private var feedbackItemMaxHeight:CGFloat = 60.0
 	
@@ -41,7 +42,6 @@ struct WizardPlayableView: View {
 					})
 				Spacer()
 				if verticalSize == .compact && studentData.playableViewVideoOnly == false {
-					//display "tap the bar to listen" text here
 					viewWithScoreMenu()
 						.padding(.trailing, 15)
 				}
@@ -70,6 +70,7 @@ struct WizardPlayableView: View {
 								LessonScoreView(viewModel: viewModel)
 									.clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
 									.frame(width:UIScreen.main.bounds.width*0.85, height:scoreSpaceReader.size.height)
+									.modifier(ScoreViewerOverlay(overlayWidth: UIScreen.main.bounds.width*0.85, overlayHeight: scoreSpaceReader.size.height, showScoreOverlay: $showScoreOverlay))
 								Spacer()
 							}
 						}
@@ -93,8 +94,6 @@ struct WizardPlayableView: View {
 							Spacer()
 						}
 						
-						
-						
 						if studentData.playableViewVideoOnly  {
 							VStack {
 								HStack {
@@ -104,15 +103,8 @@ struct WizardPlayableView: View {
 								}
 								GeometryReader { optionZSpace in
 									displayOptionsZ(frameHeight: optionZSpace.size.height)
-									
 								}
-								//Spacer()
-								
-								//Spacer()
 							}
-							
-							
-							
 						} else {
 							GeometryReader { scoreSpaceReader in
 								VStack {
@@ -121,24 +113,13 @@ struct WizardPlayableView: View {
 										LessonScoreView(viewModel: viewModel)
 											.clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
 											.frame(width:scoreSpaceReader.size.width, height:scoreSpaceReader.size.height-feedbackItemMaxHeight)
+											.modifier(ScoreViewerOverlay(overlayWidth: scoreSpaceReader.size.width, overlayHeight: scoreSpaceReader.size.height-feedbackItemMaxHeight, showScoreOverlay: $showScoreOverlay))
 										Spacer()
 									}
-									displayOptionsZ()
+									displayOptionsZ(frameHeight: feedbackItemMaxHeight)
 								}
-								
-								/*.overlay(alignment: .topTrailing ,content: {
-								 viewWithScoreMenu()
-								 .offset(y:-20)
-								 })
-								 .overlay(alignment: .bottomTrailing,content: {
-								 displayOptionsZ()
-								 })*/
 							}
-							
 						}
-						
-						
-						
 					}
 				}
 
@@ -251,9 +232,8 @@ struct WizardPlayableView: View {
 				 */
 				
 				if verticalSize == .regular {
-					displayOptionsZ()
+					displayOptionsZ(frameHeight: feedbackItemMaxHeight+10)
 				}
-				
 
 				if studentData.playableViewVideoOnly {
 					Spacer()
@@ -289,10 +269,6 @@ struct WizardPlayableView: View {
 				showProgress = true
 			}
 		})
-		/*.onDisappear(perform: {
-			viewModel.videoPlayer!.pause()
-			viewModel.videoPlayer!.replaceCurrentItem(with: nil)
-		})*/
 		.onChange(of: verticalSize, perform: { info in
 			if info == .compact {
 				feedbackItemMaxHeight = 50.0
@@ -519,6 +495,55 @@ struct WizardPlayableView: View {
 		var height:CGFloat
 	}
 	
+	struct ScoreViewerOverlay: ViewModifier {
+		var overlayWidth: CGFloat
+		var overlayHeight: CGFloat
+		@Binding var showScoreOverlay:Bool
+		
+		func body(content: Content) -> some View {
+			content
+			.overlay(content: {
+				VStack {
+					Text("Tap the bar to listen!")
+						.font(.headline)
+						.foregroundColor(Color("Dynamic/LightGray"))
+						.multilineTextAlignment(.center)
+						.padding(EdgeInsets(top: 30, leading: 15, bottom: 30, trailing: 15))
+						.background(
+							RoundedRectangle(cornerRadius: CGFloat(17))
+								.foregroundColor(Color("Dynamic/MainBrown+6"))
+								.opacity(0.8)
+						)
+						.onTapGesture {
+							if showScoreOverlay {
+								withAnimation{
+									showScoreOverlay = false
+								}
+							}
+						}
+				}
+				.frame(width:overlayWidth, height:overlayHeight)
+				.background(
+					RoundedRectangle(cornerRadius: CGFloat(17))
+						.foregroundColor(Color("Dynamic/MainBrown"))
+						.opacity(0.7)
+				)
+				.opacity(showScoreOverlay ? 1 : 0)
+				.disabled(showScoreOverlay ? false : true)
+				.onAppear(perform: {
+					DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+						if showScoreOverlay {
+							withAnimation{
+								showScoreOverlay = false
+							}
+						}
+					}
+				})
+			})
+			
+		}
+	}
+	
 	@ViewBuilder
 	private func feedbackOptionView() -> some View {
 		ForEach(PlayableFeedback.allCases, id: \.self){ feedbackItem in
@@ -550,7 +575,10 @@ struct WizardPlayableView: View {
 					if studentData.playableViewVideoOnly {
 						viewModel.videoPlayer!.pause()
 						viewModel.videoPlayer!.replaceCurrentItem(with: nil)
-						studentData.playableViewVideoOnly = false
+						withAnimation {
+							studentData.playableViewVideoOnly = false
+						}
+						
 						viewModel.loadToGo = true
 						setupPlayer(withoutScoreViewer: studentData.playableViewVideoOnly)
 						if rememberPlaybackTime > 0 {
@@ -562,7 +590,11 @@ struct WizardPlayableView: View {
 						viewModel.videoPlayer!.pause()
 						viewModel.videoPlayer!.replaceCurrentItem(with: nil)
 						viewModel.loadToGo = false
-						studentData.playableViewVideoOnly = true
+						
+						withAnimation {
+							studentData.playableViewVideoOnly = true
+						}
+						
 						setupPlayer(withoutScoreViewer: studentData.playableViewVideoOnly)
 						if rememberPlaybackTime > 0 {
 							viewModel.playerGoTo(timestamp: rememberPlaybackTime)
@@ -578,20 +610,20 @@ struct WizardPlayableView: View {
 					}
 				}
 			
-			if verticalSize == .regular {
+			/*if verticalSize == .regular {
 				Spacer()
 				if studentData.playableViewVideoOnly == false {
 					Text("Tab the bar to hear!")
 						.font(.subheadline)
 						.foregroundColor(Color("Dynamic/MainBrown+6"))
 				}
-			}
+			}*/
 			
 		}
 	}
 	
 	@ViewBuilder
-	private func displayOptionsZ(frameHeight: CGFloat = 44.0) -> some View {
+	private func displayOptionsZ(frameHeight: CGFloat = 50.0) -> some View {
 		if verticalSize == .regular {
 			GeometryReader { reader in
 				ZStack {
@@ -697,7 +729,7 @@ struct WizardPlayableView: View {
 					}
 					
 				}
-			}.frame(height:feedbackItemMaxHeight+10)
+			}.frame(height:frameHeight)
 		} else {
 			if studentData.playableViewVideoOnly {
 				GeometryReader { reader in
@@ -910,7 +942,7 @@ struct WizardPlayableView: View {
 						}
 						
 					}
-				}.frame(height:feedbackItemMaxHeight)
+				}.frame(height:frameHeight)
 			}
 			
 		}
