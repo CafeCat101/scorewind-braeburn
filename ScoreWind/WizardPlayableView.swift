@@ -42,8 +42,11 @@ struct WizardPlayableView: View {
 				Spacer()
 				if verticalSize == .compact && studentData.playableViewVideoOnly == false {
 					//display "tap the bar to listen" text here
+					viewWithScoreMenu()
+						.padding(.trailing, 15)
 				}
 			}
+			
 			Divider().frame(width:UIScreen.main.bounds.width*0.85)
 			
 			Spacer()
@@ -77,40 +80,62 @@ struct WizardPlayableView: View {
 					}
 				} else {
 					HStack {
-						VideoPlayer(player: viewModel.videoPlayer)
-							.clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
-							.frame(width: animateVideo ? getVideoFrame().width : 0, height: getVideoFrame().height)
-							.offset(x: animateVideo ? 0 : 0 - UIScreen.main.bounds.width*0.85)
-							.opacity(animateVideo ? 1 : 0)
-							.transition(AnyTransition.asymmetric(insertion: .slide, removal: .scale).combined(with: .opacity))
+						VStack {
+							if studentData.playableViewVideoOnly {
+								Spacer()
+							}
+							VideoPlayer(player: viewModel.videoPlayer)
+								.clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
+								.frame(width: animateVideo ? getVideoFrame().width : 0, height: getVideoFrame().height)
+								.offset(x: animateVideo ? 0 : 0 - UIScreen.main.bounds.width*0.85)
+								.opacity(animateVideo ? 1 : 0)
+								.transition(AnyTransition.asymmetric(insertion: .slide, removal: .scale).combined(with: .opacity))
+							Spacer()
+						}
 						
 						
-							if studentData.playableViewVideoOnly  {
-								VStack {
+						
+						if studentData.playableViewVideoOnly  {
+							VStack {
+								HStack {
+									Spacer()
 									viewWithScoreMenu()
-										.padding(.bottom, getVideoFrame().height*0.45)
-									displayOptionsZ()
+										.padding(.trailing, 15)
 								}
+								GeometryReader { optionZSpace in
+									displayOptionsZ(frameHeight: optionZSpace.size.height)
+									
+								}
+								//Spacer()
 								
-								
-							} else {
-								GeometryReader { scoreSpaceReader in
+								//Spacer()
+							}
+							
+							
+							
+						} else {
+							GeometryReader { scoreSpaceReader in
+								VStack {
 									HStack(spacing: 0) {
 										Spacer()
 										LessonScoreView(viewModel: viewModel)
 											.clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
-											.frame(width:UIScreen.main.bounds.width*0.4, height:getVideoFrame().height)
+											.frame(width:scoreSpaceReader.size.width, height:scoreSpaceReader.size.height-feedbackItemMaxHeight)
 										Spacer()
 									}
-									.overlay(alignment: .topLeading ,content: {
-										viewWithScoreMenu()
-									})
-									.overlay(alignment: .bottomTrailing,content: {
-										displayOptionsZ()
-									})
+									displayOptionsZ()
 								}
 								
+								/*.overlay(alignment: .topTrailing ,content: {
+								 viewWithScoreMenu()
+								 .offset(y:-20)
+								 })
+								 .overlay(alignment: .bottomTrailing,content: {
+								 displayOptionsZ()
+								 })*/
 							}
+							
+						}
 						
 						
 						
@@ -466,8 +491,14 @@ struct WizardPlayableView: View {
 					content.font(.title2)
 				}
 			} else {
-				content
-					.font(.headline)
+				if verticalSize == .regular {
+					content
+						.font(.headline)
+				} else {
+					content
+						.font(.title2)
+				}
+				
 			}
 		}
 	}
@@ -549,7 +580,7 @@ struct WizardPlayableView: View {
 	}
 	
 	@ViewBuilder
-	private func displayOptionsZ() -> some View {
+	private func displayOptionsZ(frameHeight: CGFloat = 44.0) -> some View {
 		if verticalSize == .regular {
 			GeometryReader { reader in
 				ZStack {
@@ -684,14 +715,14 @@ struct WizardPlayableView: View {
 						}.frame(width:reader.size.width*0.60)
 					}
 					.frame(width: reader.size.width, height: feedbackItemMaxHeight+10)
-					.offset(y: animate ? reader.size.height-feedbackItemMaxHeight*6 : reader.size.height-feedbackItemMaxHeight)
+					.offset(y: animate ? reader.size.height/2 - feedbackItemMaxHeight*4 : reader.size.height/2 - feedbackItemMaxHeight)
 					.opacity(animate ? 1 : 0)
 					
 					ZStack {
 						displayOption(feedbackItem: .veryHard, itemWidthBeforeAnimated: reader.size.width*0.80, itemWidthAfterAnimated: reader.size.width, opHasShadow:false, animated: $animate, maxHeight: feedbackItemMaxHeight)
 					}
 					.frame(width: reader.size.width, height: feedbackItemMaxHeight+10)
-					.offset(y: animate ? reader.size.height-feedbackItemMaxHeight*1 : reader.size.height-feedbackItemMaxHeight)
+					.offset(y: animate ? reader.size.height/2 + feedbackItemMaxHeight : reader.size.height/2 - feedbackItemMaxHeight)
 					.onTapGesture {
 						if animate {
 							withAnimation(Animation.spring(response: 0.2, dampingFraction: 0.4, blendDuration: 0.8).speed(0.3)) {
@@ -705,7 +736,7 @@ struct WizardPlayableView: View {
 						displayOption(feedbackItem: .littleDifficult, itemWidthBeforeAnimated: reader.size.width*0.86, itemWidthAfterAnimated: reader.size.width, opHasShadow: false, animated: $animate, maxHeight: feedbackItemMaxHeight)
 					}
 					.frame(width: reader.size.width, height: feedbackItemMaxHeight+10)
-					.offset(y: animate ? reader.size.height-feedbackItemMaxHeight*2 : reader.size.height-feedbackItemMaxHeight)
+					.offset(y: animate ? reader.size.height/2 : reader.size.height/2 - feedbackItemMaxHeight)
 					.opacity(animate ? 1 : 0)
 					.onTapGesture {
 						if animate {
@@ -720,7 +751,113 @@ struct WizardPlayableView: View {
 						displayOption(feedbackItem: .canLearn, itemWidthBeforeAnimated: reader.size.width*0.80, itemWidthAfterAnimated: reader.size.width, opHasShadow: true, animated: $animate, maxHeight: feedbackItemMaxHeight)
 					}
 					.frame(width: reader.size.width, height: feedbackItemMaxHeight+10)
-					.offset(y: animate ? reader.size.height-feedbackItemMaxHeight*3 : reader.size.height-feedbackItemMaxHeight)
+					.offset(y: animate ? reader.size.height/2 - feedbackItemMaxHeight : reader.size.height/2 - feedbackItemMaxHeight)
+					.onTapGesture {
+						if animate {
+							withAnimation(Animation.spring(response: 0.2, dampingFraction: 0.4, blendDuration: 0.8).speed(0.3)) {
+								animate.toggle()
+							}
+							feedbackTapAction(feedback: .canLearn)
+						}
+					}
+					
+					ZStack {
+						displayOption(feedbackItem: .comfortable, itemWidthBeforeAnimated: reader.size.width*0.90, itemWidthAfterAnimated: reader.size.width, opHasShadow: true, animated: $animate, maxHeight: feedbackItemMaxHeight)
+					}
+					.frame(width: reader.size.width, height: feedbackItemMaxHeight+10)
+					.offset(y: animate ? reader.size.height/2 - feedbackItemMaxHeight*2 : reader.size.height/2 - feedbackItemMaxHeight)
+					.onTapGesture {
+						if animate  {
+							withAnimation(Animation.spring(response: 0.2, dampingFraction: 0.4, blendDuration: 0.8).speed(0.3)) {
+								animate.toggle()
+							}
+							feedbackTapAction(feedback: .comfortable)
+						}
+					}
+					
+					ZStack {
+						displayOption(feedbackItem: .easyPeasy ,itemWidthBeforeAnimated: reader.size.width, itemWidthAfterAnimated: reader.size.width, opHasShadow: true, animated: $animate, maxHeight: feedbackItemMaxHeight)
+					}
+					.frame(width: reader.size.width, height: feedbackItemMaxHeight+10)
+					.offset(y: animate ? reader.size.height/2 - feedbackItemMaxHeight*3 : reader.size.height/2 - feedbackItemMaxHeight)
+					.onTapGesture {
+						if animate {
+							withAnimation(Animation.spring(response: 0.2, dampingFraction: 0.4, blendDuration: 0.8).speed(0.3)) {
+								animate.toggle()
+							}
+							feedbackTapAction(feedback: .easyPeasy)
+						} else {
+							withAnimation(Animation.spring(response: 0.2, dampingFraction: 0.4, blendDuration: 0.8).speed(0.3)) {
+								animate.toggle()
+							}
+						}
+						
+					}
+				}.frame(height:frameHeight)
+			} else {
+				GeometryReader { reader in
+					ZStack {
+						HStack {
+							Spacer()
+							HStack {
+								Spacer()
+								Label("Close", systemImage: "xmark")
+									.labelStyle(.iconOnly)
+									.foregroundColor(Color("Dynamic/MainBrown+6"))
+									.padding(15)
+								Spacer()
+							}
+							.frame(width: 48)
+							.background {
+								RoundedRectangle(cornerRadius: 26)
+									.foregroundColor(Color("Dynamic/LightGray"))
+									.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+							}
+							.onTapGesture {
+								withAnimation(Animation.spring(response: 0.2, dampingFraction: 0.4, blendDuration: 0.8).speed(0.3)) {
+									animate.toggle()
+								}
+							}
+						}.frame(width:reader.size.width*0.60)
+					}
+					.frame(width: reader.size.width, height: feedbackItemMaxHeight+10)
+					.offset(y: animate ? reader.size.height-feedbackItemMaxHeight*6 : reader.size.height-feedbackItemMaxHeight-5)
+					.opacity(animate ? 1 : 0)
+					
+					ZStack {
+						displayOption(feedbackItem: .veryHard, itemWidthBeforeAnimated: reader.size.width*0.80, itemWidthAfterAnimated: reader.size.width, opHasShadow:false, animated: $animate, maxHeight: feedbackItemMaxHeight)
+					}
+					.frame(width: reader.size.width, height: feedbackItemMaxHeight+10)
+					.offset(y: animate ? reader.size.height-feedbackItemMaxHeight*1 : reader.size.height-feedbackItemMaxHeight-5)
+					.onTapGesture {
+						if animate {
+							withAnimation(Animation.spring(response: 0.2, dampingFraction: 0.4, blendDuration: 0.8).speed(0.3)) {
+								animate.toggle()
+							}
+							feedbackTapAction(feedback: .veryHard)
+						}
+					}
+					
+					ZStack {
+						displayOption(feedbackItem: .littleDifficult, itemWidthBeforeAnimated: reader.size.width*0.86, itemWidthAfterAnimated: reader.size.width, opHasShadow: false, animated: $animate, maxHeight: feedbackItemMaxHeight)
+					}
+					.frame(width: reader.size.width, height: feedbackItemMaxHeight+10)
+					.offset(y: animate ? reader.size.height-feedbackItemMaxHeight*2 : reader.size.height-feedbackItemMaxHeight-5)
+					.opacity(animate ? 1 : 0)
+					.onTapGesture {
+						if animate {
+							withAnimation(Animation.spring(response: 0.2, dampingFraction: 0.4, blendDuration: 0.8).speed(0.3)) {
+								animate.toggle()
+							}
+							feedbackTapAction(feedback: .littleDifficult)
+						}
+					}
+					
+					ZStack {
+						displayOption(feedbackItem: .canLearn, itemWidthBeforeAnimated: reader.size.width*0.80, itemWidthAfterAnimated: reader.size.width, opHasShadow: false, animated: $animate, maxHeight: feedbackItemMaxHeight)
+					}
+					.frame(width: reader.size.width, height: feedbackItemMaxHeight+10)
+					.offset(y: animate ? reader.size.height-feedbackItemMaxHeight*3 : reader.size.height-feedbackItemMaxHeight-5)
 					.onTapGesture {
 						if animate {
 							withAnimation(Animation.spring(response: 0.2, dampingFraction: 0.4, blendDuration: 0.8).speed(0.3)) {

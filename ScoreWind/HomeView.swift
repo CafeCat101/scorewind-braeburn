@@ -212,6 +212,7 @@ struct HomeView_Previews: PreviewProvider {
 				.environment(\.colorScheme, .light)
 				.previewInterfaceOrientation(InterfaceOrientation.landscapeLeft)
 				.previewDisplayName("Light Landscape")
+				//.previewDevice(PreviewDevice(rawValue: "iPhone 13 mini"))
 		}
 		
 	}
