@@ -16,6 +16,7 @@ struct WizardLearningPathItem: Identifiable, Codable {
 	var startHere: Bool
 	var courseTitle: String
 	var lessonTitle: String
+	var friendlyID: Int
 	
 	init() {
 		id = UUID()
@@ -27,5 +28,6 @@ struct WizardLearningPathItem: Identifiable, Codable {
 		startHere = false
 		courseTitle = "Course"
 		lessonTitle = "Lesson"
+		friendlyID = 0
 	}
 }

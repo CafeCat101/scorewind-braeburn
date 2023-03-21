@@ -450,6 +450,7 @@ extension ScorewindData {
 					learningPathItem.showCourseTitle = true
 				}
 			}
+			learningPathItem.friendlyID = learningPath.count + 1
 			learningPath.append(learningPathItem)
 		}
 		

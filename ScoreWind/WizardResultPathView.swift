@@ -20,14 +20,14 @@ struct WizardResultPathView: View {
 			ForEach(studentData.wizardResult.learningPath) { pathItem in
 				pathItemView(pathItem: pathItem)
 				
-				if pathItem.lessonID != studentData.wizardResult.learningPath[studentData.wizardResult.learningPath.count - 1].lessonID {
+				/*if pathItem.lessonID != studentData.wizardResult.learningPath[studentData.wizardResult.learningPath.count - 1].lessonID {
 					HStack {
 						Spacer()
 						Label("Next", systemImage: "arrow.down")
 							.labelStyle(.iconOnly)
 						Spacer()
 					}
-				}
+				}*/
 			}
 		}
 	}
@@ -35,6 +35,33 @@ struct WizardResultPathView: View {
 	@ViewBuilder
 	private func pathItemView(pathItem: WizardLearningPathItem) -> some View {
 		if pathItem.showCourseTitle {
+			VStack(spacing:0) {
+				VStack(alignment: .leading) {
+					HStack {
+						Text("Course:")
+							.bold()
+							.foregroundColor(Color("Dynamic/MainBrown+6")) +
+						Text(" \(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.courseTitle))")
+							//.bold()
+							.foregroundColor(Color("Dynamic/MainBrown+6"))
+						Spacer()
+						Label("Go to course", systemImage: "arrow.right.circle.fill")
+							.labelStyle(.iconOnly)
+							.font(.title2)
+							.foregroundColor(Color("testColor2")) // original is "Dynamic/MainBrown"
+					}
+				}.padding(15)
+			}
+			.background(
+				RoundedRectangle(cornerRadius: CGFloat(17))
+					.foregroundColor(Color("testColor"))
+					.opacity(0.85)
+					.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+			)
+			.onTapGesture {
+				goToCourse(toCourseID: pathItem.courseID)
+			}
+			/*
 			Text("Course: \(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.courseTitle))")
 				.foregroundColor(Color("LessonSheet"))
 				.frame(maxWidth: .infinity, minHeight: 60)
@@ -44,6 +71,7 @@ struct WizardResultPathView: View {
 				.onTapGesture {
 					goToCourse(toCourseID: pathItem.courseID)
 				}
+			 */
 		}
 		
 		if (scorewindData.wizardPickedCourse.lessons[0].id != pathItem.lessonID) && (studentData.wizardResult.learningPath[0].lessonID == pathItem.lessonID) {
@@ -53,6 +81,77 @@ struct WizardResultPathView: View {
 				.labelStyle(.iconOnly)
 		}
 		
+		//:: Lesson box
+		HStack(spacing:0) {
+			VStack(spacing:0) {
+				Text("\(pathItem.friendlyID)")
+					.font(.subheadline)
+					.foregroundColor(Color("Dynamic/DarkPurple"))
+					.padding(15)
+					.frame(height: 55)
+					.background(
+						RoundedCornersShape(corners: [.topLeft, .bottomLeft], radius: 17)
+							.fill(Color("Dynamic/MainBrown"))
+							.opacity(0.25)
+							//.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+					)
+					.padding(.top, 17)
+				Spacer()
+			}
+			
+			VStack(spacing:0) {
+				VStack(alignment: .leading) {
+					/*if pathItem.startHere {
+						Label(title: {
+							Text("Start here")
+							.bold()
+							.foregroundColor(.yellow)
+						}, icon: {
+								Image(systemName: "paperplane.circle")
+								.foregroundColor(.yellow)
+						}).padding([.bottom],-5)
+					}*/
+					Text("\(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.lessonTitle))")
+						//.bold()
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+					HStack {
+						if pathItem.startHere {
+							Label(title: {
+								Text("Start Here")
+									.font(.headline)
+									.bold()
+									.foregroundColor(Color("Dynamic/DarkPurple"))
+							}, icon: {
+									Image(systemName: "paperplane.circle")
+									.foregroundColor(Color("Dynamic/DarkPurple"))
+							}).padding([.bottom],-5)
+						}
+						Spacer()
+						Label("Go to lesson", systemImage: "arrow.right.circle.fill")
+							.labelStyle(.iconOnly)
+							.font(.title2)
+							.foregroundColor(Color("testColor2")) //original is "Dynamic/MainBrown"
+					}
+				}.padding(15)
+			}
+			.frame(minHeight: 80)
+			.background(
+				RoundedCornersShape(corners: [.topRight, .topLeft, .bottomLeft, .bottomRight], radius: 17)
+					.fill(Color("Dynamic/LightGray"))
+					.opacity(0.85)
+					.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+				/*RoundedRectangle(cornerRadius: CGFloat(17))
+					.foregroundColor(Color("Dynamic/LightGray"))
+					.opacity(0.85)
+					.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))*/
+			)
+			.onTapGesture {
+				goToLesson(toCourseID: pathItem.courseID, toLessonID: pathItem.lessonID)
+			}
+			.padding(.bottom, 6)
+		}
+		
+		/*
 		if pathItem.startHere {
 			VStack {
 				Label(title: {
@@ -79,6 +178,7 @@ struct WizardResultPathView: View {
 					goToLesson(toCourseID: pathItem.courseID, toLessonID: pathItem.lessonID)
 				}
 		}
+		*/
 	}
 	
 	struct lessonItemInPath: ViewModifier {
@@ -134,13 +234,14 @@ struct WizardResultPathView: View {
 		}
 	}
 }
-
-struct WizardResultPathView_Previews: PreviewProvider {
-	@State static var tab = "THome"
-	@State static var step:Page = .wizardResult
-	@State static var wizardResult: WizardResult = WizardResult()
-	
-	static var previews: some View {
-		WizardResultPathView(selectedTab: $tab, stepName: $step, studentData: StudentData(), showLessonView: .constant(false)).environmentObject(ScorewindData())
-	}
-}
+/*
+ struct WizardResultPathView_Previews: PreviewProvider {
+ @State static var tab = "THome"
+ @State static var step:Page = .wizardResult
+ @State static var wizardResult: WizardResult = WizardResult()
+ 
+ static var previews: some View {
+ WizardResultPathView(selectedTab: $tab, stepName: $step, studentData: StudentData(), showLessonView: .constant(false)).environmentObject(ScorewindData())
+ }
+ }
+ */
