@@ -78,9 +78,19 @@ struct WizardInstrumentView: View {
 							Spacer()
 						}
 						Divider().frame(width: proxy.size.width*0.7)
-						Text(instrument.uppercased())
-							.font(.headline)
-							.foregroundColor(Color("Dynamic/MainBrown+6"))
+						HStack {
+							Spacer()
+							if isInstrumentSelected(askInstrument: instrument == InstrumentType.guitar.rawValue ? .guitar : .violin) {
+								Label("select",systemImage: "checkmark.circle.fill")
+									.labelStyle(.iconOnly)
+									.font(.headline)
+									.foregroundColor(Color("Dynamic/MainBrown+6"))
+							}
+							Text(instrument.uppercased())
+								.font(.headline)
+								.foregroundColor(Color("Dynamic/MainBrown+6"))
+							Spacer()
+						}
 					} else {
 						//:: landscape a like
 						HStack {
@@ -94,10 +104,19 @@ struct WizardInstrumentView: View {
 								Spacer()
 							}
 							Divider().frame(height: proxy.size.height*0.7)
-							Text(instrument.uppercased())
-								.font(.headline)
-								.foregroundColor(Color("Dynamic/MainBrown+6"))
-								.frame(width: proxy.size.width*0.25)
+							VStack {
+								Text(instrument.uppercased())
+									.font(.headline)
+									.foregroundColor(Color("Dynamic/MainBrown+6"))
+									.frame(width: proxy.size.width*0.25)
+								if isInstrumentSelected(askInstrument: instrument == InstrumentType.guitar.rawValue ? .guitar : .violin) {
+									Label("select",systemImage: "checkmark.circle.fill")
+										.labelStyle(.iconOnly)
+										.font(.headline)
+										.foregroundColor(Color("Dynamic/MainBrown+6"))
+								}
+							}
+							
 							Spacer()
 						}
 					}
@@ -128,14 +147,6 @@ struct WizardInstrumentView: View {
 		Image(instrumentImage)
 			.resizable()
 			.scaledToFit()
-			.overlay(
-				alignment:.bottom,
-				content: {
-					Label("select",systemImage: "checkmark.circle.fill")
-						.labelStyle(.iconOnly)
-						.font(.title)
-						.opacity(isSelected ? 1.0 : 0.0)
-				})
 	}
 	
 	private func isInstrumentSelected(askInstrument: InstrumentType) -> Bool {
