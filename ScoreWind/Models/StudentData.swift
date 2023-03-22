@@ -305,12 +305,19 @@ class StudentData: ObservableObject {
 	 */
 	
 	func getInstrumentChoice()->String{
-		return wizardInstrumentChoice
+		let wizardChooseInstrumentValue:String = userDefaults.string(forKey: "wizardChooseInstrument") ?? ""
+		if wizardChooseInstrumentValue.isEmpty == false {
+			wizardInstrumentChoice = wizardChooseInstrumentValue
+			return wizardInstrumentChoice
+		} else {
+			return wizardInstrumentChoice
+		}
 		//return useriCloudKeyValueStore.string(forKey:"instrument") ?? ""
 	}
 	
 	func updateInstrumentChoice(instrument:InstrumentType) {
 		wizardInstrumentChoice = instrument.rawValue
+		userDefaults.set(instrument.rawValue, forKey: "wizardChooseInstrument")
 		//useriCloudKeyValueStore.set(instrument.rawValue, forKey: "instrument")
 		//useriCloudKeyValueStore.synchronize()
 	}
