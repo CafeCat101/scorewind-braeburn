@@ -217,6 +217,10 @@ struct WizardPlayableView: View {
 				setupPlayer(withoutScoreViewer: studentData.playableViewVideoOnly)
 				viewModel.playerGoTo(timestamp: findFirstPlayableTimestamp())
 			}
+			
+			if nextStep != .wizardPlayable && nextStep != .wizardResult {
+				showProgress = true
+			}
 		}
 	}
 	
