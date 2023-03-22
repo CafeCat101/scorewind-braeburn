@@ -405,9 +405,9 @@ extension ScorewindData {
 	private func setWizardResultText(studentData: StudentData, explainResult: String) {
 		if studentData.getExperience() == ExperienceFeedback.continueLearning.rawValue || studentData.getExperience() == ExperienceFeedback.experienced.rawValue {
 			if studentData.getExperience() == ExperienceFeedback.continueLearning.rawValue {
-				studentData.wizardResult.resultTitle = "A lesson to explore!"
+				studentData.wizardResult.resultTitle = "A Lesson to Explore!"
 			} else {
-				studentData.wizardResult.resultTitle = "A lesson from repositories"
+				studentData.wizardResult.resultTitle = "A Lesson from Repositories"
 			}
 			
 			studentData.wizardResult.resultExplaination = explainResult

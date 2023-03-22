@@ -14,6 +14,7 @@ struct WizardResultView: View {
 	@ObservedObject var studentData:StudentData
 	@State private var dummyLearningPath:[String] = ["Course1","Course2","Course3"]
 	@State private var showMeMore:Bool = false
+	@State private var showTopLessonDescription:Bool = true
 	@State private var showStepTip = false
 	@State private var tipContent:AnyView = AnyView(Text("Tip"))
 	@State private var userDefaults = UserDefaults.standard
@@ -21,6 +22,7 @@ struct WizardResultView: View {
 	@Binding var showStore: Bool
 	@State private var showTopDivider = false
 	@State private var offset = CGFloat.zero
+	@State private var animate = false
 	
 	var body: some View {
 		VStack(spacing:0) {
@@ -47,13 +49,15 @@ struct WizardResultView: View {
 						Spacer()
 					}*/
 					VStack(alignment: .center) {
-						VStack {
+						ZStack {
 							Image("testImage")
 								.resizable()
 								.scaledToFit()
 						}
 						.padding(10)
 						.frame(maxHeight: 120)
+						.offset(x: animate ? -7 : 0-UIScreen.main.bounds.size.width)
+						
 						Text(studentData.wizardResult.resultTitle)
 							.font(.title)
 							.foregroundColor(Color("Dynamic/MainBrown+6"))
@@ -111,11 +115,12 @@ struct WizardResultView: View {
 									.font(.title2)
 									.foregroundColor(Color("testColor2"))
 							}
-							if showMeMore == false {
+							if showTopLessonDescription {
 								Divider()
 								Text(scorewindData.wizardPickedLesson.description)
 									.foregroundColor(Color("Dynamic/MainBrown+6"))
 							}
+							
 						}.padding(15)
 					}
 					.background(
@@ -202,6 +207,10 @@ struct WizardResultView: View {
 						.padding(.bottom, showMeMore ? 0 : 50)
 						.onTapGesture {
 							showMeMore.toggle()
+							
+							withAnimation(.linear(duration: 0.2)) {
+								showTopLessonDescription.toggle()
+							}
 						}
 					
 					
@@ -385,11 +394,20 @@ struct WizardResultView: View {
 					}
 				}
 			}
+			.onDisappear(perform: {
+				animate = false
+			})
 			.onAppear(perform: {
 				//print("[debug] WizardResultView, onAppear, icloud wizardResult \(studentData.getWizardResult())")
 				print("[debug] WizardResultView, onAppear, local wizardResult \(studentData.wizardResult)")
 				print("[debug] WizardResultView, onAppear, studentData.wizardRange.count \(studentData.wizardRange.count)")
 				print("[debug] WizardResultView, onAppear, studentData.getWizardResult().learningPath.count \(studentData.getWizardResult().learningPath.count)")
+				
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+					withAnimation(Animation.spring(response: 0.2, dampingFraction: 0.4, blendDuration: 0.8).speed(0.3)) {
+						animate.toggle()
+					}
+				}
 				
 				//:: for Preview only
 				if scorewindData.wizardPickedCourse.id == 0 && scorewindData.wizardPickedLesson.id == 0 {

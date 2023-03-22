@@ -75,10 +75,12 @@ struct WizardResultPathView: View {
 		}
 		
 		if (scorewindData.wizardPickedCourse.lessons[0].id != pathItem.lessonID) && (studentData.wizardResult.learningPath[0].lessonID == pathItem.lessonID) {
-			Label("Next", systemImage: "arrow.down")
-				.labelStyle(.iconOnly)
-			Label("Next", systemImage: "arrow.down")
-				.labelStyle(.iconOnly)
+			VStack(spacing:0) {
+				Label("Next", systemImage: "arrow.down")
+					.labelStyle(.iconOnly)
+					.foregroundColor(Color("testColor2"))
+					.font(.headline)
+			}.padding([.top,.bottom],3)
 		}
 		
 		//:: Lesson box
@@ -111,10 +113,36 @@ struct WizardResultPathView: View {
 								.foregroundColor(.yellow)
 						}).padding([.bottom],-5)
 					}*/
-					Text("\(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.lessonTitle))")
-						//.bold()
-						.foregroundColor(Color("Dynamic/MainBrown+6"))
+					if pathItem.startHere {
+						HStack {
+							Spacer()
+							VStack {
+								Image(getIconTitleName())
+									.resizable()
+									.scaledToFit()
+									.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+							}
+							.frame(maxHeight: 24)
+							Text("Start Here")
+								.bold()
+								.foregroundColor(Color("Dynamic/DarkPurple"))
+								.font(.headline)
+								//.frame(maxHeight: 24)
+							Spacer()
+						}
+					}
 					HStack {
+						Text("\(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.lessonTitle))")
+							//.bold()
+							.foregroundColor(Color("Dynamic/MainBrown+6"))
+						Spacer()
+						Label("Go to lesson", systemImage: "arrow.right.circle.fill")
+							.labelStyle(.iconOnly)
+							.font(.title2)
+							.foregroundColor(Color("testColor2")) //original is "Dynamic/MainBrown"
+					}
+					
+					/*HStack {
 						if pathItem.startHere {
 							Label(title: {
 								Text("Start Here")
@@ -125,16 +153,13 @@ struct WizardResultPathView: View {
 									Image(systemName: "paperplane.circle")
 									.foregroundColor(Color("Dynamic/DarkPurple"))
 							}).padding([.bottom],-5)
+							
 						}
 						Spacer()
-						Label("Go to lesson", systemImage: "arrow.right.circle.fill")
-							.labelStyle(.iconOnly)
-							.font(.title2)
-							.foregroundColor(Color("testColor2")) //original is "Dynamic/MainBrown"
-					}
+					}*/
 				}.padding(15)
 			}
-			.frame(minHeight: 80)
+			.frame(minHeight: 86)
 			.background(
 				RoundedCornersShape(corners: [.topRight, .topLeft, .bottomLeft, .bottomRight], radius: 17)
 					.fill(Color("Dynamic/LightGray"))
@@ -231,6 +256,14 @@ struct WizardResultPathView: View {
 			return .experienced
 		default:
 			return .starterKit
+		}
+	}
+	
+	private func getIconTitleName() -> String {
+		if studentData.getInstrumentChoice() == InstrumentType.guitar.rawValue {
+			return "iconGuitar"
+		} else {
+			return "iconViolin"
 		}
 	}
 }
