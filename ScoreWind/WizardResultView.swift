@@ -24,6 +24,7 @@ struct WizardResultView: View {
 	@State private var offset = CGFloat.zero
 	@State private var animate = false
 	@Environment(\.verticalSizeClass) var verticalSize
+	@Environment(\.colorScheme) var uiColor
 	
 	var body: some View {
 		VStack(spacing:0) {
@@ -174,11 +175,14 @@ struct WizardResultView: View {
 	private func displayContentHeader() -> some View {
 		VStack(alignment: .center) {
 			ZStack {
-				Image("testImage")
+				Image("resultFound")
 					.resizable()
 					.scaledToFit()
+					.shadow(color: uiColor == .light ? Color("Dynamic/ShadowReverse") : Color("Dynamic/DarkPurple"), radius: CGFloat(10))
+					//.padding(.top,18)
 			}
-			.padding(10)
+			.padding(.top,18)
+			//.padding(EdgeInsets(top: 10, leading: 0, bottom: 8, trailing: 0))
 			.frame(maxHeight: 120)
 			.offset(x: animate ? -7 : 0-UIScreen.main.bounds.size.width)
 			
