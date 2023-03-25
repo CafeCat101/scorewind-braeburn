@@ -22,28 +22,26 @@ struct HomeView: View {
 		TabView(selection: $selectedTab) {
 			WizardView(selectedTab: $selectedTab, studentData: studentData, showLessonView: $showLessonView, downloadManager: downloadManager, stepName: $stepName)
 				.tabItem {
-					Image(systemName: "music.note.house")
-					Text("Home")
+					Label("Home", systemImage: "music.note.house")
+					//Text("Home")
 				}.tag("THome")
 			
 			CourseView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData, showLessonView: $showLessonView)
 				.tabItem {
-					Image(systemName: "note.text")
-					Text("Course")
+					Label("Course", systemImage: "note.text")
 				}.tag("TCourse")
 
 			MyCoursesView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData)
 				.tabItem {
-					Image(systemName: "music.note.list")
-					Text("My Courses")
+					Label("My Courses", systemImage: "music.note.list")
 				}.tag("TMyCourses")
 		}
-		.accentColor(Color("Dynamic/MainBrown+6"))
+		.accentColor(Color("Dynamic/TabSelected"))
 		.ignoresSafeArea(.all, edges: .bottom)
 		.onAppear{
 			//UITabBar.appearance().backgroundColor = UIColor(Color("AppBackground"))
 			//;UITabBar.appearance().isTranslucent = true
-			UITabBar.appearance().unselectedItemTintColor = UIColor(Color("Dynamic/MainBrown"))
+			UITabBar.appearance().unselectedItemTintColor = UIColor(Color("Dynamic/TabUnselected"))
 			//==>>>> app is launched...
 			print("[debug] HomeView, onAppear")
 			if downloadManager.appState == .background {

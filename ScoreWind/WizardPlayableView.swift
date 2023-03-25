@@ -465,35 +465,43 @@ struct WizardPlayableView: View {
 	}
 	
 	struct videoLoader: View {
-			@State private var isLoading = false
+		@State private var isLoading = false
 		var frameSize: CGFloat
-	 
-			var body: some View {
+		
+		var body: some View {
+			Circle()
+			//.trim(from: 0, to: 0.85)
+				.stroke(Color("AppYellow"), style: StrokeStyle(
+					lineWidth: 4,
+					lineCap: .round,
+					lineJoin: .round,
+					miterLimit: 0,
+					dash: [50,10],
+					dashPhase: 0
+				))
+			//.stroke(Color("AppYellow"), lineWidth: 3)
+				.background{
 					Circle()
-							.trim(from: 0, to: 0.85)
-							.stroke(Color("AppYellow"), lineWidth: 3)
-							.background{
-								Circle()
-									.foregroundColor(Color("AppYellow"))
-									.opacity(0.7)
-							}
-							.overlay(content:{
-								Image("logo")
-									.resizable()
-									.scaledToFit()
-									.foregroundColor(Color("AppYellow"))
-									.padding(15)
-							})
-							.frame(width: frameSize, height: frameSize)
-							.rotationEffect(Angle(degrees: isLoading ? 360 : 0))
-							//.animation(Animation.default.repeatForever(autoreverses: false))
-							.onAppear() {
-								//print("video loader onAppear")
-								withAnimation(.default.repeatForever(autoreverses:false).speed(0.2)){
-									self.isLoading = true
-								}
-							}
-			}
+						.foregroundColor(Color("AppYellow"))
+						.opacity(0.7)
+				}
+				.overlay(content:{
+					Image("logo")
+						.resizable()
+						.scaledToFit()
+						.foregroundColor(Color("AppYellow"))
+						.padding(15)
+				})
+				.frame(width: frameSize, height: frameSize)
+				.rotationEffect(Angle(degrees: isLoading ? 360 : 0))
+			//.animation(Animation.default.repeatForever(autoreverses: false))
+				.onAppear() {
+					//print("video loader onAppear")
+					withAnimation(.default.repeatForever(autoreverses:false).speed(0.2)){
+						self.isLoading = true
+					}
+				}
+		}
 	}
 	
 	@ViewBuilder
@@ -517,11 +525,6 @@ struct WizardPlayableView: View {
 							.foregroundColor(.black)
 							.opacity(0.80)
 					}
-					
-					/*Text("waiting")
-						.padding(15)
-						.background(Color("Dynamic/LightGray"))
-						.cornerRadius(17)*/
 				}
 			})
 	}

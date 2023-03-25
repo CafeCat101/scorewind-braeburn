@@ -48,13 +48,13 @@ struct WizardResultPathView: View {
 						Label("Go to course", systemImage: "arrow.right.circle.fill")
 							.labelStyle(.iconOnly)
 							.font(.title2)
-							.foregroundColor(Color("testColor2")) // original is "Dynamic/MainBrown"
+							.foregroundColor(Color("Dynamic/MainGreen")) // original is "Dynamic/MainBrown"
 					}
 				}.padding(15)
 			}
 			.background(
 				RoundedRectangle(cornerRadius: CGFloat(17))
-					.foregroundColor(Color("testColor"))
+					.foregroundColor(Color("Dynamic/LightGreen"))
 					.opacity(0.85)
 					.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
 			)
@@ -78,7 +78,7 @@ struct WizardResultPathView: View {
 			VStack(spacing:0) {
 				Label("Next", systemImage: "arrow.down")
 					.labelStyle(.iconOnly)
-					.foregroundColor(Color("testColor2"))
+					.foregroundColor(Color("Dynamic/MainGreen"))
 					.font(.headline)
 			}.padding([.top,.bottom],3)
 		}
@@ -139,7 +139,7 @@ struct WizardResultPathView: View {
 						Label("Go to lesson", systemImage: "arrow.right.circle.fill")
 							.labelStyle(.iconOnly)
 							.font(.title2)
-							.foregroundColor(Color("testColor2")) //original is "Dynamic/MainBrown"
+							.foregroundColor(Color("Dynamic/MainGreen")) //original is "Dynamic/MainBrown"
 					}
 					
 					/*HStack {

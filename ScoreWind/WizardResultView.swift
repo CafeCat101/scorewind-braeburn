@@ -246,7 +246,7 @@ struct WizardResultView: View {
 					Label("Go to lesson", systemImage: "arrow.right.circle.fill")
 						.labelStyle(.iconOnly)
 						.font(.title2)
-						.foregroundColor(Color("testColor2"))
+						.foregroundColor(Color("Dynamic/MainGreen"))
 				}
 				if showTopLessonDescription {
 					Divider()
@@ -366,14 +366,14 @@ struct WizardResultView: View {
 						Label("Go to lesson", systemImage: "arrow.right.circle.fill")
 							.labelStyle(.iconOnly)
 							.font(.title2)
-							.foregroundColor(Color("testColor2"))
+							.foregroundColor(Color("Dynamic/MainGreen"))
 					}
 				}.padding(15)
 			}
 			.background(
 				RoundedRectangle(cornerRadius: CGFloat(17))
 					//.foregroundColor(Color("Dynamic/LightGray"))
-					.foregroundColor(Color("testColor"))
+					.foregroundColor(Color("Dynamic/LightGreen"))
 					.opacity(0.85)
 					.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
 			)
