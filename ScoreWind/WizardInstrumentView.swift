@@ -74,7 +74,7 @@ struct WizardInstrumentView: View {
 							Spacer()
 							getChoiceIcon(instrumentImage: instrument, isSelected: isInstrumentSelected(askInstrument: instrument == InstrumentType.guitar.rawValue ? .guitar : .violin))
 								.frame(width:proxy.size.width*0.7, height:proxy.size.width*0.7)
-								.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(15))
+								.shadow(color: Color("Dynamic/OuterGlow"), radius: CGFloat(15))
 							Spacer()
 						}
 						Divider().frame(width: proxy.size.width*0.7)

@@ -24,6 +24,7 @@ struct WizardPlayableView: View {
 	let transition = AnyTransition.asymmetric(insertion: .slide, removal: .scale).combined(with: .opacity)
 	@Environment(\.verticalSizeClass) var verticalSize
 	@State private var showScoreOverlay = true
+	@State private var showVideoLoader = false
 	
 	@State private var feedbackItemMaxHeight:CGFloat = 60.0
 	
@@ -56,12 +57,15 @@ struct WizardPlayableView: View {
 					viewWithScoreMenu()
 					.frame(width:UIScreen.main.bounds.width*0.85)
 					
+					displayVideo()
+					/*
 					VideoPlayer(player: viewModel.videoPlayer)
 						.clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
 						.frame(width: animateVideo ? getVideoFrame().width : 0, height: getVideoFrame().height)
 						.offset(x: animateVideo ? 0 : 0 - UIScreen.main.bounds.width*0.85)
 						.opacity(animateVideo ? 1 : 0)
 						.transition(AnyTransition.asymmetric(insertion: .slide, removal: .scale).combined(with: .opacity))
+					 */
 					
 					if studentData.playableViewVideoOnly == false {
 						GeometryReader { scoreSpaceReader in
@@ -82,16 +86,15 @@ struct WizardPlayableView: View {
 				} else {
 					HStack {
 						VStack(spacing: 0) {
-							//if studentData.playableViewVideoOnly {
-							//	Spacer()
-							//}
+							displayVideo()
+							/*
 							VideoPlayer(player: viewModel.videoPlayer)
 								.clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
 								.frame(width: animateVideo ? getVideoFrame().width : 0, height: getVideoFrame().height)
 								.offset(x: animateVideo ? 0 : 0 - UIScreen.main.bounds.width*0.85)
 								.opacity(animateVideo ? 1 : 0)
 								.transition(AnyTransition.asymmetric(insertion: .slide, removal: .scale).combined(with: .opacity))
-							//Spacer()
+							 */
 						}
 						
 						if studentData.playableViewVideoOnly  {
@@ -211,6 +214,7 @@ struct WizardPlayableView: View {
 			studentData.wizardStepNames.append(nextStep)
 			
 			if nextStep == .wizardPlayable {
+				rememberPlaybackTime = 0.0
 				viewModel.loadToGo = false
 				viewModel.viewedLesson = scorewindData.wizardPickedLesson
 				viewModel.viewedTimestampRecs = scorewindData.wizardPickedTimestamps
@@ -225,33 +229,53 @@ struct WizardPlayableView: View {
 	}
 	
 	private func setupPlayer(withoutScoreViewer: Bool){
+		showVideoLoader = true
 		if withoutScoreViewer == false {
-			//viewModel.videoPlayer = AVPlayer(url: URL(string: decodeVideoURL(videoURL: scorewindData.wizardPickedLesson.video))!)
 			viewModel.videoPlayer = AVPlayer(url: URL(string: decodeVideoURL(videoURL: scorewindData.wizardPickedLesson.video))!)
 			//viewModel.videoPlayer?.play()
 			
 			viewModel.videoPlayer!.addPeriodicTimeObserver(forInterval: CMTime(value: 1, timescale: 3), queue: .main, using: { time in
 				let catchTime = time.seconds
+				
+				print("catchTime:"+String(catchTime))
+				if showVideoLoader {
+					if self.rememberPlaybackTime > 0.01 && catchTime > self.rememberPlaybackTime {
+						showVideoLoader = false
+					}
+				}
+				
 				self.rememberPlaybackTime = catchTime
 				let atMeasure = findMesaureByTimestamp(videoTime: catchTime)
 				self.viewModel.valuePublisher.send(String(atMeasure))
 				//print("[debug] LessonView, setupPlayer, ready to play")
 				print("find measure:"+String(atMeasure))
+				
+				
 			})
-			
-			//if viewModel.viewedTimestampRecs!.count > 0 {
-			//	viewModel.playerGoTo(timestamp: 0.0)
-			//}
 		} else {
 			viewModel.videoPlayer = AVPlayer(url: URL(string: decodeVideoURL(videoURL: scorewindData.wizardPickedLesson.video))!)
 			viewModel.videoPlayer!.addPeriodicTimeObserver(forInterval: CMTime(value: 1, timescale: 3), queue: .main, using: { time in
 				let catchTime = time.seconds
+				
+				print("video catchTime:"+String(catchTime))
+				print("video rememberPlaybackTime:"+String(self.rememberPlaybackTime))
+				if showVideoLoader {
+					if self.rememberPlaybackTime > 0.01 && catchTime > self.rememberPlaybackTime {
+						showVideoLoader = false
+					}
+				}
+				
 				self.rememberPlaybackTime = catchTime
+				
 			})
 			//viewModel.videoPlayer?.play()
 		}
+		
 		withAnimation {
 			animateVideo = true
+		}
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+			self.showVideoLoader = true
 		}
 		print("[debug] WizardPlayableView, rememberPlaybackTime \(self.rememberPlaybackTime)")
 	}
@@ -438,6 +462,68 @@ struct WizardPlayableView: View {
 			})
 			
 		}
+	}
+	
+	struct videoLoader: View {
+			@State private var isLoading = false
+		var frameSize: CGFloat
+	 
+			var body: some View {
+					Circle()
+							.trim(from: 0, to: 0.85)
+							.stroke(Color("AppYellow"), lineWidth: 3)
+							.background{
+								Circle()
+									.foregroundColor(Color("AppYellow"))
+									.opacity(0.7)
+							}
+							.overlay(content:{
+								Image("logo")
+									.resizable()
+									.scaledToFit()
+									.foregroundColor(Color("AppYellow"))
+									.padding(15)
+							})
+							.frame(width: frameSize, height: frameSize)
+							.rotationEffect(Angle(degrees: isLoading ? 360 : 0))
+							//.animation(Animation.default.repeatForever(autoreverses: false))
+							.onAppear() {
+								//print("video loader onAppear")
+								withAnimation(.default.repeatForever(autoreverses:false).speed(0.2)){
+									self.isLoading = true
+								}
+							}
+			}
+	}
+	
+	@ViewBuilder
+	private func displayVideo() -> some View {
+		VideoPlayer(player: viewModel.videoPlayer)
+			.clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
+			.frame(width: animateVideo ? getVideoFrame().width : 0, height: getVideoFrame().height)
+			.offset(x: animateVideo ? 0 : 0 - UIScreen.main.bounds.width*0.85)
+			.opacity(animateVideo ? 1 : 0)
+			.transition(AnyTransition.asymmetric(insertion: .slide, removal: .scale).combined(with: .opacity))
+			.overlay(content: {
+				if showVideoLoader {
+					VStack {
+						ZStack {
+							videoLoader(frameSize: getVideoFrame().width*0.3)
+						}
+					}
+					.frame(width: animateVideo ? getVideoFrame().width : 0, height: getVideoFrame().height)
+					.background {
+						RoundedRectangle(cornerRadius: 17)
+							.foregroundColor(.black)
+							.opacity(0.80)
+					}
+					
+					/*Text("waiting")
+						.padding(15)
+						.background(Color("Dynamic/LightGray"))
+						.cornerRadius(17)*/
+				}
+			})
 	}
 	
 	@ViewBuilder
