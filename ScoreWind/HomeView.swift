@@ -23,7 +23,6 @@ struct HomeView: View {
 			WizardView(selectedTab: $selectedTab, studentData: studentData, showLessonView: $showLessonView, downloadManager: downloadManager, stepName: $stepName)
 				.tabItem {
 					Label("Home", systemImage: "music.note.house")
-					//Text("Home")
 				}.tag("THome")
 			
 			CourseView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData, showLessonView: $showLessonView)
@@ -186,6 +185,18 @@ struct storeViewCover: ViewModifier {
 				StoreView(showStore: $showStore)
 			})
 		}
+	}
+}
+
+@ViewBuilder
+func appBackgroundImage(colorMode: ColorScheme) -> some View {
+	if colorMode == .light {
+		Image("WelcomeViewBg")
+	} else {
+		Image("DarkPolygonBg2")
+			.resizable()
+			.aspectRatio(contentMode: .fill)
+			.edgesIgnoringSafeArea(.all)
 	}
 }
 

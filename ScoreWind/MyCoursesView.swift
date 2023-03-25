@@ -19,6 +19,7 @@ struct MyCoursesView: View {
 	@State private var listFilterFavourite = false
 	@State private var tipContent:AnyView = AnyView(Text("Tip"))
 	@State private var userDefaults = UserDefaults.standard
+	@Environment(\.colorScheme) var colorScheme
 	
 	var body: some View {
 		VStack {
@@ -135,8 +136,9 @@ struct MyCoursesView: View {
 				}
 			}
 			//Spacer()
+			Divider()
 		}
-		.background(Color("AppBackground"))
+		.background(colorScheme == .light ? appBackgroundImage(colorMode: colorScheme) : appBackgroundImage(colorMode: colorScheme))
 		.fullScreenCover(isPresented: $showTip, content: {
 			TipTransparentModalView(showStepTip: $showTip, tipContent: $tipContent)
 		})

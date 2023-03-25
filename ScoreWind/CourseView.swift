@@ -31,6 +31,8 @@ struct CourseView: View {
 	@Binding var showLessonView:Bool
 	@State private var showStore = false
 	@State private var showSubscriberOnlyAlert = false
+	@Environment(\.verticalSizeClass) var verticalSize
+	@Environment(\.colorScheme) var colorScheme
 	
 	
 	var body: some View {
@@ -38,8 +40,8 @@ struct CourseView: View {
 			VStack {
 				HStack {
 					Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentCourse.title))
-						.foregroundColor(Color("AppBlackDynamic"))
-						.font(.title2)
+						.font(verticalSize == .regular ? .title2 : .title3)
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
 						.bold()
 						.onTapGesture {
 							withAnimation {
@@ -54,26 +56,6 @@ struct CourseView: View {
 				
 				//show course section menus
 				HStack {
-					/*
-					 Button(action: {
-					 selectedSection = courseSection.overview
-					 withAnimation {
-					 scrollOffset = getNewOffset(goToSection: selectedSection)
-					 dragOffset = 0
-					 }
-					 
-					 }) {
-					 Text("Overview")
-					 .font(.headline)
-					 .fontWeight(.semibold)
-					 .foregroundColor(selectedSection == courseSection.overview ? Color("ActiveCourseSectionTitle") : Color.gray)
-					 }
-					 .frame(width: screenSize.width/pageCount)
-					 
-					 
-					 Spacer()
-					 .frame(width:5)
-					 */
 					
 					Button(action: {
 						selectedSection = courseSection.lessons
@@ -283,8 +265,9 @@ struct CourseView: View {
 							
 						})
 				)
+				Divider()
 			}
-			.background(Color("AppBackground"))
+			.background(colorScheme == .light ? appBackgroundImage(colorMode: colorScheme) : appBackgroundImage(colorMode: colorScheme))
 			.sheet(isPresented: $showOverview, content: {
 				VStack {
 					HStack {
@@ -384,8 +367,9 @@ struct CourseView: View {
 						Spacer()
 					}
 				}
-				
+				Divider()
 			}
+			.background(colorScheme == .light ? appBackgroundImage(colorMode: colorScheme) : appBackgroundImage(colorMode: colorScheme))
 			.modifier(storeViewCover(showStore: $showStore, selectedTab: $selectedTab))
 		}
 		

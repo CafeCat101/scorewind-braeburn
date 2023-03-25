@@ -61,7 +61,7 @@ struct WizardExperienceView: View {
 				}
 				.tabViewStyle(.page)
 			}
-			.frame(width: verticalSize == .regular ? UIScreen.main.bounds.size.width : UIScreen.main.bounds.size.width*0.8, height: verticalSize == .regular ? UIScreen.main.bounds.size.height*0.7 : UIScreen.main.bounds.size.height*0.5)
+			.frame(width: verticalSize == .regular ? UIScreen.main.bounds.size.width : UIScreen.main.bounds.size.width*0.8, height: verticalSize == .regular ? UIScreen.main.bounds.size.height*0.66 : UIScreen.main.bounds.size.height*0.5)
 			.onChange(of: verticalSize, perform: { info in
 				print("info \(String(describing: info))")
 				print("info w:\(UIScreen.main.bounds.size.width) / h:\(UIScreen.main.bounds.size.height)")

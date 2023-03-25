@@ -159,14 +159,14 @@ struct WizardView: View {
 			
 			Divider()
 		}
-		.background(colorScheme == .light ? backgroundImage(colorMode: colorScheme) : backgroundImage(colorMode: colorScheme))
+		.background(colorScheme == .light ? appBackgroundImage(colorMode: colorScheme) : appBackgroundImage(colorMode: colorScheme))
 		.modifier(storeViewCover(showStore: $showStore, selectedTab: $selectedTab))
 		.onAppear(perform: {			
 			print("[debug] WizardView, onAppear studentData.wizardResult.learningPath.count \(studentData.wizardResult.learningPath.count)")
 		})
 	}
 	
-	@ViewBuilder
+	/*@ViewBuilder
 	private func backgroundImage(colorMode: ColorScheme) -> some View {
 		if colorMode == .light {
 			Image("WelcomeViewBg")
@@ -176,7 +176,7 @@ struct WizardView: View {
 				.aspectRatio(contentMode: .fill)
 				.edgesIgnoringSafeArea(.all)
 		}
-	}
+	}*/
 	
 	private func getWizardViewTitle() -> String {
 		let findStepIndex = studentData.wizardStepNames.firstIndex(where: {$0.self == stepName}) ?? 0
