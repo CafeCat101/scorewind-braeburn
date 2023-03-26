@@ -36,235 +36,271 @@ struct CourseView: View {
 	
 	
 	var body: some View {
-		if scorewindData.currentCourse.id > 0 {
 			VStack {
-				HStack {
-					Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentCourse.title))
-						.font(verticalSize == .regular ? .title2 : .title3)
-						.foregroundColor(Color("Dynamic/MainBrown+6"))
-						.bold()
-						.onTapGesture {
-							withAnimation {
-								turncateTitle.toggle()
+				if scorewindData.currentCourse.id > 0 {
+					//show course title
+					HStack {
+						Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentCourse.title))
+							.font(verticalSize == .regular ? .title2 : .title3)
+							.foregroundColor(Color("Dynamic/MainBrown+6"))
+							.bold()
+							.onTapGesture {
+								withAnimation {
+									turncateTitle.toggle()
+								}
 							}
-						}
-					//.truncationMode(.tail)
-					Spacer()
-				}
-				.padding(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 15))
-				.modifier(turncateTheTitle(isTurncating: $turncateTitle))
-				
-				//show course section menus
-				HStack {
+						//.truncationMode(.tail)
+						Spacer()
+					}
+					.padding(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 15))
+					.modifier(turncateTheTitle(isTurncating: $turncateTitle))
 					
-					Button(action: {
-						selectedSection = courseSection.lessons
-						withAnimation {
-							scrollOffset = getNewOffset(goToSection: selectedSection)//getSectionOffset(goToSection: selectedSection)//0
-							dragOffset = 0
-						}
+					//show course section menus
+					HStack {
 						
-					}) {
-						Text("Course content")
-							.font(.headline)
-							.fontWeight(.semibold)
-							.foregroundColor(selectedSection == courseSection.lessons ? Color("ActiveCourseSectionTitle") : Color.gray)
-					}
-					.frame(width: screenSize.width/pageCount)
-					
-					Button(action: {
-						selectedSection = courseSection.continue
-						withAnimation {
-							scrollOffset = getNewOffset(goToSection: selectedSection)
-							dragOffset = 0
-						}
-					}) {
-						Text("Continue")
-							.font(.headline)
-							.fontWeight(.semibold)
-							.foregroundColor(selectedSection == courseSection.continue ? Color("ActiveCourseSectionTitle") : Color.gray)
-					}
-					.frame(width: screenSize.width/pageCount)
-					
-				}
-				.frame(height:screenSize.height/30-2)
-				
-				//Section menu underline
-				HStack {
-					Rectangle()
-						.frame(width:screenSize.width/pageCount, height: 2)
-						.foregroundColor(Color("AppYellow"))
-				}
-				.frame(width:screenSize.width*pageCount)
-				.offset(x: underlineScrollOffset - dragOffset/pageCount, y: 0)
-				
-				
-				
-				//show sections in course
-				HStack {
-					/*
-					 //Overview section
-					 HTMLString(htmlContent: scorewindData.removeWhatsNext(Text: overViewContent()))
-					 .frame(width:screenSize.width)
-					 */
-					
-					//Lessons section
-					VStack {
-						ScrollViewReader { proxy in
-							/*HStack {
-							 Text("Category: ").bold() + Text("\(scorewindData.courseCategoryToString(courseCategories: scorewindData.currentCourse.category, depth: 3))")
-							 Spacer()
-							 }.padding(EdgeInsets(top: 8, leading: 15, bottom: 8, trailing: 15))*/
-							//show course progress
-							courseProgressView()
-								.padding(EdgeInsets(top: 8, leading: 15, bottom: 8, trailing: 15))
-							
-							HStack {
-								Text("\(scorewindData.currentCourse.lessons.count) Lessons ").bold()
-								
-								Text("Duration:").bold()+Text("\(scorewindData.currentCourse.duration ?? "n/a")")
-								Spacer()
-							}.padding(EdgeInsets(top:0, leading: 15, bottom: 8, trailing: 15))
-							
-							HStack {
-								Label("About", systemImage: "info.circle")
-									.labelStyle(.iconOnly)
-									.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
-									.background {
-										RoundedRectangle(cornerRadius: 20)
-											.stroke(Color("MyCourseFilterTagBorder"), lineWidth: 1)
-											.background(RoundedRectangle(cornerRadius: 20).fill(Color("MyCourseItem")).opacity(0))
-									}
-									.foregroundColor(Color("MyCourseItemText"))
-									.onTapGesture {
-										showOverview = true
-									}
-								Label("Add to favourite", systemImage: isFavourite ? "heart.circle.fill" : "suit.heart")
-									.labelStyle(.iconOnly)
-									.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
-									.background {
-										RoundedRectangle(cornerRadius: 20)
-											.stroke(Color("MyCourseFilterTagBorder"), lineWidth: 1)
-											.background(RoundedRectangle(cornerRadius: 20).fill(Color("MyCourseItem")).opacity(0))
-									}
-									.foregroundColor(Color("MyCourseItemText"))
-									.onTapGesture {
-										studentData.updateFavouritedCourse(courseID: scorewindData.currentCourse.id)
-										if studentData.getFavouritedCourses().contains(where: { Int($0.key) == scorewindData.currentCourse.id}) {
-											isFavourite = true
-										} else {
-											isFavourite = false
-										}
-										studentData.updateMyCourses(allCourses: scorewindData.allCourses)
-										studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
-									}
-								//courseDownloadButtonView()
-								
-								CourseDownloadButtonView(getStatus: downloadManager.checkDownloadStatus(courseID: scorewindData.currentCourse.id, lessonsCount: scorewindData.currentCourse.lessons.count), downloadManager: downloadManager, showSubscriberOnlyAlert: $showSubscriberOnlyAlert)
-								
-								Spacer()
-							}.padding(EdgeInsets(top: 0, leading: 15, bottom: 8, trailing: 15))
-							
-							ScrollView {
-								ForEach(scorewindData.currentCourse.lessons){ lesson in
-									CourseLessonListItemView(
-										selectedTab: $selectedTab,
-										lesson: lesson,
-										downloadManager: downloadManager,
-										studentData: studentData,
-										showLessonView: $showLessonView,
-										showSubscriberOnlyAlert: $showSubscriberOnlyAlert)
-										.padding(EdgeInsets(top: 10, leading: 10, bottom: 15, trailing: 10))
-										.background{
-											RoundedRectangle(cornerRadius: 10)
-												.foregroundColor(scorewindData.currentLesson.scorewindID == lesson.scorewindID ? Color("AppYellow") : Color("LessonListTextBg"))
-										}
-										.id(lesson.scorewindID)
-								}.padding([.leading,.trailing], 15)
-							}
-							//.listStyle(.plain)
-							.onAppear(perform: {
-								print("[debug] CourseView, lesson List-onAppear")
-								DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-									withAnimation {
-										proxy.scrollTo(scorewindData.currentLesson.scorewindID, anchor: .top)
-									}
-									
-								}
-							})
-						}
-						Spacer()
-					}
-					.frame(width:screenSize.width)
-					
-					//Continue section
-					VStack {
-						ScrollView {
-							if scorewindData.previousCourse.id > 0 {
-								HStack {
-									Text("Previous course")
-										.fontWeight(.medium)
-										.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
-									Spacer()
-								}
-								HStack {
-									continueCourseButton(order: SearchParameter.DESC)
-										.padding(EdgeInsets(top: 3, leading: 10, bottom: 3, trailing: 10))
-									Spacer()
-								}
-								Spacer()
-									.frame(height:20)
-							}
-							
-							if scorewindData.nextCourse.id > 0 {
-								HStack {
-									Text("Next course")
-										.fontWeight(.medium)
-										.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
-									Spacer()
-								}
-								HStack {
-									continueCourseButton(order: SearchParameter.ASC)
-										.padding(EdgeInsets(top: 3, leading: 10, bottom: 3, trailing: 10))
-									Spacer()
-								}
-							}
-						}
-						Spacer()
-					}
-					.frame(width:screenSize.width)
-					.onAppear(perform: {
-						scorewindData.findACourseByOrder(order: SearchParameter.DESC)
-						scorewindData.findACourseByOrder(order: SearchParameter.ASC)
-					})
-				}
-				.offset(x: scrollOffset + dragOffset, y: 0)
-				.simultaneousGesture(
-					DragGesture()
-						.onChanged({event in
-							if event.translation.width > 30 || event.translation.width < (0-30) {
-								dragOffset = event.translation.width
-							}
-							
-						})
-						.onEnded({event in
-							// Scroll to where user dragged
-							print("[debug] CourseView, onDragEnded, translation.width \(event.translation.width)")
-							//if event.translation.width>50 {
-							scrollOffset += event.translation.width
-							dragOffset = 0
-							
-							underlineScrollOffset -= event.translation.width/pageCount
-							
-							// Animate snapping
+						Button(action: {
+							selectedSection = courseSection.lessons
 							withAnimation {
-								scrollOffset = getNewOffset()
-								print("HStack DragGesture.onEnded scrollOffset \(scrollOffset)")
+								scrollOffset = getNewOffset(goToSection: selectedSection)//getSectionOffset(goToSection: selectedSection)//0
+								dragOffset = 0
 							}
-							//}
 							
+						}) {
+							Text("Course content")
+								.font(.headline)
+								.fontWeight(.semibold)
+								.foregroundColor(selectedSection == courseSection.lessons ? Color("ActiveCourseSectionTitle") : Color.gray)
+						}
+						.frame(width: screenSize.width/pageCount)
+						
+						Button(action: {
+							selectedSection = courseSection.continue
+							withAnimation {
+								scrollOffset = getNewOffset(goToSection: selectedSection)
+								dragOffset = 0
+							}
+						}) {
+							Text("Continue")
+								.font(.headline)
+								.fontWeight(.semibold)
+								.foregroundColor(selectedSection == courseSection.continue ? Color("ActiveCourseSectionTitle") : Color.gray)
+						}
+						.frame(width: screenSize.width/pageCount)
+						
+					}
+					.frame(height:screenSize.height/30-2)
+					
+					//show course section menu indicator
+					HStack {
+						Rectangle()
+							.frame(width:screenSize.width/pageCount, height: 2)
+							.foregroundColor(Color("AppYellow"))
+					}
+					.frame(width:screenSize.width*pageCount)
+					.offset(x: underlineScrollOffset - dragOffset/pageCount, y: 0)
+					
+					//show sections in course
+					HStack {
+						/*
+						 //Overview section
+						 HTMLString(htmlContent: scorewindData.removeWhatsNext(Text: overViewContent()))
+						 .frame(width:screenSize.width)
+						 */
+						
+						//Lessons section
+						VStack {
+							ScrollViewReader { proxy in
+								/*HStack {
+								 Text("Category: ").bold() + Text("\(scorewindData.courseCategoryToString(courseCategories: scorewindData.currentCourse.category, depth: 3))")
+								 Spacer()
+								 }.padding(EdgeInsets(top: 8, leading: 15, bottom: 8, trailing: 15))*/
+								//show course progress
+								courseProgressView()
+									.padding(EdgeInsets(top: 8, leading: 15, bottom: 8, trailing: 15))
+								
+								HStack {
+									Text("\(scorewindData.currentCourse.lessons.count) Lessons ").bold()
+									
+									Text("Duration:").bold()+Text("\(scorewindData.currentCourse.duration ?? "n/a")")
+									Spacer()
+								}.padding(EdgeInsets(top:0, leading: 15, bottom: 8, trailing: 15))
+								
+								HStack {
+									Label("About", systemImage: "info.circle")
+										.labelStyle(.iconOnly)
+										.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
+										.background {
+											RoundedRectangle(cornerRadius: 20)
+												.stroke(Color("MyCourseFilterTagBorder"), lineWidth: 1)
+												.background(RoundedRectangle(cornerRadius: 20).fill(Color("MyCourseItem")).opacity(0))
+										}
+										.foregroundColor(Color("MyCourseItemText"))
+										.onTapGesture {
+											showOverview = true
+										}
+									Label("Add to favourite", systemImage: isFavourite ? "heart.circle.fill" : "suit.heart")
+										.labelStyle(.iconOnly)
+										.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
+										.background {
+											RoundedRectangle(cornerRadius: 20)
+												.stroke(Color("MyCourseFilterTagBorder"), lineWidth: 1)
+												.background(RoundedRectangle(cornerRadius: 20).fill(Color("MyCourseItem")).opacity(0))
+										}
+										.foregroundColor(Color("MyCourseItemText"))
+										.onTapGesture {
+											studentData.updateFavouritedCourse(courseID: scorewindData.currentCourse.id)
+											if studentData.getFavouritedCourses().contains(where: { Int($0.key) == scorewindData.currentCourse.id}) {
+												isFavourite = true
+											} else {
+												isFavourite = false
+											}
+											studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+											studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
+										}
+									//courseDownloadButtonView()
+									
+									CourseDownloadButtonView(getStatus: downloadManager.checkDownloadStatus(courseID: scorewindData.currentCourse.id, lessonsCount: scorewindData.currentCourse.lessons.count), downloadManager: downloadManager, showSubscriberOnlyAlert: $showSubscriberOnlyAlert)
+									
+									Spacer()
+								}.padding(EdgeInsets(top: 0, leading: 15, bottom: 8, trailing: 15))
+								
+								ScrollView {
+									ForEach(scorewindData.currentCourse.lessons){ lesson in
+										CourseLessonListItemView(
+											selectedTab: $selectedTab,
+											lesson: lesson,
+											downloadManager: downloadManager,
+											studentData: studentData,
+											showLessonView: $showLessonView,
+											showSubscriberOnlyAlert: $showSubscriberOnlyAlert)
+											.padding(EdgeInsets(top: 10, leading: 10, bottom: 15, trailing: 10))
+											.background{
+												RoundedRectangle(cornerRadius: 10)
+													.foregroundColor(scorewindData.currentLesson.scorewindID == lesson.scorewindID ? Color("AppYellow") : Color("LessonListTextBg"))
+											}
+											.id(lesson.scorewindID)
+									}.padding([.leading,.trailing], 15)
+								}
+								//.listStyle(.plain)
+								.onAppear(perform: {
+									print("[debug] CourseView, lesson List-onAppear")
+									DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+										withAnimation {
+											proxy.scrollTo(scorewindData.currentLesson.scorewindID, anchor: .top)
+										}
+										
+									}
+								})
+							}
+							Spacer()
+						}
+						.frame(width:screenSize.width)
+						
+						//Continue section
+						VStack {
+							ScrollView {
+								if scorewindData.previousCourse.id > 0 {
+									HStack {
+										Text("Previous course")
+											.fontWeight(.medium)
+											.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+										Spacer()
+									}
+									HStack {
+										continueCourseButton(order: SearchParameter.DESC)
+											.padding(EdgeInsets(top: 3, leading: 10, bottom: 3, trailing: 10))
+										Spacer()
+									}
+									Spacer()
+										.frame(height:20)
+								}
+								
+								if scorewindData.nextCourse.id > 0 {
+									HStack {
+										Text("Next course")
+											.fontWeight(.medium)
+											.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+										Spacer()
+									}
+									HStack {
+										continueCourseButton(order: SearchParameter.ASC)
+											.padding(EdgeInsets(top: 3, leading: 10, bottom: 3, trailing: 10))
+										Spacer()
+									}
+								}
+							}
+							Spacer()
+						}
+						.frame(width:screenSize.width)
+						.onAppear(perform: {
+							scorewindData.findACourseByOrder(order: SearchParameter.DESC)
+							scorewindData.findACourseByOrder(order: SearchParameter.ASC)
 						})
-				)
+					}
+					.offset(x: scrollOffset + dragOffset, y: 0)
+					.simultaneousGesture(
+						DragGesture()
+							.onChanged({event in
+								if event.translation.width > 30 || event.translation.width < (0-30) {
+									dragOffset = event.translation.width
+								}
+								
+							})
+							.onEnded({event in
+								// Scroll to where user dragged
+								print("[debug] CourseView, onDragEnded, translation.width \(event.translation.width)")
+								//if event.translation.width>50 {
+								scrollOffset += event.translation.width
+								dragOffset = 0
+								
+								underlineScrollOffset -= event.translation.width/pageCount
+								
+								// Animate snapping
+								withAnimation {
+									scrollOffset = getNewOffset()
+									print("HStack DragGesture.onEnded scrollOffset \(scrollOffset)")
+								}
+								//}
+								
+							})
+					)
+				} else {
+					//show blank course look
+					Label("Course", systemImage: "music.note")
+						.labelStyle(.titleAndIcon)
+					Spacer()
+					Text(studentData.wizardResult.learningPath.count == 0 ? "Ask ScoreWind for a course or a lesson now.":"See the course and the lesson ScoreWind found last time.")
+						.padding(15)
+					Button(action: {
+						selectedTab = "THome"
+					}, label: {
+						Text("Start").frame(minWidth:150)
+					})
+					.foregroundColor(Color("LessonListStatusIcon"))
+					.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
+					.background {
+						RoundedRectangle(cornerRadius: 26)
+							.foregroundColor(Color("AppYellow"))
+					}
+					Spacer()
+					if store.purchasedSubscriptions.isEmpty {
+						Group {
+							Spacer()
+							Text("View ScoreWind subscription.\nGet access to all courses and lessons now")
+								.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
+								.foregroundColor(Color("LessonListStatusIcon"))
+								.background(Color("AppYellow"))
+								.cornerRadius(26)
+								.onTapGesture {
+									showStore = true
+								}
+							Spacer()
+						}
+					}
+				}
+				
+				
+				
 				Divider()
 			}
 			.background(colorScheme == .light ? appBackgroundImage(colorMode: colorScheme) : appBackgroundImage(colorMode: colorScheme))
@@ -334,44 +370,7 @@ struct CourseView: View {
 					}
 				}
 			})
-		} else {
-			VStack {
-				Label("Course", systemImage: "music.note")
-					.labelStyle(.titleAndIcon)
-				Spacer()
-				Text(studentData.wizardResult.learningPath.count == 0 ? "Ask ScoreWind for a course or a lesson now.":"See the course and the lesson ScoreWind found last time.")
-					.padding(15)
-				Button(action: {
-					selectedTab = "THome"
-				}, label: {
-					Text("Start").frame(minWidth:150)
-				})
-				.foregroundColor(Color("LessonListStatusIcon"))
-				.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
-				.background {
-					RoundedRectangle(cornerRadius: 26)
-						.foregroundColor(Color("AppYellow"))
-				}
-				Spacer()
-				if store.purchasedSubscriptions.isEmpty {
-					Group {
-						Spacer()
-						Text("View ScoreWind subscription.\nGet access to all courses and lessons now")
-							.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
-							.foregroundColor(Color("LessonListStatusIcon"))
-							.background(Color("AppYellow"))
-							.cornerRadius(26)
-							.onTapGesture {
-								showStore = true
-							}
-						Spacer()
-					}
-				}
-				Divider()
-			}
-			.background(colorScheme == .light ? appBackgroundImage(colorMode: colorScheme) : appBackgroundImage(colorMode: colorScheme))
-			.modifier(storeViewCover(showStore: $showStore, selectedTab: $selectedTab))
-		}
+		
 		
 	}
 	

@@ -126,7 +126,7 @@ struct WizardExperienceView: View {
 	}
 	
 	private func getExperienceImageName(experience: ExperienceFeedback) -> String {
-		var imageName = "testImage"
+		var imageName = "journey"
 		
 		if experience == .starterKit {
 			imageName = "journey"
