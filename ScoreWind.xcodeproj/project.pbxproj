@@ -71,7 +71,6 @@
 		C878276E2904F2DA0007DDC1 /* WizardDoYouKnowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878276D2904F2DA0007DDC1 /* WizardDoYouKnowView.swift */; };
 		C878277129054B380007DDC1 /* WizardCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878277029054B380007DDC1 /* WizardCalculator.swift */; };
 		C8782773290586590007DDC1 /* WizardExperienceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8782772290586590007DDC1 /* WizardExperienceView.swift */; };
-		C8782779290E4AD80007DDC1 /* WizardVideos in Resources */ = {isa = PBXBuildFile; fileRef = C8782778290E4AD80007DDC1 /* WizardVideos */; };
 		C878277B291670780007DDC1 /* ExperienceFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = C878277A291670780007DDC1 /* ExperienceFeedback.swift */; };
 		C87CF11F296FE84600CDA215 /* WizardLessonSearched.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87CF11E296FE84600CDA215 /* WizardLessonSearched.swift */; };
 		C87CF1242978365400CDA215 /* BackgroundTransparentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87CF1232978365400CDA215 /* BackgroundTransparentView.swift */; };
@@ -176,7 +175,6 @@
 		C878276D2904F2DA0007DDC1 /* WizardDoYouKnowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardDoYouKnowView.swift; sourceTree = "<group>"; };
 		C878277029054B380007DDC1 /* WizardCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardCalculator.swift; sourceTree = "<group>"; };
 		C8782772290586590007DDC1 /* WizardExperienceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardExperienceView.swift; sourceTree = "<group>"; };
-		C8782778290E4AD80007DDC1 /* WizardVideos */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WizardVideos; sourceTree = "<group>"; };
 		C878277A291670780007DDC1 /* ExperienceFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperienceFeedback.swift; sourceTree = "<group>"; };
 		C87CF11E296FE84600CDA215 /* WizardLessonSearched.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardLessonSearched.swift; sourceTree = "<group>"; };
 		C87CF1232978365400CDA215 /* BackgroundTransparentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTransparentView.swift; sourceTree = "<group>"; };
@@ -269,7 +267,6 @@
 		C85F2728286F4C2B00D0A4E5 /* ScoreWind */ = {
 			isa = PBXGroup;
 			children = (
-				C8782778290E4AD80007DDC1 /* WizardVideos */,
 				C85F275A286F4EF900D0A4E5 /* www */,
 				C85F2753286F4CF200D0A4E5 /* ScoreWind.entitlements */,
 				C85F2758286F4EEE00D0A4E5 /* data_version.json */,
@@ -515,7 +512,6 @@
 				C85F2731286F4C2C00D0A4E5 /* Preview Assets.xcassets in Resources */,
 				C85F272E286F4C2C00D0A4E5 /* Assets.xcassets in Resources */,
 				C86F881E299A40B80072504E /* StoreKitTestCertificate.cer in Resources */,
-				C8782779290E4AD80007DDC1 /* WizardVideos in Resources */,
 				C85F2759286F4EEE00D0A4E5 /* data_version.json in Resources */,
 				C86F88182994C5910072504E /* scorewind_ios_xml.zip in Resources */,
 			);
