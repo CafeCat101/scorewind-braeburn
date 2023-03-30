@@ -17,19 +17,81 @@ struct CourseDownloadButtonView: View {
 	
 	
 	var body: some View {
+		Button(action: {
+			if store.purchasedSubscriptions.isEmpty {
+				showSubscriberOnlyAlert = true
+			} else {
+				showDownloadAlert = true
+			}
+		}, label: {
+			if getStatus == DownloadStatus.downloading {
+				DownloadSpinnerView(iconColor: Color("Dynamic/MainBrown"), spinnerColor: Color("testColor2"), iconSystemImage: "stop.fill")
+			} else {
+				Label("Downloaded", systemImage: getStatusIconName())
+					.labelStyle(.iconOnly)
+					.foregroundColor(Color("Dynamic/MainBrown+6"))
+			}
+		})
+		.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
+		.background(
+			RoundedRectangle(cornerRadius: CGFloat(17))
+				.foregroundColor(Color("Dynamic/MainBrown"))
+				.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+				.opacity(0.25)
+				.overlay {
+					RoundedRectangle(cornerRadius: 17)
+						.stroke(Color("Dynamic/DarkGray"), lineWidth: 1)
+				}
+		)
+		.alert("\(getAlertDialogTitle(downloadStatus:getStatus))", isPresented: $showDownloadAlert, actions: {
+			Button("ok", action:{
+				print("[debug] CourseView, alert ok.")
+				showDownloadAlert = false
+				downloadManager.addOrRemoveCourseOffline(currentCourseDownloadStatus: getStatus, courseID: scorewindData.currentCourse.id, lessons: scorewindData.currentCourse.lessons)
+				
+				
+				if downloadManager.downloadingCourse == 0 && getStatus == DownloadStatus.notInQueue {
+					Task {
+						print("[debug] download all Task")
+						do {
+							try await downloadManager.downloadVideos(allCourses: scorewindData.allCourses)
+						} catch {
+							print("[debug] download all, catch, \(error)")
+						}
+						
+					}
+				} else {
+					print("[debug] downloadVideoXML task is running.")
+				}
+				
+			})
+			Button("Cancel", role:.cancel, action:{
+				showDownloadAlert = false
+			})
+		}, message: {
+			if getStatus == DownloadStatus.notInQueue {
+				Text("All videos and socres in this course will be downloaded into your device. Continue?")
+			} else {
+				Text("After removing downloads, you can not take course offline. Continue?")
+			}
+		})
+		
+		
+		/*
 		Label("Downloaded", systemImage: getStatusIconName())
 			.labelStyle(.iconOnly)
 			.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
-			.background {
-				RoundedRectangle(cornerRadius: 20)
-					.stroke(Color("MyCourseFilterTagBorder"), lineWidth: 1)
-					/*.background(
-						RoundedRectangle(cornerRadius: 20)
-							.fill(Color("MyCourseItem"))
-							.opacity(listFilterDownloaded ? 1 : 0)
-					)*/
-			}
-			.foregroundColor(Color("MyCourseItemText"))
+			.background(
+				RoundedRectangle(cornerRadius: CGFloat(17))
+					.foregroundColor(Color("Dynamic/MainBrown"))
+					.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+					.opacity(0.25)
+					.overlay {
+						RoundedRectangle(cornerRadius: 17)
+							.stroke(Color("Dynamic/DarkGray"), lineWidth: 1)
+					}
+			)
+			.foregroundColor(Color("Dynamic/MainBrown+6"))
 			.onTapGesture {
 				if store.purchasedSubscriptions.isEmpty {
 					showSubscriberOnlyAlert = true
@@ -69,7 +131,7 @@ struct CourseDownloadButtonView: View {
 					Text("After removing downloads, you can not take course offline. Continue?")
 				}
 			})
-		
+		*/
 		/*
 		HStack {
 			if getStatus == DownloadStatus.notInQueue {
@@ -151,7 +213,7 @@ struct CourseDownloadButtonView: View {
 		if getStatus == DownloadStatus.inQueue {
 			return "arrow.down.to.line.compact"
 		} else if getStatus == DownloadStatus.downloading {
-			return "arrow.down.circle"
+			return "stop.circle"
 		} else if getStatus == DownloadStatus.downloaded {
 			return "arrow.down.circle.fill"
 		} else if getStatus == DownloadStatus.failed {

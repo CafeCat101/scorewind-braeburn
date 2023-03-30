@@ -37,7 +37,7 @@ struct CourseLessonListItemView: View {
 					}
 				Spacer()
 				downloadIconView(getLessonID: lesson.id)
-					.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color.black)
+					.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color("Dynamic/MainBrown+6"))
 				
 				lessonIsons(scorewindID: lesson.scorewindID)
 			}
