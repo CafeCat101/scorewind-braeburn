@@ -59,7 +59,8 @@ struct CourseView: View {
 						Text("\(scorewindData.currentCourse.lessons.count) Lessons ")
 							.bold()
 							.foregroundColor(Color("Dynamic/MainBrown+6"))
-						Text("Duration:").bold()+Text("\(scorewindData.currentCourse.duration ?? "n/a")")
+						Text("Duration:").bold().foregroundColor(Color("Dynamic/MainBrown+6"))+Text("\(scorewindData.currentCourse.duration ?? "n/a")")
+							.foregroundColor(Color("Dynamic/MainBrown+6"))
 						Spacer()
 					}.padding(EdgeInsets(top:8, leading: 15, bottom: 8, trailing: 15))
 					
@@ -98,7 +99,7 @@ struct CourseView: View {
 					Label("Add to favourite", systemImage: isFavourite ? "heart.fill" : "suit.heart")
 						.labelStyle(.iconOnly)
 						.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
-						.foregroundColor(isFavourite ? Color("testColor") : Color("Dynamic/MainBrown+6"))
+						.foregroundColor(isFavourite ? Color("Dynamic/IconHighlighted") : Color("Dynamic/MainBrown+6"))
 						.background(
 							RoundedRectangle(cornerRadius: CGFloat(17))
 								.foregroundColor(Color("Dynamic/MainBrown"))
@@ -549,16 +550,16 @@ struct CourseView: View {
 					if calculateCompletedLesson() > 0 {
 						
 						RoundedRectangle(cornerRadius: 6)
-							.foregroundColor(Color("testProgressBar2"))
+							.foregroundColor(Color("Dynamic/ProgressBar"))
 							.frame(width:calculateProgressBarWidth(frameSize: reader.size.width)[2],height:10)
 							.overlay(alignment:.leading, content: {
 								RoundedRectangle(cornerRadius: 6)
-									.foregroundColor(Color("testProgressBar3"))
+									.foregroundColor(Color("Dynamic/ProgressBarBG"))
 									.frame(width:calculateProgressBarWidth(frameSize: reader.size.width)[0],height:10)
 							})
 					} else {
 						RoundedRectangle(cornerRadius: 6)
-							.stroke(Color("testProgressBar3"), style: StrokeStyle(
+							.stroke(Color("Dynamic/ProgressBarBG"), style: StrokeStyle(
 								lineWidth: 1,
 								lineCap: .round,
 								lineJoin: .round,

@@ -71,7 +71,7 @@ struct CourseLessonListItemView: View {
 		.frame(minHeight: 86)
 		.background(
 			RoundedCornersShape(corners: [.topRight, .topLeft, .bottomLeft, .bottomRight], radius: 17)
-				.fill(scorewindData.currentLesson.scorewindID == lesson.scorewindID ? Color("testLessonHighlight") : Color("Dynamic/LightGray"))
+				.fill(scorewindData.currentLesson.scorewindID == lesson.scorewindID ? Color("Dynamic/PanelHighlighted") : Color("Dynamic/LightGray"))
 				.opacity(0.85)
 				.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
 		)
@@ -107,7 +107,7 @@ struct CourseLessonListItemView: View {
 		} else if getStatus == DownloadStatus.downloading.rawValue {
 			/*Image(systemName: "arrow.down.circle")
 				.foregroundColor(Color("LessonListStatusIcon"))*/
-			DownloadSpinnerView(iconColor: Color("Dynamic/MainBrown+6"), spinnerColor: Color("testColor"), iconSystemImage: "arrow.down")
+			DownloadSpinnerView(iconColor: Color("Dynamic/MainBrown+6"), spinnerColor: Color("Dynamic/IconHighlighted"), iconSystemImage: "arrow.down")
 		} else if getStatus == DownloadStatus.downloaded.rawValue {
 			Image(systemName: "arrow.down.circle.fill")
 				.foregroundColor(Color("Dynamic/MainGreen"))
