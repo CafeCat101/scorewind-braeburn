@@ -180,7 +180,7 @@ struct CourseView: View {
 							print("[debug] CourseView, lesson List-onAppear")
 							DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
 								withAnimation {
-									proxy.scrollTo(scorewindData.currentLesson.scorewindID, anchor: .top)
+									proxy.scrollTo(scorewindData.currentLesson.scorewindID, anchor: .topLeading)
 								}
 								
 							}

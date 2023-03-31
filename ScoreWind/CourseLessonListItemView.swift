@@ -23,28 +23,9 @@ struct CourseLessonListItemView: View {
 				Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
 					.multilineTextAlignment(.leading)
 					.foregroundColor(Color("Dynamic/MainBrown+6"))
-					.onTapGesture {
-						if store.purchasedSubscriptions.isEmpty && scorewindData.wizardPickedLesson.id != lesson.id {
-							showSubscriberOnlyAlert = true
-						} else {
-							scorewindData.currentLesson = lesson
-							scorewindData.setCurrentTimestampRecs()
-							scorewindData.lastPlaybackTime = 0.0
-							//self.selectedTab = "TLesson"
-							scorewindData.lessonChanged = true
-							showLessonView = true
-						}
-					}
 				Spacer()
 			}.padding(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16))
-			/*HStack {
-				downloadIconView(getLessonID: lesson.id)
-					.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color("Dynamic/MainBrown+6"))
-				
-				lessonIsons(scorewindID: lesson.scorewindID)
-				Spacer()
-			}*/
-			
+
 			if hasIcons(scorewindID: lesson.scorewindID, getLessonID: lesson.id) {
 				Spacer()
 				HStack(spacing:0) {
@@ -65,7 +46,6 @@ struct CourseLessonListItemView: View {
 					Spacer()//.frame(width: 20)
 				}
 			}
-			
 		}
 		//.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
 		.frame(minHeight: 86)
@@ -75,6 +55,18 @@ struct CourseLessonListItemView: View {
 				.opacity(0.85)
 				.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
 		)
+		.onTapGesture {
+			if store.purchasedSubscriptions.isEmpty && scorewindData.wizardPickedLesson.id != lesson.id {
+				showSubscriberOnlyAlert = true
+			} else {
+				scorewindData.currentLesson = lesson
+				scorewindData.setCurrentTimestampRecs()
+				scorewindData.lastPlaybackTime = 0.0
+				//self.selectedTab = "TLesson"
+				scorewindData.lessonChanged = true
+				showLessonView = true
+			}
+		}
 	}
 	
 	private func hasIcons(scorewindID:Int, getLessonID: Int) -> Bool {
