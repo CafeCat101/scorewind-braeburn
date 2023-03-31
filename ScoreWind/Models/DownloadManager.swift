@@ -180,7 +180,9 @@ class DownloadManager: ObservableObject {
 				if trackCourseID != item.courseID {
 					print("[debug] [downloadVideoXML] trackCourseID \(trackCourseID):item.courseID \(item.courseID)")
 					trackCourseID = item.courseID
-					self.myCourseRebuildPublisher.send(Date())
+					DispatchQueue.main.async {
+						self.myCourseRebuildPublisher.send(Date())
+					}
 				}
 				let getCourse = allCourses.first(where: {$0.id == item.courseID})
 				let getLesson = getCourse?.lessons.first(where: {$0.id == item.lessonID})

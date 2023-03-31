@@ -55,18 +55,18 @@ struct CourseView: View {
 				.modifier(turncateTheTitle(isTurncating: $turncateTitle))
 				
 				VStack {
-					courseProgressView()
-						.frame(maxHeight: 45)
-						.padding(EdgeInsets(top: 8, leading: 15, bottom: 8, trailing: 15))
-						//.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
-					
 					HStack {
 						Text("\(scorewindData.currentCourse.lessons.count) Lessons ")
 							.bold()
 							.foregroundColor(Color("Dynamic/MainBrown+6"))
 						Text("Duration:").bold()+Text("\(scorewindData.currentCourse.duration ?? "n/a")")
 						Spacer()
-					}.padding(EdgeInsets(top:0, leading: 15, bottom: 8, trailing: 15))
+					}.padding(EdgeInsets(top:8, leading: 15, bottom: 8, trailing: 15))
+					
+					courseProgressView()
+						.frame(maxHeight: 45)
+						.padding(EdgeInsets(top: 0, leading: 15, bottom: 8, trailing: 15))
+						//.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
 				}
 				.background(
 					RoundedRectangle(cornerRadius: CGFloat(17))
@@ -128,7 +128,7 @@ struct CourseView: View {
 				.padding(EdgeInsets(top: 8, leading: 15, bottom: 8, trailing: 15))
 				
 				//::lessons box title
-				HStack {
+				/*HStack {
 					HStack {
 						HStack {
 							VStack {
@@ -156,7 +156,7 @@ struct CourseView: View {
 					)
 					//.offset(x: -15, y:33 )
 					Spacer()
-				}.padding(.top,8)
+				}.padding(.top,8)*/
 				
 				VStack{
 					ScrollViewReader { proxy in
@@ -169,18 +169,6 @@ struct CourseView: View {
 									studentData: studentData,
 									showLessonView: $showLessonView,
 									showSubscriberOnlyAlert: $showSubscriberOnlyAlert)
-								.padding(EdgeInsets(top: 10, leading: 10, bottom: 15, trailing: 10))
-								.frame(minHeight: 86)
-								.background(
-									RoundedCornersShape(corners: [.topRight, .topLeft, .bottomLeft, .bottomRight], radius: 17)
-										.fill(scorewindData.currentLesson.scorewindID == lesson.scorewindID ? Color("testProgressBar1") : Color("Dynamic/LightGray"))
-										.opacity(0.85)
-										.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
-									/*RoundedRectangle(cornerRadius: CGFloat(17))
-										.foregroundColor(Color("Dynamic/LightGray"))
-										.opacity(0.85)
-										.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))*/
-								)
 								.id(lesson.scorewindID)
 							}
 							.padding([.leading,.trailing], 15)
@@ -199,14 +187,14 @@ struct CourseView: View {
 					}
 					
 				}
-				.background(
+				/*.background(
 					Rectangle()
 						.fill(Color("Dynamic/MainBrown"))
 						.opacity(0.25)
 					/*RoundedCornersShape(corners: verticalSize == .regular ? [.topRight] : [.allCorners], radius: 17)
 						.fill(Color("Dynamic/MainBrown"))
 						.opacity(0.25)*/
-				)
+				)*/
 				//.padding(.top,-33)
 				
 				
@@ -498,13 +486,13 @@ struct CourseView: View {
 				isFavourite = false
 			}
 			
-			DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+			/*DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
 				if turncateTitle == false {
 					withAnimation {
 						turncateTitle = true
 					}
 				}
-			}
+			}*/
 			if showLessonView == false && showStore == false {
 				//:: don't want to show tip again after viewStore sheet is dismissed. the default "Your purchase is all set" alert will trigger onAppear when it is dismissed.
 				handleTip()
@@ -557,12 +545,6 @@ struct CourseView: View {
 	private func courseProgressView() -> some View {
 		GeometryReader { reader in
 			VStack {
-				HStack {
-					Text("\(calculateCompletedLesson())/\(scorewindData.currentCourse.lessons.count) steps")
-						.foregroundColor(Color("Dynamic/MainBrown+6"))
-					Spacer()
-				}
-				
 				HStack(spacing:0) {
 					if calculateCompletedLesson() > 0 {
 						
@@ -576,7 +558,7 @@ struct CourseView: View {
 							})
 					} else {
 						RoundedRectangle(cornerRadius: 6)
-							.stroke(Color("Dynamic/MainBrown+6"), style: StrokeStyle(
+							.stroke(Color("testProgressBar3"), style: StrokeStyle(
 								lineWidth: 1,
 								lineCap: .round,
 								lineJoin: .round,
@@ -605,6 +587,13 @@ struct CourseView: View {
 				}
 				//.padding([.top], -13)
 				.frame(width: calculateProgressBarWidth(frameSize: reader.size.width)[2])
+				
+				HStack {
+					Text("Completed: \(calculateCompletedLesson())/\(scorewindData.currentCourse.lessons.count)")
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+						.bold()
+					Spacer()
+				}
 			}
 			
 		}

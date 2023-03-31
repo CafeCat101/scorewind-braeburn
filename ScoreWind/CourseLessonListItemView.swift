@@ -18,11 +18,11 @@ struct CourseLessonListItemView: View {
 	@Binding var showSubscriberOnlyAlert: Bool
 	
 	var body: some View {
-		VStack {
+		VStack{
 			HStack {
 				Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
 					.multilineTextAlignment(.leading)
-					.foregroundColor(.black)
+					.foregroundColor(Color("Dynamic/MainBrown+6"))
 					.onTapGesture {
 						if store.purchasedSubscriptions.isEmpty && scorewindData.wizardPickedLesson.id != lesson.id {
 							showSubscriberOnlyAlert = true
@@ -36,13 +36,65 @@ struct CourseLessonListItemView: View {
 						}
 					}
 				Spacer()
+			}.padding(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16))
+			/*HStack {
 				downloadIconView(getLessonID: lesson.id)
 					.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color("Dynamic/MainBrown+6"))
 				
 				lessonIsons(scorewindID: lesson.scorewindID)
+				Spacer()
+			}*/
+			
+			if hasIcons(scorewindID: lesson.scorewindID, getLessonID: lesson.id) {
+				Spacer()
+				HStack(spacing:0) {
+					//Spacer()
+					HStack {
+						downloadIconView(getLessonID: lesson.id)
+							.foregroundColor(scorewindData.currentLesson.title == lesson.title ? Color.green : Color("Dynamic/MainBrown+6"))
+							.padding(.trailing, 15)
+						lessonIsons(scorewindID: lesson.scorewindID)
+					}
+					.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 0))
+					.background(
+						RoundedCornersShape(corners: [.bottomLeft, .topRight], radius: 17)
+							.fill(Color("Dynamic/MainBrown"))
+							.opacity(0.25)
+							//.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+					)
+					Spacer()//.frame(width: 20)
+				}
 			}
-			Spacer()
-				.frame(height:10)
+			
+		}
+		//.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
+		.frame(minHeight: 86)
+		.background(
+			RoundedCornersShape(corners: [.topRight, .topLeft, .bottomLeft, .bottomRight], radius: 17)
+				.fill(scorewindData.currentLesson.scorewindID == lesson.scorewindID ? Color("testLessonHighlight") : Color("Dynamic/LightGray"))
+				.opacity(0.85)
+				.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+		)
+	}
+	
+	private func hasIcons(scorewindID:Int, getLessonID: Int) -> Bool {
+		var infoCount = 0
+		if studentData.getCompletedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindID) {
+			infoCount = infoCount + 1
+		}
+		
+		if studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id).contains(scorewindID) {
+			infoCount = infoCount + 1
+		}
+		
+		if downloadManager.checkDownloadStatus(lessonID: getLessonID) != DownloadStatus.notInQueue.rawValue {
+			infoCount = infoCount + 1
+		}
+		
+		if infoCount == 0 {
+			return false
+		} else {
+			return true
 		}
 	}
 	
@@ -51,16 +103,17 @@ struct CourseLessonListItemView: View {
 		let getStatus =  downloadManager.checkDownloadStatus(lessonID: getLessonID)
 		if getStatus == DownloadStatus.inQueue.rawValue {
 			Image(systemName: "arrow.down.to.line.compact")
-				.foregroundColor(Color("LessonListStatusIcon"))
+				.foregroundColor(Color("Dynamic/MainBrown+6"))
 		} else if getStatus == DownloadStatus.downloading.rawValue {
-			Image(systemName: "arrow.down.circle")
-				.foregroundColor(Color("LessonListStatusIcon"))
+			/*Image(systemName: "arrow.down.circle")
+				.foregroundColor(Color("LessonListStatusIcon"))*/
+			DownloadSpinnerView(iconColor: Color("Dynamic/MainBrown+6"), spinnerColor: Color("testColor"), iconSystemImage: "arrow.down")
 		} else if getStatus == DownloadStatus.downloaded.rawValue {
 			Image(systemName: "arrow.down.circle.fill")
-				.foregroundColor(Color("LessonListStatusIcon"))
+				.foregroundColor(Color("Dynamic/MainGreen"))
 		} else if getStatus == DownloadStatus.failed.rawValue {
 			Image(systemName: "exclamationmark.circle.fill")
-				.foregroundColor(Color("LessonListStatusIcon"))
+				.foregroundColor(Color("Dynamic/Pink"))
 		}
 	}
 	
@@ -70,14 +123,16 @@ struct CourseLessonListItemView: View {
 		if completedLessons.contains(scorewindID) {
 			Label("completed", systemImage: "checkmark.circle.fill")
 				.labelStyle(.iconOnly)
-				.foregroundColor(Color("LessonListStatusIcon"))
+				.foregroundColor(Color("Dynamic/MainGreen"))
+				.padding(.trailing, 15)
 		}
 		
 		let watchedLessons = studentData.getWatchedLessons(courseID: scorewindData.currentCourse.id)
 		if watchedLessons.contains(scorewindID) {
 			Label("watched", systemImage: "eye.circle.fill")
 				.labelStyle(.iconOnly)
-				.foregroundColor(Color("LessonListStatusIcon"))
+				.foregroundColor(Color("Dynamic/MainGreen"))
+				.padding(.trailing, 15)
 		}
 	}
 	
