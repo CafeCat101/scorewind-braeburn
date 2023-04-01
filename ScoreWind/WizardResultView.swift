@@ -202,7 +202,7 @@ struct WizardResultView: View {
 	@ViewBuilder
 	private func displayContent(frameSize: CGFloat) -> some View {
 		//:: Lesson box title
-		HStack {
+		/*HStack {
 			HStack {
 				HStack {
 					VStack {
@@ -232,10 +232,10 @@ struct WizardResultView: View {
 			)
 			.offset(x: -15, y:33 )
 			Spacer()
-		}
+		}*/
 		
 		//:: Lesson box
-		VStack(spacing:0) {
+		/*VStack(spacing:0) {
 			VStack(alignment: .leading) {
 				HStack {
 					Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.wizardPickedLesson.title))
@@ -271,9 +271,9 @@ struct WizardResultView: View {
 			self.selectedTab = "TCourse"
 			showLessonView = true
 			scorewindData.lessonChanged = true
-		}
+		}*/
 		
-		Label(showMeMore ? "Hide details" : "Tell me more", systemImage: showMeMore ? "chevron.up" : "chevron.down")
+		/*Label(showMeMore ? "Hide details" : "Tell me more", systemImage: showMeMore ? "chevron.up" : "chevron.down")
 			.foregroundColor(Color("Dynamic/MainBrown+6"))
 			.padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
 			.background(
@@ -301,14 +301,14 @@ struct WizardResultView: View {
 				withAnimation(.linear(duration: 0.2)) {
 					showTopLessonDescription.toggle()
 				}
-			}
+			}*/
 		
 		
-		Spacer()
+		//Spacer()
 		
-		if showMeMore {
+		//if showMeMore {
 			//::course box title
-			HStack {
+			/*HStack {
 				HStack {
 					HStack {
 						VStack {
@@ -336,10 +336,10 @@ struct WizardResultView: View {
 				)
 				.offset(x: -15, y:33 )
 				Spacer()
-			}
+			}*/
 			
 			//:: course box content summary
-			VStack(alignment: .center) {
+			/*VStack(alignment: .center) {
 				HStack {
 					Spacer()
 					Text("You may be interested to know that ").foregroundColor(Color("Dynamic/MainBrown+6"))+Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.wizardPickedLesson.title)).bold().foregroundColor(Color("Dynamic/MainBrown+6"))+Text(" is coming from this course, ").foregroundColor(Color("Dynamic/MainBrown+6"))+Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.wizardPickedCourse.title)).bold().foregroundColor(Color("Dynamic/MainBrown+6"))
@@ -352,10 +352,10 @@ struct WizardResultView: View {
 				RoundedRectangle(cornerRadius: CGFloat(17))
 					.foregroundColor(Color("Dynamic/MainBrown"))
 					.opacity(0.25)
-			)
+			)*/
 			
 			//::course box
-			VStack(spacing:0) {
+			/*VStack(spacing:0) {
 				VStack(alignment: .leading) {
 					HStack {
 						Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.wizardPickedCourse.title))
@@ -386,7 +386,7 @@ struct WizardResultView: View {
 				//scorewindData.lastViewAtScore = true
 				scorewindData.lastPlaybackTime = 0.0
 				scorewindData.lessonChanged = true
-			}
+			}*/
 			
 			//::learning path box title
 			HStack {
@@ -437,8 +437,8 @@ struct WizardResultView: View {
 			
 			WizardResultPathView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData, showLessonView: $showLessonView)
 			
-			Spacer()
-		}
+		Spacer().frame(minHeight: 50)
+		//}
 		
 	}
 	
