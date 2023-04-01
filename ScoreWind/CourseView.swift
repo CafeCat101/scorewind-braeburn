@@ -4,6 +4,9 @@
 //
 //  Created by Leonore Yardimli on 2022/3/4.
 //
+/*
+ save the reddit style scroll here before merge the new course layout to the main
+ */
 
 import SwiftUI
 import WebKit
