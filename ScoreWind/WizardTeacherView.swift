@@ -243,6 +243,7 @@ struct WizardTeacherView: View {
 		studentData.removeAUserDefaultKey(keyName: "lastViewedLesson")
 		studentData.removeAUserDefaultKey(keyName: "lastViewedCourse")
 		studentData.removeAUserDefaultKey(keyName: "hideTips")
+		studentData.removeAUserDefaultKey(keyName: "wizardChooseInstrument")
 		
 		let courseOfflineList = userDefaults.object(forKey: "courseOffline") as? [Int] ?? []
 		if courseOfflineList.count > 0 {

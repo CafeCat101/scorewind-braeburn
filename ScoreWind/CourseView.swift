@@ -494,52 +494,59 @@ struct CourseView: View {
 						}
 					}
 				})
-				
-				
-				
-				
-				
-				
-				
-				
-				
 			} else {
 				//show blank course look
-				Label("Course", systemImage: "music.note")
-					.labelStyle(.titleAndIcon)
-				Spacer()
-				Text(studentData.wizardResult.learningPath.count == 0 ? "Ask ScoreWind for a course or a lesson now.":"See the course and the lesson ScoreWind found last time.")
-					.padding(15)
-				Button(action: {
-					selectedTab = "THome"
-				}, label: {
-					Text("Start").frame(minWidth:150)
+				Label(title: {
+					Text("Course")
+						.font(verticalSize == .regular ? .title2 : .title3)
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+						.bold()
+				}, icon: {
+					Image("logo")
+					.resizable()
+					.scaledToFit()
+					.frame(maxHeight: 30)
 				})
-				.foregroundColor(Color("LessonListStatusIcon"))
-				.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
-				.background {
-					RoundedRectangle(cornerRadius: 26)
-						.foregroundColor(Color("AppYellow"))
-				}
+				.padding(.top,5)
+				
 				Spacer()
-				if store.purchasedSubscriptions.isEmpty {
-					Group {
+				
+				VStack {
+					Spacer()
+					HStack {
+						Text(studentData.wizardResult.learningPath.count == 0 ? "Ask ScoreWind for a course or a lesson now.":"See the course and the lesson ScoreWind found last time.")
+							.font(.headline)
+							.foregroundColor(Color("Dynamic/MainBrown+6"))
 						Spacer()
-						Text("View ScoreWind subscription.\nGet access to all courses and lessons now")
-							.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
-							.foregroundColor(Color("LessonListStatusIcon"))
-							.background(Color("AppYellow"))
-							.cornerRadius(26)
-							.onTapGesture {
-								showStore = true
-							}
-						Spacer()
+						Label("Go to lesson", systemImage: "arrow.right.circle.fill")
+							.labelStyle(.iconOnly)
+							.font(.title2)
+							.foregroundColor(Color("Dynamic/MainGreen")) //original is "Dynamic/MainBrown"
 					}
+					.padding(30)
+					.frame(width: verticalSize == .regular ? UIScreen.main.bounds.size.width*0.8 : UIScreen.main.bounds.size.width*0.6)
+					.background(
+						RoundedCornersShape(corners: [.topRight, .topLeft, .bottomLeft, .bottomRight], radius: 17)
+							.fill(Color("Dynamic/LightGray"))
+							.opacity(0.85)
+							.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+					)
+					.onTapGesture {
+						selectedTab = "THome"
+					}
+					Spacer()
 				}
+				.frame(width: UIScreen.main.bounds.size.width)
+				.background {
+					Image(getBlankBackgroundInstrument())
+						.resizable()
+						.scaledToFit()
+						.opacity(0.3)
+				}
+				
+				
+				Spacer()
 			}
-			
-			
-			
 			Divider()
 		}
 		.background(colorScheme == .light ? appBackgroundImage(colorMode: colorScheme) : appBackgroundImage(colorMode: colorScheme))
@@ -606,8 +613,15 @@ struct CourseView: View {
 				}
 			}
 		})
-		
-		
+	}
+
+	private func getBlankBackgroundInstrument() -> String {
+		if studentData.getInstrumentChoice().isEmpty == false {
+			return studentData.getInstrumentChoice()
+		} else {
+			return "play_any"
+			
+		}
 	}
 	
 	private func handleTip() {
@@ -999,6 +1013,12 @@ struct CourseView_Previews: PreviewProvider {
 		CourseView(selectedTab: $tab, downloadManager: DownloadManager(), studentData: StudentData(), showLessonView: .constant(false))
 			.environmentObject(scorewindData)
 			.environmentObject(store)
+		
+		CourseView(selectedTab: $tab, downloadManager: DownloadManager(), studentData: StudentData(), showLessonView: .constant(false))
+			.environmentObject(scorewindData)
+			.environmentObject(store)
+			.previewInterfaceOrientation(InterfaceOrientation.landscapeLeft)
+			.previewDisplayName("Light LandscapeLeft")
 	}
 }
 
