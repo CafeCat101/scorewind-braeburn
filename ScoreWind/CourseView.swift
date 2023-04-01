@@ -44,38 +44,43 @@ struct CourseView: View {
 						.font(verticalSize == .regular ? .title2 : .title3)
 						.foregroundColor(Color("Dynamic/MainBrown+6"))
 						.bold()
-						.onTapGesture {
+						.modifier(turncateTheTitle(isTurncating: $turncateTitle))
+						.truncationMode(.tail)
+						/*.onTapGesture {
 							withAnimation {
 								turncateTitle.toggle()
+								forceTurncateTitle.toggle()
 							}
-						}
+						}*/
 					Spacer()
 				}
 				.padding([.leading, .trailing], 15)
-				.modifier(turncateTheTitle(isTurncating: $turncateTitle))
 				
-				VStack {
-					HStack {
-						Text("\(scorewindData.currentCourse.lessons.count) Lessons ")
-							.bold()
-							.foregroundColor(Color("Dynamic/MainBrown+6"))
-						Text("Duration:").bold().foregroundColor(Color("Dynamic/MainBrown+6"))+Text("\(scorewindData.currentCourse.duration ?? "n/a")")
-							.foregroundColor(Color("Dynamic/MainBrown+6"))
-						Spacer()
-					}.padding(EdgeInsets(top:8, leading: 15, bottom: 8, trailing: 15))
-					
-					courseProgressView()
-						.frame(maxHeight: 45)
-						.padding(EdgeInsets(top: 0, leading: 15, bottom: 8, trailing: 15))
-						//.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+				if turncateTitle == false {
+					VStack {
+						HStack {
+							Text("\(scorewindData.currentCourse.lessons.count) Lessons ")
+								.bold()
+								.foregroundColor(Color("Dynamic/MainBrown+6"))
+							Text("Duration:").bold().foregroundColor(Color("Dynamic/MainBrown+6"))+Text("\(scorewindData.currentCourse.duration ?? "n/a")")
+								.foregroundColor(Color("Dynamic/MainBrown+6"))
+							Spacer()
+						}.padding(EdgeInsets(top:8, leading: 15, bottom: 8, trailing: 15))
+						
+						courseProgressView()
+							.frame(maxHeight: 45)
+							.padding(EdgeInsets(top: 0, leading: 15, bottom: 8, trailing: 15))
+							//.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+					}
+					.background(
+						RoundedRectangle(cornerRadius: CGFloat(17))
+							.foregroundColor(Color("Dynamic/MainBrown"))
+							.opacity(0.25)
+					)
+					.padding([.leading, .trailing], 15)
+					.padding([.top,.bottom], 10)
 				}
-				.background(
-					RoundedRectangle(cornerRadius: CGFloat(17))
-						.foregroundColor(Color("Dynamic/MainBrown"))
-						.opacity(0.25)
-				)
-				.padding([.leading, .trailing], 15)
-				.padding([.top,.bottom], 10)
+				
 				
 				//::feature buttons
 				HStack {
@@ -162,29 +167,50 @@ struct CourseView: View {
 				VStack{
 					ScrollViewReader { proxy in
 						ScrollView {
-							ForEach(scorewindData.currentCourse.lessons){ lesson in
-								CourseLessonListItemView(
-									selectedTab: $selectedTab,
-									lesson: lesson,
-									downloadManager: downloadManager,
-									studentData: studentData,
-									showLessonView: $showLessonView,
-									showSubscriberOnlyAlert: $showSubscriberOnlyAlert)
-								.id(lesson.scorewindID)
+							VStack(spacing:0) {
+								Spacer().frame(height: 10)
+								ForEach(scorewindData.currentCourse.lessons){ lesson in
+									CourseLessonListItemView(
+										selectedTab: $selectedTab,
+										lesson: lesson,
+										downloadManager: downloadManager,
+										studentData: studentData,
+										showLessonView: $showLessonView,
+										showSubscriberOnlyAlert: $showSubscriberOnlyAlert)
+									.id(lesson.scorewindID)
+								}
+								.padding([.leading,.trailing], 15)
+								.padding([.bottom],6)
 							}
-							.padding([.leading,.trailing], 15)
-							.padding([.top,.bottom],10)
+							.background(GeometryReader {
+								Color.clear.preference(key: ViewOffsetKey.self, value: -$0.frame(in: .named("scroll")).origin.y)
+							})
+							.onPreferenceChange(ViewOffsetKey.self) {
+								print("offset >> \($0)")
+								if $0 > UIScreen.main.bounds.size.height*0.4 {
+									withAnimation {
+										turncateTitle = true
+									}
+								}
+								
+								if $0 <= 10 {
+									withAnimation {
+										turncateTitle = false
+									}
+								}
+								
+							}
 						}
-						.padding([.top],10)
 						.onAppear(perform: {
 							print("[debug] CourseView, lesson List-onAppear")
 							DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
 								withAnimation {
-									proxy.scrollTo(scorewindData.currentLesson.scorewindID, anchor: .topLeading)
+									proxy.scrollTo(scorewindData.currentLesson.scorewindID, anchor: .top)
 								}
 								
 							}
 						})
+						.coordinateSpace(name: "scroll")
 					}
 					
 				}
@@ -803,6 +829,13 @@ struct CourseView: View {
 		}
 	}
 	
+	struct ViewOffsetKey: PreferenceKey {
+			typealias Value = CGFloat
+			static var defaultValue = CGFloat.zero
+			static func reduce(value: inout Value, nextValue: () -> Value) {
+					value += nextValue()
+			}
+	}
 }
 
 struct CourseView_Previews: PreviewProvider {
