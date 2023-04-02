@@ -63,7 +63,8 @@ struct CourseView: View {
 				HStack(spacing:0) {
 					if verticalSize == .compact {
 						VStack(spacing:0) {
-							if turncateTitle == false {
+							displayHeaderContent()
+							/*if turncateTitle == false {
 								VStack {
 									HStack {
 										Text("\(scorewindData.currentCourse.lessons.count) Lessons ")
@@ -90,7 +91,7 @@ struct CourseView: View {
 							
 							//::feature buttons
 							HStack {
-								Label("About", systemImage: "info.circle")
+								Label("About", systemImage: "doc.plaintext")
 									.labelStyle(.iconOnly)
 									.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
 									.foregroundColor(Color("Dynamic/MainBrown+6"))
@@ -137,12 +138,13 @@ struct CourseView: View {
 								
 								Spacer()
 							}
-							.padding(EdgeInsets(top: 8, leading: 15, bottom: 8, trailing: 15))
+							.padding(EdgeInsets(top: 8, leading: 15, bottom: 8, trailing: 15))*/
 						}.frame(width: UIScreen.main.bounds.size.width*0.35)
 					}
 					VStack(spacing:0) {
 						if verticalSize == .regular {
-							if turncateTitle == false {
+							displayHeaderContent()
+							/*if turncateTitle == false {
 								VStack {
 									HStack {
 										Text("\(scorewindData.currentCourse.lessons.count) Lessons ")
@@ -215,7 +217,7 @@ struct CourseView: View {
 								
 								Spacer()
 							}
-							.padding(EdgeInsets(top: 8, leading: 15, bottom: 8, trailing: 15))
+							.padding(EdgeInsets(top: 8, leading: 15, bottom: 8, trailing: 15))*/
 						}
 						
 						VStack{
@@ -551,25 +553,11 @@ struct CourseView: View {
 		}
 		.background(colorScheme == .light ? appBackgroundImage(colorMode: colorScheme) : appBackgroundImage(colorMode: colorScheme))
 		.sheet(isPresented: $showOverview, content: {
-			VStack {
-				HStack {
-					Text("About this course")
-						.font(.title2)
-						.padding(15)
-					Spacer()
-					Label("Close", systemImage: "xmark.circle")
-						.labelStyle(.iconOnly)
-						.font(.title2)
-						.padding(15)
-						.onTapGesture {
-							showOverview = false
-						}
-				}
-				HTMLString(htmlContent: scorewindData.removeWhatsNext(Text: overViewContent()))
-			}
-			.frame(width:screenSize.width)
-			.edgesIgnoringSafeArea(.bottom)
+			CourseOverViewView(showOverview: $showOverview)
 		})
+		/*.overlay(content: {
+			CourseOverViewView(showOverview: $showOverview)
+		})*/
 		.fullScreenCover(isPresented: $showStepTip, content: {
 			TipTransparentModalView(showStepTip: $showStepTip, tipContent: $tipContent)
 		})
@@ -953,7 +941,7 @@ struct CourseView: View {
 		
 		//::feature buttons
 		HStack {
-			Label("About", systemImage: "info.circle")
+			Label("About", systemImage: "doc.plaintext")
 				.labelStyle(.iconOnly)
 				.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
 				.foregroundColor(Color("Dynamic/MainBrown+6"))
@@ -1001,6 +989,47 @@ struct CourseView: View {
 			Spacer()
 		}
 		.padding(EdgeInsets(top: 8, leading: 15, bottom: 8, trailing: 15))
+	}
+	
+	struct CourseOverViewView: View {
+		@EnvironmentObject var scorewindData:ScorewindData
+		@Environment(\.verticalSizeClass) var verticalSize
+		@Binding var showOverview:Bool
+		
+		var body: some View {
+			VStack(spacing:0) {
+				HStack {
+					Spacer()
+					Text("About This Course")
+						.font(verticalSize == .regular ? .title2 : .title3)
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+						.bold()
+					Spacer()
+					Label("Close", systemImage: "xmark.circle.fill")
+						.labelStyle(.iconOnly)
+						.font(verticalSize == .regular ? .title2 : .title3)
+						.foregroundColor(Color("Dynamic/MainGreen"))
+						.onTapGesture {
+							showOverview = false
+						}
+				}
+				.padding(EdgeInsets(top: 15, leading: 15, bottom: 5, trailing: 15))
+				.background(Color("Dynamic/LightGray"))
+				HTMLString(htmlContent: scorewindData.removeWhatsNext(Text: overViewContent()))
+					.frame(width:UIScreen.main.bounds.size.width)
+			}
+			.edgesIgnoringSafeArea(.bottom)
+			//.frame(width: UIScreen.main.bounds.size.width*0.8, height: UIScreen.main.bounds.size.height*0.8)
+			//.offset(x: showOverview ? 0 : UIScreen.main.bounds.size.width + 50)
+		}
+		
+		private func overViewContent() -> String {
+			/*
+			 let setDuration = scorewindData.currentCourse.duration ?? "n/a"
+			 return "<b>Category:</b>&nbsp;\(scorewindData.courseCategoryToString(courseCategories: scorewindData.currentCourse.category, depth: 3))<br><b>Level:&nbsp;</b>\(scorewindData.currentCourse.level)<br><b>Duration:&nbsp;</b>\(setDuration)\(scorewindData.currentCourse.content)"
+			 */
+			return "<b>Category:</b>&nbsp;\(scorewindData.courseCategoryToString(courseCategories: scorewindData.currentCourse.category, depth: 3))<br>\(scorewindData.currentCourse.content)"
+		}
 	}
 }
 
