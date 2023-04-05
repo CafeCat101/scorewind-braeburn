@@ -34,7 +34,7 @@ struct LessonView2: View {
 	@State private var showSubscriberOnlyAlert = false
 	@Environment(\.verticalSizeClass) var verticalSize
 	@Environment(\.colorScheme) var colorScheme
-	@State private var revealContent = false
+	@State private var revealAVPlayer = false
 	
 	var body: some View {
 		VStack {
@@ -84,7 +84,7 @@ struct LessonView2: View {
 			
 			//::LESSON VIDEO::
 			ZStack {
-				if revealContent {
+				if revealAVPlayer {
 					if scorewindData.currentLesson.videoMP4.isEmpty == false {
 						VideoPlayer(player: viewModel.videoPlayer)
 							.clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
@@ -154,7 +154,7 @@ struct LessonView2: View {
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.14) {
 				if scorewindData.currentLesson.videoMP4.isEmpty == false {
 					withAnimation {
-						revealContent = true
+						revealAVPlayer = true
 					}
 					viewModel.viewedLesson = scorewindData.currentLesson
 					viewModel.viewedTimestampRecs = scorewindData.currentTimestampRecs
