@@ -26,10 +26,12 @@ struct CourseDownloadButtonView: View {
 		}, label: {
 			if getStatus == DownloadStatus.downloading {
 				DownloadSpinnerView(iconColor: Color("Dynamic/MainBrown+6"), spinnerColor: Color("Dynamic/IconHighlighted"), iconSystemImage: "stop.fill")
+					.frame(maxWidth: 35, maxHeight:20)
 			} else {
 				Label("Downloaded", systemImage: getStatusIconName())
 					.labelStyle(.iconOnly)
 					.foregroundColor(getStatus == DownloadStatus.downloaded ? Color("Dynamic/IconHighlighted") : Color("Dynamic/MainBrown+6"))
+					.frame(maxWidth: 35, maxHeight:20)
 			}
 		})
 		.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))

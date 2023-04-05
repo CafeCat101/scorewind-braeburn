@@ -36,6 +36,21 @@ struct HomeView: View {
 				}.tag("TMyCourses")
 		}
 		.accentColor(Color("Dynamic/TabSelected"))
+		.overlay(content: {
+			//::use overlay instead of fullScreenCover to avoid that strange bottom lag when the view is dismissed.
+			if showLessonView {
+				LessonView2(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData, showLessonView: $showLessonView)
+					.offset(y: showLessonView ? 0 : 0 - UIScreen.main.bounds.height)
+					.opacity(showLessonView ? 1 : 0)
+					.transition(AnyTransition.asymmetric(insertion: .move(edge: .bottom), removal: .scale).combined(with: .opacity))
+					.safeAreaInset(edge: .bottom, content: {
+						Color.clear.frame(height: 20)
+					})
+			}
+		})
+		/*.fullScreenCover(isPresented: $showLessonView, content: {
+			LessonView2(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData, showLessonView: $showLessonView)
+		})*/
 		.ignoresSafeArea(.all, edges: .bottom)
 		.onAppear{
 			//UITabBar.appearance().backgroundColor = UIColor(Color("AppBackground"))

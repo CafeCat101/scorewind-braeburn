@@ -304,7 +304,7 @@ struct WizardCalculatorHelper {
 		let averageFeedbackValue = sumFeedback / Double(sortedWizardRange.count)
 
 		print("[debug] wizardCalcaultor, explorerAlgorithm, sorted \(sortedWizardRange)")
-		
+		//:: *0.6 to find a level that is a bit challenaged
 		sortedWizardRange = sortedWizardRange.sorted(by: {$0.sortHelper < $1.sortHelper}).filter({$0.feedbackValue < averageFeedbackValue*0.6})
 		
 		result["courseID"] = sortedWizardRange[0].courseID

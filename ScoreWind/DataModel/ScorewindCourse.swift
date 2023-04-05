@@ -105,9 +105,14 @@ struct Lesson: Codable, Identifiable{
 		content = "Self study music is a joyful journey. It fills your soul, challenges your mind and gives you a path to share your passions. Self study is one of many ways to learn to play music. It’s affordable, and offers flexible studying hours. You can learn at your own pace, and develop your learning path based on your own interests. So, why wait, let’s start playing music!"
 		description = "In the lesson, scorewind teacher prepare vidoe and score for you to learn how to play easier than ever!"
 		composer = "Scorewind Teacher"
-		video = "https://scorewind.com/sw-music/pdfProject/Sheet13740/G103_1_02_-_Explanation_to_exercise_1_V2.m3u8"
+		//::example without score
+		/*video = "https://scorewind.com/sw-music/pdfProject/Sheet13740/G103_1_02_-_Explanation_to_exercise_1_V2.m3u8"
 		videoMP4 = "https://scorewind.com/sw-music/pdfProject/Sheet13740/G103 1 02 - Explanation to exercise 1 V2.mp4"
-		scoreViewer = "https://scorewind.com/sw-music/pdfProject/Sheet13740/G103 1 03 E01.xml"
+		scoreViewer = "https://scorewind.com/sw-music/pdfProject/Sheet13740/G103 1 03 E01.xml"*/
+		//:: example with score
+		video = "https://scorewind.com/sw-music/pdfProject/Sheet13824/G103_4_01_-_Intro_to_two_fingers_per_melody_on_same_string.m3u8"
+		videoMP4 = "https://scorewind.com/sw-music/pdfProject/Sheet13824/G103 4 01 - Intro to two fingers per melody on same string.mp4"
+		scoreViewer = "https://scorewind.com/sw-music/pdfProject/Sheet13824/Co G103 4 1.xml"
 		image = "lesson/image"
 		step = 1
 		sortValue = ""

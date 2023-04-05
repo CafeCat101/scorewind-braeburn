@@ -95,13 +95,13 @@ struct CourseView: View {
 									})
 									.onPreferenceChange(ViewOffsetKey.self) {
 										print("offset >> \($0)")
-										if $0 > UIScreen.main.bounds.size.height*0.4 && verticalSize == .regular {
+										if $0 > UIScreen.main.bounds.size.height*0.4 {
 											withAnimation {
 												turncateTitle = true
 											}
 										}
 										
-										if $0 <= 10 && verticalSize == .regular {
+										if $0 <= 10 {
 											withAnimation {
 												turncateTitle = false
 											}
@@ -193,9 +193,9 @@ struct CourseView: View {
 		.fullScreenCover(isPresented: $showStepTip, content: {
 			TipTransparentModalView(showStepTip: $showStepTip, tipContent: $tipContent)
 		})
-		.fullScreenCover(isPresented: $showLessonView, content: {
+		/*.fullScreenCover(isPresented: $showLessonView, content: {
 			LessonView2(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData, showLessonView: $showLessonView)
-		})
+		})*/
 		.confirmationDialog("Subscription is required", isPresented: $showSubscriberOnlyAlert) {
 			Button("View subscription", role: nil) {
 				showStore = true
@@ -512,7 +512,8 @@ struct CourseView: View {
 		func body(content: Content) -> some View {
 			if isTurncating {
 				content
-					.frame(height: UIScreen.main.bounds.height/25)
+					.frame(maxHeight: 44)
+					//.frame(height: UIScreen.main.bounds.height/25)
 			} else {
 				content
 			}
@@ -529,7 +530,7 @@ struct CourseView: View {
 	
 	@ViewBuilder
 	private func displayHeaderContent() -> some View {
-		if turncateTitle == false {
+		if turncateTitle == false || verticalSize == .compact {
 			VStack {
 				HStack {
 					Text("\(scorewindData.currentCourse.lessons.count) Lessons ")
@@ -557,6 +558,7 @@ struct CourseView: View {
 		//::feature buttons
 		HStack {
 			Label("About", systemImage: "doc.plaintext")
+				.frame(maxWidth: 35, maxHeight:20)
 				.labelStyle(.iconOnly)
 				.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
 				.foregroundColor(Color("Dynamic/MainBrown+6"))
@@ -574,6 +576,7 @@ struct CourseView: View {
 					showOverview = true
 				}
 			Label("Add to favourite", systemImage: isFavourite ? "heart.fill" : "suit.heart")
+				.frame(maxWidth: 35, maxHeight:20)
 				.labelStyle(.iconOnly)
 				.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
 				.foregroundColor(isFavourite ? Color("Dynamic/IconHighlighted") : Color("Dynamic/MainBrown+6"))

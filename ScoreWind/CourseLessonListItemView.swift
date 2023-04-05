@@ -64,7 +64,10 @@ struct CourseLessonListItemView: View {
 				scorewindData.lastPlaybackTime = 0.0
 				//self.selectedTab = "TLesson"
 				scorewindData.lessonChanged = true
-				showLessonView = true
+				withAnimation(Animation.linear(duration: 0.13)) {
+					showLessonView = true
+				}
+				
 			}
 		}
 	}
