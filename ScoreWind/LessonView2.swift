@@ -35,6 +35,7 @@ struct LessonView2: View {
 	@Environment(\.verticalSizeClass) var verticalSize
 	@Environment(\.colorScheme) var colorScheme
 	@State private var revealAVPlayer = false
+	@State private var showVideoLoader = false
 	
 	var body: some View {
 		VStack {
@@ -91,6 +92,21 @@ struct LessonView2: View {
 							.modifier(videoFrameModifier(splitView: splitScreen))
 							.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
 							.padding([.leading, .trailing], 15)
+							.overlay(content: {
+								if showVideoLoader {
+									VStack {
+										ZStack {
+											videoLoader(frameSize: getVideoFrame().width*0.3)
+										}
+									}
+									.modifier(videoFrameModifier(splitView: splitScreen))
+									.background {
+										RoundedRectangle(cornerRadius: 17)
+											.foregroundColor(.black)
+											.opacity(0.80)
+									}
+								}
+							})
 							.onAppear(perform: {
 								//VideoPlayer onAppear when comeing from anohter tab view, not when the sheet disappears
 								print("[debug] VideoPlayer onAppear")
@@ -171,6 +187,9 @@ struct LessonView2: View {
 						} else {
 							viewModel.playerGoTo(timestamp: 0.0)
 						}
+					}
+					withAnimation {
+						self.showVideoLoader = true
 					}
 					
 				}
@@ -352,6 +371,8 @@ struct LessonView2: View {
 	
 	private func setupPlayer(){
 		print("[debug] LessonView, setupPlayer, begin to setup")
+		showVideoLoader = true
+		
 		if !scorewindData.currentLesson.videoMP4.isEmpty {
 			watchTime = ""
 			let courseURL = URL(string: "course\(scorewindData.currentCourse.id)", relativeTo: downloadManager.docsUrl)!
@@ -367,6 +388,14 @@ struct LessonView2: View {
 			
 			viewModel.videoPlayer!.addPeriodicTimeObserver(forInterval: CMTime(value: 1, timescale: 3), queue: .main, using: { time in
 				let catchTime = time.seconds
+				
+				print("catchTime:"+String(catchTime))
+				if showVideoLoader {
+					if scorewindData.lastPlaybackTime > 0.01 && catchTime > scorewindData.lastPlaybackTime {
+						showVideoLoader = false
+					}
+				}
+				
 				scorewindData.lastPlaybackTime = catchTime
 				
 				if scorewindData.currentTimestampRecs.count > 0 {
@@ -532,6 +561,14 @@ struct LessonView2: View {
 		}
 	}
 	
+	private func getVideoFrame() -> VideoFrame {
+		if verticalSize == .regular {
+			return VideoFrame(width: UIScreen.main.bounds.width-30, height: (UIScreen.main.bounds.width-30) * 9/16)
+		} else {
+			return VideoFrame(width: UIScreen.main.bounds.height*0.55 * 16/9, height: UIScreen.main.bounds.height*0.55)
+		}
+	}
+	
 	struct videoFrameModifier : ViewModifier {
 		var splitView : Bool
 		@Environment(\.verticalSizeClass) var verticalSize
@@ -553,10 +590,12 @@ struct LessonView2: View {
 			}
 		}
 		
-		struct VideoFrame {
-			var width:CGFloat
-			var height:CGFloat
-		}
+		
+	}
+	
+	struct VideoFrame {
+		var width:CGFloat
+		var height:CGFloat
 	}
 	
 	private func handleTip() {
