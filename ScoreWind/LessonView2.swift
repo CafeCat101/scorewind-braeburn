@@ -138,6 +138,35 @@ struct LessonView2: View {
 							displayChangeNoteSize()
 						}
 					})
+					.overlay(content: {
+						if showScoreZoomIcon == false && showVideoLoader {
+							VStack {
+								Spacer()
+								HStack {
+									Spacer()
+									Text("Tap the bar to listen!")
+										.font(.headline)
+										.foregroundColor(Color("Dynamic/LightGray"))
+										.multilineTextAlignment(.center)
+										.padding(EdgeInsets(top: 30, leading: 15, bottom: 30, trailing: 15))
+										.background(
+											RoundedRectangle(cornerRadius: CGFloat(17))
+												.foregroundColor(Color("Dynamic/MainBrown+6"))
+												.opacity(0.8)
+										)
+									Spacer()
+								}
+								Spacer()
+							}
+							.background(
+								RoundedRectangle(cornerRadius: CGFloat(17))
+									.foregroundColor(Color("Dynamic/MainBrown"))
+									.opacity(0.7)
+							)
+							.opacity(showVideoLoader ? 1 : 0)
+							.disabled(showVideoLoader ? false : true)
+						}
+					})
 					.padding([.leading, .trailing], 15)
 			} else {
 				Spacer()
