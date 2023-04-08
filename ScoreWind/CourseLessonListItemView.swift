@@ -15,7 +15,7 @@ struct CourseLessonListItemView: View {
 	@ObservedObject var downloadManager:DownloadManager
 	@ObservedObject var studentData:StudentData
 	@Binding var showLessonView: Bool
-	@Binding var showSubscriberOnlyAlert: Bool
+	@Binding var showStoreView: Bool
 	
 	var body: some View {
 		VStack{
@@ -57,7 +57,10 @@ struct CourseLessonListItemView: View {
 		)
 		.onTapGesture {
 			if store.purchasedSubscriptions.isEmpty && scorewindData.wizardPickedLesson.id != lesson.id {
-				showSubscriberOnlyAlert = true
+				scorewindData.currentLesson = lesson
+				scorewindData.setCurrentTimestampRecs()
+				scorewindData.lastPlaybackTime = 0.0
+				showStoreView = true
 			} else {
 				scorewindData.currentLesson = lesson
 				scorewindData.setCurrentTimestampRecs()
@@ -136,6 +139,6 @@ struct CourseLessonListItemView: View {
 struct CourseLessonListItemView_Previews: PreviewProvider {
 	@State static var tab = "TCourse"
 	static var previews: some View {
-		CourseLessonListItemView(selectedTab:$tab, lesson: Lesson(), downloadManager: DownloadManager(), studentData: StudentData(), showLessonView: .constant(false), showSubscriberOnlyAlert: .constant(false)).environmentObject(ScorewindData())
+		CourseLessonListItemView(selectedTab:$tab, lesson: Lesson(), downloadManager: DownloadManager(), studentData: StudentData(), showLessonView: .constant(false), showStoreView: .constant(false)).environmentObject(ScorewindData())
 	}
 }

@@ -83,7 +83,7 @@ struct CourseView: View {
 												downloadManager: downloadManager,
 												studentData: studentData,
 												showLessonView: $showLessonView,
-												showSubscriberOnlyAlert: $showSubscriberOnlyAlert)
+												showStoreView: $showStore)
 											.id(lesson.scorewindID)
 										}
 										.padding([.leading,.trailing], 15)
@@ -196,13 +196,16 @@ struct CourseView: View {
 		/*.fullScreenCover(isPresented: $showLessonView, content: {
 			LessonView2(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData, showLessonView: $showLessonView)
 		})*/
-		.confirmationDialog("Subscription is required", isPresented: $showSubscriberOnlyAlert) {
+		/*.confirmationDialog("Subscription is required", isPresented: $showSubscriberOnlyAlert) {
 			Button("View subscription", role: nil) {
 				showStore = true
 			}
 			Button("Later", role: .cancel, action: {})
-		} message: { Text("Subscription is required") }
-		.modifier(storeViewCover(showStore: $showStore, selectedTab: $selectedTab))
+		} message: { Text("Subscription is required") }*/
+		//.modifier(storeViewCover(showStore: $showStore, selectedTab: $selectedTab))
+		.sheet(isPresented: $showStore, content: {
+			StoreView(showStore: $showStore)
+		})
 		.onAppear(perform: {
 			print("[debug] CourseView, onAppear, dragOffset \(dragOffset)")
 			underlineScrollOffset = 0-screenSize.width/pageCount
