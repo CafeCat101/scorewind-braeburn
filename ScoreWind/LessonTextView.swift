@@ -166,6 +166,14 @@ struct LessonTextView: View {
 				RoundedRectangle(cornerRadius: CGFloat(17))
 					.foregroundColor(Color("Dynamic/MainBrown"))
 					.opacity(0.30)
+					.overlay(content: {
+						Image(getBlankBackgroundInstrument())
+							.resizable()
+							.scaledToFill()
+							//.scaledToFit()
+							.padding(30)
+							.opacity(0.25)
+					})
 			)
 			.padding(EdgeInsets(top: -33, leading: 15, bottom: 15, trailing: 15))
 			/*ScrollView {
@@ -256,12 +264,13 @@ struct LessonTextView: View {
 	}
 	
 	private func getBlankBackgroundInstrument() -> String {
-		if studentData.getInstrumentChoice().isEmpty == false {
-			return studentData.getInstrumentChoice()
+		return scorewindData.currentCourse.instrument
+		/*if studentData.getInstrumentChoice().isEmpty == false {
+			return  studentData.getInstrumentChoice()
 		} else {
 			return "play_any"
 			
-		}
+		}*/
 	}
 }
 

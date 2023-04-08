@@ -13,13 +13,13 @@ struct CourseDownloadButtonView: View {
 	var getStatus:DownloadStatus
 	@ObservedObject var downloadManager:DownloadManager
 	@State private var showDownloadAlert = false
-	@Binding var showSubscriberOnlyAlert: Bool
+	@Binding var showStoreView: Bool
 	
 	
 	var body: some View {
 		Button(action: {
 			if store.purchasedSubscriptions.isEmpty {
-				showSubscriberOnlyAlert = true
+				showStoreView = true
 			} else {
 				showDownloadAlert = true
 			}
@@ -230,6 +230,6 @@ struct CourseDownloadButtonView: View {
 
 struct CourseDownloadButtonView_Previews: PreviewProvider {
 	static var previews: some View {
-		CourseDownloadButtonView(getStatus: DownloadStatus.notInQueue, downloadManager: DownloadManager(), showSubscriberOnlyAlert: .constant(false)).environmentObject(ScorewindData())
+		CourseDownloadButtonView(getStatus: DownloadStatus.notInQueue, downloadManager: DownloadManager(), showStoreView: .constant(false)).environmentObject(ScorewindData())
 	}
 }

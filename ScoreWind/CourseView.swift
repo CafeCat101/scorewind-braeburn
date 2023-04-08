@@ -605,7 +605,7 @@ struct CourseView: View {
 				}
 			//courseDownloadButtonView()
 			
-			CourseDownloadButtonView(getStatus: downloadManager.checkDownloadStatus(courseID: scorewindData.currentCourse.id, lessonsCount: scorewindData.currentCourse.lessons.count), downloadManager: downloadManager, showSubscriberOnlyAlert: $showSubscriberOnlyAlert)
+			CourseDownloadButtonView(getStatus: downloadManager.checkDownloadStatus(courseID: scorewindData.currentCourse.id, lessonsCount: scorewindData.currentCourse.lessons.count), downloadManager: downloadManager, showStoreView: $showStore)
 			
 			Spacer()
 		}
