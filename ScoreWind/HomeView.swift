@@ -180,29 +180,6 @@ struct HomeView: View {
 	}
 }
 
-struct storeViewCover: ViewModifier {
-	@EnvironmentObject var store: Store
-	@EnvironmentObject var scorewindData:ScorewindData
-	@Binding var showStore:Bool
-	@Binding var selectedTab: String
-	
-	func body(content: Content) -> some View {
-		if !store.purchasedSubscriptions.isEmpty {
-			if selectedTab == "TCourse" {
-				content
-			} else {
-				content.sheet(isPresented: $showStore, content: {
-					StoreView(showStore: $showStore)
-				})
-			}
-		} else {
-			content.sheet(isPresented: $showStore, content: {
-				StoreView(showStore: $showStore)
-			})
-		}
-	}
-}
-
 @ViewBuilder
 func appBackgroundImage(colorMode: ColorScheme) -> some View {
 	if colorMode == .light {

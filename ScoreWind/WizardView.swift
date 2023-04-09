@@ -160,7 +160,9 @@ struct WizardView: View {
 			Divider()
 		}
 		.background(colorScheme == .light ? appBackgroundImage(colorMode: colorScheme) : appBackgroundImage(colorMode: colorScheme))
-		.modifier(storeViewCover(showStore: $showStore, selectedTab: $selectedTab))
+		.sheet(isPresented: $showStore, content: {
+			StoreView(showStore: $showStore)
+		})
 		.onAppear(perform: {			
 			print("[debug] WizardView, onAppear studentData.wizardResult.learningPath.count \(studentData.wizardResult.learningPath.count)")
 		})

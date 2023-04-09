@@ -83,94 +83,106 @@ struct LessonView2: View {
 			}
 			.frame(maxHeight: 44)
 			
-			//::LESSON VIDEO::
-			ZStack {
-				if revealAVPlayer {
-					if scorewindData.currentLesson.videoMP4.isEmpty == false {
-						VideoPlayer(player: viewModel.videoPlayer)
-							.clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
-							.modifier(videoFrameModifier(splitView: splitScreen))
-							.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
-							.padding([.leading, .trailing], 15)
-							.overlay(content: {
-								if showVideoLoader {
-									VStack {
-										ZStack {
-											videoLoader(frameSize: getVideoFrame().width*0.3)
+			if verticalSize == .regular {
+				//::LESSON VIDEO::
+				/*ZStack {
+					if revealAVPlayer {
+						if scorewindData.currentLesson.videoMP4.isEmpty == false {
+							VideoPlayer(player: viewModel.videoPlayer)
+								.clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
+								.modifier(videoFrameModifier(splitView: splitScreen))
+								.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+								.padding([.leading, .trailing], 15)
+								.overlay(content: {
+									if showVideoLoader {
+										VStack {
+											ZStack {
+												videoLoader(frameSize: getVideoFrame().width*0.3)
+											}
+										}
+										.modifier(videoFrameModifier(splitView: splitScreen))
+										.background {
+											RoundedRectangle(cornerRadius: 17)
+												.foregroundColor(.black)
+												.opacity(0.80)
 										}
 									}
-									.modifier(videoFrameModifier(splitView: splitScreen))
-									.background {
-										RoundedRectangle(cornerRadius: 17)
-											.foregroundColor(.black)
-											.opacity(0.80)
+								})
+								.onAppear(perform: {
+									//VideoPlayer onAppear when comeing from anohter tab view, not when the sheet disappears
+									print("[debug] VideoPlayer onAppear")
+								})
+								.onDisappear(perform: {
+									//VideoPlayer disappears when go to another tab view, not when sheet appears
+									print("[debug] VideoPlayer onDisappear")
+									print("[debug] lastPlaybackTime \(scorewindData.lastPlaybackTime)")
+									if scorewindData.lastPlaybackTime >= 10 {
+										print("[debug] VideoPlayer onDisappear, lastPlayBackTime>=10")
+										studentData.updateWatchedLessons(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, addWatched: true)
+										studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+										studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 									}
+									viewModel.videoPlayer!.pause()
+								})
+						}
+					}
+				}
+				.modifier(videoFrameModifier(splitView: splitScreen))*/
+				displayVideo()
+				
+				//::SCORE VIEWER::
+				if scorewindData.currentTimestampRecs.count > 0 {
+					/*LessonScoreView(viewModel: viewModel)
+						.clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
+						.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+						.overlay(content: {
+							if showScoreZoomIcon {
+								displayChangeNoteSize()
+							}
+						})
+						.overlay(content: {
+							if showScoreZoomIcon == false && showVideoLoader {
+								VStack {
+									Spacer()
+									HStack {
+										Spacer()
+										Text("Tap the bar to listen!")
+											.font(.headline)
+											.foregroundColor(Color("Dynamic/LightGray"))
+											.multilineTextAlignment(.center)
+											.padding(EdgeInsets(top: 30, leading: 15, bottom: 30, trailing: 15))
+											.background(
+												RoundedRectangle(cornerRadius: CGFloat(17))
+													.foregroundColor(Color("Dynamic/MainBrown+6"))
+													.opacity(0.8)
+											)
+										Spacer()
+									}
+									Spacer()
 								}
-							})
-							.onAppear(perform: {
-								//VideoPlayer onAppear when comeing from anohter tab view, not when the sheet disappears
-								print("[debug] VideoPlayer onAppear")
-							})
-							.onDisappear(perform: {
-								//VideoPlayer disappears when go to another tab view, not when sheet appears
-								print("[debug] VideoPlayer onDisappear")
-								print("[debug] lastPlaybackTime \(scorewindData.lastPlaybackTime)")
-								if scorewindData.lastPlaybackTime >= 10 {
-									print("[debug] VideoPlayer onDisappear, lastPlayBackTime>=10")
-									studentData.updateWatchedLessons(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, addWatched: true)
-									studentData.updateMyCourses(allCourses: scorewindData.allCourses)
-									studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
-								}
-								viewModel.videoPlayer!.pause()
-							})
+								.background(
+									RoundedRectangle(cornerRadius: CGFloat(17))
+										.foregroundColor(Color("Dynamic/MainBrown"))
+										.opacity(0.7)
+								)
+								.opacity(showVideoLoader ? 1 : 0)
+								.disabled(showVideoLoader ? false : true)
+							}
+						})
+						.padding([.leading, .trailing], 15)*/
+					displayScoreViewer()
+				} else {
+					Spacer()
+				}
+			} else {
+				HStack(spacing:0) {
+					displayVideo()
+					if scorewindData.currentTimestampRecs.count > 0 {
+						displayScoreViewer()
 					}
 				}
 			}
-			.modifier(videoFrameModifier(splitView: splitScreen))
 			
-			//::SCORE VIEWER::
-			if scorewindData.currentTimestampRecs.count > 0 {
-				LessonScoreView(viewModel: viewModel)
-					.clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
-					.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
-					.overlay(content: {
-						if showScoreZoomIcon {
-							displayChangeNoteSize()
-						}
-					})
-					.overlay(content: {
-						if showScoreZoomIcon == false && showVideoLoader {
-							VStack {
-								Spacer()
-								HStack {
-									Spacer()
-									Text("Tap the bar to listen!")
-										.font(.headline)
-										.foregroundColor(Color("Dynamic/LightGray"))
-										.multilineTextAlignment(.center)
-										.padding(EdgeInsets(top: 30, leading: 15, bottom: 30, trailing: 15))
-										.background(
-											RoundedRectangle(cornerRadius: CGFloat(17))
-												.foregroundColor(Color("Dynamic/MainBrown+6"))
-												.opacity(0.8)
-										)
-									Spacer()
-								}
-								Spacer()
-							}
-							.background(
-								RoundedRectangle(cornerRadius: CGFloat(17))
-									.foregroundColor(Color("Dynamic/MainBrown"))
-									.opacity(0.7)
-							)
-							.opacity(showVideoLoader ? 1 : 0)
-							.disabled(showVideoLoader ? false : true)
-						}
-					})
-					.padding([.leading, .trailing], 15)
-			} else {
-				Spacer()
-			}
 		}
 		/*.alert("Subscription is required", isPresented: $showStoreView) {
 			Button("OK", role: .cancel) { }
@@ -205,26 +217,14 @@ struct LessonView2: View {
 					viewModel.viewedTimestampRecs = scorewindData.currentTimestampRecs
 					setupPlayer()
 					if scorewindData.lastPlaybackTime > 0.0 {
-						if scorewindData.showLessonTextOverlay {
-							viewModel.playerSeek(timestamp: scorewindData.lastPlaybackTime)
-						} else {
-							viewModel.playerGoTo(timestamp: scorewindData.lastPlaybackTime)
-						}
+						viewModel.playerGoTo(timestamp: scorewindData.lastPlaybackTime)
 					} else {
-						if scorewindData.showLessonTextOverlay {
-							viewModel.playerSeek(timestamp: 0.0)
-						} else {
-							viewModel.playerGoTo(timestamp: 0.0)
-						}
+						viewModel.playerGoTo(timestamp: 0.0)
 					}
-					withAnimation {
-						self.showVideoLoader = true
-					}
+					
 					
 				}
 			}
-			
-			
 			checkCurrentLessonCompleted()
 			//setNextLesson()
 			//setPreviousLesson()
@@ -239,18 +239,14 @@ struct LessonView2: View {
 		})
 		.onDisappear(perform: {
 			print("[debug] LessonView onDisappear")
+			viewModel.videoPlayer!.pause()
+			viewModel.videoPlayer!.replaceCurrentItem(with: nil)
 			showScoreZoomIcon = false
 		})
-		.sheet(isPresented: $scorewindData.showLessonTextOverlay, onDismiss: {
-			if scorewindData.currentLesson.videoMP4.isEmpty == false && scorewindData.lastPlaybackTime > 0.1 {
-				viewModel.videoPlayer?.play()
-			}}, content: {
+		.sheet(isPresented: $scorewindData.showLessonTextOverlay, content: {
 				LessonTextView(studentData: studentData, isCurrentLessonCompleted: $isCurrentLessonCompleted)
 			})
-		.sheet(isPresented: $showStoreView, onDismiss: {
-			if scorewindData.currentLesson.videoMP4.isEmpty == false && scorewindData.lastPlaybackTime > 0.1 {
-				viewModel.videoPlayer?.play()
-			}}, content: {
+		.sheet(isPresented: $showStoreView, content: {
 				StoreView(showStore: $showStoreView)
 			})
 		.fullScreenCover(isPresented: $showLessonViewTip, onDismiss:{
@@ -259,6 +255,113 @@ struct LessonView2: View {
 			}}, content: {
 				TipTransparentModalView(showStepTip: $showLessonViewTip, tipContent: $tipContent)
 			})
+		.onChange(of: verticalSize, perform: {info in
+			print("[debug] LessonView, setupPlayer, track verticalSize is changed")
+			showVideoLoader = false
+			if scorewindData.currentLesson.videoMP4.isEmpty == false {
+				viewModel.videoPlayer!.pause()
+				viewModel.videoPlayer!.replaceCurrentItem(with: nil)
+				
+				viewModel.viewedLesson = scorewindData.currentLesson
+				viewModel.viewedTimestampRecs = scorewindData.currentTimestampRecs
+				
+				viewModel.loadToGo = true
+				setupPlayer()
+				if scorewindData.lastPlaybackTime > 0 {
+					viewModel.playerGoTo(timestamp: scorewindData.lastPlaybackTime)
+				} else {
+					viewModel.playerGoTo(timestamp: 0.0)
+				}
+			}
+		})
+	}
+	
+	@ViewBuilder
+	private func displayVideo() -> some View {
+		ZStack {
+			if revealAVPlayer {
+				if scorewindData.currentLesson.videoMP4.isEmpty == false {
+					VideoPlayer(player: viewModel.videoPlayer)
+						.clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
+						.modifier(videoFrameModifier(splitView: splitScreen))
+						.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+						.padding([.leading, .trailing], 15)
+						.overlay(content: {
+							if showVideoLoader {
+								VStack {
+									ZStack {
+										videoLoader(frameSize: getVideoFrame().width*0.3)
+									}
+								}
+								.modifier(videoFrameModifier(splitView: splitScreen))
+								.background {
+									RoundedRectangle(cornerRadius: 17)
+										.foregroundColor(.black)
+										.opacity(0.80)
+								}
+							}
+						})
+						.onAppear(perform: {
+							//VideoPlayer onAppear when comeing from anohter tab view, not when the sheet disappears
+							print("[debug] VideoPlayer onAppear")
+						})
+						.onDisappear(perform: {
+							//VideoPlayer disappears when go to another tab view, not when sheet appears
+							print("[debug] VideoPlayer onDisappear")
+							print("[debug] lastPlaybackTime \(scorewindData.lastPlaybackTime)")
+							if scorewindData.lastPlaybackTime >= 10 {
+								print("[debug] VideoPlayer onDisappear, lastPlayBackTime>=10")
+								studentData.updateWatchedLessons(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, addWatched: true)
+								studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+								studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
+							}
+						})
+				}
+			}
+		}
+		.modifier(videoFrameModifier(splitView: splitScreen))
+	}
+	
+	@ViewBuilder
+	private func displayScoreViewer() -> some View {
+		LessonScoreView(viewModel: viewModel)
+			.clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
+			.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+			.overlay(content: {
+				if showScoreZoomIcon {
+					displayChangeNoteSize()
+				}
+			})
+			.overlay(content: {
+				if showScoreZoomIcon == false && showVideoLoader {
+					VStack {
+						Spacer()
+						HStack {
+							Spacer()
+							Text("Tap the bar to listen!")
+								.font(.headline)
+								.foregroundColor(Color("Dynamic/LightGray"))
+								.multilineTextAlignment(.center)
+								.padding(EdgeInsets(top: 30, leading: 15, bottom: 30, trailing: 15))
+								.background(
+									RoundedRectangle(cornerRadius: CGFloat(17))
+										.foregroundColor(Color("Dynamic/MainBrown+6"))
+										.opacity(0.8)
+								)
+							Spacer()
+						}
+						Spacer()
+					}
+					.background(
+						RoundedRectangle(cornerRadius: CGFloat(17))
+							.foregroundColor(Color("Dynamic/MainBrown"))
+							.opacity(0.7)
+					)
+					.opacity(showVideoLoader ? 1 : 0)
+					.disabled(showVideoLoader ? false : true)
+				}
+			})
+			.padding([.leading, .trailing], 15)
 	}
 	
 	private func decodeVideoURL(videoURL:String)->String{
@@ -303,7 +406,6 @@ struct LessonView2: View {
 	
 	private func setupPlayer(){
 		print("[debug] LessonView, setupPlayer, begin to setup")
-		showVideoLoader = true
 		
 		if !scorewindData.currentLesson.videoMP4.isEmpty {
 			watchTime = ""
@@ -321,7 +423,8 @@ struct LessonView2: View {
 			viewModel.videoPlayer!.addPeriodicTimeObserver(forInterval: CMTime(value: 1, timescale: 3), queue: .main, using: { time in
 				let catchTime = time.seconds
 				
-				print("catchTime:"+String(catchTime))
+				print("[debug] LessonView, setupPlayer, catchTime:"+String(catchTime))
+				print("[debug] LessonView, setupPlayer, lastPlaybackTime:"+String(scorewindData.lastPlaybackTime))
 				if showVideoLoader {
 					if scorewindData.lastPlaybackTime > 0.01 && catchTime > scorewindData.lastPlaybackTime {
 						showVideoLoader = false
@@ -334,7 +437,7 @@ struct LessonView2: View {
 					let atMeasure = findMesaureByTimestamp(videoTime: catchTime)
 					self.viewModel.valuePublisher.send(String(atMeasure))
 					//print("[debug] LessonView, setupPlayer, ready to play")
-					print("find measure:"+String(atMeasure))
+					print("[debug] LessonView, setupPlayer, find measure:"+String(atMeasure))
 				}
 				
 				
@@ -343,6 +446,13 @@ struct LessonView2: View {
 				
 			})
 		}
+		
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+			withAnimation {
+				self.showVideoLoader = true
+			}
+		}
+		
 	}
 	
 	private func switchLesson() {
@@ -503,7 +613,7 @@ struct LessonView2: View {
 		if verticalSize == .regular {
 			return VideoFrame(width: UIScreen.main.bounds.width-30, height: (UIScreen.main.bounds.width-30) * 9/16)
 		} else {
-			return VideoFrame(width: UIScreen.main.bounds.height*0.55 * 16/9, height: UIScreen.main.bounds.height*0.55)
+			return VideoFrame(width: UIScreen.main.bounds.height*0.65 * 16/9, height: UIScreen.main.bounds.height*0.65)
 		}
 	}
 	
@@ -524,7 +634,7 @@ struct LessonView2: View {
 			if verticalSize == .regular {
 				return VideoFrame(width: UIScreen.main.bounds.width-30, height: (UIScreen.main.bounds.width-30) * 9/16)
 			} else {
-				return VideoFrame(width: UIScreen.main.bounds.height*0.55 * 16/9, height: UIScreen.main.bounds.height*0.55)
+				return VideoFrame(width: UIScreen.main.bounds.height*0.65 * 16/9, height: UIScreen.main.bounds.height*0.65)
 			}
 		}
 		
