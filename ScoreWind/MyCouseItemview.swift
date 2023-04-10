@@ -37,7 +37,7 @@ struct MyCouseItemview: View {
 					.padding(EdgeInsets(top: 10, leading: 0, bottom: 33, trailing: 0))
 				}
 				.padding(.leading, 15)
-				.frame(width: UIScreen.main.bounds.size.width*0.7)
+				.frame(width: verticalSize == .regular ? UIScreen.main.bounds.size.width*0.7 : (UIScreen.main.bounds.size.width*0.7)*0.5)
 				.background(
 					RoundedCornersShape(corners: verticalSize == .regular ? [.topRight, .bottomRight] : [.allCorners], radius: 17)
 						.fill(Color("Dynamic/MainBrown"))
@@ -47,6 +47,8 @@ struct MyCouseItemview: View {
 				Spacer()
 			}
 		}
+		
+		
 		VStack(spacing: 0) {
 			HStack {
 				/*Text(scorewindData.replaceCommonHTMLNumber(htmlString: aCourse.courseTitle))
