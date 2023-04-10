@@ -175,10 +175,15 @@ struct CourseView: View {
 				}
 				.frame(width: UIScreen.main.bounds.size.width)
 				.background {
-					Image(getBlankBackgroundInstrument())
-						.resizable()
-						.scaledToFit()
-						.opacity(0.3)
+					VStack {
+						Spacer()
+						Image(getBlankBackgroundInstrument())
+							.resizable()
+							.scaledToFit()
+							.opacity(0.3)
+							.padding(30)
+					}
+					
 				}
 				
 				

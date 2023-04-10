@@ -19,122 +19,201 @@ struct MyCoursesView: View {
 	@State private var listFilterFavourite = false
 	@State private var tipContent:AnyView = AnyView(Text("Tip"))
 	@State private var userDefaults = UserDefaults.standard
+	@Environment(\.verticalSizeClass) var verticalSize
 	@Environment(\.colorScheme) var colorScheme
 	
 	var body: some View {
-		VStack {
-			Label("My Courses", systemImage: "music.note")
-				.labelStyle(.titleAndIcon)
-				.foregroundColor(Color("AppBlackDynamic"))
+		VStack(spacing:0) {
+			Label(title: {
+				Text("My Courses")
+					.font(verticalSize == .regular ? .title2 : .title3)
+					.foregroundColor(Color("Dynamic/MainBrown+6"))
+					.bold()
+			}, icon: {
+				Image(systemName: "music.note")
+			})
+			.padding(.top,5)
 			
 			//::FILTER TAGS::
-			ScrollView(.horizontal) {
-				HStack {
-					Label("Favourite", systemImage: "suit.heart")
-						.fixedSize(horizontal: true, vertical: true)
-						.labelStyle(.titleOnly)
-						.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
-						.background {
-							RoundedRectangle(cornerRadius: 20)
-								.stroke(Color("MyCourseFilterTagBorder"), lineWidth: 1)
-								.background(
-									RoundedRectangle(cornerRadius: 20)
-										.fill(Color("MyCourseItem"))
-										.opacity(listFilterFavourite ? 1 : 0)
-								)
-						}
-						.foregroundColor(Color("MyCourseItemText"))
-						.onTapGesture {
-							withAnimation {
-								listFilterFavourite.toggle()
+			if studentData.myCourses.count > 0 {
+				ScrollView(.horizontal) {
+					HStack {
+						/*Label("Favourite", systemImage: "suit.heart")
+							.fixedSize(horizontal: true, vertical: true)
+							.labelStyle(.titleOnly)
+							.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
+							.background {
+								RoundedRectangle(cornerRadius: 20)
+									.stroke(Color("MyCourseFilterTagBorder"), lineWidth: 1)
+									.background(
+										RoundedRectangle(cornerRadius: 20)
+											.fill(Color("MyCourseItem"))
+											.opacity(listFilterFavourite ? 1 : 0)
+									)
 							}
-						}
+							.foregroundColor(Color("MyCourseItemText"))
+							.onTapGesture {
+								withAnimation {
+									listFilterFavourite.toggle()
+								}
+							}*/
+						Label(title:{
+							Text("Favourite").foregroundColor(Color("Dynamic/MainBrown+6"))
+						},icon:{
+							Image(systemName: "suit.heart.fill").foregroundColor(Color("Dynamic/IconHighlighted"))
+						})
+							.fixedSize(horizontal: true, vertical: true)
+							.frame(maxHeight:20)
+							.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
+							.background(
+								RoundedRectangle(cornerRadius: CGFloat(17))
+									.foregroundColor(Color("Dynamic/MainBrown"))
+									.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+									.opacity(0.25)
+									.overlay {
+										RoundedRectangle(cornerRadius: 17)
+											.stroke(Color("Dynamic/DarkGray"), lineWidth: 1)
+									}
+							)
+							.onTapGesture {
+								withAnimation {
+									listFilterFavourite.toggle()
+								}
+							}
 						
-					Label("Downloaded", systemImage: "arrow.down.circle.fill")
-						.fixedSize(horizontal: true, vertical: true)
-						.labelStyle(.titleOnly)
-						.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
-						.background {
-							RoundedRectangle(cornerRadius: 20)
-								.stroke(Color("MyCourseFilterTagBorder"), lineWidth: 1)
-								.background(
-									RoundedRectangle(cornerRadius: 20)
-										.fill(Color("MyCourseItem"))
-										.opacity(listFilterDownloaded ? 1 : 0)
-								)
-						}
-						.foregroundColor(Color("MyCourseItemText"))
-						.onTapGesture {
-							withAnimation {
-								listFilterDownloaded.toggle()
+						Label(title:{
+							Text("Downloaded").foregroundColor(Color("Dynamic/MainBrown+6"))
+						}, icon:{
+							Image(systemName: "arrow.down.circle.fill").foregroundColor(Color("Dynamic/IconHighlighted"))
+						})
+							.fixedSize(horizontal: true, vertical: true)
+							.frame(maxHeight:20)
+							.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
+							//.foregroundColor(Color("Dynamic/IconHighlighted"))
+							.background(
+								RoundedRectangle(cornerRadius: CGFloat(17))
+									.foregroundColor(Color("Dynamic/MainBrown"))
+									.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+									.opacity(0.25)
+									.overlay {
+										RoundedRectangle(cornerRadius: 17)
+											.stroke(Color("Dynamic/DarkGray"), lineWidth: 1)
+									}
+							)
+							.onTapGesture {
+								withAnimation {
+									listFilterDownloaded.toggle()
+								}
 							}
-							
-						}
-					Spacer()
-				}.padding(EdgeInsets(top: 2, leading: 10, bottom: 10, trailing: 10))
+						
+						Spacer()
+					}
+					.padding([.leading, .trailing], 15)
+					.padding([.top,.bottom], 10)
+				}
 			}
 			
 			//::MY COURSE LIST::
-			ScrollViewReader { proxy in
-				if studentData.myCourses.count > 0 {
-					ScrollView {
-						Spacer().frame(height:10)
-						ForEach(studentData.myCourses) { aCourse in
-							if courseItemVisibility(courseID: aCourse.courseID) {
-								MyCouseItemview(selectedTab:$selectedTab ,aCourse: aCourse,downloadManager:downloadManager, studentData: studentData)
-								.id(aCourse.courseID)
-								.padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
-							}
-						}
-					}
-					.onAppear(perform: {
-						DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-							if studentData.myCourses.firstIndex(where: {$0.courseID == scorewindData.currentCourse.id}) ?? -1 > -1 {
-								print("[debug] MyCourseView, scrollView onAppear, currentCourse.id is found")
-								withAnimation {
-									proxy.scrollTo(scorewindData.currentCourse.id, anchor: .top)
+			VStack {
+				ScrollViewReader { proxy in
+					if studentData.myCourses.count > 0 {
+						ScrollView {
+							VStack(spacing:0){
+								Spacer().frame(height:10)
+								ForEach(studentData.myCourses) { aCourse in
+									if courseItemVisibility(courseID: aCourse.courseID) {
+										MyCouseItemview(selectedTab:$selectedTab ,aCourse: aCourse,downloadManager:downloadManager, studentData: studentData)
+										.id(aCourse.courseID)
+									}
 								}
+								.padding([.leading,.trailing], 15)
+								.padding([.bottom],6)
 								
+								Spacer().frame(height: 50)
 							}
 						}
-					})
-					.onReceive(downloadManager.myCourseRebuildPublisher, perform: { pushDate in
-						print("[debug] MyCourseView lessonList onRecieve, \(pushDate)")
-						studentData.updateMyCourses(allCourses: scorewindData.allCourses)
-						studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
-					})
-				} else {
-					VStack {
-						Spacer()
-						Text("Looks like you haven't added any course to favourite or watched any lesson yet.")
-							.padding(15)
-						if scorewindData.currentCourse.id > 0 {
-							Text("Look at my last viewed course and lesson now.")
-								.padding(15)
-						} else {
-							Text(studentData.wizardResult.learningPath.count == 0 ? "Ask ScoreWind for a course or a lesson now.":"See the course and the lesson ScoreWind found last time.")
-								.padding(15)
-						}
-						
-						Button(action: {
-							if scorewindData.currentCourse.id > 0 {
-								selectedTab = "TCourse"
-							} else {
-								selectedTab = "THome"
+						.onAppear(perform: {
+							DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+								if studentData.myCourses.firstIndex(where: {$0.courseID == scorewindData.currentCourse.id}) ?? -1 > -1 {
+									print("[debug] MyCourseView, scrollView onAppear, currentCourse.id is found")
+									withAnimation {
+										proxy.scrollTo(scorewindData.currentCourse.id, anchor: .top)
+									}
+									
+								}
 							}
-						}, label: {
-							Text("Start").frame(minWidth:150)
 						})
-						.foregroundColor(Color("LessonListStatusIcon"))
-						.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
-						.background {
-							RoundedRectangle(cornerRadius: 26)
-								.foregroundColor(Color("AppYellow"))
+						.onReceive(downloadManager.myCourseRebuildPublisher, perform: { pushDate in
+							print("[debug] MyCourseView lessonList onRecieve, \(pushDate)")
+							studentData.updateMyCourses(allCourses: scorewindData.allCourses)
+							studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
+						})
+					} else {
+						VStack {
+							Spacer()
+							Text("Looks like you haven't added any course to favourite or watched any lesson yet.")
+								.foregroundColor(Color("Dynamic/MainBrown+6"))
+								.padding(30)
+							/*
+							Button(action: {
+								if scorewindData.currentCourse.id > 0 {
+									selectedTab = "TCourse"
+								} else {
+									selectedTab = "THome"
+								}
+							}, label: {
+								Text("Start").frame(minWidth:150)
+							})
+							.foregroundColor(Color("LessonListStatusIcon"))
+							.padding(EdgeInsets(top: 18, leading: 26, bottom: 18, trailing: 26))
+							.background {
+								RoundedRectangle(cornerRadius: 26)
+									.foregroundColor(Color("AppYellow"))
+							}
+							*/
+							HStack {
+								Text(getExplainText())
+									.font(.headline)
+									.foregroundColor(Color("Dynamic/MainBrown+6"))
+								Spacer()
+								Label("Go now", systemImage: "arrow.right.circle.fill")
+									.labelStyle(.iconOnly)
+									.font(.title2)
+									.foregroundColor(Color("Dynamic/MainGreen")) //original is "Dynamic/MainBrown"
+							}
+							.padding(30)
+							.frame(width: verticalSize == .regular ? UIScreen.main.bounds.size.width*0.8 : UIScreen.main.bounds.size.width*0.6)
+							.background(
+								RoundedCornersShape(corners: [.topRight, .topLeft, .bottomLeft, .bottomRight], radius: 17)
+									.fill(Color("Dynamic/LightGray"))
+									.opacity(0.85)
+									.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+							)
+							.onTapGesture {
+								if scorewindData.currentCourse.id > 0 {
+									selectedTab = "TCourse"
+								} else {
+									selectedTab = "THome"
+								}
+							}
+							
+							Spacer()
 						}
-						Spacer()
+						.background {
+							VStack {
+								Spacer()
+								Image("play_any")
+									.resizable()
+									.scaledToFit()
+									.opacity(0.3)
+									.padding(30)
+							}
+							
+						}
 					}
 				}
 			}
+			
 			//Spacer()
 			Divider()
 		}
@@ -146,6 +225,18 @@ struct MyCoursesView: View {
 			print("[debug] MyCourseView, onAppear")
 			handleTip()
 		})
+	}
+	
+	private func getExplainText() -> String{
+		if scorewindData.currentCourse.id > 0 {
+			return "Look at my last viewed course and lesson now."
+		} else {
+			if studentData.wizardResult.learningPath.count == 0 {
+				return "Ask ScoreWind for a course or a lesson now."
+			} else {
+				return "See the course and the lesson ScoreWind found last time."
+			}
+		}
 	}
 	
 	private func handleTip() {

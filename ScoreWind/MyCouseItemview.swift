@@ -13,17 +13,53 @@ struct MyCouseItemview: View {
 	var aCourse:MyCourse
 	@ObservedObject var downloadManager:DownloadManager
 	@ObservedObject var studentData:StudentData
+	@Environment(\.verticalSizeClass) var verticalSize
 	
 	var body: some View {
-		VStack {
+		if aCourse.courseID == scorewindData.currentCourse.id {
 			HStack {
-				Text(scorewindData.replaceCommonHTMLNumber(htmlString: aCourse.courseTitle))
-					.font(.headline)
-					.multilineTextAlignment(.leading)
-					.foregroundColor(getColorHere(colorFor: "MyCourseItemText", courseID: aCourse.courseID))
+				HStack {
+					HStack {
+						VStack {
+							Image(getIconTitleName())
+								.resizable()
+								.scaledToFit()
+								.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+						}
+						.frame(maxHeight: 33)
+						Text("Currently")
+							.bold()
+							.foregroundColor(Color("Dynamic/DarkPurple"))
+							.font(.headline)
+							.frame(maxHeight: 33)
+						Spacer()
+					}
+					.padding(EdgeInsets(top: 10, leading: 0, bottom: 33, trailing: 0))
+				}
+				.padding(.leading, 15)
+				.frame(width: UIScreen.main.bounds.size.width*0.7)
+				.background(
+					RoundedCornersShape(corners: verticalSize == .regular ? [.topRight, .bottomRight] : [.allCorners], radius: 17)
+						.fill(Color("Dynamic/MainBrown"))
+						.opacity(0.25)
+				)
+				.offset(x: -15)
 				Spacer()
 			}
-			.padding(EdgeInsets(top: 10, leading: 15, bottom: 0, trailing: 15))
+		}
+		VStack(spacing: 0) {
+			HStack {
+				/*Text(scorewindData.replaceCommonHTMLNumber(htmlString: aCourse.courseTitle))
+					.font(.headline)
+					.multilineTextAlignment(.leading)
+					.foregroundColor(getColorHere(colorFor: "MyCourseItemText", courseID: aCourse.courseID))*/
+				Text(scorewindData.replaceCommonHTMLNumber(htmlString: aCourse.courseTitle))
+					.bold()
+					.multilineTextAlignment(.leading)
+					.foregroundColor(Color("Dynamic/MainBrown+6"))
+				Spacer()
+			}
+			.padding(EdgeInsets(top: 10, leading: 16, bottom: 0, trailing: 16))
 			
 			HStack {
 				if aCourse.completedLessons.count>0 {
@@ -35,7 +71,7 @@ struct MyCouseItemview: View {
 				if aCourse.watchedLessons.count>0 {
 					Label("\(aCourse.watchedLessons.count)", systemImage: "eye.circle.fill")
 						.labelStyle(.titleAndIcon)
-						.foregroundColor(getColorHere(colorFor: "MyCourseItemText", courseID: aCourse.courseID))
+						.foregroundColor(Color("Dynamic/MainGreen"))
 					Spacer()
 						.frame(width:20)
 				}
@@ -51,7 +87,7 @@ struct MyCouseItemview: View {
 					//print("myString \(myString)")
 					Label("Downloaded", systemImage: myString)
 						.labelStyle(.iconOnly)
-						.foregroundColor(getColorHere(colorFor: "MyCourseItemText", courseID: aCourse.courseID))
+						.foregroundColor(Color("Dynamic/MainGreen"))
 					Spacer()
 						.frame(width:20)
 				}
@@ -59,27 +95,39 @@ struct MyCouseItemview: View {
 				if aCourse.isFavourite {
 					Label("favourite", systemImage: "heart.circle.fill")
 						.labelStyle(.iconOnly)
-						.foregroundColor(getColorHere(colorFor: "MyCourseItemText", courseID: aCourse.courseID))
+						.foregroundColor(Color("Dynamic/MainGreen"))
 					Spacer()
 						.frame(width:20)
 				}
 				
 				Spacer()
 			}
-			.padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15))
+			.padding(EdgeInsets(top: 5, leading: 16, bottom: 0, trailing: 16))
+			
+			Divider()
+				.padding([.top,.bottom], 10)
 			
 			if aCourse.completedLessons.count > 0 || aCourse.watchedLessons.count > 0  || aCourse.isFavourite{
 				HStack() {
+					Label("Go to course", systemImage: "arrow.left.circle.fill")
+						.labelStyle(.iconOnly)
+					  .font(.title2)
+						.foregroundColor(Color("Dynamic/MainGreen"))
 					lastCompletedWatchedTime(courseID: aCourse.courseID)
 					Spacer()
-				}.padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 15))
+				}
+				.padding(EdgeInsets(top: 0, leading: 16, bottom: 10, trailing: 16))
 			}
 			//Text("\(aCourse.courseID):\(testDateToString(getDate:aCourse.lastUpdatedDate))")
 		}
-		.background{
-			RoundedRectangle(cornerRadius: 10)
-				.foregroundColor(getColorHere(colorFor: "MyCourseItem", courseID: aCourse.courseID))
-		}
+		.frame(minHeight: 86)
+		.background(
+			RoundedCornersShape(corners: [.topRight, .topLeft, .bottomLeft, .bottomRight], radius: 17)
+				.fill(aCourse.courseID == scorewindData.currentCourse.id ? Color("Dynamic/LightGreen") : Color("Dynamic/LightGray"))
+				.opacity(0.85)
+				.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+		)
+		.padding(.top, aCourse.courseID == scorewindData.currentCourse.id ? -33 : 0)
 		.onTapGesture(perform: {
 			scorewindData.currentCourse = scorewindData.allCourses.first(where: {$0.id == aCourse.courseID}) ?? Course()
 			scorewindData.currentView = Page.course
@@ -101,14 +149,27 @@ struct MyCouseItemview: View {
 		})
 	}
 	
+	private func getIconTitleName() -> String {
+		if scorewindData.currentCourse.instrument == InstrumentType.guitar.rawValue {
+			return "iconGuitar"
+		} else {
+			return "iconViolin"
+		}
+	}
+	
 	@ViewBuilder
 	private func courseProgressView(myCourse:MyCourse) -> some View {
 		let findCourseInAll = scorewindData.allCourses.first(where: {$0.id == myCourse.courseID}) ?? Course()
 		if findCourseInAll.id > 0 {
 			if myCourse.completedLessons.count > 0 {
-				Label("\(myCourse.completedLessons.count)/\(findCourseInAll.lessons.count) lessons", systemImage: "checkmark.circle.fill")
-					.labelStyle(.titleAndIcon)
-					.foregroundColor(myCourse.courseID == scorewindData.currentCourse.id ? Color("MyCourseItemTextHighlited") : Color("MyCourseItemText"))
+				Label(title: {
+					Text("\(myCourse.completedLessons.count)/\(findCourseInAll.lessons.count) lessons")
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+				}, icon: {
+					Image(systemName: "checkmark.circle.fill")
+						.foregroundColor(Color("Dynamic/MainGreen"))
+				})
+				.labelStyle(.titleAndIcon)
 			}
 		}
 	}
@@ -136,12 +197,14 @@ struct MyCouseItemview: View {
 		let courseLessons = scorewindData.allCourses.first(where: {$0.id == courseID})?.lessons
 		let latestUpdatedLesson = courseLessons?.first(where: {$0.scorewindID == Int(lastUpdatedItemValue[1])}) ?? Lesson()
 		
-		VStack(alignment:.leading) {
+		VStack(alignment:.leading, spacing:0) {
 			if latestUpdatedLesson.id > 0 {
 				Text("\(String(describing: scorewindData.replaceCommonHTMLNumber(htmlString: latestUpdatedLesson.title)))")
-					.foregroundColor(courseID == scorewindData.currentCourse.id ? Color("MyCourseItemTextHighlited") : Color("MyCourseItemText"))
+					.foregroundColor(courseID == scorewindData.currentCourse.id ? Color("Dynamic/MainBrown+6") : Color("Dynamic/MainBrown+6"))
 			}
-			Text("\(String(lastUpdatedItemValue[0])) \(getFriendlyDateTimeDiff(targetDateTime: dateCollections.sorted(by: {$0.key > $1.key})[0].key))").foregroundColor(courseID == scorewindData.currentCourse.id ? Color("FriednlyTimeDiffText") : .gray)
+			Text("\(String(lastUpdatedItemValue[0])) \(getFriendlyDateTimeDiff(targetDateTime: dateCollections.sorted(by: {$0.key > $1.key})[0].key))").foregroundColor(courseID == scorewindData.currentCourse.id ? Color("Dynamic/IconHighlighted") : .gray)
+				.font(.subheadline)
+				.padding(.top, 5)
 		}
 	}
 	
