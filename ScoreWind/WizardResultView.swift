@@ -435,7 +435,7 @@ struct WizardResultView: View {
 					.opacity(0.25)
 			)
 			
-			WizardResultPathView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData, showLessonView: $showLessonView)
+			WizardResultPathView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData, showLessonView: $showLessonView, showStore: $showStore)
 			
 		Spacer().frame(minHeight: 50)
 		//}

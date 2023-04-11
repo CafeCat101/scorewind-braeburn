@@ -14,6 +14,7 @@ struct WizardResultPathView: View {
 	@Binding var stepName:Page
 	@ObservedObject var studentData:StudentData
 	@Binding var showLessonView:Bool
+	@Binding var showStore: Bool
 	
 	var body: some View {
 		VStack {
@@ -227,11 +228,14 @@ struct WizardResultPathView: View {
 			scorewindData.currentLesson = theLesson
 			scorewindData.setCurrentTimestampRecs()
 			scorewindData.lastPlaybackTime = 0.0
-			self.selectedTab = "TCourse"
+			
 			if !store.purchasedSubscriptions.isEmpty || (store.purchasedSubscriptions.isEmpty && scorewindData.wizardPickedLesson.id == theLesson.id) {
+				self.selectedTab = "TCourse"
 				withAnimation(Animation.linear(duration: 0.13)) {
 					showLessonView = true
 				}
+			} else {
+				showStore = true
 			}
 			scorewindData.lessonChanged = true
 		}
