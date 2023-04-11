@@ -13,6 +13,7 @@ struct BuyItemView: View {
 	@State var isPurchased: Bool = false
 	@State var errorTitle = ""
 	@State var isShowingError: Bool = false
+	@Environment(\.verticalSizeClass) var verticalSize
 	
 	let product: Product
 	let purchasingEnabled: Bool
@@ -23,27 +24,46 @@ struct BuyItemView: View {
 	}
 	
 	var body: some View {
-		VStack {
-			HStack{
-				Text(product.displayName)
-					.font(.footnote)
-					.bold()
-				Spacer()
-			}
-			.padding(EdgeInsets(top: 10, leading: 15, bottom: 0, trailing: 15))
+		VStack{
 			HStack {
+				Spacer().frame(width: verticalSize == .regular ? 0 : UIScreen.main.bounds.size.width*0.15)
+				
 				VStack {
-					Text(product.displayPrice)
-					Divider().frame(height:2)
-					Text(getFriendlyPeriodName(product.subscription!, isIntroduction: false))
+					HStack{
+						Text(product.displayName)
+							.foregroundColor(Color("Dynamic/MainBrown+6"))
+							.font(.footnote)
+							.bold()
+						Spacer()
+					}
+					.padding(EdgeInsets(top: 10, leading: 15, bottom: 0, trailing: 15))
+					HStack {
+						VStack {
+							Text(product.displayPrice)
+							Divider().frame(height:2)
+							Text(getFriendlyPeriodName(product.subscription!, isIntroduction: false))
+						}
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+						.padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 5))
+						buyButton
+							.padding([.trailing], 15)
+					}
 				}
-				.padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 5))
-				buyButton
-					.padding([.trailing], 15)
+				
+				Spacer().frame(width: verticalSize == .regular ? 0 : UIScreen.main.bounds.size.width*0.15)
 			}
+			
 		}
-		.background(Color("MyCourseItem"))
-		.cornerRadius(15)
+		.background(
+			RoundedCornersShape(corners: [.topRight, .topLeft, .bottomLeft, .bottomRight], radius: 17)
+				.fill(Color("Dynamic/LightGray"))
+				.opacity(0.85)
+				.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+			/*RoundedRectangle(cornerRadius: CGFloat(17))
+				.foregroundColor(Color("Dynamic/LightGray"))
+				.opacity(0.85)
+				.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))*/
+		)
 		.alert(isPresented: $isShowingError, content: {
 				Alert(title: Text(errorTitle), message: nil, dismissButton: .default(Text("Okay")))
 		})
@@ -58,18 +78,23 @@ struct BuyItemView: View {
 			if isPurchased {
 				Text(Image(systemName: "checkmark"))
 					.bold()
-					.foregroundColor(.white)
+					.foregroundColor(Color("Dynamic/ShadowReverse"))
 			} else {
 				Text("SUBSCRIBE\nIT")
+					.foregroundColor(Color("Dynamic/MainBrown+6"))
 			}
 		}
-		//.frame(width:UIScreen.main.bounds.size.width*0.3)
-		.foregroundColor(Color("LessonListStatusIcon"))
 		.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
-		.background {
-			RoundedRectangle(cornerRadius: 20)
-				.foregroundColor(isPurchased ? .green : Color("AppYellow"))
-		}
+		.background(
+			RoundedRectangle(cornerRadius: CGFloat(17))
+				.foregroundColor(Color("Dynamic/MainBrown"))
+				.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+				.opacity(isPurchased ? 0.85 : 0.25)
+				.overlay {
+					RoundedRectangle(cornerRadius: 17)
+						.stroke(Color("Dynamic/DarkGray"), lineWidth: 1)
+				}
+		)
 		.disabled(isPurchased)
 		.onAppear {
 			Task {

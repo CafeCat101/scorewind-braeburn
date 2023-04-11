@@ -9,6 +9,8 @@ struct StatusInfoView: View {
 
 		var body: some View {
 				Text(statusDescription())
+				.bold()
+				.foregroundColor(Color("Dynamic/MainBrown+6"))
 				.multilineTextAlignment(.center)
 				.frame(maxWidth: .infinity, alignment: .center)
 		}
