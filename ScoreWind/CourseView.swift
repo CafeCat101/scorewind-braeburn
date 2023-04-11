@@ -77,6 +77,38 @@ struct CourseView: View {
 									VStack(spacing:0) {
 										Spacer().frame(height: 10)
 										ForEach(scorewindData.currentCourse.lessons){ lesson in
+											if scorewindData.currentLesson.scorewindID == lesson.scorewindID {
+												HStack {
+													HStack {
+														HStack {
+															VStack {
+																Image(getIconTitleName())
+																	.resizable()
+																	.scaledToFit()
+																	.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+															}
+															.frame(maxHeight: 33)
+															Text("Currently")
+																.bold()
+																.foregroundColor(Color("Dynamic/DarkPurple"))
+																.font(.headline)
+																.frame(maxHeight: 33)
+															Spacer()
+														}
+														.padding(EdgeInsets(top: 10, leading: 0, bottom: 33, trailing: 0))
+													}
+													.padding(.leading, 15)
+													.frame(width: verticalSize == .regular ? UIScreen.main.bounds.size.width*0.7 : (UIScreen.main.bounds.size.width*0.7)*0.5)
+													.background(
+														RoundedCornersShape(corners: verticalSize == .regular ? [.topRight, .bottomRight] : [.allCorners], radius: 17)
+															.fill(Color("Dynamic/MainBrown"))
+															.opacity(0.25)
+													)
+													.offset(x: -15)
+													Spacer()
+												}
+												.id(lesson.scorewindID)
+											}
 											CourseLessonListItemView(
 												selectedTab: $selectedTab,
 												lesson: lesson,
@@ -85,6 +117,7 @@ struct CourseView: View {
 												showLessonView: $showLessonView,
 												showStoreView: $showStore)
 											.id(lesson.scorewindID)
+											.padding(.top, scorewindData.currentLesson.scorewindID == lesson.scorewindID ? -33 : 0)
 										}
 										.padding([.leading,.trailing], 15)
 										.padding([.bottom],6)
@@ -111,11 +144,10 @@ struct CourseView: View {
 								}
 								.onAppear(perform: {
 									print("[debug] CourseView, lesson List-onAppear")
-									DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+									DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 										withAnimation {
 											proxy.scrollTo(scorewindData.currentLesson.scorewindID, anchor: .top)
 										}
-										
 									}
 								})
 								.coordinateSpace(name: "scroll")
@@ -615,6 +647,14 @@ struct CourseView: View {
 			Spacer()
 		}
 		.padding(EdgeInsets(top: 8, leading: 15, bottom: 8, trailing: 15))
+	}
+	
+	private func getIconTitleName() -> String {
+		if scorewindData.currentCourse.instrument == InstrumentType.guitar.rawValue {
+			return "iconGuitar"
+		} else {
+			return "iconViolin"
+		}
 	}
 	
 	struct CourseOverViewView: View {
