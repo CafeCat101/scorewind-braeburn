@@ -14,6 +14,7 @@ struct BuyItemView: View {
 	@State var errorTitle = ""
 	@State var isShowingError: Bool = false
 	@Environment(\.verticalSizeClass) var verticalSize
+	@State private var showPurchaseWaiting = false
 	
 	let product: Product
 	let purchasingEnabled: Bool
@@ -47,7 +48,7 @@ struct BuyItemView: View {
 						.padding(EdgeInsets(top: 0, leading: 15, bottom: 10, trailing: 5))
 						buyButton
 							.padding([.trailing], 15)
-					}
+					}.padding(.bottom, 5)
 				}
 				
 				Spacer().frame(width: verticalSize == .regular ? 0 : UIScreen.main.bounds.size.width*0.15)
@@ -71,6 +72,7 @@ struct BuyItemView: View {
 	
 	var buyButton: some View {
 		Button(action: {
+			showPurchaseWaiting = true
 			Task {
 				await buy()
 			}
@@ -80,8 +82,12 @@ struct BuyItemView: View {
 					.bold()
 					.foregroundColor(Color("Dynamic/ShadowReverse"))
 			} else {
-				Text("SUBSCRIBE\nIT")
-					.foregroundColor(Color("Dynamic/MainBrown+6"))
+				if showPurchaseWaiting == false {
+					Text("SUBSCRIBE\nIT")
+						.foregroundColor(Color("Dynamic/StoreViewTitle"))
+				} else {
+					DownloadSpinnerView(iconColor: Color("Dynamic/MainBrown+6"), spinnerColor: Color("Dynamic/IconHighlighted"), iconSystemImage: "music.note")
+				}
 			}
 		}
 		.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
@@ -101,6 +107,9 @@ struct BuyItemView: View {
 				isPurchased = (try? await store.isPurchased(product)) ?? false
 			}
 		}
+		.onDisappear(perform: {
+			showPurchaseWaiting = false
+		})
 	}
 	
 	private func getFriendlyPeriodName(_ subscription: Product.SubscriptionInfo, isIntroduction: Bool) -> String {
@@ -152,16 +161,19 @@ struct BuyItemView: View {
 				print("[debug] BuyItemView, buy, store.purchase(product) != ni")
 				withAnimation {
 					isPurchased = true
+					showPurchaseWaiting = false
 				}
 			}
 		} catch StoreError.failedVerification {
 			print("[debug] BuyItemView, buy, StoreError.failedVerification")
 			errorTitle = "Your purchase could not be verified by the App Store."
 			isShowingError = true
+			showPurchaseWaiting = false
 		} catch {
 			print("Failed purchase for \(product.id): \(error)")
 			isShowingError = true
 			errorTitle = error.localizedDescription
+			showPurchaseWaiting = false
 		}
 	}
 }

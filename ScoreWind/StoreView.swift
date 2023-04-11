@@ -17,6 +17,7 @@ struct StoreView: View {
 	@State var status: Product.SubscriptionInfo.Status?
 	@Environment(\.verticalSizeClass) var verticalSize
 	@Environment(\.colorScheme) var colorScheme
+	@State private var showResotreWaiting = 0
 	
 	var availableSubscriptions: [Product] {
 		store.subscriptions.filter { $0.id != currentSubscription?.id }
@@ -46,41 +47,52 @@ struct StoreView: View {
 			//Text("This is the place where you subscribe scorewind")
 			ScrollView(.vertical) {
 				VStack(alignment: .leading, spacing:0) {
-					Label(title: {
-						Text("Unlock all lessons in the learning path and the courses.")
-					}, icon: {
-						Image(systemName: "circle.fill")
-							.resizable()
-							.frame(width:6, height:6)
-					}).padding(.bottom, 5)
-					
-					Label(title: {
-						Text("Access to all the features in the courses and the lessons")
-					}, icon: {
-						Image(systemName: "circle.fill")
-							.resizable()
-							.frame(width:6, height:6)
-					}).padding(.bottom, 5)
-					
-					Label(title: {
-						Text("1 month free trial.")
-					}, icon: {
-						Image(systemName: "circle.fill")
-							.resizable()
-							.frame(width:6, height:6)
-					}).padding(.bottom, 5)
-					/*Label("Unlock all lessons in the learning path and the courses.", systemImage: "circle.fill")
-					Label("Access to all the features in the courses and the lessons", systemImage: "circle.fill")
-					Label("1 month free trial.", systemImage: "circle.fill")*/
+					VStack(alignment: .leading, spacing:0) {
+						Label(title: {
+							Text("Unlock all lessons in the learning path and the courses.")
+						}, icon: {
+							Image(systemName: "circle.fill")
+								.resizable()
+								.frame(width:6, height:6)
+						}).padding(.bottom, 5)
+						
+						Label(title: {
+							Text("Access to all the features in the courses and the lessons.")
+						}, icon: {
+							Image(systemName: "circle.fill")
+								.resizable()
+								.frame(width:6, height:6)
+						}).padding(.bottom, 5)
+						
+						Label(title: {
+							Text("1 month free trial.")
+						}, icon: {
+							Image(systemName: "circle.fill")
+								.resizable()
+								.frame(width:6, height:6)
+						}).padding(.bottom, 5)
+						/*Label("Unlock all lessons in the learning path and the courses.", systemImage: "circle.fill")
+						Label("Access to all the features in the courses and the lessons", systemImage: "circle.fill")
+						Label("1 month free trial.", systemImage: "circle.fill")*/
+					}.padding(20)
 				}
 				.foregroundColor(Color("Dynamic/MainBrown+6"))
+				.background(
+					RoundedRectangle(cornerRadius: CGFloat(17))
+						.foregroundColor(Color("testColor2"))
+						.opacity(0.25)
+						.shadow(color: Color("Dynamic/ShadowReverse"),radius: CGFloat(5))
+				)
 				.padding([.leading,.trailing], 15)
+				.padding(.bottom, 15)
+				
 				
 				if let currentSubscription = currentSubscription {
 					Divider()
 					HStack {
 						Text("My Current Subscription")
 							.font(.title2)
+							.foregroundColor(Color("Dynamic/StoreViewTitle"))
 						Spacer()
 					}.padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
 					
@@ -101,7 +113,7 @@ struct StoreView: View {
 					}
 					.background(
 						RoundedRectangle(cornerRadius: CGFloat(17))
-							.foregroundColor(Color("Dynamic/LightGray"))
+							.foregroundColor(Color("testColor2"))
 							.opacity(0.20)
 							.shadow(color: Color("Dynamic/ShadowReverse"),radius: CGFloat(5))
 							.overlay(content: {
@@ -120,7 +132,7 @@ struct StoreView: View {
 					HStack {
 						Text("Available Subscription")
 							.font(.title2)
-							.foregroundColor(Color("Dynamic/MainBrown+6"))
+							.foregroundColor(Color("Dynamic/StoreViewTitle"))
 						Spacer()
 					}.padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
 					
@@ -136,7 +148,7 @@ struct StoreView: View {
 				}
 				
 				TabView {
-					infoTabAbout.padding(15)
+					//infoTabAbout.padding(15)
 					infoTabPurchased.padding(15)
 					infoTaCancel.padding(15)
 				}
@@ -150,13 +162,35 @@ struct StoreView: View {
 				.frame(height: verticalSize == .regular ? UIScreen.main.bounds.size.height*0.5 : UIScreen.main.bounds.size.height*0.8)
 				
 				Button(action: {
+					showResotreWaiting = 1
 					Task {
-							//This call displays a system prompt that asks users to authenticate with their App Store credentials.
-							//Call this function only in response to an explicit user action, such as tapping a button.
-							try? await AppStore.sync()
+						//This call displays a system prompt that asks users to authenticate with their App Store credentials.
+						//Call this function only in response to an explicit user action, such as tapping a button.
+						try? await AppStore.sync()
+						
+						Task {
+							await updateSubscriptionStatus()
+							//showResotreWaiting = 2
+							DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+								showResotreWaiting = 0
+							}
+						}
 					}
 				}) {
-					Text("Restore Subscription")
+					HStack {
+						Spacer()
+						Text("Restore Subscription")
+						if showResotreWaiting > 0 {
+							if showResotreWaiting == 1 {
+								DownloadSpinnerView(iconColor: Color("Dynamic/MainBrown+6"), spinnerColor: Color("Dynamic/IconHighlighted"), iconSystemImage: "music.note")
+							} else {
+								Label("Restored", systemImage: "checkmark")
+									.labelStyle(.iconOnly)
+									.foregroundColor(Color("Dynamic/MainBrown+6"))
+							}
+						}
+						Spacer()
+					}
 				}
 				.foregroundColor(Color("Dynamic/MainBrown+6"))
 				.frame(width:UIScreen.main.bounds.size.width*0.8)
@@ -171,10 +205,12 @@ struct StoreView: View {
 								.stroke(Color("Dynamic/DarkGray"), lineWidth: 1)
 						}
 				)
+				.padding(.bottom, 50)
 			}
 		}
 		.background(colorScheme == .light ? appBackgroundImage(colorMode: colorScheme) : appBackgroundImage(colorMode: colorScheme))
 		.onAppear {
+			showResotreWaiting = 0
 			Task {
 				//When this view appears, get the latest subscription status.
 				await updateSubscriptionStatus()
@@ -270,17 +306,18 @@ struct StoreView: View {
 	
 	var infoTabAbout: some View {
 		VStack {
-			Text("After you subscribe...")
+			Text("Subscription Content")
 				.font(.title2)
 				.padding([.bottom],10)
-			Text("When you configure ScoreWind to build a learning path, you'll unlock all the lessons inside it, not just the starting lesson in the learning path.\n\nBesides using synchornized interactive score viewer, with subscription, you'll also have access to feature of offline course and tracking completed lessons.")
+			Text("Access to all the lessons in the learning path.\nDownload course video for offline viewing.\nMark lessons as completed.\n")
 		}.foregroundColor(Color("Dynamic/MainBrown+6"))
 	}
 	
 	var infoTabPurchased: some View {
 		VStack {
-			Text("See your subscription")
+			Text("See Your Subscription")
 				.font(.title2)
+				.foregroundColor(Color("Dynamic/StoreViewTitle"))
 				.padding([.bottom],10)
 			Text("When you want to view your subscription status, go to \(Image(systemName: "music.note.house")) Home tab, and open the \(Image(systemName: "gear")) menu on the top right corner.")
 		}
@@ -289,8 +326,9 @@ struct StoreView: View {
 	
 	var infoTaCancel: some View {
 		VStack {
-			Text("Cancel subscription")
+			Text("Cancel Subscription")
 				.font(.title2)
+				.foregroundColor(Color("Dynamic/StoreViewTitle"))
 				.padding([.bottom], 10)
 			VStack(alignment:.leading) {
 				Label("Open the Settings app on your phone.", systemImage: "number.circle.fill")
@@ -312,6 +350,9 @@ struct StoreView: View {
 struct StoreView_Previews: PreviewProvider {
 	static var previews: some View {
 		StoreView(showStore:.constant(false)).environmentObject(Store())
+		StoreView(showStore:.constant(false)).environmentObject(Store())
+			.environment(\.colorScheme, .dark)
+			.previewDisplayName("dark")
 		StoreView(showStore:.constant(false)).environmentObject(Store())
 			.previewInterfaceOrientation(InterfaceOrientation.landscapeLeft)
 			.previewDisplayName("Light LandscapeLeft")
