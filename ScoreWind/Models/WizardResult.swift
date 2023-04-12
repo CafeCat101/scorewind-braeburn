@@ -16,14 +16,16 @@ struct WizardResult: Codable {
 	var learningPathTitle: String
 	var learningPathExplaination: String
 	var learningPath:[WizardLearningPathItem]
+	var resultExperience: String
 	
 	init() {
 		id = UUID()
 		resultTitle = "Discovered a Lesson!"
-		resultExplaination = "You've completed the configuration. ScoreWind found a lesson for you."
+		resultExplaination = "You've completed the configuration. Checkout out the next lesson to learn."
 		learningPathTitle = "Your Learning Path"
 		learningPathExplaination = "These are some lessons that await for you to complete them."
 		learningPath = []
+		resultExperience = ExperienceFeedback.starterKit.rawValue
 	}
 	
 	

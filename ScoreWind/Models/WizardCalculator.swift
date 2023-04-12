@@ -224,7 +224,7 @@ extension ScorewindData {
 					assignedLessonId = useCourse.lessons[0].id
 				}
 			}
-			explainResult = "This lesson is forgotten. Let's check it out!"
+			explainResult = "This lesson may be missed. Let's check it out!"
 			goToWizardStep = .wizardResult
 		}
 		
@@ -412,6 +412,7 @@ extension ScorewindData {
 			
 			studentData.wizardResult.resultExplaination = explainResult
 			studentData.wizardResult.learningPathExplaination = "Start here and into the near future. These are lessons that await for you to explore them."
+			studentData.wizardResult.resultExperience = studentData.getExperience()
 		}
 	}
 	

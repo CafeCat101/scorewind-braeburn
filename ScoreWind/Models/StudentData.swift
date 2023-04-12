@@ -394,6 +394,7 @@ class StudentData: ObservableObject {
 				wizardResult.learningPathTitle = result.learningPathTitle
 				wizardResult.learningPathExplaination = result.learningPathExplaination
 				wizardResult.learningPath = result.learningPath
+				wizardResult.resultExperience = result.resultExperience
 				return wizardResult
 			} catch {
 				wizardResult = WizardResult()

@@ -118,7 +118,7 @@ struct WizardResultPathView: View {
 						HStack {
 							Spacer()
 							VStack {
-								Image(getIconTitleName())
+								Image("resultFound")
 									.resizable()
 									.scaledToFit()
 									.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
