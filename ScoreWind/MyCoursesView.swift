@@ -283,21 +283,43 @@ struct MyCoursesView: View {
 	
 	@ViewBuilder
 	private func tipHere() -> some View {
-		VStack {
-			Text("You'll find all of your favorite courses, lessons you've watched, and lessons you've finished here.")
-				.font(.headline)
-				.modifier(StepExplainingText())
-			VStack(alignment:.leading) {
-				Text("Meanwhile, you can also use \"Downloaded\" filter tag to access the offline courses quickly.")
-					.modifier(TipExplainingParagraph())
-				Text("Enjoy!")
-					.modifier(TipExplainingParagraph())
-			}.padding([.bottom],18)
-			
-		}.background {
-			RoundedRectangle(cornerRadius: 26)
-				.foregroundColor(Color("AppYellow"))
-			.frame(width: UIScreen.main.bounds.width*0.9)}
+		VStack (spacing: 0) {
+			VStack(spacing:0) {
+				ScrollView {
+					VStack(alignment: .leading) {
+						HStack {
+							Spacer()
+							Label("My Courses", systemImage: "music.note.list")
+								.labelStyle(.iconOnly)
+								.font(.title)
+								.padding(.bottom, 5)
+							Spacer()
+						}
+						HStack {
+							Spacer()
+							Text("You'll find all your faourite or downloaded courses here.")
+							.font(.headline)
+							.padding(.bottom, 15)
+							.multilineTextAlignment(.center)
+							Spacer()
+						}
+
+						Divider().padding(.bottom, 20)
+						(Text("This list offers you an overview of how many lessons in a course you've ")+Text(Image(systemName: "eye.circle.fill"))+Text(" watched or ")+Text(Image(systemName: "checkmark.circle.fill"))+Text(" completed.")).padding(.bottom, 15)
+						(Text("In the list, you can also ")+Text(Image(systemName: "arrow.left.circle.fill"))+Text(" revisit your last watched or completed lesson in a course for a quick brushup.")).padding(.bottom, 15)
+					}
+					.foregroundColor(Color("MainBrown+6"))
+					.padding(EdgeInsets(top: 18, leading: 40, bottom: 18, trailing: 40))
+				}
+			}
+			.background(
+				RoundedRectangle(cornerRadius: CGFloat(10))
+					.foregroundColor(Color("AppYellow"))
+					.shadow(color: Color("Dynamic/ShadowLight"),radius: CGFloat(7))
+					.opacity(0.90)
+			)
+			.padding([.leading,.trailing],15)
+		}
 	}
 	
 	private func courseItemVisibility(courseID: Int) -> Bool {
