@@ -159,20 +159,59 @@ struct WizardResultView: View {
 	
 	@ViewBuilder
 	private func tipHere() -> some View {
-		VStack {
-			Text("The place to discover new lessons!")
-				.font(.headline)
-				.modifier(StepExplainingText())
-			VStack(alignment:.leading) {
-				Text("You can always ask ScoreWind again by click the \(Image(systemName: "goforward")) button in the top left corner.")
-					.modifier(TipExplainingParagraph())
-				Text("Your last learning path ScoreWind found will be saved here, you can revisit it whenever you like.")
-					.modifier(TipExplainingParagraph())
-			}.padding([.bottom], 18)
-		}.background {
-			RoundedRectangle(cornerRadius: 26)
-				.foregroundColor(Color("AppYellow"))
-			.frame(width: UIScreen.main.bounds.width*0.9)}
+		VStack(spacing: 0) {
+			HStack(spacing:0) {
+				Label("tip", systemImage: "lightbulb")
+					.labelStyle(.iconOnly)
+					.font(.title2)
+					.foregroundColor(Color("MainBrown+6"))
+					.shadow(color: Color("Dynamic/ShadowReverse"),radius: CGFloat(10))
+					.padding(EdgeInsets(top: 8, leading: 15, bottom: 4, trailing: 15))
+					.background(
+						RoundedCornersShape(corners: verticalSize == .regular ? [.topLeft, .topRight] : [.allCorners], radius: 10)
+							.fill(Color("AppYellow"))
+							.opacity(0.90)
+					)
+				Spacer()
+			}.padding(.leading, 28)
+			
+			VStack(spacing:0) {
+				ScrollView {
+					VStack(alignment: .leading) {
+						HStack {
+							Spacer()
+							Label("Home", systemImage: "music.note.house.fill")
+								.labelStyle(.iconOnly)
+								.font(.title)
+								.padding(.bottom, 5)
+							Spacer()
+						}
+						HStack {
+							Spacer()
+							Text("The place to discover new lessons!")
+							.font(.headline)
+							.padding(.bottom, 15)
+							.multilineTextAlignment(.center)
+							Spacer()
+						}
+						
+						
+						Divider().padding(.bottom, 20)
+						Text("Reset and configure a new Learning Path by click the \(Image(systemName: "goforward")) button in the top left corner.").padding(.bottom, 15)
+						Text("You can revisit your current learning path here whenever you like.").padding(.bottom, 15)
+					}
+					.foregroundColor(Color("MainBrown+6"))
+					.padding(EdgeInsets(top: 18, leading: 40, bottom: 18, trailing: 40))
+				}
+			}
+			.background(
+				RoundedRectangle(cornerRadius: CGFloat(10))
+					.foregroundColor(Color("AppYellow"))
+					.shadow(color: Color("Dynamic/ShadowLight"),radius: CGFloat(7))
+					.opacity(0.90)
+			)
+			.padding([.leading,.trailing],15)
+		}
 	}
 	
 	@ViewBuilder

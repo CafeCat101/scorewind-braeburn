@@ -284,13 +284,28 @@ struct WizardExperienceView: View {
 	
 	@ViewBuilder
 	private func tipHere(choise: ExperienceFeedback) -> some View {
-		VStack {
-			Label("tip", systemImage: "lightbulb")
+		VStack(spacing:0) {
+			/*Label("tip", systemImage: "lightbulb")
 				.labelStyle(.iconOnly)
 				.font(.largeTitle)
 				.foregroundColor(Color("AppYellow"))
 				.shadow(color: Color("Dynamic/ShadowReverse"),radius: CGFloat(10))
-				.padding(.bottom, 15)
+				.padding(.bottom, 15)*/
+			
+			HStack(spacing:0) {
+				Label("tip", systemImage: "lightbulb")
+					.labelStyle(.iconOnly)
+					.font(.title2)
+					.foregroundColor(Color("MainBrown+6"))
+					.shadow(color: Color("Dynamic/ShadowReverse"),radius: CGFloat(10))
+					.padding(EdgeInsets(top: 8, leading: 15, bottom: 4, trailing: 15))
+					.background(
+						RoundedCornersShape(corners: verticalSize == .regular ? [.topLeft, .topRight] : [.allCorners], radius: 10)
+							.fill(Color("AppYellow"))
+							.opacity(0.90)
+					)
+				Spacer()
+			}.padding(.leading, 28)
 			
 			VStack(spacing:0) {
 				ScrollView {
