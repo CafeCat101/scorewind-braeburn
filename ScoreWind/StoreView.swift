@@ -79,7 +79,7 @@ struct StoreView: View {
 				.foregroundColor(Color("Dynamic/MainBrown+6"))
 				.background(
 					RoundedRectangle(cornerRadius: CGFloat(17))
-						.foregroundColor(Color("testColor2"))
+						.foregroundColor(Color("Dynamic/StoreViewTextBackground"))
 						.opacity(0.25)
 						.shadow(color: Color("Dynamic/ShadowReverse"),radius: CGFloat(5))
 				)
@@ -113,7 +113,7 @@ struct StoreView: View {
 					}
 					.background(
 						RoundedRectangle(cornerRadius: CGFloat(17))
-							.foregroundColor(Color("testColor2"))
+							.foregroundColor(Color("Dynamic/StoreViewTextBackground"))
 							.opacity(0.20)
 							.shadow(color: Color("Dynamic/ShadowReverse"),radius: CGFloat(5))
 							.overlay(content: {

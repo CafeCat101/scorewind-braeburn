@@ -30,7 +30,7 @@ struct MyCoursesView: View {
 					.foregroundColor(Color("Dynamic/MainBrown+6"))
 					.bold()
 			}, icon: {
-				Image(systemName: "music.note")
+				Image(systemName: "music.note.list")
 			})
 			.padding(.top,5)
 			

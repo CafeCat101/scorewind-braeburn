@@ -228,7 +228,7 @@ struct WizardView: View {
 struct StepExplainingText: ViewModifier {
 	func body(content: Content) -> some View {
 		content
-			.foregroundColor(Color("LessonListStatusIcon"))
+			.foregroundColor(Color("Dynamic/MainBrown+6"))
 			.padding(EdgeInsets(top: 18, leading: 40, bottom: 18, trailing: 40))
 	}
 }

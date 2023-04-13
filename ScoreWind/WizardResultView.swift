@@ -102,16 +102,20 @@ struct WizardResultView: View {
 	
 	private func handleTip() {
 		let hideTips:[String] = userDefaults.object(forKey: "hideTips") as? [String] ?? []
+		print("[debug] WizardResultView hidetips \(hideTips)")
 		if hideTips.contains(Tip.wizardResult.rawValue) == false {
 			tipContent = AnyView(TipContentMakerView(showStepTip: $showStepTip, hideTipValue: Tip.wizardResult.rawValue, tipMainContent: AnyView(tipHere())))
-			if studentData.getExperience() == ExperienceFeedback.starterKit.rawValue {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+				showStepTip = true
+			}
+			/*if studentData.getExperience() == ExperienceFeedback.starterKit.rawValue {
 				//:: delay tip a little because starterkit doesn't have steps
 				DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
 					showStepTip = true
 				}
 			} else {
 				showStepTip = true
-			}
+			}*/
 		}
 	}
 	
@@ -180,7 +184,7 @@ struct WizardResultView: View {
 					.scaledToFit()
 					.shadow(color: uiColor == .light ? Color("Dynamic/ShadowReverse") : Color("Dynamic/ShadowReverse"), radius: CGFloat(10))
 					.overlay(alignment: .bottomTrailing, content: {
-						Text(findTitleByTypeValue(typeValue:studentData.wizardResult.resultExperience))
+						Text(findTitleByTypeValue(typeValue:studentData.wizardResult.resultExperience).uppercased())
 							.font(.subheadline)
 							.fixedSize()
 							.padding(EdgeInsets(top: 2, leading: 15, bottom: 2, trailing: 15))

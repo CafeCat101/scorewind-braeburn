@@ -171,10 +171,7 @@ struct CourseView: View {
 						.foregroundColor(Color("Dynamic/MainBrown+6"))
 						.bold()
 				}, icon: {
-					Image("logo")
-					.resizable()
-					.scaledToFit()
-					.frame(maxHeight: 30)
+					Image(systemName: "note.text")
 				})
 				.padding(.top,5)
 				
@@ -182,6 +179,9 @@ struct CourseView: View {
 				
 				VStack {
 					Spacer()
+					Text("Looks like you haven't started any course yet.")
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+						.padding(30)
 					HStack {
 						Text(studentData.wizardResult.learningPath.count == 0 ? "Ask ScoreWind for a course or a lesson now.":"See the course and the lesson ScoreWind found last time.")
 							.font(.headline)

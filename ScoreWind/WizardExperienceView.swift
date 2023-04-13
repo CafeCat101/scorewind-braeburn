@@ -119,7 +119,7 @@ struct WizardExperienceView: View {
 			print("[debug] WizardExperienceView.onAppear, userDefaults hideTips \(userDefaults.object(forKey: "hideTips") as? [String] ?? [])")
 		})
 		.fullScreenCover(isPresented: $showStepTip, onDismiss: {
-			goToNextStep()
+			//goToNextStep()
 		}, content: {
 			TipTransparentModalView(showStepTip: $showStepTip, tipContent: $tipContent)
 		})
@@ -177,7 +177,19 @@ struct WizardExperienceView: View {
 										
 								}
 								Spacer()
-							}.padding(EdgeInsets(top: 30, leading: 15, bottom: 30, trailing: 15))
+							}
+							.padding(EdgeInsets(top: 30, leading: 15, bottom: 30, trailing: 15))
+							.overlay(alignment:.topTrailing ,content: {
+								Label("help", systemImage: "questionmark.circle.fill")
+									.font(.headline)
+									.labelStyle(.iconOnly)
+									.foregroundColor(Color("Dynamic/MainBrown+6"))
+									.padding([.top,.trailing], 10)
+									.onTapGesture {
+										tipContent = AnyView(TipContentMakerView(showStepTip: $showStepTip, hideTipValue: Tip.wizardExperience.rawValue, tipMainContent: AnyView(tipHere(choise: experience)), allowHideForever: true))
+										showStepTip = true
+									}
+							})
 						}
 						.background(
 							RoundedCornersShape(corners: [.bottomLeft, .bottomRight], radius: 28)
@@ -214,7 +226,18 @@ struct WizardExperienceView: View {
 										.multilineTextAlignment(.center)
 									Spacer()
 								}
-								
+								.overlay(alignment:.topTrailing ,content: {
+									Label("help", systemImage: "questionmark.circle.fill")
+										.font(.headline)
+										.labelStyle(.iconOnly)
+										.foregroundColor(Color("Dynamic/MainBrown+6"))
+										.padding(.top, 15)
+										.padding(.trailing, 20)
+										.onTapGesture {
+											tipContent = AnyView(TipContentMakerView(showStepTip: $showStepTip, hideTipValue: Tip.wizardExperience.rawValue, tipMainContent: AnyView(tipHere(choise: experience)), allowHideForever: true))
+											showStepTip = true
+										}
+								})
 							}
 							.background(
 								RoundedCornersShape(corners: [.bottomRight, .topRight], radius: 28)
@@ -248,37 +271,68 @@ struct WizardExperienceView: View {
 	
 	private func gotFeedback(selectedFeedback: ExperienceFeedback) {
 		studentData.updateExperience(experience: selectedFeedback)
-		
-		let hideTips:[String] = userDefaults.object(forKey: "hideTips") as? [String] ?? []
+		goToNextStep()
+		//:: use Help icon to see the tip here instead
+		/*let hideTips:[String] = userDefaults.object(forKey: "hideTips") as? [String] ?? []
 		if hideTips.contains(Tip.wizardExperience.rawValue) == false {
 			tipContent = AnyView(TipContentMakerView(showStepTip: $showStepTip, hideTipValue: Tip.wizardExperience.rawValue, tipMainContent: AnyView(tipHere(choise: selectedFeedback))))
 			showStepTip = true
 		} else {
 			goToNextStep()
-		}
+		}*/
 	}
 	
 	@ViewBuilder
 	private func tipHere(choise: ExperienceFeedback) -> some View {
 		VStack {
-			Text("\(choise.getLabel())")
-			.font(.headline)
-			.modifier(StepExplainingText())
+			Label("tip", systemImage: "lightbulb")
+				.labelStyle(.iconOnly)
+				.font(.largeTitle)
+				.foregroundColor(Color("AppYellow"))
+				.shadow(color: Color("Dynamic/ShadowReverse"),radius: CGFloat(10))
+				.padding(.bottom, 15)
 			
-			if choise == ExperienceFeedback.continueLearning {
-				Text("One step at a time, and you are learning well.\n\nHowever, sometimes you are just wondering what's ahead of you. Maybe you want to take on some challenges.\n\nThere is no time to hesitate. Let's go!")
-					.modifier(StepExplainingText())
-			} else if choise == ExperienceFeedback.experienced {
-				Text("You are skillfull. You can navigate new pieces faster.\n\nThis step will take you to explore over 400 pieces organized by different techniques in our repositories. Enjoy!")
-					.modifier(StepExplainingText())
-			} else {
-				Text("Scorewind has over 1000 lessons organized by their difficulties. This step will show you the lessons yet completed ahead of you.")
-					.modifier(StepExplainingText())
+			VStack(spacing:0) {
+				ScrollView {
+					VStack(alignment: .leading) {
+						Text("\(choise.getLabel())")
+						.font(.headline)
+						.padding(.bottom, 15)
+						
+						if choise == ExperienceFeedback.continueLearning {
+							Text("From courses designed with a step-by-step learning style, ScoreWind will show you the next 10 uncompleted lessons based on your feedbacks and lessons you've completed.")
+							Divider().padding([.top,.bottom], 20)
+							Text("Maybe you wonder what the challenges are out there. There is no time to hesitate. Let's go!")
+						} else if choise == ExperienceFeedback.experienced {
+							Text("According to your answers and completed lessons, ScoreWind will show you the next 10 uncompleted lessons from the courses designed with a fast-paced learning style.")
+							Divider().padding([.top,.bottom], 20)
+							Text("You are skillfull. You can navigate new pieces faster.\n\nCome and explore over 400 pieces organized by different techniques in our repositories. Enjoy!")
+						} else {
+							Text("Ask ScoreWind to show you the next 10 uncompleted lessons.")
+							Divider().padding([.top,.bottom], 20)
+							Text("Scorewind has over 1000 lessons organized by their difficulties. This step will show you the lessons yet completed ahead of you.")
+						}
+					}
+					.foregroundColor(Color("MainBrown+6"))
+					.padding(EdgeInsets(top: 18, leading: 40, bottom: 18, trailing: 40))
+					
+				}
 			}
-		}.background {
+			.background(
+				RoundedRectangle(cornerRadius: CGFloat(10))
+					.foregroundColor(Color("AppYellow"))
+					.shadow(color: Color("Dynamic/ShadowLight"),radius: CGFloat(7))
+					.opacity(0.90)
+			)
+			.padding([.leading,.trailing],15)
+		}
+		
+		
+		/*.background {
 			RoundedRectangle(cornerRadius: 26)
 				.foregroundColor(Color("AppYellow"))
-			.frame(width: UIScreen.main.bounds.size.width*0.9)}
+			.frame(width: UIScreen.main.bounds.size.width*0.9)
+		}*/
 	}
 
 }
