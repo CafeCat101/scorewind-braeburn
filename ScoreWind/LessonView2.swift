@@ -497,7 +497,7 @@ struct LessonView2: View {
 				}
 				scorewindData.showLessonTextOverlay = true
 			}){
-				Label("About the Lesson", systemImage: "info.circle")
+				Label("About the Lesson", systemImage: "doc.plaintext")
 					.labelStyle(.titleAndIcon)
 					.foregroundColor(Color("Dynamic/MainBrown+6"))
 			}
@@ -656,7 +656,79 @@ struct LessonView2: View {
 	
 	@ViewBuilder
 	private func tipHere() -> some View {
-		VStack {
+		VStack(spacing:0) {
+			HStack(spacing:0) {
+				Label("tip", systemImage: "lightbulb")
+					.labelStyle(.iconOnly)
+					.font(.title2)
+					.foregroundColor(Color("MainBrown+6"))
+					.shadow(color: Color("Dynamic/ShadowReverse"),radius: CGFloat(10))
+					.padding(EdgeInsets(top: 8, leading: 15, bottom: 4, trailing: 15))
+					.background(
+						RoundedCornersShape(corners: verticalSize == .regular ? [.topLeft, .topRight] : [.allCorners], radius: 10)
+							.fill(Color("AppYellow"))
+							.opacity(0.90)
+					)
+				Spacer()
+			}.padding(.leading, 28)
+			
+			VStack(spacing:0) {
+				ScrollView {
+					VStack(alignment: .leading) {
+						VStack(spacing: 0) {
+							HStack {
+								Spacer()
+								Label("Lesson", systemImage: "headphones")
+									.labelStyle(.iconOnly)
+									.font(.title)
+									.padding(.bottom, 5)
+								Spacer()
+							}
+							HStack {
+								Spacer()
+								Text("This is the lesson you are viewing currently.")
+								.font(.headline)
+								.padding(.bottom, 15)
+								.multilineTextAlignment(.center)
+								.shadow(color:.white,radius: 15)
+								Spacer()
+							}
+						}
+						.background(alignment: .topLeading, content:{
+							Image("animal_play_\(studentData.getInstrumentChoice())")
+								.resizable()
+								.scaledToFit()
+								.padding(.leading, -30)
+						})
+						Group {
+							Divider().padding(.bottom, 20)
+							Text("When the lesson has score, don't forget to use your headphone to listen and play together with the teacher. \n\nleave one of your ears open when you are playing").padding(.bottom, 15)
+							Text("It would be idea to place your phone at your eye level while you are learning and playing.").padding(.bottom, 15)
+							
+							Divider().padding(.bottom, 20)
+							(Text("Use features in the ")+Text(Image(systemName: "list.bullet.circle"))+Text(" lesson menu to improve your learning experience.")).padding(.bottom, 15)
+							(Text("Click ")+Text(Image(systemName: "doc.plaintext"))+Text(" to learn what this lesson is about in details.")).padding(.bottom, 8)
+							(Text(Image(systemName: "checkmark.circle"))+Text(" Mark this lesson as completed to track your learning progress.")).padding(.bottom, 8)
+							(Text("Click ")+Text(Image(systemName: "music.note"))+Text(" to change the note size in the socre.")).padding(.bottom, 15)
+							
+							Divider().padding(.bottom, 20)
+							(Text("At last, ")+Text(Image(systemName: "chevron.backward"))+Text(" will take you back to see the course. Enjoy!")).padding(.bottom, 15)
+						}
+					}
+					.foregroundColor(Color("MainBrown+6"))
+					.padding(EdgeInsets(top: 18, leading: 40, bottom: 18, trailing: 40))
+				}
+			}
+			.background(
+				RoundedRectangle(cornerRadius: CGFloat(10))
+					.foregroundColor(Color("AppYellow"))
+					.shadow(color: Color("Dynamic/ShadowLight"),radius: CGFloat(7))
+					.opacity(0.90)
+			)
+			.padding([.leading,.trailing],15)
+		}
+		
+		/*VStack {
 			Text("This is the lesson.\nStart learning and play together with the teacher!")
 				.font(.headline)
 				.modifier(StepExplainingText())
@@ -672,7 +744,7 @@ struct LessonView2: View {
 		}.background {
 			RoundedRectangle(cornerRadius: 26)
 				.foregroundColor(Color("AppYellow"))
-			.frame(width: UIScreen.main.bounds.width*0.9)}
+			.frame(width: UIScreen.main.bounds.width*0.9)}*/
 	}
 	
 	@ViewBuilder

@@ -197,7 +197,7 @@ struct WizardResultView: View {
 						
 						
 						Divider().padding(.bottom, 20)
-						Text("Reset and configure a new Learning Path by click the \(Image(systemName: "goforward")) button in the top left corner.").padding(.bottom, 15)
+						Text("Reset and configure a new Learning Path by clicking the \(Image(systemName: "goforward")) button in the top left corner.").padding(.bottom, 15)
 						Text("You can revisit your current learning path here whenever you like.").padding(.bottom, 15)
 					}
 					.foregroundColor(Color("MainBrown+6"))

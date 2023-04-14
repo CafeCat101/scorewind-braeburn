@@ -201,7 +201,7 @@ struct MyCoursesView: View {
 						}
 					}*/
 				Label(title:{
-					Text("Favourite")
+					Text("Favorites")
 						.foregroundColor( listFilterFavourite ? Color("Dynamic/ShadowReverse") : Color("Dynamic/MainBrown+6"))
 				},icon:{
 					Image(systemName: "suit.heart.fill")
@@ -284,6 +284,21 @@ struct MyCoursesView: View {
 	@ViewBuilder
 	private func tipHere() -> some View {
 		VStack (spacing: 0) {
+			HStack(spacing:0) {
+				Label("tip", systemImage: "lightbulb")
+					.labelStyle(.iconOnly)
+					.font(.title2)
+					.foregroundColor(Color("MainBrown+6"))
+					.shadow(color: Color("Dynamic/ShadowReverse"),radius: CGFloat(10))
+					.padding(EdgeInsets(top: 8, leading: 15, bottom: 4, trailing: 15))
+					.background(
+						RoundedCornersShape(corners: verticalSize == .regular ? [.topLeft, .topRight] : [.allCorners], radius: 10)
+							.fill(Color("AppYellow"))
+							.opacity(0.90)
+					)
+				Spacer()
+			}.padding(.leading, 28)
+			
 			VStack(spacing:0) {
 				ScrollView {
 					VStack(alignment: .leading) {

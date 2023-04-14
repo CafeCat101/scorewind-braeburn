@@ -294,7 +294,70 @@ struct CourseView: View {
 	
 	@ViewBuilder
 	private func tipHere() -> some View {
-		VStack {
+		VStack(spacing:0) {
+			HStack(spacing:0) {
+				Label("tip", systemImage: "lightbulb")
+					.labelStyle(.iconOnly)
+					.font(.title2)
+					.foregroundColor(Color("MainBrown+6"))
+					.shadow(color: Color("Dynamic/ShadowReverse"),radius: CGFloat(10))
+					.padding(EdgeInsets(top: 8, leading: 15, bottom: 4, trailing: 15))
+					.background(
+						RoundedCornersShape(corners: verticalSize == .regular ? [.topLeft, .topRight] : [.allCorners], radius: 10)
+							.fill(Color("AppYellow"))
+							.opacity(0.90)
+					)
+				Spacer()
+			}.padding(.leading, 28)
+			
+			VStack(spacing:0) {
+				ScrollView {
+					VStack(alignment: .leading) {
+						HStack {
+							Spacer()
+							Label("Course", systemImage: "note.text")
+								.labelStyle(.iconOnly)
+								.font(.title)
+								.padding(.bottom, 5)
+							Spacer()
+						}
+						HStack {
+							Spacer()
+							Text("This is the course you are viewing currently.")
+							.font(.headline)
+							.padding(.bottom, 15)
+							.multilineTextAlignment(.center)
+							Spacer()
+						}
+
+						Divider().padding(.bottom, 20)
+						Text("Let's check out what lessons does this course have here and start learning!").padding(.bottom, 15)
+						(Text("You can track your learning progress from the progress bar or inspect which lesson you've ")+Text(Image(systemName: "eye.circle.fill"))+Text(" watched or ")+Text(Image(systemName: "checkmark.circle.fill"))+Text(" completed from the lesson list.")).padding(.bottom, 15)
+						
+						Divider().padding(.bottom, 20)
+						Text("Use features in the course to improve your learning experience.").padding(.bottom, 15)
+						(Text("Click ")+Text(Image(systemName: "doc.plaintext"))+Text(" to learn what this course is about in details.")).padding(.bottom, 8)
+						(Text(Image(systemName: "suit.heart"))+Text(" Mark this course as your favorite for revisiting in the future.")).padding(.bottom, 8)
+						(Text(Image(systemName: "arrow.down.circle"))+Text(" Download the course videos for your offline moments.")).padding(.bottom, 15)
+						
+						//(Text("Click ")+Text(Image(systemName: "doc.plaintext"))+Text(" to learn what this course is about in details. ")+Text(Image(systemName: "suit.heart"))+Text(" Mark this course as your favorite for revisiting in the future. ")+Text(Image(systemName: "arrow.down.circle"))+Text(" Download the course videos for your offline moments.")).padding(.bottom,15)
+					}
+					.foregroundColor(Color("MainBrown+6"))
+					.padding(EdgeInsets(top: 18, leading: 40, bottom: 18, trailing: 40))
+				}
+			}
+			.background(
+				RoundedRectangle(cornerRadius: CGFloat(10))
+					.foregroundColor(Color("AppYellow"))
+					.shadow(color: Color("Dynamic/ShadowLight"),radius: CGFloat(7))
+					.opacity(0.90)
+			)
+			.padding([.leading,.trailing],15)
+		}
+		
+		
+		
+		/*VStack {
 			Text("This is the course.\nLet's check out what lessons the course has here!")
 				.font(.headline)
 				.modifier(StepExplainingText())
@@ -312,7 +375,7 @@ struct CourseView: View {
 		}.background {
 			RoundedRectangle(cornerRadius: 26)
 				.foregroundColor(Color("AppYellow"))
-			.frame(width: UIScreen.main.bounds.width*0.9)}
+			.frame(width: UIScreen.main.bounds.width*0.9)}*/
 	}
 	
 	@ViewBuilder
