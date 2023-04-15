@@ -154,7 +154,7 @@ struct WizardView: View {
 		}
 		.background(colorScheme == .light ? appBackgroundImage(colorMode: colorScheme) : appBackgroundImage(colorMode: colorScheme))
 		.alert("All the tips will be shown again now.", isPresented: $showRevealAllTipsAlert, actions:{})
-		.alert(Text("ScoreWind\n\n\(getVersionNumber())").foregroundColor(Color("MainBrown+6")), isPresented: $showAboutScorewindAlert,actions:{})
+		.alert("ScoreWind\n\n\(getVersionNumber())", isPresented: $showAboutScorewindAlert,actions:{})
 		.sheet(isPresented: $showStore, content: {
 			StoreView(showStore: $showStore)
 		})

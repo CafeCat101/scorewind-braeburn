@@ -51,7 +51,6 @@
 		C85F27A8287A775E00D0A4E5 /* TipLimit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F27A7287A775E00D0A4E5 /* TipLimit.swift */; };
 		C868CA0729856F9300724D2D /* TipContentMakerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C868CA0629856F9300724D2D /* TipContentMakerView.swift */; };
 		C868CA09298BB64B00724D2D /* LessonView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = C868CA08298BB64B00724D2D /* LessonView2.swift */; };
-		C86F88182994C5910072504E /* scorewind_ios_xml.zip in Resources */ = {isa = PBXBuildFile; fileRef = C86F88172994C5910072504E /* scorewind_ios_xml.zip */; };
 		C86F881A2996166E0072504E /* WizardCalculationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C86F88192996166E0072504E /* WizardCalculationMode.swift */; };
 		C86F881C299A3F390072504E /* Products.storekit in Resources */ = {isa = PBXBuildFile; fileRef = C86F881B299A3F390072504E /* Products.storekit */; };
 		C86F881E299A40B80072504E /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = C86F881D299A40B80072504E /* StoreKitTestCertificate.cer */; };
@@ -84,6 +83,7 @@
 		C897D4C929AEEF9C00A21603 /* RoundedCornerShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = C897D4C829AEEF9C00A21603 /* RoundedCornerShape.swift */; };
 		C897D4CB29B03F2F00A21603 /* Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C897D4CA29B03F2F00A21603 /* Carousel.swift */; };
 		C8CA57A42936F8D90097AE07 /* WizardPicked.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CA57A32936F8D90097AE07 /* WizardPicked.swift */; };
+		C8DD45F629EAB43B0096CA41 /* scorewind_ios_xml.zip in Resources */ = {isa = PBXBuildFile; fileRef = C8DD45F529EAB43B0096CA41 /* scorewind_ios_xml.zip */; };
 		C8E063F028B0E20E000B3D67 /* MyCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E063EF28B0E20E000B3D67 /* MyCourse.swift */; };
 /* End PBXBuildFile section */
 
@@ -156,7 +156,6 @@
 		C85F27A9287A7C9C00D0A4E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C868CA0629856F9300724D2D /* TipContentMakerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipContentMakerView.swift; sourceTree = "<group>"; };
 		C868CA08298BB64B00724D2D /* LessonView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonView2.swift; sourceTree = "<group>"; };
-		C86F88172994C5910072504E /* scorewind_ios_xml.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = scorewind_ios_xml.zip; sourceTree = "<group>"; };
 		C86F88192996166E0072504E /* WizardCalculationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardCalculationMode.swift; sourceTree = "<group>"; };
 		C86F881B299A3F390072504E /* Products.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Products.storekit; sourceTree = "<group>"; };
 		C86F881D299A40B80072504E /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
@@ -189,6 +188,7 @@
 		C897D4C829AEEF9C00A21603 /* RoundedCornerShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCornerShape.swift; sourceTree = "<group>"; };
 		C897D4CA29B03F2F00A21603 /* Carousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Carousel.swift; sourceTree = "<group>"; };
 		C8CA57A32936F8D90097AE07 /* WizardPicked.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardPicked.swift; sourceTree = "<group>"; };
+		C8DD45F529EAB43B0096CA41 /* scorewind_ios_xml.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = scorewind_ios_xml.zip; sourceTree = "<group>"; };
 		C8E063EF28B0E20E000B3D67 /* MyCourse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCourse.swift; sourceTree = "<group>"; };
 		F3441470A2546CDD3AD7E6C9 /* Pods_ScoreWind.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScoreWind.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5B8EA121B65003489B73002 /* Pods-ScoreWindTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScoreWindTests.debug.xcconfig"; path = "Target Support Files/Pods-ScoreWindTests/Pods-ScoreWindTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -269,6 +269,7 @@
 		C85F2728286F4C2B00D0A4E5 /* ScoreWind */ = {
 			isa = PBXGroup;
 			children = (
+				C8DD45F529EAB43B0096CA41 /* scorewind_ios_xml.zip */,
 				C85F275A286F4EF900D0A4E5 /* www */,
 				C85F2753286F4CF200D0A4E5 /* ScoreWind.entitlements */,
 				C85F2758286F4EEE00D0A4E5 /* data_version.json */,
@@ -307,7 +308,6 @@
 				C878275D28F1A04E0007DDC1 /* WizardTeacherView.swift */,
 				C85F2771286F4F2E00D0A4E5 /* WizardView.swift */,
 				C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */,
-				C86F88172994C5910072504E /* scorewind_ios_xml.zip */,
 				C8E063EA28AE06B7000B3D67 /* DataModel */,
 				C878276F290511430007DDC1 /* Models */,
 				C85F272F286F4C2C00D0A4E5 /* Preview Content */,
@@ -515,8 +515,8 @@
 				C85F2731286F4C2C00D0A4E5 /* Preview Assets.xcassets in Resources */,
 				C85F272E286F4C2C00D0A4E5 /* Assets.xcassets in Resources */,
 				C86F881E299A40B80072504E /* StoreKitTestCertificate.cer in Resources */,
+				C8DD45F629EAB43B0096CA41 /* scorewind_ios_xml.zip in Resources */,
 				C85F2759286F4EEE00D0A4E5 /* data_version.json in Resources */,
-				C86F88182994C5910072504E /* scorewind_ios_xml.zip in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -848,6 +848,9 @@
 				MARKETING_VERSION = 0.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.elosoft.ScoreWind;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -882,6 +885,9 @@
 				MARKETING_VERSION = 0.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.elosoft.ScoreWind;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
