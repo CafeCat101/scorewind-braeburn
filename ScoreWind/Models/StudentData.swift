@@ -406,7 +406,7 @@ class StudentData: ObservableObject {
 	}
 	
 	func resetWizrdChoice() {
-		wizardInstrumentChoice = ""
+		removeAUserDefaultKey(keyName: "wizardChooseInstrument")
 		wizardExperienceChoice = ""
 		wizardDoYouKnowChoice.removeAll()
 		wizardPlayableChoice.removeAll()

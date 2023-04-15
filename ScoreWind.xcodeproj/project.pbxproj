@@ -280,6 +280,7 @@
 				C878275828E88B8E0007DDC1 /* CourseDownloadButtonView.swift */,
 				C878275628E8861C0007DDC1 /* CourseLessonListItemView.swift */,
 				C85F275E286F4F2E00D0A4E5 /* CourseView.swift */,
+				C810183829D2FB7400B54AFD /* DownloadSpinnerView.swift */,
 				C85F275F286F4F2E00D0A4E5 /* HomeView.swift */,
 				C85F2767286F4F2E00D0A4E5 /* HTMLString.swift */,
 				C85F2761286F4F2E00D0A4E5 /* LessonScoreView.swift */,
@@ -312,7 +313,6 @@
 				C85F272F286F4C2C00D0A4E5 /* Preview Content */,
 				C897D4C729AEEF6B00A21603 /* Styles */,
 				C85F2798286F5A4E00D0A4E5 /* Types */,
-				C810183829D2FB7400B54AFD /* DownloadSpinnerView.swift */,
 			);
 			path = ScoreWind;
 			sourceTree = "<group>";

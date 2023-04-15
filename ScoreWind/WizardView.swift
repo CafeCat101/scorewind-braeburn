@@ -20,6 +20,8 @@ struct WizardView: View {
 	@State private var showStore = false
 	@Binding var stepName:Page
 	@Environment(\.colorScheme) var colorScheme
+	@State private var showRevealAllTipsAlert = false
+	@State private var showAboutScorewindAlert = false
 	
 	var body: some View {
 		VStack(spacing:0) {
@@ -43,29 +45,6 @@ struct WizardView: View {
 						})
 				}
 				Spacer()
-				/*if showViewTitle {
-					Label("ScoreWind", systemImage: "music.note")
-						.labelStyle(.titleOnly)
-						.foregroundColor(Color("AppBlackDynamic"))
-						.onTapGesture(count:3, perform: {
-							if userRole == .student {
-								userRole = .teacher
-							} else {
-								userRole = .student
-							}
-						})
-				}
-				if showProgress {
-					GeometryReader { (proxy: GeometryProxy) in
-						HStack {
-							wizardProgressView(barWidth: proxy.size.width)
-						}.onAppear(perform: {
-							print("[debug] showProgress, screensize.size.width \(screenSize.width)")
-							print("[debug] showProgress, proxy.size.width \(proxy.size.width)")
-						})
-					}.frame(height:10)
-				}
-				Spacer()*/
 				Menu {
 					Button(action: {
 						if userRole == .student {
@@ -78,11 +57,25 @@ struct WizardView: View {
 					})
 					
 					Button(action: {
+						showAboutScorewindAlert = true
+					}, label: {
+						Text("About ScoreWind")
+					})
+					
+					Button(action: {
 						showStore = true
 					}, label: {
-						Text("ScoreWind subscription")
-						
+						Text("ScoreWind Subscription")
 					})
+					
+					if (UserDefaults.standard.object(forKey: "hideTips") as? [String] ?? []).count > 0 {
+						Button(action: {
+							studentData.removeAUserDefaultKey(keyName: "hideTips")
+							showRevealAllTipsAlert = true
+						}, label: {
+							Text("Show Me All Tips")
+						})
+					}
 					
 				} label: {
 					Label("ScoreWind", systemImage: "gear")
@@ -160,6 +153,8 @@ struct WizardView: View {
 			Divider()
 		}
 		.background(colorScheme == .light ? appBackgroundImage(colorMode: colorScheme) : appBackgroundImage(colorMode: colorScheme))
+		.alert("All the tips will be shown again now.", isPresented: $showRevealAllTipsAlert, actions:{})
+		.alert(Text("ScoreWind\n\n\(getVersionNumber())").foregroundColor(Color("MainBrown+6")), isPresented: $showAboutScorewindAlert,actions:{})
 		.sheet(isPresented: $showStore, content: {
 			StoreView(showStore: $showStore)
 		})
@@ -179,6 +174,12 @@ struct WizardView: View {
 				.edgesIgnoringSafeArea(.all)
 		}
 	}*/
+	
+	private func getVersionNumber() -> String {
+		//:: CFBundleVersion for build number
+		return "Version \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")  as! String)\nBuild \(Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion")  as! String)"
+		//return UIApplication.appVer
+	}
 	
 	private func getWizardViewTitle() -> String {
 		let findStepIndex = studentData.wizardStepNames.firstIndex(where: {$0.self == stepName}) ?? 0
