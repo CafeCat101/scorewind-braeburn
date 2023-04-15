@@ -311,7 +311,7 @@ struct CourseView: View {
 			}.padding(.leading, 28)
 			
 			VStack(spacing:0) {
-				ScrollView {
+				ScrollView(showsIndicators: true) {
 					VStack(alignment: .leading) {
 						HStack {
 							Spacer()

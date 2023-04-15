@@ -32,7 +32,7 @@ struct TipContentMakerView: View {
 				VStack {
 					displayOkButton()
 					
-					Spacer().frame(maxHeight:20)
+					Spacer().frame(maxHeight:44)
 					
 					if allowHideForever == false {
 						displayHideButton()
