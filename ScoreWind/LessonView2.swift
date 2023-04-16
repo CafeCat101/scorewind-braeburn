@@ -673,7 +673,7 @@ struct LessonView2: View {
 			}.padding(.leading, 28)
 			
 			VStack(spacing:0) {
-				ScrollView(showsIndicators: true) {
+				ScrollView {
 					VStack(alignment: .leading) {
 						VStack(spacing: 0) {
 							HStack {
@@ -702,14 +702,14 @@ struct LessonView2: View {
 						})
 						Group {
 							Divider().padding(.bottom, 20)
-							Text("When the lesson has score, don't forget to use your headphone to listen and play together with the teacher. \n\nleave one of your ears open when you are playing").padding(.bottom, 15)
-							Text("It would be idea to place your phone at your eye level while you are learning and playing.").padding(.bottom, 15)
+							Text("When the lesson has a musical score, don't forget to use your headphone to listen and play together with the teacher. \n\nLeave one of your ears open when you are playing.").padding(.bottom, 15)
+							Text("It would be ideal for placing your phone at eye level while learning and playing.").padding(.bottom, 15)
 							
 							Divider().padding(.bottom, 20)
 							(Text("Use features in the ")+Text(Image(systemName: "list.bullet.circle"))+Text(" lesson menu to improve your learning experience.")).padding(.bottom, 15)
-							(Text("Click ")+Text(Image(systemName: "doc.plaintext"))+Text(" to learn what this lesson is about in details.")).padding(.bottom, 8)
+							(Text("Click ")+Text(Image(systemName: "doc.plaintext"))+Text(" to learn what this lesson is about in detail.")).padding(.bottom, 8)
 							(Text(Image(systemName: "checkmark.circle"))+Text(" Mark this lesson as completed to track your learning progress.")).padding(.bottom, 8)
-							(Text("Click ")+Text(Image(systemName: "music.note"))+Text(" to change the note size in the socre.")).padding(.bottom, 15)
+							(Text("Click ")+Text(Image(systemName: "music.note"))+Text(" to change the note size in the score.")).padding(.bottom, 15)
 							
 							Divider().padding(.bottom, 20)
 							(Text("At last, ")+Text(Image(systemName: "chevron.backward"))+Text(" will take you back to see the course. Enjoy!")).padding(.bottom, 15)

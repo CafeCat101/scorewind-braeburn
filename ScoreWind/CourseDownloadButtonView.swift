@@ -72,9 +72,9 @@ struct CourseDownloadButtonView: View {
 			})
 		}, message: {
 			if getStatus == DownloadStatus.notInQueue {
-				Text("All videos and socres in this course will be downloaded into your device. Continue?")
+				Text("All videos and scores in this course will be downloaded to your device. Continue?")
 			} else {
-				Text("After removing downloads, you can not take course offline. Continue?")
+				Text("After removing downloads, you can not take the course offline. Continue?")
 			}
 		})
 		
@@ -205,9 +205,9 @@ struct CourseDownloadButtonView: View {
 	
 	private func getAlertDialogTitle(downloadStatus: DownloadStatus) -> String {
 		if downloadStatus == DownloadStatus.notInQueue {
-			return "Download course"
+			return "Download Course"
 		} else {
-			return "Remove download"
+			return "Remove Download"
 		}
 	}
 	

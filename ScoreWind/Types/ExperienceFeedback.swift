@@ -14,9 +14,9 @@ enum ExperienceFeedback:String {
 	func getLabel() -> String{
 		switch self {
 		case .starterKit:
-			return "Based on lessons you've completed, see your next lessons." //"Take me to the beginning of the unpaved journey."
+			return "Based on the lessons you've completed, see your next lessons." //"Take me to the beginning of the unpaved journey."
 		case .continueLearning:
-			return "Configurate the next learning path based on your feedbacks."//"Feeling adventurous.\nI want to explore!"
+			return "Configure the next learning path based on your feedback and completed lessons."//"Feeling adventurous.\nI want to explore!"
 		case .experienced:
 			return "Find a learning path for a fast-paced learning style."//"I'm skilled.\nGo to explore the repositories now."
 		}

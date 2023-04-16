@@ -65,7 +65,7 @@ struct StoreView: View {
 						}).padding(.bottom, 5)
 						
 						Label(title: {
-							Text("1 month free trial.")
+							Text("1-month free trial.")
 						}, icon: {
 							Image(systemName: "circle.fill")
 								.resizable()
@@ -319,7 +319,7 @@ struct StoreView: View {
 				.font(.title2)
 				.foregroundColor(Color("Dynamic/StoreViewTitle"))
 				.padding([.bottom],10)
-			Text("When you want to view your subscription status, go to \(Image(systemName: "music.note.house")) Home tab, and open the \(Image(systemName: "gear")) menu on the top right corner.")
+			Text("When you want to view your subscription status, go to \(Image(systemName: "music.note.house")) Home tab, and open the \(Image(systemName: "gear")) menu in the top right corner.")
 		}
 		.foregroundColor(Color("Dynamic/MainBrown+6"))
 	}
@@ -332,9 +332,9 @@ struct StoreView: View {
 				.padding([.bottom], 10)
 			VStack(alignment:.leading) {
 				Label("Open the Settings app on your phone.", systemImage: "number.circle.fill")
-				Label("Tap your name", systemImage: "number.circle.fill")
-				Label("Tap Subscriptions", systemImage: "number.circle.fill")
-				Label("Find the ScoreWind app and tap Cancel", systemImage: "number.circle.fill")
+				Label("Tap your name.", systemImage: "number.circle.fill")
+				Label("Tap Subscriptions.", systemImage: "number.circle.fill")
+				Label("Find the ScoreWind app and tap Cancel.", systemImage: "number.circle.fill")
 			}
 			.padding([.bottom],10)
 			

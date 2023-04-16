@@ -306,20 +306,27 @@ struct WizardCalculatorHelper {
 		print("[debug] wizardCalcaultor, explorerAlgorithm, sorted \(sortedWizardRange)")
 		//:: *0.6 to find a level that is a bit challenaged
 		sortedWizardRange = sortedWizardRange.sorted(by: {$0.sortHelper < $1.sortHelper}).filter({$0.feedbackValue < averageFeedbackValue*0.6})
-		
-		result["courseID"] = sortedWizardRange[0].courseID
-		if sortedWizardRange[0].courseID > 0 && sortedWizardRange[0].lessonID == 0 {
-			//:: this is a DoYouKnow, course item
-			let findCourse = allCourses.first(where: {$0.id == sortedWizardRange[0].courseID}) ?? Course()
-			let findUncompletedLessons = excludeLessonsCompleted(targetCourseID: findCourse.id, targetLessons: findCourse.lessons, useStudentData: useStudentData)
-			if findUncompletedLessons.count > 0 {
-				result["courseID"] = findCourse.id
-				result["lessonID"] = findUncompletedLessons[0].id
+		if sortedWizardRange.count > 0 {
+			result["courseID"] = sortedWizardRange[0].courseID
+			if sortedWizardRange[0].courseID > 0 && sortedWizardRange[0].lessonID == 0 {
+				//:: this is a DoYouKnow, course item
+				let findCourse = allCourses.first(where: {$0.id == sortedWizardRange[0].courseID}) ?? Course()
+				let findUncompletedLessons = excludeLessonsCompleted(targetCourseID: findCourse.id, targetLessons: findCourse.lessons, useStudentData: useStudentData)
+				if findUncompletedLessons.count > 0 {
+					result["courseID"] = findCourse.id
+					result["lessonID"] = findUncompletedLessons[0].id
+				} else {
+					result["lessonID"] = sortedWizardRange[0].lessonID
+				}
 			} else {
 				result["lessonID"] = sortedWizardRange[0].lessonID
 			}
 		} else {
-			result["lessonID"] = sortedWizardRange[0].lessonID
+			//:: user answer "Yes" and "Easy Peasy" on all the quesiton, nothing in the range is challenging, give the last one for now
+			sortedWizardRange = useStudentData.wizardRange
+			sortedWizardRange = sortedWizardRange.sorted(by: {$0.sortHelper < $1.sortHelper})
+			result["courseID"] = sortedWizardRange[sortedWizardRange.count-1].courseID
+			result["lessonID"] = sortedWizardRange[sortedWizardRange.count-1].lessonID
 		}
 		
 		useStudentData.updateWizardMode(wizardMode: .assessment)

@@ -315,13 +315,13 @@ struct WizardExperienceView: View {
 						.padding(.bottom, 15)
 						
 						if choise == ExperienceFeedback.continueLearning {
-							Text("From courses designed with a step-by-step learning style, ScoreWind will show you the next 10 uncompleted lessons based on your feedbacks and lessons you've completed.")
+							Text("From courses designed with a step-by-step learning style, ScoreWind will show you the next 10 uncompleted lessons based on your feedback and the lessons you've completed.")
 							Divider().padding([.top,.bottom], 20)
 							Text("Maybe you wonder what the challenges are out there. There is no time to hesitate. Let's go!")
 						} else if choise == ExperienceFeedback.experienced {
 							Text("According to your answers and completed lessons, ScoreWind will show you the next 10 uncompleted lessons from the courses designed with a fast-paced learning style.")
 							Divider().padding([.top,.bottom], 20)
-							Text("You are skillfull. You can navigate new pieces faster.\n\nCome and explore over 400 pieces organized by different techniques in our repositories. Enjoy!")
+							Text("You are skillful. You can navigate new pieces faster.\n\nCome and explore over 400 pieces organized by different techniques in our repositories. Enjoy!")
 						} else {
 							Text("Ask ScoreWind to show you the next 10 uncompleted lessons.")
 							Divider().padding([.top,.bottom], 20)

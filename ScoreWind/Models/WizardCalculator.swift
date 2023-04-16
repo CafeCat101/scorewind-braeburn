@@ -189,6 +189,8 @@ extension ScorewindData {
 			}
 		}
 		
+		/*
+		//:: this part is replaced by the finishWizardNow()
 		if (studentData.wizardRange.count > 10) && (studentData.getExperience() != ExperienceFeedback.starterKit.rawValue) {
 			let totalCompleted:Double = Double(studentData.getTotalCompletedLessonCount())
 			let checkCompletedLessonStatus:Double = totalCompleted/5
@@ -197,7 +199,7 @@ extension ScorewindData {
 				let explorer = helper.explorerAlgorithm(useStudentData: studentData)
 				assignedCourseId = explorer["courseID"] ?? 0
 				assignedLessonId = explorer["lessonID"] ?? 0
-				explainResult = "It's time to take a little challenges. Good luck!"
+				explainResult = "It's time to take on more challenges. Good luck!"
 			} else {
 				//:: find the closest level normally
 				let lastCourseInRange = allCourses.first(where: {$0.id == studentData.wizardRange.last?.courseID}) ?? Course()
@@ -208,7 +210,7 @@ extension ScorewindData {
 			}
 			//:: explain->hi explorer, it's time to challange or repositioning your level.
 			goToWizardStep = .wizardResult
-		}
+		}*/
 		
 		//:: in case of no course or lesson is found but the wizardRange has some data(mostly happen when trying to find something easy in path course),
 		//:: use the last doable lesson in it.
@@ -257,7 +259,7 @@ extension ScorewindData {
 						}
 					}*/
 					//:: explain->101~102 is the essentail package, don't miss it.
-					explainResult = "Series 101 to 102 is an essential package for you to get your hands on the instrument more easily. Don't miss it!"
+					explainResult = "Series 101 to 102 is an essential package to get your hands on the instrument more easily. Don't miss it!"
 					goToWizardStep = .wizardResult
 				}
 				
@@ -291,7 +293,7 @@ extension ScorewindData {
 				//studentData.wizardRange.append(WizardPicked(allCourses: allCourses, courseID: assignedCourseId, lessonID: assignedLessonId, feedbackValue:0.0))
 			}
 		} else {
-			studentData.wizardResult.learningPath = setLearningPath(helper:helper, useStudentData: studentData)
+			//studentData.wizardResult.learningPath = setLearningPath(helper:helper, useStudentData: studentData)
 			studentData.wizardResult.learningPath = setLearningPath(helper:helper, useStudentData: studentData)
 			setWizardResultText(studentData: studentData, explainResult: explainResult)
 			
@@ -351,19 +353,25 @@ extension ScorewindData {
 		}
 		
 		if studentData.wizardRange.count >= 10 {
-			if studentData.getWizardMode() == .explore {
-				//:: every 5 completed lesson, try a little harder lesssons
-				let explorer = helper.explorerAlgorithm(useStudentData: studentData)
-				assignedCourseId = explorer["courseID"] ?? 0
-				assignedLessonId = explorer["lessonID"] ?? 0
-				explainResult = "It's time to take a little challenges. Good luck!"
+			if currentStepName == .wizardPlayable && currentFinalFeedbackValue == Double(PlayableFeedback.canLearn.rawValue) {
+				assignedCourseId = wizardPickedCourse.id
+				assignedLessonId = wizardPickedLesson.id
 			} else {
-				//:: find the closest level normally
-				let lastCourseInRange = allCourses.first(where: {$0.id == studentData.wizardRange.last?.courseID}) ?? Course()
-				let assesment = helper.assessmentAlgorithm(useStudentData: studentData, exampleCourse: lastCourseInRange)
-				assignedCourseId = assesment["courseID"] ?? 0
-				assignedLessonId = assesment["lessonID"] ?? 0
-				explainResult = "Hi explorer, Scorewind found a lesson that may be your interest."
+				if studentData.getWizardMode() == .explore {
+					//:: every 5 completed lesson, try a little harder lesssons
+					let explorer = helper.explorerAlgorithm(useStudentData: studentData)
+					assignedCourseId = explorer["courseID"] ?? 0
+					assignedLessonId = explorer["lessonID"] ?? 0
+					
+					explainResult = "It's time to take on more challenges. Good luck!"
+				} else {
+					//:: find the closest level normally
+					let lastCourseInRange = allCourses.first(where: {$0.id == studentData.wizardRange.last?.courseID}) ?? Course()
+					let assesment = helper.assessmentAlgorithm(useStudentData: studentData, exampleCourse: lastCourseInRange)
+					assignedCourseId = assesment["courseID"] ?? 0
+					assignedLessonId = assesment["lessonID"] ?? 0
+					explainResult = "Hi explorer, Scorewind found a lesson that may be your interest."
+				}
 			}
 		} else {
 			assignedCourseId = wizardPickedCourse.id
@@ -380,7 +388,7 @@ extension ScorewindData {
 				wizardPickedCourse = allCourses.first(where: {$0.id == veryfirstCourse["courseID"]}) ?? Course()
 				assignedCourseId = veryfirstCourse["courseID"] ?? 0
 				assignedLessonId = veryfirstCourse["lessonID"] ?? 0
-				explainResult = "Series 101 to 102 is an essential package for you to get your hands on the instrument more easily. Don't miss it!"
+				explainResult = "Series 101 to 102 is an essential package to get your hands on the instrument more easily. Don't miss it!"
 			}
 			
 			print("[debug] finishWizardNow, assignCourseId \(assignedCourseId)")

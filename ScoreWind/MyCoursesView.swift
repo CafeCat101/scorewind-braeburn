@@ -312,7 +312,7 @@ struct MyCoursesView: View {
 						}
 						HStack {
 							Spacer()
-							Text("You'll find all your faourite or downloaded courses here.")
+							Text("You'll find all your favorite or downloaded courses here.")
 							.font(.headline)
 							.padding(.bottom, 15)
 							.multilineTextAlignment(.center)
@@ -321,7 +321,7 @@ struct MyCoursesView: View {
 
 						Divider().padding(.bottom, 20)
 						(Text("This list offers you an overview of how many lessons in a course you've ")+Text(Image(systemName: "eye.circle.fill"))+Text(" watched or ")+Text(Image(systemName: "checkmark.circle.fill"))+Text(" completed.")).padding(.bottom, 15)
-						(Text("In the list, you can also ")+Text(Image(systemName: "arrow.left.circle.fill"))+Text(" revisit your last watched or completed lesson in a course for a quick brushup.")).padding(.bottom, 15)
+						(Text("In the list, you can also ")+Text(Image(systemName: "arrow.left.circle.fill"))+Text(" revisit your last completed or watched lesson in a course for a quick brushup.")).padding(.bottom, 15)
 					}
 					.foregroundColor(Color("MainBrown+6"))
 					.padding(EdgeInsets(top: 18, leading: 40, bottom: 18, trailing: 40))
