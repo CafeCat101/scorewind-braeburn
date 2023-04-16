@@ -77,7 +77,27 @@ struct WizardResultPathView: View {
 		
 		if (scorewindData.wizardPickedCourse.lessons[0].id != pathItem.lessonID) && (studentData.wizardResult.learningPath[0].lessonID == pathItem.lessonID) {
 			VStack(spacing:0) {
-				Label("Next", systemImage: "arrow.down")
+				Label(title: {Text("dot")}, icon: {
+					Image(systemName: "circle.fill")
+						.resizable()
+						.scaledToFit()
+						.frame(width:3, height: 3)
+				})
+				.labelStyle(.iconOnly)
+				.foregroundColor(Color("Dynamic/MainGreen"))
+				.font(.headline)
+				.padding(.bottom,3)
+				Label(title: {Text("dot")}, icon: {
+					Image(systemName: "circle.fill")
+						.resizable()
+						.scaledToFit()
+						.frame(width:3, height: 3)
+				})
+				.labelStyle(.iconOnly)
+				.foregroundColor(Color("Dynamic/MainGreen"))
+				.font(.headline)
+				.padding(.bottom,3)
+				Label("Next", systemImage: "chevron.down")
 					.labelStyle(.iconOnly)
 					.foregroundColor(Color("Dynamic/MainGreen"))
 					.font(.headline)

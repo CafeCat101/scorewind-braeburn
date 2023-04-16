@@ -25,6 +25,8 @@ struct WizardResultView: View {
 	@State private var animate = false
 	@Environment(\.verticalSizeClass) var verticalSize
 	@Environment(\.colorScheme) var uiColor
+	@State private var showOtherCourses = false
+	let transition = AnyTransition.asymmetric(insertion: .slide, removal: .scale).combined(with: .opacity)
 	
 	var body: some View {
 		VStack(spacing:0) {
@@ -42,6 +44,7 @@ struct WizardResultView: View {
 					VStack {
 						if verticalSize == .regular {
 							displayContentHeader()
+								.padding(.bottom, 15)
 						}
 						
 						displayContent(frameSize: verticalSize == .regular ? UIScreen.main.bounds.size.width : UIScreen.main.bounds.size.width*0.55)
@@ -53,9 +56,13 @@ struct WizardResultView: View {
 					.onPreferenceChange(ViewOffsetKey.self) {
 						//print("offset >> \($0)")
 						if $0 >= 10 {
-							showTopDivider = true
+							withAnimation {
+								showTopDivider = true
+							}
 						} else {
-							showTopDivider = false
+							withAnimation {
+								showTopDivider = false
+							}
 						}
 					}
 				}
@@ -89,6 +96,13 @@ struct WizardResultView: View {
 				})
 				.coordinateSpace(name: "scroll")
 			}
+			.overlay(alignment: .topLeading, content: {
+				if showTopDivider {
+					displayShowOtherCourseMenu()
+						.padding([.top,.leading], 15)
+						.animation(Animation.easeIn(duration: 2), value: showTopDivider)
+				}
+			})
 		}
 	}
 	
@@ -269,193 +283,23 @@ struct WizardResultView: View {
 	
 	@ViewBuilder
 	private func displayContent(frameSize: CGFloat) -> some View {
-		//:: Lesson box title
-		/*HStack {
-		 HStack {
-		 HStack {
-		 VStack {
-		 Image(getIconTitleName())
-		 .resizable()
-		 .scaledToFit()
-		 .shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
-		 }
-		 .frame(maxHeight: 33)
-		 Text("The Lesson")
-		 .bold()
-		 .foregroundColor(Color("Dynamic/DarkPurple"))
-		 .font(.headline)
-		 .frame(maxHeight: 33)
-		 Spacer()
-		 }
-		 .padding(EdgeInsets(top: 10, leading: 0, bottom: 33, trailing: 0))
-		 }
-		 .padding(.leading, 15)
-		 .frame(width: frameSize*0.7)
-		 //.frame(width: UIScreen.main.bounds.size.width*0.7)
-		 .background(
-		 RoundedCornersShape(corners: verticalSize == .regular ? [.topRight, .bottomRight] : [.allCorners], radius: 17)
-		 .fill(Color("Dynamic/MainBrown"))
-		 .opacity(0.25)
-		 
-		 )
-		 .offset(x: -15, y:33 )
-		 Spacer()
-		 }*/
-		
-		//:: Lesson box
-		/*VStack(spacing:0) {
-		 VStack(alignment: .leading) {
-		 HStack {
-		 Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.wizardPickedLesson.title))
-		 .bold()
-		 .foregroundColor(Color("Dynamic/MainBrown+6"))
-		 .font(.title2)
-		 Spacer()
-		 Label("Go to lesson", systemImage: "arrow.right.circle.fill")
-		 .labelStyle(.iconOnly)
-		 .font(.title2)
-		 .foregroundColor(Color("Dynamic/MainGreen"))
-		 }
-		 if showTopLessonDescription {
-		 Divider()
-		 Text(scorewindData.wizardPickedLesson.description)
-		 .foregroundColor(Color("Dynamic/MainBrown+6"))
-		 }
-		 
-		 }.padding(15)
-		 }
-		 .background(
-		 RoundedRectangle(cornerRadius: CGFloat(17))
-		 .foregroundColor(Color("Dynamic/LightGray"))
-		 .opacity(0.85)
-		 .shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
-		 )
-		 .onTapGesture {
-		 print("[debug] WizardResultView, lesson.onTapGesture")
-		 scorewindData.currentCourse = scorewindData.wizardPickedCourse
-		 scorewindData.currentLesson = scorewindData.wizardPickedLesson
-		 scorewindData.setCurrentTimestampRecs()
-		 scorewindData.lastPlaybackTime = 0.0
-		 self.selectedTab = "TCourse"
-		 showLessonView = true
-		 scorewindData.lessonChanged = true
-		 }*/
-		
-		/*Label(showMeMore ? "Hide details" : "Tell me more", systemImage: showMeMore ? "chevron.up" : "chevron.down")
-		 .foregroundColor(Color("Dynamic/MainBrown+6"))
-		 .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
-		 .background(
-		 RoundedRectangle(cornerRadius: CGFloat(17))
-		 .foregroundColor(Color("Dynamic/MainBrown"))
-		 .shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
-		 .opacity(0.25)
-		 .overlay {
-		 RoundedRectangle(cornerRadius: 17)
-		 .stroke(Color("Dynamic/DarkGray"), lineWidth: 1)
-		 }
-		 )
-		 .padding(.top, 15)
-		 .padding(.bottom, showMeMore ? 0 : 50)
-		 .onTapGesture {
-		 showMeMore.toggle()
-		 if showTopLessonDescription == false {
-		 animate = false
-		 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-		 withAnimation(Animation.spring(response: 0.2, dampingFraction: 0.4, blendDuration: 0.8).speed(0.3)) {
-		 animate.toggle()
-		 }
-		 }
-		 }
-		 withAnimation(.linear(duration: 0.2)) {
-		 showTopLessonDescription.toggle()
-		 }
-		 }*/
-		
-		
-		//Spacer()
-		
-		//if showMeMore {
-		//::course box title
-		/*HStack {
-		 HStack {
-		 HStack {
-		 VStack {
-		 Image(getIconTitleName())
-		 .resizable()
-		 .scaledToFit()
-		 .shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
-		 }
-		 .frame(maxHeight: 33)
-		 Text("The Course")
-		 .bold()
-		 .foregroundColor(Color("Dynamic/DarkPurple"))
-		 .font(.headline)
-		 .frame(maxHeight: 33)
-		 Spacer()
-		 }
-		 .padding(EdgeInsets(top: 10, leading: 0, bottom: 33, trailing: 0))
-		 }
-		 .padding(.leading, 15)
-		 .frame(width: frameSize*0.7)
-		 .background(
-		 RoundedCornersShape(corners: verticalSize == .regular ? [.topRight, .bottomRight] : [.allCorners], radius: 17)
-		 .fill(Color("Dynamic/MainBrown"))
-		 .opacity(0.25)
-		 )
-		 .offset(x: -15, y:33 )
-		 Spacer()
-		 }*/
-		
-		//:: course box content summary
-		/*VStack(alignment: .center) {
-		 HStack {
-		 Spacer()
-		 Text("You may be interested to know that ").foregroundColor(Color("Dynamic/MainBrown+6"))+Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.wizardPickedLesson.title)).bold().foregroundColor(Color("Dynamic/MainBrown+6"))+Text(" is coming from this course, ").foregroundColor(Color("Dynamic/MainBrown+6"))+Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.wizardPickedCourse.title)).bold().foregroundColor(Color("Dynamic/MainBrown+6"))
-		 Spacer()
-		 }
-		 
-		 }
-		 .padding(EdgeInsets(top: 30, leading: 15, bottom: 30, trailing: 15))
-		 .background(
-		 RoundedRectangle(cornerRadius: CGFloat(17))
-		 .foregroundColor(Color("Dynamic/MainBrown"))
-		 .opacity(0.25)
-		 )*/
-		
-		//::course box
-		/*VStack(spacing:0) {
-		 VStack(alignment: .leading) {
-		 HStack {
-		 Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.wizardPickedCourse.title))
-		 .bold()
-		 .foregroundColor(Color("Dynamic/MainBrown+6"))
-		 .font(.title2)
-		 Spacer()
-		 Label("Go to lesson", systemImage: "arrow.right.circle.fill")
-		 .labelStyle(.iconOnly)
-		 .font(.title2)
-		 .foregroundColor(Color("Dynamic/MainGreen"))
-		 }
-		 }.padding(15)
-		 }
-		 .background(
-		 RoundedRectangle(cornerRadius: CGFloat(17))
-		 //.foregroundColor(Color("Dynamic/LightGray"))
-		 .foregroundColor(Color("Dynamic/LightGreen"))
-		 .opacity(0.85)
-		 .shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
-		 )
-		 .onTapGesture {
-		 scorewindData.currentCourse = scorewindData.wizardPickedCourse
-		 scorewindData.currentView = Page.course
-		 self.selectedTab = "TCourse"
-		 scorewindData.currentLesson = scorewindData.wizardPickedCourse.lessons[0]
-		 scorewindData.setCurrentTimestampRecs()
-		 //scorewindData.lastViewAtScore = true
-		 scorewindData.lastPlaybackTime = 0.0
-		 scorewindData.lessonChanged = true
-		 }*/
-		
+		if studentData.wizardResult.learningPath.count > 0 && showOtherCourses {
+			if extractCourseSortValue(learningPathItem: studentData.wizardResult.learningPath[0]) > 1 {
+				if showTopDivider == false {
+					displayShowOtherCourseMenu()
+						.animation(Animation.easeIn(duration: 2), value: showTopDivider)
+				}
+				
+				ForEach(getEasierCourseStack(sortValue: extractCourseSortValue(learningPathItem: studentData.wizardResult.learningPath[0]))) { aCourse in
+					courseItem(courseItem: aCourse)
+				}
+				Spacer().frame(height: 15)
+				/*Label("Easier", systemImage: "arrow.up")
+					.labelStyle(.iconOnly)
+					.foregroundColor(Color("Dynamic/MainGreen"))
+					.font(.headline)*/
+			}
+		}
 		//::learning path box title
 		HStack {
 			HStack {
@@ -486,6 +330,13 @@ struct WizardResultView: View {
 			.offset(x: -15, y:33 )
 			Spacer()
 		}
+		.overlay(alignment: .topLeading , content: {
+			if showTopDivider == false {
+				displayShowOtherCourseMenu()
+					.padding(.top, verticalSize == .regular ? -10 : 5)
+					.animation(Animation.easeIn(duration: 2), value: showTopDivider)
+			}
+		})
 		
 		//:: learning path box content summary
 		VStack(alignment: .center) {
@@ -505,9 +356,92 @@ struct WizardResultView: View {
 		
 		WizardResultPathView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData, showLessonView: $showLessonView, showStore: $showStore)
 		
-		Spacer().frame(minHeight: 50)
+		if studentData.wizardResult.learningPath.count > 0 && showOtherCourses {
+			Spacer().frame(height:48) //15+33
+			/*Label("Harder", systemImage: "arrow.down")
+				.labelStyle(.iconOnly)
+				.foregroundColor(Color("Dynamic/MainGreen"))
+				.font(.headline)*/
+			ForEach(getHarderCourseStack(sortValue: extractCourseSortValue(learningPathItem: studentData.wizardResult.learningPath[studentData.wizardResult.learningPath.count-1]))) { aCourse in
+				courseItem(courseItem: aCourse)
+			}
+		}
+		
+		Spacer().frame(minHeight: 80)
 		//}
 		
+	}
+	
+	@ViewBuilder
+	private func displayShowOtherCourseMenu() -> some View {
+		//showOtherCourses ? "Show Learning Path Only" : "Show All Courses"
+		Label(title:{
+			if showOtherCourses {
+							Text("Show Learning Path Only")
+									.transition(transition)
+					} else {
+							Text("Show All Courses")
+									.transition(transition)
+					}
+			/*Text(showOtherCourses ? "Show Learning Path Only" : "Show All Courses")
+				.animation(Animation.default, value: showOtherCourses)*/
+		}, icon: {
+			Image(systemName: "tray.2")
+		})
+			.frame(maxHeight:20)
+			.labelStyle(.titleAndIcon)
+			.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
+			.foregroundColor(showTopDivider ? Color("Dynamic/LightGray") : Color("Dynamic/MainBrown+6"))
+			.background(
+				RoundedRectangle(cornerRadius: CGFloat(17))
+					.foregroundColor(Color("Dynamic/MainBrown"))
+					.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+					.opacity(showTopDivider ? 0.8 : 0.25)
+					.overlay {
+						RoundedRectangle(cornerRadius: 17)
+							.stroke(Color("Dynamic/DarkGray"), lineWidth: 1)
+					}
+			)
+			.onTapGesture {
+				withAnimation {
+					showOtherCourses.toggle()
+				}
+			}
+	}
+	
+	@ViewBuilder
+	private func courseItem(courseItem: Course) -> some View {
+		VStack(spacing:0) {
+			VStack(alignment: .leading) {
+				HStack {
+					Text("Course:")
+						.bold()
+						.foregroundColor(Color("Dynamic/MainBrown+6")) +
+					Text(" \(scorewindData.replaceCommonHTMLNumber(htmlString: courseItem.title))")
+						//.bold()
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+					Spacer()
+					Label("Go to course", systemImage: "arrow.right.circle.fill")
+						.labelStyle(.iconOnly)
+						.font(.title2)
+						.foregroundColor(Color("Dynamic/MainGreen")) // original is "Dynamic/MainBrown"
+				}
+			}.padding(15)
+		}
+		.background(
+			RoundedRectangle(cornerRadius: CGFloat(17))
+				.foregroundColor(Color("Dynamic/LightGreen"))
+				.opacity(0.85)
+				.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+		)
+		.onTapGesture {
+			scorewindData.currentCourse = courseItem
+			scorewindData.currentLesson = courseItem.lessons[0]
+			scorewindData.setCurrentTimestampRecs()
+			scorewindData.lastPlaybackTime = 0.0
+			self.selectedTab = "TCourse"
+			scorewindData.lessonChanged = true
+		}
 	}
 	
 	struct ViewOffsetKey: PreferenceKey {
@@ -532,13 +466,13 @@ struct WizardResultView: View {
 	}
 	
 	private func getEasierCourseStack(sortValue: Int) -> [Course] {
-		var allCourses = scorewindData.allCourses.filter({$0.instrument == studentData.getInstrumentChoice() && Int($0.sortValue)! < sortValue})
+		var allCourses = scorewindData.allCourses.filter({$0.instrument == scorewindData.wizardPickedCourse.instrument && Int($0.sortValue)! < sortValue})
 		allCourses = allCourses.sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})
 		return allCourses
 	}
 	
 	private func getHarderCourseStack(sortValue: Int) -> [Course] {
-		var allCourses = scorewindData.allCourses.filter({$0.instrument == studentData.getInstrumentChoice() && Int($0.sortValue)! > sortValue})
+		var allCourses = scorewindData.allCourses.filter({$0.instrument == scorewindData.wizardPickedCourse.instrument && Int($0.sortValue)! > sortValue})
 		allCourses = allCourses.sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})
 		return allCourses
 	}
