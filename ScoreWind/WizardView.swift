@@ -53,7 +53,7 @@ struct WizardView: View {
 							userRole = .student
 						}
 					}, label: {
-						Text("Switch role")
+						Text(userRole == .student ? "Internal Tester Only" : "Back to Normal User's View")
 					})
 					
 					Button(action: {

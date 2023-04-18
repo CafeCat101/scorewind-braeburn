@@ -16,175 +16,238 @@ struct WizardTeacherView: View {
 	@State private var resetAllAlert = false
 	@State private var resetTipAlert = false
 	@State private var userDefaults = UserDefaults.standard
+	@State private var showRemoveAllDataAlrt = false
 	
 	var body: some View {
-		List {
-			Section(header: Text("Guitar - Step By Step")) {
-				ForEach(guitarCourses(type: "step")) { course in
-					Button(action: {
-						scorewindData.currentCourse = course
-						scorewindData.currentView = Page.course
-						self.selectedTab = "TCourse"
-						scorewindData.currentLesson = scorewindData.currentCourse.lessons[0]
-						scorewindData.setCurrentTimestampRecs()
-						//scorewindData.lastViewAtScore = true
-						scorewindData.lastPlaybackTime = 0.0
-						scorewindData.lessonChanged = true
-					}) {
-						if course.id == scorewindData.currentCourse.id {
-							Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
-								.foregroundColor(Color("WizardListTextHighlight"))
-						} else {
-							Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
-								.foregroundColor(Color("MyCourseItemText"))
+		VStack {
+			Text("Internal Testers Only").font(.title)
+			List {
+				Section(header: Text("Guitar - Step By Step")) {
+					ForEach(guitarCourses(type: "step")) { course in
+						Button(action: {
+							scorewindData.currentCourse = course
+							scorewindData.currentView = Page.course
+							self.selectedTab = "TCourse"
+							scorewindData.currentLesson = scorewindData.currentCourse.lessons[0]
+							scorewindData.setCurrentTimestampRecs()
+							scorewindData.lastPlaybackTime = 0.0
+							scorewindData.lessonChanged = true
+						}) {
+							if course.id == scorewindData.currentCourse.id {
+								Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
+									.foregroundColor(Color("Dynamic/Pink"))
+							} else {
+								Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
+									.foregroundColor(Color("Dynamic/MainBrown+6"))
+							}
+							
 						}
-						
 					}
 				}
-			}
-			
-			Section(header: Text("Violin - Step By Step")) {
-				ForEach(violinCourses(type: "step")) { course in
-					Button(action: {
-						scorewindData.currentCourse = course
-						scorewindData.currentView = Page.course
-						self.selectedTab = "TCourse"
-						scorewindData.currentLesson = scorewindData.currentCourse.lessons[0]
-						scorewindData.setCurrentTimestampRecs()
-						//scorewindData.lastViewAtScore = true
-						scorewindData.lastPlaybackTime = 0.0
-						scorewindData.lessonChanged = true
-					}) {
-						if course.id == scorewindData.currentCourse.id {
-							Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
-								.foregroundColor(Color("WizardListTextHighlight"))
-						} else {
-							Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
-								.foregroundColor(Color("MyCourseItemText"))
-						}
-						
-					}
-				}
-			}
-			
-			Section(header: Text("Guitar - Path")) {
-				ForEach(guitarCourses(type: "path")) { course in
-					Button(action: {
-						scorewindData.currentCourse = course
-						scorewindData.currentView = Page.course
-						self.selectedTab = "TCourse"
-						scorewindData.currentLesson = scorewindData.currentCourse.lessons[0]
-						scorewindData.setCurrentTimestampRecs()
-						//scorewindData.lastViewAtScore = true
-						scorewindData.lastPlaybackTime = 0.0
-						scorewindData.lessonChanged = true
-					}) {
-						if course.id == scorewindData.currentCourse.id {
-							Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
-								.foregroundColor(Color("WizardListTextHighlight"))
-						} else {
-							Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
-								.foregroundColor(Color("MyCourseItemText"))
-						}
-						
-					}
-				}
-			}
-			
-			Section(header: Text("Violin - Path")) {
-				ForEach(violinCourses(type: "path")) { course in
-					Button(action: {
-						scorewindData.currentCourse = course
-						scorewindData.currentView = Page.course
-						self.selectedTab = "TCourse"
-						scorewindData.currentLesson = scorewindData.currentCourse.lessons[0]
-						scorewindData.setCurrentTimestampRecs()
-						//scorewindData.lastViewAtScore = true
-						scorewindData.lastPlaybackTime = 0.0
-						scorewindData.lessonChanged = true
-					}) {
-						if course.id == scorewindData.currentCourse.id {
-							Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
-								.foregroundColor(Color("WizardListTextHighlight"))
-						} else {
-							Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
-								.foregroundColor(Color("MyCourseItemText"))
-						}
-						
-					}
-				}
-			}
-			/*
-			Section(header: Text("Reset Data")) {
-				Button(action: {
-					removeDataOnDevice()
-					removeDataOniCloud()
-					showResetDataDialog = true
-				}, label: {
-					Text("Remove all data").foregroundColor(Color("MyCourseItemText"))
-				})
-				.alert("Please restart the app now!", isPresented: $showResetDataDialog, actions: {
-					Button("ok", action:{
-						showResetDataDialog = false
-					})
-				}, message: {
-					Text("Data is removed.\n\nRemember to restart the app to see the effect.")
-				})
 				
-				Button(action: {
-					studentData.removeAUserDefaultKey(keyName: "hideTips")
-					showResetDataDialog = true
-				}, label: {
-					Text("Remove viewed tip data only").foregroundColor(Color("MyCourseItemText"))
-				})
-				.alert("Remove viewed tip data", isPresented: $showResetDataDialog, actions: {
-					Button("ok", action:{
-						showResetDataDialog = false
-					})
-				}, message: {
-					Text("All tips are visible again now.")
-				})
-				
-				/*Button(action: {
-					removeDataOnDevice()
-					showResetDataDialog = true
-				}, label: {
-					VStack {
-						Text("Remove all data on the device").foregroundColor(Color("MyCourseItemText")).font(.headline)
-						Text("To delete data about last viewed lesson, course, tips and downloaded video courses.").foregroundColor(Color("MyCourseItemText"))
+				Section(header: Text("Violin - Step By Step")) {
+					ForEach(violinCourses(type: "step")) { course in
+						Button(action: {
+							scorewindData.currentCourse = course
+							scorewindData.currentView = Page.course
+							self.selectedTab = "TCourse"
+							scorewindData.currentLesson = scorewindData.currentCourse.lessons[0]
+							scorewindData.setCurrentTimestampRecs()
+							scorewindData.lastPlaybackTime = 0.0
+							scorewindData.lessonChanged = true
+						}) {
+							if course.id == scorewindData.currentCourse.id {
+								Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
+									.foregroundColor(Color("Dynamic/Pink"))
+							} else {
+								Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
+									.foregroundColor(Color("Dynamic/MainBrown+6"))
+							}
+							
+						}
 					}
-				})
-				.alert("Please restart the app now!", isPresented: $showResetDataDialog, actions: {
-					Button("ok", action:{
-						showResetDataDialog = false
-					})
-				}, message: {
-					Text("Data is removed.\n\nRemember to restart the app to see the effect.")
-				})
+				}
 				
-				Button(action: {
-					removeDataOniCloud()
-					showResetDataDialog = true
-				}, label: {
-					VStack {
-						Text("Remove all data on the cloud").foregroundColor(Color("MyCourseItemText")).font(.headline)
-						Text("To delete data about favourite courses, lessons you've finished or watched.\n\nThe result of wizard will also be removed.").foregroundColor(Color("MyCourseItemText"))
+				Section(header: Text("Guitar - Path")) {
+					ForEach(guitarCourses(type: "path")) { course in
+						Button(action: {
+							scorewindData.currentCourse = course
+							scorewindData.currentView = Page.course
+							self.selectedTab = "TCourse"
+							scorewindData.currentLesson = scorewindData.currentCourse.lessons[0]
+							scorewindData.setCurrentTimestampRecs()
+							//scorewindData.lastViewAtScore = true
+							scorewindData.lastPlaybackTime = 0.0
+							scorewindData.lessonChanged = true
+						}) {
+							if course.id == scorewindData.currentCourse.id {
+								Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
+									.foregroundColor(Color("Dynamic/Pink"))
+							} else {
+								Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
+									.foregroundColor(Color("Dynamic/MainBrown+6"))
+							}
+							
+						}
 					}
-				})
-				.alert("Please restart the app now!", isPresented: $showResetDataDialog, actions: {
-					Button("ok", action:{
-						showResetDataDialog = false
+				}
+				
+				Section(header: Text("Violin - Path")) {
+					ForEach(violinCourses(type: "path")) { course in
+						Button(action: {
+							scorewindData.currentCourse = course
+							scorewindData.currentView = Page.course
+							self.selectedTab = "TCourse"
+							scorewindData.currentLesson = scorewindData.currentCourse.lessons[0]
+							scorewindData.setCurrentTimestampRecs()
+							//scorewindData.lastViewAtScore = true
+							scorewindData.lastPlaybackTime = 0.0
+							scorewindData.lessonChanged = true
+						}) {
+							if course.id == scorewindData.currentCourse.id {
+								Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
+									.foregroundColor(Color("Dynamic/Pink"))
+							} else {
+								Text(scorewindData.replaceCommonHTMLNumber(htmlString: course.title))
+									.foregroundColor(Color("Dynamic/MainBrown+6"))
+							}
+							
+						}
+					}
+				}
+				/*
+				Section(header: Text("Reset Data")) {
+					Button(action: {
+						removeDataOnDevice()
+						removeDataOniCloud()
+						showResetDataDialog = true
+					}, label: {
+						Text("Remove all data").foregroundColor(Color("MyCourseItemText"))
 					})
-				}, message: {
-					Text("Data is removed.\n\nRemember to restart the app to see the effect.")
-				})*/
+					.alert("Please restart the app now!", isPresented: $showResetDataDialog, actions: {
+						Button("ok", action:{
+							showResetDataDialog = false
+						})
+					}, message: {
+						Text("Data is removed.\n\nRemember to restart the app to see the effect.")
+					})
+					
+					Button(action: {
+						studentData.removeAUserDefaultKey(keyName: "hideTips")
+						showResetDataDialog = true
+					}, label: {
+						Text("Remove viewed tip data only").foregroundColor(Color("MyCourseItemText"))
+					})
+					.alert("Remove viewed tip data", isPresented: $showResetDataDialog, actions: {
+						Button("ok", action:{
+							showResetDataDialog = false
+						})
+					}, message: {
+						Text("All tips are visible again now.")
+					})
+					
+					/*Button(action: {
+						removeDataOnDevice()
+						showResetDataDialog = true
+					}, label: {
+						VStack {
+							Text("Remove all data on the device").foregroundColor(Color("MyCourseItemText")).font(.headline)
+							Text("To delete data about last viewed lesson, course, tips and downloaded video courses.").foregroundColor(Color("MyCourseItemText"))
+						}
+					})
+					.alert("Please restart the app now!", isPresented: $showResetDataDialog, actions: {
+						Button("ok", action:{
+							showResetDataDialog = false
+						})
+					}, message: {
+						Text("Data is removed.\n\nRemember to restart the app to see the effect.")
+					})
+					
+					Button(action: {
+						removeDataOniCloud()
+						showResetDataDialog = true
+					}, label: {
+						VStack {
+							Text("Remove all data on the cloud").foregroundColor(Color("MyCourseItemText")).font(.headline)
+							Text("To delete data about favourite courses, lessons you've finished or watched.\n\nThe result of wizard will also be removed.").foregroundColor(Color("MyCourseItemText"))
+						}
+					})
+					.alert("Please restart the app now!", isPresented: $showResetDataDialog, actions: {
+						Button("ok", action:{
+							showResetDataDialog = false
+						})
+					}, message: {
+						Text("Data is removed.\n\nRemember to restart the app to see the effect.")
+					})*/
+				}
+				 */
 			}
-			 */
+			.listStyle(GroupedListStyle())
+			.background(Color("Dynamic/LightGray"))
+			.cornerRadius(17)
+			.padding([.leading,.trailing], 15)
+			
+			Button(action: {
+				showRemoveAllDataAlrt = true
+			}, label: {
+				Text("Remove all data")
+					.foregroundColor(Color("Dynamic/MainBrown+6"))
+					.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
+					.background(
+						RoundedRectangle(cornerRadius: CGFloat(17))
+							.foregroundColor(Color("Dynamic/MainBrown"))
+							.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+							.opacity(0.25)
+							.overlay {
+								RoundedRectangle(cornerRadius: 17)
+									.stroke(Color("Dynamic/DarkGray"), lineWidth: 1)
+							}
+					)
+			})
+			.padding([.top,.bottom],15)
 		}
-		.listStyle(GroupedListStyle())
-		.background(Color("LessonListTextBg"))
+		.alert("Remove All Data", isPresented: $showRemoveAllDataAlrt, actions: {
+			Button("ok", action:{
+				print("[debug] My CourseView, alert ok.")
+				
+				removeDataOniCloud()
+				removeDataOnDevice()
+				
+				//:: reset in memory variable
+				studentData.myCourses.removeAll()
+				downloadManager.downloadList.removeAll()
+				
+				studentData.resetWizrdChoice()
+				studentData.wizardStepNames.removeAll()
+				studentData.wizardRange.removeAll()
+				studentData.wizardResult = WizardResult()
+				scorewindData.wizardPickedCourse = Course()
+				scorewindData.wizardPickedLesson = Lesson()
+				scorewindData.wizardPickedTimestamps.removeAll()
+				
+				scorewindData.currentCourse = Course()
+				scorewindData.currentLesson = Lesson()
+				
+				resetAllAlert = true
+			})
+			Button("Cancel", role:.cancel, action:{
+				print("[debug] My CourseView, alert cancel.")
+			})
+		}, message: {
+			Text("This step will remove all your data in MyCourses, History of Current Course/Lesson, Completed and Watched Lessons, Offline Course Videos, Recent Learning Path, Viewed Tips. Continuet?")
+		})
+		.alert("Please RESTART the app now!", isPresented: $resetAllAlert, actions: {
+			Button("ok", action:{
+				resetAllAlert = false
+			})
+		}, message: {
+			Text("Data is removed.\n\nRemember to restart the app to see the effect.")
+		})
 		
-		Button(action: {
+		
+		
+		
+		/*Button(action: {
 			removeDataOniCloud()
 			removeDataOnDevice()
 			
@@ -210,15 +273,10 @@ struct WizardTeacherView: View {
 				.background(Color("MyCourseItem"))
 				.cornerRadius(15)
 		})
-		.padding([.bottom],15)
-		.alert("Please RESTART the app now!", isPresented: $resetAllAlert, actions: {
-			Button("ok", action:{
-				resetAllAlert = false
-			})
-		}, message: {
-			Text("Data is removed.\n\nRemember to restart the app to see the effect.")
-		})
+		.padding([.bottom],15)*/
 		
+		
+		/*
 		Button(action: {
 			studentData.removeAUserDefaultKey(keyName: "hideTips")
 			resetTipAlert = true
@@ -237,6 +295,7 @@ struct WizardTeacherView: View {
 		}, message: {
 			Text("All tips are visible again now.")
 		})
+		 */
 	}
 	
 	private func removeDataOnDevice() {

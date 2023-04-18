@@ -23,7 +23,8 @@ struct HomeView: View {
 			WizardView(selectedTab: $selectedTab, studentData: studentData, showLessonView: $showLessonView, downloadManager: downloadManager, stepName: $stepName)
 				.tabItem {
 					Label("Home", systemImage: "music.note.house")
-				}.tag("THome")
+				}
+				.tag("THome")
 			
 			CourseView(selectedTab: $selectedTab, downloadManager: downloadManager, studentData: studentData, showLessonView: $showLessonView)
 				.tabItem {

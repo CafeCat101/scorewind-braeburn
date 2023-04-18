@@ -828,7 +828,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = ScoreWind/ScoreWind.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.8.1;
+				CURRENT_PROJECT_VERSION = 3.9.1;
 				DEVELOPMENT_ASSET_PATHS = "\"ScoreWind/Preview Content\"";
 				DEVELOPMENT_TEAM = 23BXR5AUUB;
 				ENABLE_PREVIEWS = YES;
@@ -845,7 +845,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.elosoft.ScoreWind;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -865,7 +865,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = ScoreWind/ScoreWind.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.8.1;
+				CURRENT_PROJECT_VERSION = 3.9.1;
 				DEVELOPMENT_ASSET_PATHS = "\"ScoreWind/Preview Content\"";
 				DEVELOPMENT_TEAM = 23BXR5AUUB;
 				ENABLE_PREVIEWS = YES;
@@ -882,7 +882,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.elosoft.ScoreWind;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

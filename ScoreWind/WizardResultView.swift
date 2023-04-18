@@ -27,6 +27,7 @@ struct WizardResultView: View {
 	@Environment(\.colorScheme) var uiColor
 	@State private var showOtherCourses = false
 	let transition = AnyTransition.asymmetric(insertion: .slide, removal: .scale).combined(with: .opacity)
+	@State private var showNotification = false
 	
 	var body: some View {
 		VStack(spacing:0) {
@@ -100,10 +101,31 @@ struct WizardResultView: View {
 				if showTopDivider {
 					displayShowOtherCourseMenu()
 						.padding([.top,.leading], 15)
-						.animation(Animation.easeIn(duration: 2), value: showTopDivider)
+						.animation(Animation.easeIn(duration: 1), value: showTopDivider)
 				}
 			})
 		}
+		.overlay(alignment: .top ,content: {
+			ZStack {
+				Label(showOtherCourses ? "All the courses are shown now." : "Only your learning path is shown now.", systemImage: "info.circle.fill")
+					.font(.headline)
+					.foregroundColor(Color("AppYellow"))
+					.multilineTextAlignment(.center)
+					.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
+				/*Text(showOtherCourses ? "All the courses are shown now." : "Only your learning path is shown now.")
+					.font(.headline)
+					.foregroundColor(Color("AppYellow"))
+					.multilineTextAlignment(.center)
+					.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))*/
+			}
+			.frame(width:UIScreen.main.bounds.size.width*0.85)
+			.background(
+				RoundedRectangle(cornerRadius: CGFloat(17))
+					.foregroundColor(.black)
+					.opacity(0.90)
+			)
+			.offset(y: showNotification ? 10 : -200)
+		})
 	}
 	
 	private func getIconTitleName() -> String {
@@ -294,6 +316,7 @@ struct WizardResultView: View {
 					courseItem(courseItem: aCourse)
 				}
 				Spacer().frame(height: 15)
+				Divider()
 				/*Label("Easier", systemImage: "arrow.up")
 					.labelStyle(.iconOnly)
 					.foregroundColor(Color("Dynamic/MainGreen"))
@@ -358,6 +381,7 @@ struct WizardResultView: View {
 		
 		if studentData.wizardResult.learningPath.count > 0 && showOtherCourses {
 			Spacer().frame(height:48) //15+33
+			Divider().padding(.bottom, 8)
 			/*Label("Harder", systemImage: "arrow.down")
 				.labelStyle(.iconOnly)
 				.foregroundColor(Color("Dynamic/MainGreen"))
@@ -383,8 +407,6 @@ struct WizardResultView: View {
 							Text("Show All Courses")
 									.transition(transition)
 					}
-			/*Text(showOtherCourses ? "Show Learning Path Only" : "Show All Courses")
-				.animation(Animation.default, value: showOtherCourses)*/
 		}, icon: {
 			Image(systemName: "tray.2")
 		})
@@ -405,6 +427,18 @@ struct WizardResultView: View {
 			.onTapGesture {
 				withAnimation {
 					showOtherCourses.toggle()
+				}
+				DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+					withAnimation(Animation.spring(response: 0.15, dampingFraction: 0.4, blendDuration: 0.4).speed(0.3)) {
+						showNotification = true
+					}
+				}
+				DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+					withAnimation(Animation.spring(response: 0.15, dampingFraction: 0.4, blendDuration: 0.4).speed(0.3)) {
+						if showNotification {
+							showNotification = false
+						}
+					}
 				}
 			}
 	}
