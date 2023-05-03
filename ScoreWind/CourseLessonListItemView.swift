@@ -60,7 +60,7 @@ struct CourseLessonListItemView: View {
 					.foregroundColor(Color("Dynamic/MainBrown+6"))
 				Spacer()
 			}
-			.padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
+			.padding(16)
 
 			if hasIcons(scorewindID: lesson.scorewindID, getLessonID: lesson.id) {
 				Spacer()

@@ -16,7 +16,7 @@ struct MyCouseItemview: View {
 	@Environment(\.verticalSizeClass) var verticalSize
 	
 	var body: some View {
-		if aCourse.courseID == scorewindData.currentCourse.id {
+		/*if aCourse.courseID == scorewindData.currentCourse.id {
 			HStack {
 				HStack {
 					HStack {
@@ -46,22 +46,46 @@ struct MyCouseItemview: View {
 				.offset(x: -15)
 				Spacer()
 			}
-		}
+		}*/
 		
 		
 		VStack(spacing: 0) {
+			if aCourse.courseID == scorewindData.currentCourse.id {
+				HStack {
+					HStack {
+						HStack {
+							VStack {
+								Image(getIconTitleName())
+									.resizable()
+									.scaledToFit()
+									.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+							}
+							.frame(maxHeight: 33)
+							Text("Currently")
+								.bold()
+								.foregroundColor(Color("Dynamic/DarkPurple"))
+								.font(.subheadline)
+								.frame(maxHeight: 33)
+						}
+						.padding(EdgeInsets(top: 10, leading: 22, bottom: 8, trailing: 31))
+					}
+					.background(
+						RoundedCornersShape(corners: [.allCorners], radius: 17)
+							.fill(Color("Dynamic/MainBrown"))
+							.opacity(0.25)
+					)
+					.padding(EdgeInsets(top: 15, leading: 17, bottom: 0, trailing: 0))
+					Spacer()
+				}
+			}
 			HStack {
-				/*Text(scorewindData.replaceCommonHTMLNumber(htmlString: aCourse.courseTitle))
-					.font(.headline)
-					.multilineTextAlignment(.leading)
-					.foregroundColor(getColorHere(colorFor: "MyCourseItemText", courseID: aCourse.courseID))*/
 				Text(scorewindData.replaceCommonHTMLNumber(htmlString: aCourse.courseTitle))
 					.bold()
 					.multilineTextAlignment(.leading)
 					.foregroundColor(Color("Dynamic/MainBrown+6"))
 				Spacer()
 			}
-			.padding(EdgeInsets(top: 10, leading: 16, bottom: 0, trailing: 16))
+			.padding(EdgeInsets(top: 16, leading: 16, bottom: 0, trailing: 16))
 			
 			HStack {
 				if aCourse.completedLessons.count>0 {
@@ -118,18 +142,18 @@ struct MyCouseItemview: View {
 					lastCompletedWatchedTime(courseID: aCourse.courseID)
 					Spacer()
 				}
-				.padding(EdgeInsets(top: 0, leading: 16, bottom: 10, trailing: 16))
+				.padding(EdgeInsets(top: 10, leading: 16, bottom: 20, trailing: 16))
 			}
 			//Text("\(aCourse.courseID):\(testDateToString(getDate:aCourse.lastUpdatedDate))")
 		}
-		.frame(minHeight: 86)
+		//.frame(minHeight: 86)
 		.background(
 			RoundedCornersShape(corners: [.topRight, .topLeft, .bottomLeft, .bottomRight], radius: 17)
 				.fill(aCourse.courseID == scorewindData.currentCourse.id ? Color("Dynamic/LightGreen") : Color("Dynamic/LightGray"))
 				.opacity(0.85)
 				.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
 		)
-		.padding(.top, aCourse.courseID == scorewindData.currentCourse.id ? -33 : 0)
+		//.padding(.top, aCourse.courseID == scorewindData.currentCourse.id ? -33 : 0)
 		.onTapGesture(perform: {
 			scorewindData.currentCourse = scorewindData.allCourses.first(where: {$0.id == aCourse.courseID}) ?? Course()
 			scorewindData.currentView = Page.course

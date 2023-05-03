@@ -74,7 +74,7 @@ struct MyCoursesView: View {
 										}
 									}
 									.padding([.leading,.trailing], 15)
-									.padding([.bottom],6)
+									.padding([.bottom],12)
 									
 									Spacer().frame(height: 50)
 								}

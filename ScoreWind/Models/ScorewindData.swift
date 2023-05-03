@@ -189,6 +189,7 @@ class ScorewindData: ObservableObject {
 		result = result.replacingOccurrences(of: "&#8217;", with: "’")
 		result = result.replacingOccurrences(of: "&#8220;", with: "“")
 		result = result.replacingOccurrences(of: "&#8221;", with: "”")
+		result = result.replacingOccurrences(of: "&#038;", with: "& ")
 		return result
 	}
 	
