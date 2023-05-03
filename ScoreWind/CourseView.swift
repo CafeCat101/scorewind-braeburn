@@ -44,7 +44,7 @@ struct CourseView: View {
 						Spacer()
 					}
 					Text(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentCourse.title))
-						.font(verticalSize == .regular ? .title2 : .title3)
+						.font(verticalSize == .regular ? .title : .title3)
 						.foregroundColor(Color("Dynamic/MainBrown+6"))
 						.bold()
 						.modifier(turncateTheTitle(isTurncating: $turncateTitle))
@@ -77,7 +77,7 @@ struct CourseView: View {
 									VStack(spacing:0) {
 										Spacer().frame(height: 10)
 										ForEach(scorewindData.currentCourse.lessons){ lesson in
-											if scorewindData.currentLesson.scorewindID == lesson.scorewindID {
+											/*if scorewindData.currentLesson.scorewindID == lesson.scorewindID {
 												HStack {
 													HStack {
 														HStack {
@@ -91,24 +91,25 @@ struct CourseView: View {
 															Text("Currently")
 																.bold()
 																.foregroundColor(Color("Dynamic/DarkPurple"))
-																.font(.headline)
+																.font(.subheadline)
+																.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
 																.frame(maxHeight: 33)
-															Spacer()
+															//Spacer()
 														}
-														.padding(EdgeInsets(top: 10, leading: 0, bottom: 33, trailing: 0))
+														.padding(EdgeInsets(top: 10, leading: 22, bottom: 8, trailing: 31))
 													}
-													.padding(.leading, 15)
-													.frame(width: verticalSize == .regular ? UIScreen.main.bounds.size.width*0.7 : (UIScreen.main.bounds.size.width*0.7)*0.5)
+													//.padding(.leading, 15)
+													//.frame(width: verticalSize == .regular ? UIScreen.main.bounds.size.width*0.7 : (UIScreen.main.bounds.size.width*0.7)*0.5)
 													.background(
-														RoundedCornersShape(corners: verticalSize == .regular ? [.topRight, .bottomRight] : [.allCorners], radius: 17)
+														RoundedCornersShape(corners: [.topLeft,.topRight], radius: 17)
 															.fill(Color("Dynamic/MainBrown"))
 															.opacity(0.25)
 													)
-													.offset(x: -15)
+													.offset(x: 17)
 													Spacer()
 												}
 												.id(lesson.scorewindID)
-											}
+											}*/
 											CourseLessonListItemView(
 												selectedTab: $selectedTab,
 												lesson: lesson,
@@ -117,10 +118,10 @@ struct CourseView: View {
 												showLessonView: $showLessonView,
 												showStoreView: $showStore)
 											.id(lesson.scorewindID)
-											.padding(.top, scorewindData.currentLesson.scorewindID == lesson.scorewindID ? -33 : 0)
+											//.padding(.top, scorewindData.currentLesson.scorewindID == lesson.scorewindID ? 0 : 0)
 										}
 										.padding([.leading,.trailing], 15)
-										.padding([.bottom],6)
+										.padding([.bottom],12)
 										Spacer().frame(height: 50)
 									}
 									.background(GeometryReader {

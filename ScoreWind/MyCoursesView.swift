@@ -26,7 +26,7 @@ struct MyCoursesView: View {
 		VStack(spacing:0) {
 			Label(title: {
 				Text("My Courses")
-					.font(verticalSize == .regular ? .title2 : .title3)
+					.font(verticalSize == .regular ? .title : .title3)
 					.foregroundColor(Color("Dynamic/MainBrown+6"))
 					.bold()
 			}, icon: {

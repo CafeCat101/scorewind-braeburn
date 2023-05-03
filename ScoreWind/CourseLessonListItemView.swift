@@ -19,12 +19,48 @@ struct CourseLessonListItemView: View {
 	
 	var body: some View {
 		VStack{
+			if scorewindData.currentLesson.scorewindID == lesson.scorewindID {
+				HStack {
+					HStack {
+						HStack {
+							VStack {
+								Image(getIconTitleName())
+									.resizable()
+									.scaledToFit()
+									.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+							}
+							.frame(maxHeight: 33)
+							Text("Currently")
+								.bold()
+								.foregroundColor(Color("Dynamic/DarkPurple"))
+								.font(.subheadline)
+								//.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+								.frame(maxHeight: 33)
+							//Spacer()
+						}
+						.padding(EdgeInsets(top: 10, leading: 22, bottom: 8, trailing: 31))
+					}
+					//.frame(width: verticalSize == .regular ? UIScreen.main.bounds.size.width*0.7 : (UIScreen.main.bounds.size.width*0.7)*0.5)
+					.background(
+						RoundedCornersShape(corners: [.allCorners], radius: 17)
+							.fill(Color("Dynamic/MainBrown"))
+							.opacity(0.25)
+					)
+					.padding(EdgeInsets(top: 15, leading: 17, bottom: 0, trailing: 0))
+					Spacer()
+				}
+				.id(lesson.scorewindID)
+			}
+			
+			
 			HStack {
 				Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
+					.bold()
 					.multilineTextAlignment(.leading)
 					.foregroundColor(Color("Dynamic/MainBrown+6"))
 				Spacer()
-			}.padding(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16))
+			}
+			.padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
 
 			if hasIcons(scorewindID: lesson.scorewindID, getLessonID: lesson.id) {
 				Spacer()
@@ -50,7 +86,7 @@ struct CourseLessonListItemView: View {
 		//.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
 		.frame(minHeight: 86)
 		.background(
-			RoundedCornersShape(corners: [.topRight, .topLeft, .bottomLeft, .bottomRight], radius: 17)
+			RoundedCornersShape(corners: [.allCorners], radius: 17)
 				.fill(scorewindData.currentLesson.scorewindID == lesson.scorewindID ? Color("Dynamic/PanelHighlighted") : Color("Dynamic/LightGray"))
 				.opacity(0.85)
 				.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
@@ -131,6 +167,14 @@ struct CourseLessonListItemView: View {
 				.labelStyle(.iconOnly)
 				.foregroundColor(Color("Dynamic/MainGreen"))
 				.padding(.trailing, 15)
+		}
+	}
+	
+	private func getIconTitleName() -> String {
+		if scorewindData.currentCourse.instrument == InstrumentType.guitar.rawValue {
+			return "iconGuitar"
+		} else {
+			return "iconViolin"
 		}
 	}
 	

@@ -62,6 +62,7 @@ struct WizardResultPathView: View {
 			.onTapGesture {
 				goToCourse(toCourseID: pathItem.courseID)
 			}
+			.padding(.bottom, 6)
 			/*
 			Text("Course: \(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.courseTitle))")
 				.foregroundColor(Color("LessonSheet"))
@@ -124,16 +125,6 @@ struct WizardResultPathView: View {
 			
 			VStack(spacing:0) {
 				VStack(alignment: .leading) {
-					/*if pathItem.startHere {
-						Label(title: {
-							Text("Start here")
-							.bold()
-							.foregroundColor(.yellow)
-						}, icon: {
-								Image(systemName: "paperplane.circle")
-								.foregroundColor(.yellow)
-						}).padding([.bottom],-5)
-					}*/
 					if pathItem.startHere {
 						HStack {
 							Spacer()
@@ -156,6 +147,7 @@ struct WizardResultPathView: View {
 						Text("\(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.lessonTitle))")
 							//.bold()
 							.foregroundColor(Color("Dynamic/MainBrown+6"))
+							.padding([.top,.bottom],6)
 						Spacer()
 						Label("Go to lesson", systemImage: "arrow.right.circle.fill")
 							.labelStyle(.iconOnly)
@@ -194,7 +186,7 @@ struct WizardResultPathView: View {
 			.onTapGesture {
 				goToLesson(toCourseID: pathItem.courseID, toLessonID: pathItem.lessonID)
 			}
-			.padding(.bottom, 6)
+			.padding(.bottom, 12)
 		}
 		
 		/*

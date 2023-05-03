@@ -85,9 +85,9 @@ struct MyCouseItemview: View {
 					Spacer()
 						.frame(width:20)
 				}*/
-				if let myString = getCourseDownloadStatusIcon(courseID: aCourse.courseID), !myString.isEmpty {
+				if getCourseDownloadStatusIcon(courseID: aCourse.courseID).isEmpty == false {
 					//print("myString \(myString)")
-					Label("Downloaded", systemImage: myString)
+					Label("Downloaded", systemImage: getCourseDownloadStatusIcon(courseID: aCourse.courseID))
 						.labelStyle(.iconOnly)
 						.foregroundColor(Color("Dynamic/MainGreen"))
 					Spacer()
