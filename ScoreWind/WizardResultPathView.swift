@@ -43,7 +43,7 @@ struct WizardResultPathView: View {
 							.bold()
 							.foregroundColor(Color("Dynamic/MainBrown+6")) +
 						Text(" \(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.courseTitle))")
-							//.bold()
+							.bold()
 							.foregroundColor(Color("Dynamic/MainBrown+6"))
 						Spacer()
 						Label("Go to course", systemImage: "arrow.right.circle.fill")
@@ -147,6 +147,7 @@ struct WizardResultPathView: View {
 						Text("\(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.lessonTitle))")
 							//.bold()
 							.foregroundColor(Color("Dynamic/MainBrown+6"))
+							.bold()
 							.padding([.top,.bottom],6)
 						Spacer()
 						Label("Go to lesson", systemImage: "arrow.right.circle.fill")

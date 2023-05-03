@@ -315,7 +315,7 @@ struct WizardResultView: View {
 				ForEach(getEasierCourseStack(sortValue: extractCourseSortValue(learningPathItem: studentData.wizardResult.learningPath[0]))) { aCourse in
 					courseItem(courseItem: aCourse)
 				}
-				Spacer().frame(height: 15)
+				Spacer().frame(height: 48)
 				Divider()
 				/*Label("Easier", systemImage: "arrow.up")
 					.labelStyle(.iconOnly)
@@ -324,7 +324,7 @@ struct WizardResultView: View {
 			}
 		}
 		//::learning path box title
-		HStack {
+		/*HStack {
 			HStack {
 				HStack {
 					VStack {
@@ -359,25 +359,41 @@ struct WizardResultView: View {
 					.padding(.top, verticalSize == .regular ? -10 : 5)
 					.animation(Animation.easeIn(duration: 2), value: showTopDivider)
 			}
-		})
+		})*/
 		
 		//:: learning path box content summary
+		if showTopDivider == false {
+			displayShowOtherCourseMenu()
+				.padding(.top, verticalSize == .regular ? 10 : 5)
+				.animation(Animation.easeIn(duration: 2), value: showTopDivider)
+		}
+		
 		VStack(alignment: .center) {
-			HStack {
-				Spacer()
-				Text(studentData.wizardResult.learningPathExplaination).foregroundColor(Color("Dynamic/MainBrown+6"))
-				Spacer()
-			}
+			Label(title: {
+				Text(studentData.wizardResult.learningPathTitle)
+					.bold()
+					.foregroundColor(Color("Dynamic/DarkPurple"))
+					.font(.title2)
+			}, icon: {
+				Image("iconLearningPath")
+					.resizable()
+					.scaledToFit()
+					.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+			}).frame(maxHeight:33)
+			Text(studentData.wizardResult.learningPathExplaination).foregroundColor(Color("Dynamic/MainBrown+6"))
+				.padding([.bottom],15)
+			
+			WizardResultPathView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData, showLessonView: $showLessonView, showStore: $showStore)
 			
 		}
 		.padding(EdgeInsets(top: 30, leading: 15, bottom: 30, trailing: 15))
 		.background(
 			RoundedRectangle(cornerRadius: CGFloat(17))
 				.foregroundColor(Color("Dynamic/MainBrown"))
-				.opacity(0.25)
+				.opacity(uiColor == .light ? 0.25 : 0.08)
 		)
 		
-		WizardResultPathView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData, showLessonView: $showLessonView, showStore: $showStore)
+		//WizardResultPathView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData, showLessonView: $showLessonView, showStore: $showStore)
 		
 		if studentData.wizardResult.learningPath.count > 0 && showOtherCourses {
 			Spacer().frame(height:48) //15+33
@@ -468,6 +484,7 @@ struct WizardResultView: View {
 				.opacity(0.85)
 				.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
 		)
+		.padding(.bottom, 7)
 		.onTapGesture {
 			scorewindData.currentCourse = courseItem
 			scorewindData.currentLesson = courseItem.lessons[0]
