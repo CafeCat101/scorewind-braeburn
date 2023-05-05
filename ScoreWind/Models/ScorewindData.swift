@@ -236,6 +236,36 @@ class ScorewindData: ObservableObject {
 		return capture
 	}
 	
+	func arrangedTitle(title:String, instrumentType: String) -> [String] {
+		var newTitle = title
+		newTitle = replaceCommonHTMLNumber(htmlString: title)
+		var result:[String] = []
+
+		let highlightRange = NSRange(newTitle.startIndex..<newTitle.endIndex, in: newTitle)
+		var highlightRegex = try! NSRegularExpression(pattern: #"^(G[0-9][0-9][0-9][.].*?) - (.*?)$"#)
+		if instrumentType == InstrumentType.violin.rawValue {
+			highlightRegex = try! NSRegularExpression(pattern: #"^(V[0-9][0-9][0-9][.].*?) - (.*?)$"#)
+		}
+		let matches = highlightRegex.matches(in: newTitle, options:[], range: highlightRange)
+		if matches.count > 0 {
+			for match in matches {
+				let code = match.range(at: 1)
+				let friendlyTitle = match.range(at: 2)
+				let codeRange = Range(code, in:newTitle)
+				let friendlyTitleRange = Range(friendlyTitle, in:newTitle)
+				//newTitle = String(newTitle[codeRange!]) + " - \n" + String(newTitle[friendlyTitleRange!])
+				result.append(String(newTitle[codeRange!]))
+				result.append(String(newTitle[friendlyTitleRange!]))
+			}
+		}
+		
+		if result.count == 0 {
+			result.append(newTitle)
+		}
+		
+		return result
+	}
+	
 	private func readBundleDataVersion() -> Int {
 		let dataVersionURL = URL(fileURLWithPath: "data_version", relativeTo: Bundle.main.resourceURL).appendingPathExtension("json")
 		do {

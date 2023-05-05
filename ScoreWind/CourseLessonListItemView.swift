@@ -29,13 +29,13 @@ struct CourseLessonListItemView: View {
 									.scaledToFit()
 									.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
 							}
-							.frame(maxHeight: 33)
+							.frame(maxHeight: 24)
 							Text("Currently")
 								.bold()
 								.foregroundColor(Color("Dynamic/DarkPurple"))
 								.font(.subheadline)
 								//.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
-								.frame(maxHeight: 33)
+								.frame(maxHeight: 24)
 							//Spacer()
 						}
 						.padding(EdgeInsets(top: 10, leading: 22, bottom: 8, trailing: 31))
@@ -54,10 +54,18 @@ struct CourseLessonListItemView: View {
 			
 			
 			HStack {
-				Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
-					.bold()
-					.multilineTextAlignment(.leading)
-					.foregroundColor(Color("Dynamic/MainBrown+6"))
+				//Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
+				if scorewindData.arrangedTitle(title: lesson.title, instrumentType: scorewindData.currentCourse.instrument).count > 1 {
+					(Text(scorewindData.arrangedTitle(title: lesson.title, instrumentType: scorewindData.currentCourse.instrument)[0]).font(.caption) + Text("\n") + Text(scorewindData.arrangedTitle(title: lesson.title, instrumentType: scorewindData.currentCourse.instrument)[1]).bold())
+						.multilineTextAlignment(.leading)
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+				} else {
+					Text(scorewindData.arrangedTitle(title: lesson.title, instrumentType: scorewindData.currentCourse.instrument)[0])
+						.bold()
+						.multilineTextAlignment(.leading)
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+				}
+				
 				Spacer()
 			}
 			.padding(16)

@@ -60,12 +60,12 @@ struct MyCouseItemview: View {
 									.scaledToFit()
 									.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
 							}
-							.frame(maxHeight: 33)
+							.frame(maxHeight: 24)
 							Text("Currently")
 								.bold()
 								.foregroundColor(Color("Dynamic/DarkPurple"))
 								.font(.subheadline)
-								.frame(maxHeight: 33)
+								.frame(maxHeight: 24)
 						}
 						.padding(EdgeInsets(top: 10, leading: 22, bottom: 8, trailing: 31))
 					}
@@ -218,6 +218,7 @@ struct MyCouseItemview: View {
 	
 	@ViewBuilder
 	private func lastCompletedWatchedTime(courseID: Int) -> some View {
+		let theCourse: Course = scorewindData.allCourses.first(where: {$0.id == courseID}) ?? Course()
 		let dateCollections:[Date:String] = getDateCollectionsFromAllStatus(courseID: courseID)
 		let lastUpdatedItemValue = (dateCollections.sorted(by: {$0.key > $1.key})[0].value).split(separator:"/")
 		let courseLessons = scorewindData.allCourses.first(where: {$0.id == courseID})?.lessons
@@ -225,8 +226,16 @@ struct MyCouseItemview: View {
 		
 		VStack(alignment:.leading, spacing:0) {
 			if latestUpdatedLesson.id > 0 {
-				Text("\(String(describing: scorewindData.replaceCommonHTMLNumber(htmlString: latestUpdatedLesson.title)))")
-					.foregroundColor(courseID == scorewindData.currentCourse.id ? Color("Dynamic/MainBrown+6") : Color("Dynamic/MainBrown+6"))
+				/*Text(scorewindData.arrangedTitle(title: latestUpdatedLesson.title, instrumentType: theCourse.instrument))
+					.foregroundColor(courseID == scorewindData.currentCourse.id ? Color("Dynamic/MainBrown+6") : Color("Dynamic/MainBrown+6"))*/
+				if scorewindData.arrangedTitle(title: latestUpdatedLesson.title, instrumentType: theCourse.instrument).count > 1 {
+					(Text(scorewindData.arrangedTitle(title: latestUpdatedLesson.title, instrumentType: theCourse.instrument)[0]).font(.caption) + Text("\n") + Text(scorewindData.arrangedTitle(title: latestUpdatedLesson.title, instrumentType: theCourse.instrument)[1]).bold() ).foregroundColor(Color("Dynamic/MainBrown+6"))
+				} else {
+					Text(scorewindData.arrangedTitle(title: latestUpdatedLesson.title, instrumentType: theCourse.instrument)[0])
+						.bold()
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+				}
+				
 			}
 			Text("\(String(lastUpdatedItemValue[0])) \(getFriendlyDateTimeDiff(targetDateTime: dateCollections.sorted(by: {$0.key > $1.key})[0].key))").foregroundColor(courseID == scorewindData.currentCourse.id ? Color("Dynamic/IconHighlighted") : .gray)
 				.font(.subheadline)

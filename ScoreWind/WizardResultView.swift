@@ -462,13 +462,47 @@ struct WizardResultView: View {
 	@ViewBuilder
 	private func courseItem(courseItem: Course) -> some View {
 		VStack(spacing:0) {
-			VStack(alignment: .leading) {
+			if courseItem.id == scorewindData.currentCourse.id {
 				HStack {
-					Text("Course:")
+					HStack {
+						HStack {
+							VStack {
+								Image(getIconTitleName())
+									.resizable()
+									.scaledToFit()
+									.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+							}
+							.frame(maxHeight: 24)
+							Text("Currently")
+								.bold()
+								.foregroundColor(Color("Dynamic/DarkPurple"))
+								.font(.subheadline)
+								.frame(maxHeight: 24)
+						}
+						.padding(EdgeInsets(top: 10, leading: 22, bottom: 8, trailing: 31))
+					}
+					.background(
+						RoundedCornersShape(corners: [.allCorners], radius: 17)
+							.fill(Color("Dynamic/MainBrown"))
+							.opacity(0.25)
+					)
+					.padding(EdgeInsets(top: 15, leading: 17, bottom: 0, trailing: 0))
+					Spacer()
+				}
+			}
+			
+			VStack(alignment: .leading) {
+				if courseItem.id != scorewindData.currentCourse.id {
+					Text("Course")
+						.font(.subheadline)
 						.bold()
-						.foregroundColor(Color("Dynamic/MainBrown+6")) +
-					Text(" \(scorewindData.replaceCommonHTMLNumber(htmlString: courseItem.title))")
-						//.bold()
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+						.padding(.bottom, 12)
+				}
+				
+				HStack {
+					Text("\(scorewindData.replaceCommonHTMLNumber(htmlString: courseItem.title))")
+						.bold()
 						.foregroundColor(Color("Dynamic/MainBrown+6"))
 					Spacer()
 					Label("Go to course", systemImage: "arrow.right.circle.fill")

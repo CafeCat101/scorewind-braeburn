@@ -38,13 +38,34 @@ struct WizardResultPathView: View {
 		if pathItem.showCourseTitle {
 			VStack(spacing:0) {
 				VStack(alignment: .leading) {
+					Text("Course")
+						.font(.subheadline)
+						.bold()
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+						.padding(.bottom, 12)
 					HStack {
-						Text("Course:")
-							.bold()
-							.foregroundColor(Color("Dynamic/MainBrown+6")) +
-						Text(" \(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.courseTitle))")
+						/*if scorewindData.arrangedTitle(title: pathItem.courseTitle, instrumentType: scorewindData.wizardPickedCourse.instrument).count > 1 {
+							Text("Course: ")
+								.bold()
+								.foregroundColor(Color("Dynamic/MainBrown+6")) +
+							//Text(" \(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.courseTitle))")
+							(Text("\n"+scorewindData.arrangedTitle(title: pathItem.courseTitle, instrumentType: scorewindData.wizardPickedCourse.instrument)[0] + " -" + "\n").font(.caption) +
+							Text(scorewindData.arrangedTitle(title: pathItem.courseTitle, instrumentType: scorewindData.wizardPickedCourse.instrument)[1]))
+								.bold()
+								.foregroundColor(Color("Dynamic/MainBrown+6"))
+						} else {
+							Text("Course")
+								.font(.caption)
+								.bold()
+								.foregroundColor(Color("Dynamic/MainBrown+6")) +
+							Text(" \(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.courseTitle))")
+								.bold()
+								.foregroundColor(Color("Dynamic/MainBrown+6"))
+						}*/
+						Text("\(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.courseTitle))")
 							.bold()
 							.foregroundColor(Color("Dynamic/MainBrown+6"))
+						
 						Spacer()
 						Label("Go to course", systemImage: "arrow.right.circle.fill")
 							.labelStyle(.iconOnly)
@@ -126,7 +147,7 @@ struct WizardResultPathView: View {
 			VStack(spacing:0) {
 				VStack(alignment: .leading) {
 					if pathItem.startHere {
-						HStack {
+						/*HStack {
 							Spacer()
 							VStack {
 								Image("resultFound")
@@ -141,13 +162,39 @@ struct WizardResultPathView: View {
 								.font(.headline)
 								//.frame(maxHeight: 24)
 							Spacer()
+						}*/
+						HStack {
+							Spacer()
+							HStack {
+								HStack {
+									VStack {
+										Image("resultFound")
+											.resizable()
+											.scaledToFit()
+											.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+									}
+									.frame(maxHeight: 24)
+									Text("Start Here")
+										.bold()
+										.foregroundColor(Color("Dynamic/DarkPurple"))
+										.font(.subheadline)
+										.frame(maxHeight: 24)
+								}
+								.padding(EdgeInsets(top: 10, leading: 22, bottom: 8, trailing: 31))
+							}
+							.background(
+								RoundedCornersShape(corners: [.allCorners], radius: 17)
+									.fill(Color("Dynamic/MainBrown"))
+									.opacity(0.25)
+							)
+							//.padding(EdgeInsets(top: 15, leading: 17, bottom: 0, trailing: 0))
+							Spacer()
 						}
 					}
 					HStack {
-						Text("\(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.lessonTitle))")
-							//.bold()
+						//Text("\(scorewindData.arrangedTitle(title: pathItem.lessonTitle, instrumentType: scorewindData.wizardPickedCourse.instrument)[1])")
+						(Text(scorewindData.arrangedTitle(title: pathItem.lessonTitle, instrumentType: scorewindData.wizardPickedCourse.instrument)[0]).font(.caption) + Text("\n") + Text(scorewindData.arrangedTitle(title: pathItem.lessonTitle, instrumentType: scorewindData.wizardPickedCourse.instrument)[1]).bold())
 							.foregroundColor(Color("Dynamic/MainBrown+6"))
-							.bold()
 							.padding([.top,.bottom],6)
 						Spacer()
 						Label("Go to lesson", systemImage: "arrow.right.circle.fill")
