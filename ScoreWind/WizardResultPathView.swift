@@ -37,6 +37,36 @@ struct WizardResultPathView: View {
 	private func pathItemView(pathItem: WizardLearningPathItem) -> some View {
 		if pathItem.showCourseTitle {
 			VStack(spacing:0) {
+				if pathItem.courseID == scorewindData.currentCourse.id && studentData.wizardResult.learningPath.contains(where: {$0.lessonID == scorewindData.currentLesson.id}) == false {
+					HStack {
+						Spacer()
+						HStack {
+							HStack {
+								VStack {
+									Image(getIconTitleName())
+										.resizable()
+										.scaledToFit()
+										.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+								}
+								.frame(maxHeight: 24)
+								Text("Currently")
+									.bold()
+									.foregroundColor(Color("Dynamic/DarkPurple"))
+									.font(.subheadline)
+									.frame(maxHeight: 24)
+							}
+							.padding(EdgeInsets(top: 10, leading: 22, bottom: 8, trailing: 31))
+						}
+						.background(
+							RoundedCornersShape(corners: [.allCorners], radius: 17)
+								.fill(Color("Dynamic/MainBrown"))
+								.opacity(0.25)
+						)
+						.padding(EdgeInsets(top: 15, leading: 17, bottom: 0, trailing: 0))
+						Spacer()
+					}
+				}
+				
 				VStack(alignment: .leading) {
 					Text("Course")
 						.font(.subheadline)
@@ -44,24 +74,6 @@ struct WizardResultPathView: View {
 						.foregroundColor(Color("Dynamic/MainBrown+6"))
 						.padding(.bottom, 12)
 					HStack {
-						/*if scorewindData.arrangedTitle(title: pathItem.courseTitle, instrumentType: scorewindData.wizardPickedCourse.instrument).count > 1 {
-							Text("Course: ")
-								.bold()
-								.foregroundColor(Color("Dynamic/MainBrown+6")) +
-							//Text(" \(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.courseTitle))")
-							(Text("\n"+scorewindData.arrangedTitle(title: pathItem.courseTitle, instrumentType: scorewindData.wizardPickedCourse.instrument)[0] + " -" + "\n").font(.caption) +
-							Text(scorewindData.arrangedTitle(title: pathItem.courseTitle, instrumentType: scorewindData.wizardPickedCourse.instrument)[1]))
-								.bold()
-								.foregroundColor(Color("Dynamic/MainBrown+6"))
-						} else {
-							Text("Course")
-								.font(.caption)
-								.bold()
-								.foregroundColor(Color("Dynamic/MainBrown+6")) +
-							Text(" \(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.courseTitle))")
-								.bold()
-								.foregroundColor(Color("Dynamic/MainBrown+6"))
-						}*/
 						Text("\(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.courseTitle))")
 							.bold()
 							.foregroundColor(Color("Dynamic/MainBrown+6"))
@@ -84,17 +96,6 @@ struct WizardResultPathView: View {
 				goToCourse(toCourseID: pathItem.courseID)
 			}
 			.padding(.bottom, 6)
-			/*
-			Text("Course: \(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.courseTitle))")
-				.foregroundColor(Color("LessonSheet"))
-				.frame(maxWidth: .infinity, minHeight: 60)
-				.padding([.leading, .trailing], 15)
-				.background(Color("BadgeWatchLearn"))
-				.cornerRadius(25)
-				.onTapGesture {
-					goToCourse(toCourseID: pathItem.courseID)
-				}
-			 */
 		}
 		
 		if (scorewindData.wizardPickedCourse.lessons[0].id != pathItem.lessonID) && (studentData.wizardResult.learningPath[0].lessonID == pathItem.lessonID) {
@@ -146,27 +147,45 @@ struct WizardResultPathView: View {
 			
 			VStack(spacing:0) {
 				VStack(alignment: .leading) {
+					//:: show where to start in the learning path
 					if pathItem.startHere {
-						/*HStack {
-							Spacer()
-							VStack {
-								Image("resultFound")
-									.resizable()
-									.scaledToFit()
-									.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
-							}
-							.frame(maxHeight: 24)
-							Text("Start Here")
-								.bold()
-								.foregroundColor(Color("Dynamic/DarkPurple"))
-								.font(.headline)
-								//.frame(maxHeight: 24)
-							Spacer()
-						}*/
 						HStack {
 							Spacer()
 							HStack {
-								HStack {
+								VStack(alignment: .center, spacing:0) {
+									Label(title: {
+										Text("Start Here")
+											.bold()
+											.foregroundColor(Color("Dynamic/DarkPurple"))
+											.font(.subheadline)
+											.fixedSize()
+									}, icon: {
+										Image("resultFound")
+											.resizable()
+											.scaledToFit()
+											.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+									})
+									.frame(maxHeight: 24)
+									
+									if scorewindData.currentLesson.id == pathItem.lessonID {
+										Divider()
+										Label(title: {
+											Text("Currently")
+												.bold()
+												.foregroundColor(Color("Dynamic/DarkPurple"))
+												.font(.subheadline)
+												.fixedSize()
+										}, icon: {
+											Image(getIconTitleName())
+												.resizable()
+												.scaledToFit()
+												.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+										})
+										.frame(maxHeight: 24)
+									}
+								}
+								.padding(EdgeInsets(top: 10, leading: 22, bottom: 8, trailing: 31))
+								/*HStack {
 									VStack {
 										Image("resultFound")
 											.resizable()
@@ -180,7 +199,7 @@ struct WizardResultPathView: View {
 										.font(.subheadline)
 										.frame(maxHeight: 24)
 								}
-								.padding(EdgeInsets(top: 10, leading: 22, bottom: 8, trailing: 31))
+								.padding(EdgeInsets(top: 10, leading: 22, bottom: 8, trailing: 31))*/
 							}
 							.background(
 								RoundedCornersShape(corners: [.allCorners], radius: 17)
@@ -191,6 +210,39 @@ struct WizardResultPathView: View {
 							Spacer()
 						}
 					}
+					
+					//:: show this is the current lesson
+					if scorewindData.currentLesson.id == pathItem.lessonID && pathItem.startHere == false {
+						HStack {
+							Spacer()
+							HStack {
+								HStack {
+									VStack {
+										Image(getIconTitleName())
+											.resizable()
+											.scaledToFit()
+											.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+									}
+									.frame(maxHeight: 24)
+									Text("Currently")
+										.bold()
+										.foregroundColor(Color("Dynamic/DarkPurple"))
+										.font(.subheadline)
+										.frame(maxHeight: 24)
+									//Spacer()
+								}
+								.padding(EdgeInsets(top: 10, leading: 22, bottom: 8, trailing: 31))
+							}
+							//.frame(width: verticalSize == .regular ? UIScreen.main.bounds.size.width*0.7 : (UIScreen.main.bounds.size.width*0.7)*0.5)
+							.background(
+								RoundedCornersShape(corners: [.allCorners], radius: 17)
+									.fill(Color("Dynamic/MainBrown"))
+									.opacity(0.25)
+							)
+							Spacer()
+						}
+					}
+					
 					HStack {
 						//Text("\(scorewindData.arrangedTitle(title: pathItem.lessonTitle, instrumentType: scorewindData.wizardPickedCourse.instrument)[1])")
 						(Text(scorewindData.arrangedTitle(title: pathItem.lessonTitle, instrumentType: scorewindData.wizardPickedCourse.instrument)[0]).font(.caption) + Text("\n") + Text(scorewindData.arrangedTitle(title: pathItem.lessonTitle, instrumentType: scorewindData.wizardPickedCourse.instrument)[1]).bold())
@@ -202,22 +254,6 @@ struct WizardResultPathView: View {
 							.font(.title2)
 							.foregroundColor(Color("Dynamic/MainGreen")) //original is "Dynamic/MainBrown"
 					}
-					
-					/*HStack {
-						if pathItem.startHere {
-							Label(title: {
-								Text("Start Here")
-									.font(.headline)
-									.bold()
-									.foregroundColor(Color("Dynamic/DarkPurple"))
-							}, icon: {
-									Image(systemName: "paperplane.circle")
-									.foregroundColor(Color("Dynamic/DarkPurple"))
-							}).padding([.bottom],-5)
-							
-						}
-						Spacer()
-					}*/
 				}.padding(15)
 			}
 			.frame(minHeight: 86)
@@ -236,35 +272,6 @@ struct WizardResultPathView: View {
 			}
 			.padding(.bottom, 12)
 		}
-		
-		/*
-		if pathItem.startHere {
-			VStack {
-				Label(title: {
-					Text("Start here")
-					.bold()
-					.foregroundColor(.yellow)
-				}, icon: {
-						Image(systemName: "paperplane.circle")
-						.foregroundColor(.yellow)
-				}).padding([.bottom],-5)
-				Text(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.lessonTitle))
-					.modifier(lessonItemInPath())
-					.onTapGesture {
-						goToLesson(toCourseID: pathItem.courseID, toLessonID: pathItem.lessonID)
-					}
-			}
-			.background {
-				RoundedRectangle(cornerRadius: 26)
-				.foregroundColor(Color("BadgeWatchLearn"))}
-		} else {
-			Text(scorewindData.replaceCommonHTMLNumber(htmlString: pathItem.lessonTitle))
-				.modifier(lessonItemInPath())
-				.onTapGesture {
-					goToLesson(toCourseID: pathItem.courseID, toLessonID: pathItem.lessonID)
-				}
-		}
-		*/
 	}
 	
 	struct lessonItemInPath: ViewModifier {

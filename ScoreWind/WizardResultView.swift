@@ -464,6 +464,7 @@ struct WizardResultView: View {
 		VStack(spacing:0) {
 			if courseItem.id == scorewindData.currentCourse.id {
 				HStack {
+					Spacer()
 					HStack {
 						HStack {
 							VStack {

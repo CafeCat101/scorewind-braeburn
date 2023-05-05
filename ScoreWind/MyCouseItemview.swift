@@ -52,6 +52,7 @@ struct MyCouseItemview: View {
 		VStack(spacing: 0) {
 			if aCourse.courseID == scorewindData.currentCourse.id {
 				HStack {
+					Spacer()
 					HStack {
 						HStack {
 							VStack {

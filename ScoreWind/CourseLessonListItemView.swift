@@ -21,6 +21,7 @@ struct CourseLessonListItemView: View {
 		VStack{
 			if scorewindData.currentLesson.scorewindID == lesson.scorewindID {
 				HStack {
+					Spacer()
 					HStack {
 						HStack {
 							VStack {
