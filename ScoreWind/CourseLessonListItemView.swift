@@ -22,6 +22,17 @@ struct CourseLessonListItemView: View {
 			if scorewindData.currentLesson.scorewindID == lesson.scorewindID {
 				HStack {
 					Spacer()
+					Image(getIconTitleName())
+						.resizable()
+						.scaledToFit()
+						.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+						.frame(maxHeight: 33)
+					Spacer()
+				}
+				.padding(.top, 21)
+				/*
+				HStack {
+					Spacer()
 					HStack {
 						HStack {
 							VStack {
@@ -30,14 +41,12 @@ struct CourseLessonListItemView: View {
 									.scaledToFit()
 									.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
 							}
-							.frame(maxHeight: 24)
-							Text("Currently")
+						 .frame(maxHeight: 24)
+							Text("Now")
 								.bold()
 								.foregroundColor(Color("Dynamic/DarkPurple"))
 								.font(.subheadline)
-								//.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
 								.frame(maxHeight: 24)
-							//Spacer()
 						}
 						.padding(EdgeInsets(top: 10, leading: 22, bottom: 8, trailing: 31))
 					}
@@ -50,26 +59,27 @@ struct CourseLessonListItemView: View {
 					.padding(EdgeInsets(top: 15, leading: 17, bottom: 0, trailing: 0))
 					Spacer()
 				}
-				.id(lesson.scorewindID)
+				 */
 			}
 			
-			
 			HStack {
-				//Text(scorewindData.replaceCommonHTMLNumber(htmlString: lesson.title))
 				if scorewindData.arrangedTitle(title: lesson.title, instrumentType: scorewindData.currentCourse.instrument).count > 1 {
-					(Text(scorewindData.arrangedTitle(title: lesson.title, instrumentType: scorewindData.currentCourse.instrument)[0]).font(.caption) + Text("\n") + Text(scorewindData.arrangedTitle(title: lesson.title, instrumentType: scorewindData.currentCourse.instrument)[1]).bold())
-						.multilineTextAlignment(.leading)
-						.foregroundColor(Color("Dynamic/MainBrown+6"))
+					VStack(alignment:.leading) {
+						Text(scorewindData.arrangedTitle(title: lesson.title, instrumentType: scorewindData.currentCourse.instrument)[0]).font(.caption)
+						Text(scorewindData.arrangedTitle(title: lesson.title, instrumentType: scorewindData.currentCourse.instrument)[1])
+							.bold()
+							.fixedSize(horizontal: false, vertical: true)
+					}.foregroundColor(Color("Dynamic/MainBrown+6"))
 				} else {
 					Text(scorewindData.arrangedTitle(title: lesson.title, instrumentType: scorewindData.currentCourse.instrument)[0])
 						.bold()
-						.multilineTextAlignment(.leading)
+						.fixedSize(horizontal: false, vertical: true)
 						.foregroundColor(Color("Dynamic/MainBrown+6"))
 				}
 				
 				Spacer()
 			}
-			.padding(16)
+			.padding(EdgeInsets(top: scorewindData.currentLesson.scorewindID != lesson.scorewindID ? 21 : 5, leading: 16, bottom: 21, trailing: 16))
 
 			if hasIcons(scorewindID: lesson.scorewindID, getLessonID: lesson.id) {
 				Spacer()
@@ -86,13 +96,11 @@ struct CourseLessonListItemView: View {
 						RoundedCornersShape(corners: [.bottomLeft, .topRight], radius: 17)
 							.fill(Color("Dynamic/MainBrown"))
 							.opacity(0.25)
-							//.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
 					)
-					Spacer()//.frame(width: 20)
+					Spacer()
 				}
 			}
 		}
-		//.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
 		.frame(minHeight: 86)
 		.background(
 			RoundedCornersShape(corners: [.allCorners], radius: 17)

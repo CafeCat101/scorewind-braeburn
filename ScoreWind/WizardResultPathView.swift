@@ -33,11 +33,29 @@ struct WizardResultPathView: View {
 		}
 	}
 	
+	private func getItmeTitleTopPadding(courseID: Int) -> CGFloat {
+		if courseID == scorewindData.currentCourse.id && studentData.wizardResult.learningPath.contains(where: {$0.lessonID == scorewindData.currentLesson.id}) == false {
+			return 5
+		} else {
+			return 21
+		}
+	}
+	
 	@ViewBuilder
 	private func pathItemView(pathItem: WizardLearningPathItem) -> some View {
 		if pathItem.showCourseTitle {
 			VStack(spacing:0) {
 				if pathItem.courseID == scorewindData.currentCourse.id && studentData.wizardResult.learningPath.contains(where: {$0.lessonID == scorewindData.currentLesson.id}) == false {
+					HStack {
+						Spacer()
+						Image(getIconTitleName())
+							.resizable()
+							.scaledToFit()
+							.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+							.frame(maxHeight: 33)
+						Spacer()
+					}.padding(.top, 21)
+					/*
 					HStack {
 						Spacer()
 						HStack {
@@ -65,6 +83,7 @@ struct WizardResultPathView: View {
 						.padding(EdgeInsets(top: 15, leading: 17, bottom: 0, trailing: 0))
 						Spacer()
 					}
+					 */
 				}
 				
 				VStack(alignment: .leading) {
@@ -84,7 +103,9 @@ struct WizardResultPathView: View {
 							.font(.title2)
 							.foregroundColor(Color("Dynamic/MainGreen")) // original is "Dynamic/MainBrown"
 					}
-				}.padding(15)
+				}
+				.padding(EdgeInsets(top: getItmeTitleTopPadding(courseID: pathItem.courseID), leading: 15, bottom: 21, trailing: 15))
+				//.padding(15)
 			}
 			.background(
 				RoundedRectangle(cornerRadius: CGFloat(17))
@@ -151,110 +172,83 @@ struct WizardResultPathView: View {
 					if pathItem.startHere {
 						HStack {
 							Spacer()
+							
+							if scorewindData.currentLesson.id == pathItem.lessonID {
+								Image(getIconTitleName())
+									.resizable()
+									.scaledToFit()
+									.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+									.frame(maxHeight: 33)
+							}
+							
 							HStack {
-								VStack(alignment: .center, spacing:0) {
-									Label(title: {
-										Text("Start Here")
-											.bold()
-											.foregroundColor(Color("Dynamic/DarkPurple"))
-											.font(.subheadline)
-											.fixedSize()
-									}, icon: {
-										Image("resultFound")
-											.resizable()
-											.scaledToFit()
-											.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
-									})
-									.frame(maxHeight: 24)
-									
-									if scorewindData.currentLesson.id == pathItem.lessonID {
-										Divider()
-										Label(title: {
-											Text("Currently")
-												.bold()
-												.foregroundColor(Color("Dynamic/DarkPurple"))
-												.font(.subheadline)
-												.fixedSize()
-										}, icon: {
-											Image(getIconTitleName())
-												.resizable()
-												.scaledToFit()
-												.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
-										})
+								HStack {
+									Image("resultFound")
+										.resizable()
+										.scaledToFit()
+										.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
 										.frame(maxHeight: 24)
-									}
-								}
-								.padding(EdgeInsets(top: 10, leading: 22, bottom: 8, trailing: 31))
-								/*HStack {
-									VStack {
-										Image("resultFound")
-											.resizable()
-											.scaledToFit()
-											.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
-									}
-									.frame(maxHeight: 24)
+									
 									Text("Start Here")
 										.bold()
 										.foregroundColor(Color("Dynamic/DarkPurple"))
 										.font(.subheadline)
 										.frame(maxHeight: 24)
 								}
-								.padding(EdgeInsets(top: 10, leading: 22, bottom: 8, trailing: 31))*/
+								.padding(EdgeInsets(top: 10, leading: 22, bottom: 10, trailing: 25))
 							}
 							.background(
 								RoundedCornersShape(corners: [.allCorners], radius: 17)
 									.fill(Color("Dynamic/MainBrown"))
 									.opacity(0.25)
 							)
-							//.padding(EdgeInsets(top: 15, leading: 17, bottom: 0, trailing: 0))
+							
 							Spacer()
 						}
+						.padding(.top, scorewindData.currentLesson.id == pathItem.lessonID ? 21 : 0)
 					}
 					
 					//:: show this is the current lesson
 					if scorewindData.currentLesson.id == pathItem.lessonID && pathItem.startHere == false {
 						HStack {
 							Spacer()
-							HStack {
-								HStack {
-									VStack {
-										Image(getIconTitleName())
-											.resizable()
-											.scaledToFit()
-											.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
-									}
-									.frame(maxHeight: 24)
-									Text("Currently")
-										.bold()
-										.foregroundColor(Color("Dynamic/DarkPurple"))
-										.font(.subheadline)
-										.frame(maxHeight: 24)
-									//Spacer()
-								}
-								.padding(EdgeInsets(top: 10, leading: 22, bottom: 8, trailing: 31))
-							}
-							//.frame(width: verticalSize == .regular ? UIScreen.main.bounds.size.width*0.7 : (UIScreen.main.bounds.size.width*0.7)*0.5)
-							.background(
-								RoundedCornersShape(corners: [.allCorners], radius: 17)
-									.fill(Color("Dynamic/MainBrown"))
-									.opacity(0.25)
-							)
+							Image(getIconTitleName())
+								.resizable()
+								.scaledToFit()
+								.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+								.frame(maxHeight: 33)
 							Spacer()
 						}
+						.padding(.top, 21)
 					}
 					
 					HStack {
-						//Text("\(scorewindData.arrangedTitle(title: pathItem.lessonTitle, instrumentType: scorewindData.wizardPickedCourse.instrument)[1])")
-						(Text(scorewindData.arrangedTitle(title: pathItem.lessonTitle, instrumentType: scorewindData.wizardPickedCourse.instrument)[0]).font(.caption) + Text("\n") + Text(scorewindData.arrangedTitle(title: pathItem.lessonTitle, instrumentType: scorewindData.wizardPickedCourse.instrument)[1]).bold())
-							.foregroundColor(Color("Dynamic/MainBrown+6"))
-							.padding([.top,.bottom],6)
+						if scorewindData.arrangedTitle(title: pathItem.lessonTitle, instrumentType: scorewindData.wizardPickedCourse.instrument).count > 1 {
+							VStack(alignment:.leading) {
+								Text(scorewindData.arrangedTitle(title: pathItem.lessonTitle, instrumentType: scorewindData.wizardPickedCourse.instrument)[0]).font(.caption)
+								Text(scorewindData.arrangedTitle(title: pathItem.lessonTitle, instrumentType: scorewindData.wizardPickedCourse.instrument)[1])
+									.bold()
+									.fixedSize(horizontal: false, vertical: true)
+							}.foregroundColor(Color("Dynamic/MainBrown+6"))
+							
+							/*(Text(scorewindData.arrangedTitle(title: pathItem.lessonTitle, instrumentType: scorewindData.wizardPickedCourse.instrument)[0]).font(.caption) + Text("\n") + Text(scorewindData.arrangedTitle(title: pathItem.lessonTitle, instrumentType: scorewindData.wizardPickedCourse.instrument)[1]).bold())
+								.foregroundColor(Color("Dynamic/MainBrown+6"))
+								.padding([.top,.bottom],6)*/
+						} else {
+							Text(scorewindData.arrangedTitle(title: pathItem.lessonTitle, instrumentType: scorewindData.wizardPickedCourse.instrument)[0])
+								.bold()
+								.fixedSize(horizontal: false, vertical: true)
+								.foregroundColor(Color("Dynamic/MainBrown+6"))
+						}
+						
 						Spacer()
 						Label("Go to lesson", systemImage: "arrow.right.circle.fill")
 							.labelStyle(.iconOnly)
 							.font(.title2)
 							.foregroundColor(Color("Dynamic/MainGreen")) //original is "Dynamic/MainBrown"
 					}
-				}.padding(15)
+				}
+				.padding(EdgeInsets(top: scorewindData.currentLesson.id != pathItem.lessonID ? 21 : 5, leading: 16, bottom: 21, trailing: 16))
 			}
 			.frame(minHeight: 86)
 			.background(
@@ -333,10 +327,12 @@ struct WizardResultPathView: View {
 	}
 	
 	private func getIconTitleName() -> String {
-		if studentData.getInstrumentChoice() == InstrumentType.guitar.rawValue {
+		if scorewindData.wizardPickedCourse.instrument == InstrumentType.guitar.rawValue {
 			return "iconGuitar"
-		} else {
+		} else if scorewindData.wizardPickedCourse.instrument == InstrumentType.violin.rawValue {
 			return "iconViolin"
+		} else {
+			return "feedbackYes"
 		}
 	}
 }

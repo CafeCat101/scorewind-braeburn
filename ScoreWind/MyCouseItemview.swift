@@ -53,6 +53,18 @@ struct MyCouseItemview: View {
 			if aCourse.courseID == scorewindData.currentCourse.id {
 				HStack {
 					Spacer()
+					Image(getIconTitleName(courseID: aCourse.courseID))
+						.resizable()
+						.scaledToFit()
+						.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+						.frame(maxHeight: 33)
+					Spacer()
+				}
+				.padding(.top, 21)
+				
+				/*
+				HStack {
+					Spacer()
 					HStack {
 						HStack {
 							VStack {
@@ -78,15 +90,17 @@ struct MyCouseItemview: View {
 					.padding(EdgeInsets(top: 15, leading: 17, bottom: 0, trailing: 0))
 					Spacer()
 				}
+				 */
 			}
+			
 			HStack {
 				Text(scorewindData.replaceCommonHTMLNumber(htmlString: aCourse.courseTitle))
 					.bold()
-					.multilineTextAlignment(.leading)
+					.fixedSize(horizontal: false, vertical: true)
 					.foregroundColor(Color("Dynamic/MainBrown+6"))
 				Spacer()
 			}
-			.padding(EdgeInsets(top: 16, leading: 16, bottom: 0, trailing: 16))
+			.padding(EdgeInsets(top: aCourse.courseID != scorewindData.currentCourse.id ? 21 : 10, leading: 16, bottom: 0, trailing: 16))
 			
 			HStack {
 				if aCourse.completedLessons.count>0 {
@@ -143,7 +157,7 @@ struct MyCouseItemview: View {
 					lastCompletedWatchedTime(courseID: aCourse.courseID)
 					Spacer()
 				}
-				.padding(EdgeInsets(top: 10, leading: 16, bottom: 20, trailing: 16))
+				.padding(EdgeInsets(top: 10, leading: 16, bottom: 21, trailing: 16))
 			}
 			//Text("\(aCourse.courseID):\(testDateToString(getDate:aCourse.lastUpdatedDate))")
 		}
@@ -176,11 +190,14 @@ struct MyCouseItemview: View {
 		})
 	}
 	
-	private func getIconTitleName() -> String {
-		if scorewindData.currentCourse.instrument == InstrumentType.guitar.rawValue {
+	private func getIconTitleName(courseID: Int) -> String {
+		let theCourse = scorewindData.allCourses.first(where: {$0.id == courseID}) ?? Course()
+		if theCourse.instrument == InstrumentType.guitar.rawValue {
 			return "iconGuitar"
-		} else {
+		} else if theCourse.instrument == InstrumentType.violin.rawValue {
 			return "iconViolin"
+		} else {
+			return "feedbackYes"
 		}
 	}
 	

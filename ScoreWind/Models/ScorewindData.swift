@@ -189,7 +189,8 @@ class ScorewindData: ObservableObject {
 		result = result.replacingOccurrences(of: "&#8217;", with: "’")
 		result = result.replacingOccurrences(of: "&#8220;", with: "“")
 		result = result.replacingOccurrences(of: "&#8221;", with: "”")
-		result = result.replacingOccurrences(of: "&#038;", with: "& ")
+		result = result.replacingOccurrences(of: "&#038;", with: "&")
+		result = result.replacingOccurrences(of: "&amp;", with: "&")
 		return result
 	}
 	
@@ -227,7 +228,8 @@ class ScorewindData: ObservableObject {
 			for match in matches {
 				let matchRange = match.range(at: 1)
 				if let substringRange = Range(matchRange, in:theList) {
-					let listItem = String(theList[substringRange])
+					var listItem = String(theList[substringRange])
+					listItem = replaceCommonHTMLNumber(htmlString: listItem)
 					capture.append(listItem)
 				}
 			}

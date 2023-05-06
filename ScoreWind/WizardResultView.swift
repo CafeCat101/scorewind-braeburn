@@ -128,11 +128,13 @@ struct WizardResultView: View {
 		})
 	}
 	
-	private func getIconTitleName() -> String {
-		if studentData.getInstrumentChoice() == InstrumentType.guitar.rawValue {
+	private func getIconTitleName(instrument: String) -> String {
+		if instrument == InstrumentType.guitar.rawValue {
 			return "iconGuitar"
-		} else {
+		} else if instrument == InstrumentType.violin.rawValue {
 			return "iconViolin"
+		} else {
+			return "feedbackYes"
 		}
 	}
 	
@@ -465,6 +467,16 @@ struct WizardResultView: View {
 			if courseItem.id == scorewindData.currentCourse.id {
 				HStack {
 					Spacer()
+					Image(getIconTitleName(instrument: courseItem.instrument))
+						.resizable()
+						.scaledToFit()
+						.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+						.frame(maxHeight: 33)
+					Spacer()
+				}.padding(.top, 21)
+				/*
+				HStack {
+					Spacer()
 					HStack {
 						HStack {
 							VStack {
@@ -490,16 +502,17 @@ struct WizardResultView: View {
 					.padding(EdgeInsets(top: 15, leading: 17, bottom: 0, trailing: 0))
 					Spacer()
 				}
+				 */
 			}
 			
 			VStack(alignment: .leading) {
-				if courseItem.id != scorewindData.currentCourse.id {
+				//if courseItem.id != scorewindData.currentCourse.id {
 					Text("Course")
 						.font(.subheadline)
 						.bold()
 						.foregroundColor(Color("Dynamic/MainBrown+6"))
 						.padding(.bottom, 12)
-				}
+				//}
 				
 				HStack {
 					Text("\(scorewindData.replaceCommonHTMLNumber(htmlString: courseItem.title))")
@@ -511,7 +524,9 @@ struct WizardResultView: View {
 						.font(.title2)
 						.foregroundColor(Color("Dynamic/MainGreen")) // original is "Dynamic/MainBrown"
 				}
-			}.padding(15)
+			}
+			.padding(EdgeInsets(top: courseItem.id != scorewindData.currentCourse.id ? 21 : 5, leading: 15, bottom: 21, trailing: 15))
+			//.padding(15)
 		}
 		.background(
 			RoundedRectangle(cornerRadius: CGFloat(17))

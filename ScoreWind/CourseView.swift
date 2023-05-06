@@ -145,7 +145,7 @@ struct CourseView: View {
 								}
 								.onAppear(perform: {
 									print("[debug] CourseView, lesson List-onAppear")
-									DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+									DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
 										withAnimation {
 											proxy.scrollTo(scorewindData.currentLesson.scorewindID, anchor: .top)
 										}
@@ -266,6 +266,9 @@ struct CourseView: View {
 				handleTip()
 			}
 			userDefaults.set(scorewindData.currentCourse.id,forKey: "lastViewedCourse")
+			if scorewindData.currentLesson.id > 0 {
+				userDefaults.set(scorewindData.currentLesson.id,forKey: "lastViewedLesson")
+			}
 			
 			if showStore == false {
 				Task {
