@@ -29,25 +29,25 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "6",
+          "displayPrice" : "7.99",
           "familyShareable" : true,
           "groupNumber" : 1,
           "internalID" : "88F9559A",
           "introductoryOffer" : {
-            "internalID" : "8A6EAF36",
+            "internalID" : "BF42C271",
             "paymentMode" : "free",
             "subscriptionPeriod" : "P1M"
           },
           "localizations" : [
             {
               "description" : "Full access to all courses and lessons",
-              "displayName" : "Standard",
+              "displayName" : "Monthly Subscription",
               "locale" : "en_US"
             }
           ],
           "productID" : "scorewind.standard",
           "recurringSubscriptionPeriod" : "P1M",
-          "referenceName" : "Standard",
+          "referenceName" : "Monthly Subscription",
           "subscriptionGroupID" : "C65AFA9A",
           "type" : "RecurringSubscription"
         },

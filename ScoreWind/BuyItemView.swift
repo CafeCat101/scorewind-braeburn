@@ -15,6 +15,7 @@ struct BuyItemView: View {
 	@State var isShowingError: Bool = false
 	@Environment(\.verticalSizeClass) var verticalSize
 	@State private var showPurchaseWaiting = false
+	@Environment(\.colorScheme) var colorScheme
 	
 	let product: Product
 	let purchasingEnabled: Bool
@@ -26,7 +27,28 @@ struct BuyItemView: View {
 	
 	var body: some View {
 		VStack{
-			HStack {
+			(Text(product.displayPrice)+Text(" / ")+Text(getFriendlyPeriodName(product.subscription!, isIntroduction: false)))
+				.bold()
+				//.padding(.bottom, 20)
+			
+			HStack(spacing:0) {
+				Spacer()
+				Image(systemName: "gift.fill")
+					.resizable()
+					.scaledToFit()
+					.frame(maxWidth: 25)
+					.padding(.trailing,5)
+				Text("Plus 1-month free trial!")
+					.bold()
+					.padding([.top,.bottom], 5)
+					.multilineTextAlignment(.center)
+				Spacer()
+			}
+			
+			buyButton
+				.padding([.trailing,.leading], 15)
+				.padding(.top, 20)
+			/*HStack {
 				Spacer().frame(width: verticalSize == .regular ? 0 : UIScreen.main.bounds.size.width*0.15)
 				
 				VStack {
@@ -50,27 +72,22 @@ struct BuyItemView: View {
 							.padding([.trailing], 15)
 					}.padding(.bottom, 5)
 				}
-				
 				Spacer().frame(width: verticalSize == .regular ? 0 : UIScreen.main.bounds.size.width*0.15)
-			}
-			
+			}*/
 		}
-		.background(
+		/*.background(
 			RoundedCornersShape(corners: [.topRight, .topLeft, .bottomLeft, .bottomRight], radius: 17)
 				.fill(Color("Dynamic/LightGray"))
 				.opacity(0.85)
 				.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
-			/*RoundedRectangle(cornerRadius: CGFloat(17))
-				.foregroundColor(Color("Dynamic/LightGray"))
-				.opacity(0.85)
-				.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))*/
-		)
+		)*/
 		.alert(isPresented: $isShowingError, content: {
 				Alert(title: Text(errorTitle), message: nil, dismissButton: .default(Text("Okay")))
 		})
 	}
 	
 	var buyButton: some View {
+		
 		Button(action: {
 			showPurchaseWaiting = true
 			Task {
@@ -83,19 +100,29 @@ struct BuyItemView: View {
 					.foregroundColor(Color("Dynamic/ShadowReverse"))
 			} else {
 				if showPurchaseWaiting == false {
-					Text("SUBSCRIBE\nIT")
-						.foregroundColor(Color("Dynamic/StoreViewTitle"))
+					if colorScheme == .light {
+						Text("Subscribe Now")
+							.fontWeight(Font.Weight.bold)
+							.foregroundColor(Color("Dynamic/ShadowReverse"))
+					} else {
+						Text("Subscribe Now")
+							.foregroundColor(Color("Dynamic/StoreViewTitle"))
+							.fontWeight(Font.Weight.medium)
+					}
+					
 				} else {
 					DownloadSpinnerView(iconColor: Color("Dynamic/MainBrown+6"), spinnerColor: Color("Dynamic/IconHighlighted"), iconSystemImage: "music.note")
 				}
 			}
 		}
+		.frame(maxWidth: verticalSize == .regular ? UIScreen.main.bounds.size.width*0.7 : UIScreen.main.bounds.size.width*0.5)
 		.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
 		.background(
 			RoundedRectangle(cornerRadius: CGFloat(17))
-				.foregroundColor(Color("Dynamic/MainBrown"))
+				.foregroundColor(colorScheme == .light ? Color("Dynamic/StoreViewTitle") : Color("Dynamic/MainBrown"))
 				.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
-				.opacity(isPurchased ? 0.85 : 0.25)
+				.opacity(colorScheme == .light ? 1 : 0.25)
+				//.opacity(isPurchased ? 0.85 : 0.25)
 				.overlay {
 					RoundedRectangle(cornerRadius: 17)
 						.stroke(Color("Dynamic/DarkGray"), lineWidth: 1)

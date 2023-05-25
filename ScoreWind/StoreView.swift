@@ -27,11 +27,6 @@ struct StoreView: View {
 		VStack {
 			HStack {
 				Spacer()
-				Text("ScoreWind Subscription")
-					.font(verticalSize == .regular ? .title2 : .title3)
-					.foregroundColor(Color("Dynamic/MainBrown+6"))
-					.bold()
-				Spacer()
 				Label("Close", systemImage: "xmark.circle")
 					.labelStyle(.iconOnly)
 					.font(verticalSize == .regular ? .title2 : .title3)
@@ -42,38 +37,115 @@ struct StoreView: View {
 					}
 			}
 			.padding(EdgeInsets(top: 10, leading: 15, bottom: 15, trailing: 15))
+			HStack {
+				Spacer()
+				if colorScheme == .light {
+					Image("logo")
+						.resizable()
+						.scaledToFit()
+						.frame(maxWidth: 46)
+				} else {
+					Image("logo")
+						.resizable()
+						.scaledToFit()
+						.frame(maxWidth: 46)
+						.padding(15)
+						.background(
+							RoundedRectangle(cornerRadius: CGFloat(17))
+								.foregroundColor(Color("AppYellow"))
+								.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+								.overlay {
+									RoundedRectangle(cornerRadius: 17)
+										.stroke(Color("Dynamic/ShadowReverse"), lineWidth: 1)
+								}
+						)
+				}
+				
+				Spacer()
+			}
+			.overlay(alignment: .trailing ,content: {
+				
+			})
+			
+			
+			
+			/*HStack {
+				Spacer()
+				Text("Stay Curious with ScoreWind WizPack")
+					.font(verticalSize == .regular ? .title : .title3)
+					.foregroundColor(Color("Dynamic/MainBrown+6"))
+					.bold()
+					.multilineTextAlignment(.center)
+				Spacer()
+			}.padding(EdgeInsets(top: 10, leading: 15, bottom: 15, trailing: 15))*/
 			
 				
 			//Text("This is the place where you subscribe scorewind")
 			ScrollView(.vertical) {
+				VStack(spacing:0) {
+					HStack(spacing:0) {
+						Spacer()
+						Text("Stay Curious with")
+							.font(verticalSize == .regular ? .title : .title3)
+							.foregroundColor(Color("Dynamic/MainBrown+6"))
+							.fontWeight(Font.Weight.bold)
+							.multilineTextAlignment(.center)
+						Spacer()
+					}
+					/*Text("with").font(verticalSize == .regular ? .title : .title3)
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+						.fontWeight(Font.Weight.bold)*/
+					HStack(spacing:0) {
+						Spacer()
+						Text("ScoreWind ")
+							.font(verticalSize == .regular ? .title : .title3)
+							.foregroundColor(Color("Dynamic/MainBrown+6"))
+							.fontWeight(Font.Weight.bold)
+							.multilineTextAlignment(.center)
+						Text("WizPack")
+							.fontWeight(Font.Weight.bold)
+							.foregroundColor(colorScheme == .light ? Color("Dynamic/ShadowReverse") : Color("Dynamic/Shadow"))
+							.font(verticalSize == .regular ? .title3 : .subheadline)
+							.padding(EdgeInsets(top: 6, leading: 17, bottom: 6, trailing: 17))
+							.background(colorScheme == .light ? Color("Dynamic/DarkGray") : Color("AppYellow"))
+							.cornerRadius(20)
+							.padding(EdgeInsets(top: 3, leading: 5, bottom: 3, trailing: 2))
+						Spacer()
+					}
+				}.padding(EdgeInsets(top: 10, leading: 15, bottom: 15, trailing: 15))
 				VStack(alignment: .leading, spacing:0) {
 					VStack(alignment: .leading, spacing:0) {
 						Label(title: {
-							Text("Unlock all lessons in the learning path and the courses.")
+							Text("Unlimited access to all lessons in the learning path.")
 						}, icon: {
-							Image(systemName: "circle.fill")
+							Image(systemName: "checkmark.seal.fill")
 								.resizable()
-								.frame(width:6, height:6)
+								.frame(width:22, height:22)
 						}).padding(.bottom, 5)
 						
 						Label(title: {
-							Text("Access to all the features in the courses and the lessons.")
+							Text("Unlimited access to all courses in the ScoreWind.")
 						}, icon: {
-							Image(systemName: "circle.fill")
+							Image(systemName: "checkmark.seal.fill")
 								.resizable()
-								.frame(width:6, height:6)
+								.frame(width:22, height:22)
 						}).padding(.bottom, 5)
 						
 						Label(title: {
-							Text("1-month free trial.")
+							Text("Unlock all the features in the Courses & Lessons")
 						}, icon: {
-							Image(systemName: "circle.fill")
+							Image(systemName: "checkmark.seal.fill")
 								.resizable()
-								.frame(width:6, height:6)
+								.frame(width:22, height:22)
 						}).padding(.bottom, 5)
-						/*Label("Unlock all lessons in the learning path and the courses.", systemImage: "circle.fill")
-						Label("Access to all the features in the courses and the lessons", systemImage: "circle.fill")
-						Label("1 month free trial.", systemImage: "circle.fill")*/
+						/*HStack(spacing:0) {
+							Spacer()
+							Text("Plus 1-month free trial!")
+								.bold()
+								.padding(.bottom, 5)
+								.multilineTextAlignment(.center)
+							Spacer()
+						}*/
 					}.padding(20)
 				}
 				.foregroundColor(Color("Dynamic/MainBrown+6"))
@@ -88,7 +160,6 @@ struct StoreView: View {
 				
 				
 				if let currentSubscription = currentSubscription {
-					Divider()
 					HStack {
 						Text("My Current Subscription")
 							.font(.title2)
@@ -128,15 +199,17 @@ struct StoreView: View {
 				}
 				
 				if availableSubscriptions.count > 0 {
-					Divider()
 					HStack {
-						Text("Available Subscription")
-							.font(.title2)
+						Spacer()
+						Text("Ignite your mind. Discover, learn, and embrace curiosity.")
+							.bold()
+							.multilineTextAlignment(.center)
 							.foregroundColor(Color("Dynamic/StoreViewTitle"))
+							.font(.headline)
 						Spacer()
 					}.padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
 					
-					ScrollView(.horizontal, showsIndicators: false) {
+					/*ScrollView(.horizontal, showsIndicators: false) {
 						HStack {
 							ForEach(availableSubscriptions) { product in
 								BuyItemView(product: product)
@@ -144,22 +217,37 @@ struct StoreView: View {
 									.modifier(buyItemPadding(isLastItem: product.id == availableSubscriptions.last?.id ? true : false ,isOnlyOne: availableSubscriptions.count == 1 ? true : false))
 							}
 						}
-					}//.frame(width: UIScreen.main.bounds.size.width)
+					}//.frame(width: UIScreen.main.bounds.size.width)*/
+					BuyItemView(product: availableSubscriptions[0])
+						//.padding(15)
+						.modifier(buyItemPadding(isLastItem: availableSubscriptions[0].id == availableSubscriptions.last?.id ? true : false ,isOnlyOne: availableSubscriptions.count == 1 ? true : false))
+					
+					Text("Once you purchase, your 1-month free trial starts immediately. When your 1-month free trial ends, you will automatically be charged the monthly fee of \(availableSubscriptions[0].displayPrice). Your subscription will automatically renew 24 hours before each subscription period ends.")
+						.foregroundColor(Color("Dynamic/MainBrown+6"))
+						.bold()
+						.padding([.leading,.trailing,.top], 30)
+						.font(.subheadline)
 				}
+				
+				Divider()
+					.padding([.leading,.trailing], 15)
+					.padding([.top,.bottom], 30)
 				
 				TabView {
 					//infoTabAbout.padding(15)
-					infoTabPurchased.padding(15)
-					infoTaCancel.padding(15)
+					infoTabPurchased
+					infoTaCancel
 				}
 				.tabViewStyle(.page)
-				.background(
+				.padding([.leading,.trailing,.bottom], 15)
+				.frame(height: verticalSize == .regular ? UIScreen.main.bounds.size.height*0.4 : UIScreen.main.bounds.size.height*0.8)
+				/*.background(
 					RoundedRectangle(cornerRadius: CGFloat(17))
 						.foregroundColor(Color("Dynamic/MainBrown"))
 						.opacity(0.25)
 				)
 				.padding(15)
-				.frame(height: verticalSize == .regular ? UIScreen.main.bounds.size.height*0.5 : UIScreen.main.bounds.size.height*0.8)
+				.frame(height: verticalSize == .regular ? UIScreen.main.bounds.size.height*0.5 : UIScreen.main.bounds.size.height*0.8)*/
 				
 				Button(action: {
 					showResotreWaiting = 1
@@ -193,7 +281,7 @@ struct StoreView: View {
 					}
 				}
 				.foregroundColor(Color("Dynamic/MainBrown+6"))
-				.frame(width:UIScreen.main.bounds.size.width*0.8)
+				.frame(maxWidth: verticalSize == .regular ? UIScreen.main.bounds.size.width*0.7 : UIScreen.main.bounds.size.width*0.5)
 				.padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
 				.background(
 					RoundedRectangle(cornerRadius: CGFloat(17))
@@ -304,22 +392,18 @@ struct StoreView: View {
 		}
 	}
 	
-	var infoTabAbout: some View {
-		VStack {
-			Text("Subscription Content")
-				.font(.title2)
-				.padding([.bottom],10)
-			Text("Access to all the lessons in the learning path.\nDownload course video for offline viewing.\nMark lessons as completed.\n")
-		}.foregroundColor(Color("Dynamic/MainBrown+6"))
-	}
-	
 	var infoTabPurchased: some View {
 		VStack {
 			Text("See Your Subscription")
 				.font(.title2)
 				.foregroundColor(Color("Dynamic/StoreViewTitle"))
 				.padding([.bottom],10)
-			Text("When you want to view your subscription status, go to \(Image(systemName: "music.note.house")) Home tab, and open the \(Image(systemName: "gear")) menu in the top right corner.")
+			VStack(alignment: .leading){
+				Text("· Go to ScoreWind \(Image(systemName: "music.note.house")) Home.").padding(.bottom,3)
+				Text("· Tap \(Image(systemName: "gear")) menu in the right top corner.").padding(.bottom,3)
+				Text("· Tap ScoreWind WizPack").padding(.bottom,3)
+			}
+			Spacer()
 		}
 		.foregroundColor(Color("Dynamic/MainBrown+6"))
 	}
@@ -331,18 +415,19 @@ struct StoreView: View {
 				.foregroundColor(Color("Dynamic/StoreViewTitle"))
 				.padding([.bottom], 10)
 			VStack(alignment:.leading) {
-				Label("Open the Settings app on your phone.", systemImage: "number.circle.fill")
-				Label("Tap your name.", systemImage: "number.circle.fill")
-				Label("Tap Subscriptions.", systemImage: "number.circle.fill")
-				Label("Find the ScoreWind app and tap Cancel.", systemImage: "number.circle.fill")
+				Text("· Open the Settings app on your phone.").padding(.bottom, 3)
+				Text("· Tap your name.").padding(.bottom, 3)
+				Text("· Tap Subscriptions.").padding(.bottom, 3)
+				Text("· Find the ScoreWind app and tap Cancel.").padding(.bottom, 3)
 			}
 			.padding([.bottom],10)
 			
 			Link(destination: URL(string: "https://support.apple.com/en-us/HT202039")!, label: {
-				Text("For more information about it on Apple Support, ")+Text("click here.").bold()
+				Text("For more information about it, go to Apple Support, ")+Text("click here.").bold()
 			})
 			/*Link("For more information about it on Apple Support, click here.", destination: URL(string: "https://support.apple.com/en-us/HT202039")!)*/
 			//Text("Here is the place to help user learn how to manage the subscription. I'll fill up this information soon.")
+			Spacer()
 		}.foregroundColor(Color("Dynamic/MainBrown+6"))
 	}
 }

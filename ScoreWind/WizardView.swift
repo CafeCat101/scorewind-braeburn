@@ -62,12 +62,6 @@ struct WizardView: View {
 						Text("About ScoreWind")
 					})
 					
-					Button(action: {
-						showStore = true
-					}, label: {
-						Text("ScoreWind Subscription")
-					})
-					
 					if (UserDefaults.standard.object(forKey: "hideTips") as? [String] ?? []).count > 0 {
 						Button(action: {
 							studentData.removeAUserDefaultKey(keyName: "hideTips")
@@ -76,6 +70,12 @@ struct WizardView: View {
 							Text("Show Me All Tips")
 						})
 					}
+					
+					Button(action: {
+						showStore = true
+					}, label: {
+						Text("Start Your Free Trial")
+					})
 					
 				} label: {
 					Label("ScoreWind", systemImage: "gear")
