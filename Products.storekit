@@ -9,10 +9,13 @@
   "settings" : {
     "_billingGracePeriodEnabled" : false,
     "_billingIssuesEnabled" : false,
+    "_compatibilityTimeRate" : {
+      "3" : 6
+    },
     "_failTransactionsEnabled" : false,
     "_renewalBillingIssuesEnabled" : false,
     "_storeKitError" : 0,
-    "_timeRate" : 0
+    "_timeRate" : 15
   },
   "subscriptionGroups" : [
     {
@@ -41,13 +44,13 @@
           "localizations" : [
             {
               "description" : "Full access to all courses and lessons",
-              "displayName" : "Monthly Subscription",
+              "displayName" : " WizPack",
               "locale" : "en_US"
             }
           ],
           "productID" : "scorewind.standard",
           "recurringSubscriptionPeriod" : "P1M",
-          "referenceName" : "Monthly Subscription",
+          "referenceName" : "WizPack Monthly Auto",
           "subscriptionGroupID" : "C65AFA9A",
           "type" : "RecurringSubscription"
         },

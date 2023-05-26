@@ -111,7 +111,7 @@ struct BuyItemView: View {
 					}
 					
 				} else {
-					DownloadSpinnerView(iconColor: Color("Dynamic/MainBrown+6"), spinnerColor: Color("Dynamic/IconHighlighted"), iconSystemImage: "music.note")
+					DownloadSpinnerView(iconColor: Color("Dynamic/MainBrown+6"), spinnerColor: Color("AppYellow"), iconSystemImage: "music.note")
 				}
 			}
 		}

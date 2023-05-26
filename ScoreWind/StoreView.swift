@@ -158,8 +158,21 @@ struct StoreView: View {
 				.padding([.leading,.trailing], 15)
 				.padding(.bottom, 15)
 				
+				HStack {
+					Spacer()
+					Text("Ignite your mind. Discover, learn, and embrace curiosity.")
+						.bold()
+						.multilineTextAlignment(.center)
+						.foregroundColor(Color("Dynamic/StoreViewTitle"))
+						.font(.headline)
+					Spacer()
+				}.padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
 				
 				if let currentSubscription = currentSubscription {
+					if let status = status {
+						StatusInfoView(product: currentSubscription, status: status)
+					}
+					/*
 					HStack {
 						Text("My Current Subscription")
 							.font(.title2)
@@ -196,18 +209,11 @@ struct StoreView: View {
 							})
 					)
 					.modifier(buyItemPadding(isLastItem: true, isOnlyOne: true))
+					 */
 				}
 				
 				if availableSubscriptions.count > 0 {
-					HStack {
-						Spacer()
-						Text("Ignite your mind. Discover, learn, and embrace curiosity.")
-							.bold()
-							.multilineTextAlignment(.center)
-							.foregroundColor(Color("Dynamic/StoreViewTitle"))
-							.font(.headline)
-						Spacer()
-					}.padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
+					
 					
 					/*ScrollView(.horizontal, showsIndicators: false) {
 						HStack {
@@ -221,7 +227,6 @@ struct StoreView: View {
 					BuyItemView(product: availableSubscriptions[0])
 						//.padding(15)
 						.modifier(buyItemPadding(isLastItem: availableSubscriptions[0].id == availableSubscriptions.last?.id ? true : false ,isOnlyOne: availableSubscriptions.count == 1 ? true : false))
-					
 					Text("Once you purchase, your 1-month free trial starts immediately. When your 1-month free trial ends, you will automatically be charged the monthly fee of \(availableSubscriptions[0].displayPrice). Your subscription will automatically renew 24 hours before each subscription period ends.")
 						.foregroundColor(Color("Dynamic/MainBrown+6"))
 						.bold()
