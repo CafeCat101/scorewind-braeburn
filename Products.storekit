@@ -15,7 +15,7 @@
     "_failTransactionsEnabled" : false,
     "_renewalBillingIssuesEnabled" : false,
     "_storeKitError" : 0,
-    "_timeRate" : 15
+    "_timeRate" : 13
   },
   "subscriptionGroups" : [
     {

@@ -79,7 +79,7 @@ struct StatusInfoView: View {
 			.foregroundColor(Color("Dynamic/MainBrown+6"))
 			.bold()
 			.padding([.leading,.trailing], 30)
-			.padding(.top, isInTrial() ? 0 : 30)
+			.padding(.top, isInTrial() ? 2 : 30)
 			.font(.subheadline)
 		
 	}

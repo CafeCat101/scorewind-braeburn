@@ -188,4 +188,78 @@ class Store: ObservableObject {
 					return .none
 			}
 	}
+	
+	@MainActor
+	func isCurrentSubscriptionValid() async -> Bool {
+		
+		do {
+			//var currentSubscription: Product?
+			//var status: Product.SubscriptionInfo.Status?
+			
+			//This app has only one subscription group, so products in the subscriptions
+			//array all belong to the same group. The statuses that
+			//`product.subscription.status` returns apply to the entire subscription group.
+			guard let product = self.subscriptions.first,
+						let statuses = try await product.subscription?.status else {
+				return false
+			}
+			
+			var highestStatus: Product.SubscriptionInfo.Status? = nil
+			var highestProduct: Product? = nil
+			
+			//Iterate through `statuses` for this subscription group and find
+			//the `Status` with the highest level of service that isn't
+			//in an expired or revoked state. For example, a customer may be subscribed to the
+			//same product with different levels of service through Family Sharing.
+			for status in statuses {
+				switch status.state {
+				case .expired, .revoked:
+					continue
+				default:
+					let renewalInfo = try self.checkVerified(status.renewalInfo)
+					
+					//Find the first subscription product that matches the subscription status renewal info by comparing the product IDs.
+					guard let newSubscription = self.subscriptions.first(where: { $0.id == renewalInfo.currentProductID }) else {
+						continue
+					}
+					
+					guard let currentProduct = highestProduct else {
+						highestStatus = status
+						highestProduct = newSubscription
+						continue
+					}
+					
+					let highestTier = self.tier(for: currentProduct.id)
+					let newTier = self.tier(for: renewalInfo.currentProductID)
+					
+					if newTier > highestTier {
+						highestStatus = status
+						highestProduct = newSubscription
+					}
+				}
+			}
+			
+			//status = highestStatus
+			//currentSubscription = highestProduct
+			
+			if let status = highestStatus {
+				guard case .verified(let renewalInfo) = status.renewalInfo else {
+					return false
+				}
+				print("[debug] Store, isCurrentSubscriptionValid() \(String(describing: renewalInfo.jsonRepresentation))")
+				if status.state == .subscribed && renewalInfo.willAutoRenew == false {
+					//::user just cancalled most likly
+					return true
+				} else {
+					return false
+				}
+			} else {
+				return false
+			}
+		} catch {
+			print("Could not update subscription status \(error)")
+			return false
+		}
+		
+	}
 }

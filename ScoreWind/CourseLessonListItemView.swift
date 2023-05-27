@@ -109,6 +109,11 @@ struct CourseLessonListItemView: View {
 				.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
 		)
 		.onTapGesture {
+			Task {
+				let isSubscriptionValid = await store.isCurrentSubscriptionValid()
+				print("[debug] CourseLessonListItemView, onTapGesture, isSubscriptionValid \(isSubscriptionValid)")
+			}
+			
 			if store.purchasedSubscriptions.isEmpty && scorewindData.wizardPickedLesson.id != lesson.id {
 				scorewindData.currentLesson = lesson
 				scorewindData.setCurrentTimestampRecs()
