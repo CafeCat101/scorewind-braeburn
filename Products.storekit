@@ -44,7 +44,7 @@
           "localizations" : [
             {
               "description" : "Full access to all courses and lessons",
-              "displayName" : " WizPack",
+              "displayName" : "WizPack",
               "locale" : "en_US"
             }
           ],
