@@ -33,6 +33,7 @@ class Store: ObservableObject {
 	@Published private(set) var subscriptionGroupStatus: RenewalState?
 	var updateListenerTask: Task<Void, Error>? = nil
 	private let productIDs:[String] = ["scorewind.standard"]//["scorewind.standard","scorewind.silver"]
+	@Published var isSubscriptionValid = false
 
 	init() {
 		//Initialize empty products, and then do a product request asynchronously to fill them in.
@@ -136,6 +137,7 @@ class Store: ObservableObject {
 	
 		//Update the store information with auto-renewable subscription products.
 		self.purchasedSubscriptions = purchasedSubscriptions
+		print("[debug] Store, purchasedSubscriptions.count \(self.purchasedSubscriptions.count)")
 		
 		//Check the `subscriptionGroupStatus` to learn the auto-renewable subscription state to determine whether the customer
 		//is new (never subscribed), active, or inactive (expired subscription). This app has only one subscription
@@ -247,8 +249,7 @@ class Store: ObservableObject {
 					return false
 				}
 				print("[debug] Store, isCurrentSubscriptionValid() \(String(describing: renewalInfo.jsonRepresentation))")
-				if status.state == .subscribed && renewalInfo.willAutoRenew == false {
-					//::user just cancalled most likly
+				if status.state == .subscribed {
 					return true
 				} else {
 					return false

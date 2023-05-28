@@ -365,10 +365,11 @@ struct StoreView: View {
 			for status in statuses {
 				switch status.state {
 				case .expired, .revoked:
+					print("[debug] StoreView, updateSubscription(), status.expired, status.revoked")
 					continue
 				default:
 					let renewalInfo = try store.checkVerified(status.renewalInfo)
-					
+					print("[debug] StoreView, updateSubscription(), renewalInfo(\(String(describing: renewalInfo.currentProductID)) \(String(describing: renewalInfo.willAutoRenew))")
 					//Find the first subscription product that matches the subscription status renewal info by comparing the product IDs.
 					guard let newSubscription = store.subscriptions.first(where: { $0.id == renewalInfo.currentProductID }) else {
 						continue
@@ -392,6 +393,8 @@ struct StoreView: View {
 			
 			status = highestStatus
 			currentSubscription = highestProduct
+			print("[debug] StoreView, updateSubscriptionStatus() store.purchasedSubscription.count \(store.purchasedSubscriptions.count)")
+			print("[debug] StoreView, availableSubscription.count \(availableSubscriptions.count)")
 		} catch {
 			print("Could not update subscription status \(error)")
 		}

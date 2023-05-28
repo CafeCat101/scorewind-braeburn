@@ -67,21 +67,21 @@ struct StatusInfoView: View {
 			)
 		}
 		
-		if isInTrial() {
-			Text("Yoy will not be charged during your trial.")
-				.foregroundColor(Color("Dynamic/MainBrown+6"))
-				.bold()
-				.padding([.leading,.trailing,.top], 30)
-				.font(.subheadline)
-		}
-		
-		Text(statusDescription())
+		Text(displayPurchaseInformation())
 			.foregroundColor(Color("Dynamic/MainBrown+6"))
 			.bold()
-			.padding([.leading,.trailing], 30)
-			.padding(.top, isInTrial() ? 2 : 30)
+			.padding([.leading,.trailing,.top], 30)
 			.font(.subheadline)
+	}
+	
+	private func displayPurchaseInformation() -> String {
+		var information = ""
+		if isInTrial() {
+			information += "Yoy will not be charged during your trial.\n"
+		}
 		
+		information += statusDescription()
+		return information
 	}
 	
 	private func isInTrial() -> Bool {
@@ -128,6 +128,7 @@ struct StatusInfoView: View {
 		switch status.state {
 		case .subscribed:
 			description = ""//subscribedDescription()
+			print("[debug] StatusInfoView, status.state .subscribed")
 		case .expired:
 			if let expirationDate = transaction.expirationDate,
 				 let expirationReason = renewalInfo.expirationReason {

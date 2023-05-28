@@ -111,7 +111,7 @@ struct CourseLessonListItemView: View {
 		.onTapGesture {
 			Task {
 				let isSubscriptionValid = await store.isCurrentSubscriptionValid()
-				print("[debug] CourseLessonListItemView, onTapGesture, isSubscriptionValid \(isSubscriptionValid)")
+				print("[debug] CourseLessonListItemView, onTapGesture, isSubscriptionValid \(String(describing: isSubscriptionValid))")
 			}
 			
 			if store.purchasedSubscriptions.isEmpty && scorewindData.wizardPickedLesson.id != lesson.id {
