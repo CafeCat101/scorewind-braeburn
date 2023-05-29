@@ -16,13 +16,15 @@ struct BuyItemView: View {
 	@Environment(\.verticalSizeClass) var verticalSize
 	@State private var showPurchaseWaiting = false
 	@Environment(\.colorScheme) var colorScheme
+	@Binding var offerIntroduction:Bool
 	
 	let product: Product
 	let purchasingEnabled: Bool
 	
-	init(product: Product, purchasingEnabled: Bool = true) {
+	init(product: Product, purchasingEnabled: Bool = true, offerIntroduction: Binding<Bool>) {
 		self.product = product
 		self.purchasingEnabled = purchasingEnabled
+		self._offerIntroduction = offerIntroduction
 	}
 	
 	var body: some View {
@@ -30,19 +32,20 @@ struct BuyItemView: View {
 			(Text(product.displayPrice)+Text(" / ")+Text(getFriendlyPeriodName(product.subscription!, isIntroduction: false)))
 				.bold()
 				//.padding(.bottom, 20)
-			
-			HStack(spacing:0) {
-				Spacer()
-				Image(systemName: "gift.fill")
-					.resizable()
-					.scaledToFit()
-					.frame(maxWidth: 25)
-					.padding(.trailing,5)
-				Text("Plus 1-month free trial!")
-					.bold()
-					.padding([.top,.bottom], 5)
-					.multilineTextAlignment(.center)
-				Spacer()
+			if offerIntroduction {
+				HStack(spacing:0) {
+					Spacer()
+					Image(systemName: "gift.fill")
+						.resizable()
+						.scaledToFit()
+						.frame(maxWidth: 25)
+						.padding(.trailing,5)
+					Text("Plus 1-month free trial!")
+						.bold()
+						.padding([.top,.bottom], 5)
+						.multilineTextAlignment(.center)
+					Spacer()
+				}
 			}
 			
 			buyButton

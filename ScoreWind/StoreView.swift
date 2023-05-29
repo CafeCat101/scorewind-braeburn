@@ -18,6 +18,7 @@ struct StoreView: View {
 	@Environment(\.verticalSizeClass) var verticalSize
 	@Environment(\.colorScheme) var colorScheme
 	@State private var showResotreWaiting = 0
+	@State private var offerIntroduction = false
 	
 	var availableSubscriptions: [Product] {
 		store.subscriptions.filter { $0.id != currentSubscription?.id }
@@ -162,9 +163,9 @@ struct StoreView: View {
 					Spacer()
 					Text("Ignite your mind. Discover, learn, and embrace curiosity.")
 						.bold()
+						.font(.title3)
 						.multilineTextAlignment(.center)
 						.foregroundColor(Color("Dynamic/StoreViewTitle"))
-						.font(.headline)
 					Spacer()
 				}.padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
 				
@@ -224,7 +225,7 @@ struct StoreView: View {
 							}
 						}
 					}//.frame(width: UIScreen.main.bounds.size.width)*/
-					BuyItemView(product: availableSubscriptions[0])
+					BuyItemView(product: availableSubscriptions[0], offerIntroduction: $offerIntroduction)
 						//.padding(15)
 						.modifier(buyItemPadding(isLastItem: availableSubscriptions[0].id == availableSubscriptions.last?.id ? true : false ,isOnlyOne: availableSubscriptions.count == 1 ? true : false))
 					Text("Once you purchase, your 1-month free trial starts immediately. When your 1-month free trial ends, you will automatically be charged the monthly fee of \(availableSubscriptions[0].displayPrice). Your subscription will automatically renew 24 hours before each subscription period ends.")
@@ -354,7 +355,7 @@ struct StoreView: View {
 						let statuses = try await product.subscription?.status else {
 				return
 			}
-			
+			print("[debug] StoreView, updateSubscriptionStatus() product \(String(describing: await product.subscription?.isEligibleForIntroOffer))")
 			var highestStatus: Product.SubscriptionInfo.Status? = nil
 			var highestProduct: Product? = nil
 			
@@ -365,11 +366,11 @@ struct StoreView: View {
 			for status in statuses {
 				switch status.state {
 				case .expired, .revoked:
-					print("[debug] StoreView, updateSubscription(), status.expired, status.revoked")
+					print("[debug] StoreView, updateSubscriptionStatus(), status.expired, status.revoked")
 					continue
 				default:
 					let renewalInfo = try store.checkVerified(status.renewalInfo)
-					print("[debug] StoreView, updateSubscription(), renewalInfo(\(String(describing: renewalInfo.currentProductID)) \(String(describing: renewalInfo.willAutoRenew))")
+					print("[debug] StoreView, updateSubscriptionStatus(), renewalInfo(\(String(describing: renewalInfo.currentProductID)) \(String(describing: renewalInfo.willAutoRenew))")
 					//Find the first subscription product that matches the subscription status renewal info by comparing the product IDs.
 					guard let newSubscription = store.subscriptions.first(where: { $0.id == renewalInfo.currentProductID }) else {
 						continue
@@ -393,11 +394,31 @@ struct StoreView: View {
 			
 			status = highestStatus
 			currentSubscription = highestProduct
+			/*if await currentSubscription?.subscription?.isEligibleForIntroOffer != nil {
+				offerIntroduction = false
+			} else {
+				offerIntroduction = true
+			}*/
+			offerIntroduction = await eligibleForIntro(product: product)
+			print("[debug] StoreView, updateSubscriptionStatus() eligibleForIntro \(offerIntroduction)")
+			//print("[debug] StoreView, updateSubscriptionStatus() offerIntroduction \(String(describing: await currentSubscription?.subscription?.isEligibleForIntroOffer))")
 			print("[debug] StoreView, updateSubscriptionStatus() store.purchasedSubscription.count \(store.purchasedSubscriptions.count)")
-			print("[debug] StoreView, availableSubscription.count \(availableSubscriptions.count)")
+			print("[debug] StoreView, updateSubscriptionStatus() availableSubscription.count \(availableSubscriptions.count)")
 		} catch {
 			print("Could not update subscription status \(error)")
 		}
+	}
+	
+	func eligibleForIntro(product: Product) async -> Bool {
+			guard let renewableSubscription = product.subscription else {
+					// No renewable subscription is available for this product.
+					return false
+			}
+			if await renewableSubscription.isEligibleForIntroOffer {
+					// The product is eligible for an introductory offer.
+					return true
+			}
+			return false
 	}
 	
 	var infoTabPurchased: some View {

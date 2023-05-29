@@ -51,7 +51,7 @@ struct StatusInfoView: View {
 				
 				Text(Image(systemName: "checkmark"))
 					.bold()
-					.foregroundColor(Color("Dynamic/ShadowReverse"))
+					.foregroundColor(colorScheme == .light ? Color("Dynamic/ShadowReverse") : Color("Dynamic/StoreViewTitle"))
 			}
 			.frame(maxWidth: verticalSize == .regular ? UIScreen.main.bounds.size.width*0.7 : UIScreen.main.bounds.size.width*0.5)
 			.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
@@ -128,13 +128,15 @@ struct StatusInfoView: View {
 		switch status.state {
 		case .subscribed:
 			description = ""//subscribedDescription()
-			print("[debug] StatusInfoView, status.state .subscribed")
+			print("[debug] StatusInfoView, statusDescription() status.state .subscribed")
 		case .expired:
+			print("[debug] StatusInfoView, statusDescription() status.state .expired")
 			if let expirationDate = transaction.expirationDate,
 				 let expirationReason = renewalInfo.expirationReason {
 				description = expirationDescription(expirationReason, expirationDate: expirationDate)
 			}
 		case .revoked:
+			print("[debug] StatusInfoView, statusDescription() status.state .revoked")
 			if let revokedDate = transaction.revocationDate {
 				description = "The App Store refunded your subscription to \(product.displayName) on \(revokedDate.storeFormattedDate())."
 			}
@@ -150,7 +152,7 @@ struct StatusInfoView: View {
 			description += renewalDescription(renewalInfo, expirationDate)
 		}
 		
-		if description.isEmpty && status.state == .subscribed && renewalInfo.willAutoRenew == false {
+		if status.state == .subscribed && renewalInfo.willAutoRenew == false {
 			//:: no renew date but subscribed, user has cancelled.
 			description += "You can still access \(product.displayName) until \(transaction.expirationDate!.storeFormattedDate())."
 		}

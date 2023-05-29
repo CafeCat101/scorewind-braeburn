@@ -53,35 +53,6 @@
           "referenceName" : "WizPack Monthly Auto",
           "subscriptionGroupID" : "C65AFA9A",
           "type" : "RecurringSubscription"
-        },
-        {
-          "adHocOffers" : [
-
-          ],
-          "codeOffers" : [
-
-          ],
-          "displayPrice" : "12",
-          "familyShareable" : true,
-          "groupNumber" : 1,
-          "internalID" : "33F5F208",
-          "introductoryOffer" : {
-            "internalID" : "33137AF5",
-            "paymentMode" : "free",
-            "subscriptionPeriod" : "P1M"
-          },
-          "localizations" : [
-            {
-              "description" : "Full access to all courses and lessons",
-              "displayName" : "Silver",
-              "locale" : "en_US"
-            }
-          ],
-          "productID" : "scorewind.silver",
-          "recurringSubscriptionPeriod" : "P3M",
-          "referenceName" : "Silver",
-          "subscriptionGroupID" : "C65AFA9A",
-          "type" : "RecurringSubscription"
         }
       ]
     }
