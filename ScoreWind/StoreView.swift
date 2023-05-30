@@ -19,7 +19,7 @@ struct StoreView: View {
 	@Environment(\.colorScheme) var colorScheme
 	@State private var showResotreWaiting = 0
 	@State private var offerIntroduction = false
-	@State private var enableBuyButton = true
+	//@State private var enableBuyButton = true
 	
 	var availableSubscriptions: [Product] {
 		store.subscriptions.filter { $0.id != currentSubscription?.id }
@@ -194,7 +194,7 @@ struct StoreView: View {
 						}
 					}
 					
-					BuyButtonView(product: getProductForBuyButton(), purchasingEnabled: $enableBuyButton)
+					BuyButtonView(product: getProductForBuyButton())
 						.padding([.leading, .trailing],15)
 						.padding([.top, .bottom], 10)
 						.frame(width: verticalSize == .regular ? UIScreen.main.bounds.size.width : UIScreen.main.bounds.size.width*0.9)
@@ -403,7 +403,7 @@ struct StoreView: View {
 			print("[debug] StoreView, updateSubscriptionStatus() status \(String(describing: status?.state))")
 			print("[debug] StoreView, updateSubscriptionStatus() currentSubscription \(String(describing: currentSubscription?.id))")
 			if status?.state == .subscribed {
-				enableBuyButton = false
+				store.enablePurchase = false
 			}
 			offerIntroduction = await eligibleForIntro(product: product)
 			print("[debug] StoreView, updateSubscriptionStatus() eligibleForIntro \(offerIntroduction)")

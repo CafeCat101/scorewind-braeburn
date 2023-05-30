@@ -18,7 +18,7 @@ struct BuyButtonView: View {
 	@Environment(\.colorScheme) var colorScheme
 	
 	let product: Product
-	@Binding var purchasingEnabled: Bool
+	//@Binding var purchasingEnabled: Bool
 	
 	var body: some View {
 		VStack{
@@ -29,13 +29,13 @@ struct BuyButtonView: View {
 				}
 			}) {
 				HStack {
-					Text(purchasingEnabled ? "Subscribe Now" : "Subscribed")
+					Text(store.enablePurchase ? "Subscribe Now" : "Subscribed")
 						.fontWeight(colorScheme == .light ? Font.Weight.bold : Font.Weight.medium)
 						.foregroundColor(colorScheme == .light ? Color("Dynamic/ShadowReverse") : Color("Dynamic/StoreViewTitle"))
 					if showPurchaseWaiting {
 						DownloadSpinnerView(iconColor: Color("Dynamic/MainBrown+6"), spinnerColor: Color("AppYellow"), iconSystemImage: "music.note")
 					}
-					if purchasingEnabled == false {
+					if store.enablePurchase == false {
 						Text(Image(systemName: "checkmark"))
 							.bold()
 							.foregroundColor(colorScheme == .light ? Color("Dynamic/ShadowReverse") : Color("Dynamic/StoreViewTitle"))
@@ -69,9 +69,9 @@ struct BuyButtonView: View {
 							.stroke(Color("Dynamic/DarkGray"), lineWidth: 1)
 					}
 			)
-			.disabled(purchasingEnabled ? false : true)
+			.disabled(store.enablePurchase ? false : true)
 			.onAppear {
-				print("[debug] BuyButtonView, purchasingEnabled \(purchasingEnabled)")
+				print("[debug] BuyButtonView, purchasingEnabled \(store.enablePurchase)")
 				/*Task {
 					isPurchased = (try? await store.isPurchased(product)) ?? false
 				}*/
@@ -95,7 +95,7 @@ struct BuyButtonView: View {
 				withAnimation {
 					//isPurchased = true
 					showPurchaseWaiting = false
-					purchasingEnabled = false
+					store.enablePurchase = false
 				}
 			}
 		} catch StoreError.failedVerification {

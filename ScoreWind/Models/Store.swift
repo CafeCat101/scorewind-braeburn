@@ -34,6 +34,7 @@ class Store: ObservableObject {
 	var updateListenerTask: Task<Void, Error>? = nil
 	private let productIDs:[String] = ["scorewind.standard"]//["scorewind.standard","scorewind.silver"]
 	@Published var isSubscriptionValid = false
+	@Published var enablePurchase = true
 
 	init() {
 		//Initialize empty products, and then do a product request asynchronously to fill them in.
