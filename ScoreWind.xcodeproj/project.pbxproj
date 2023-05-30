@@ -11,6 +11,7 @@
 		B54FC1429AC896AD280E77F4 /* Pods_ScoreWindTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87352E67846310649E0B1D07 /* Pods_ScoreWindTests.framework */; };
 		C810183929D2FB7400B54AFD /* DownloadSpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C810183829D2FB7400B54AFD /* DownloadSpinnerView.swift */; };
 		C821817F29BEC68800F8180E /* Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C821817E29BEC68800F8180E /* Orientation.swift */; };
+		C8285E3D2A25033600D4D917 /* BuyButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8285E3C2A25033600D4D917 /* BuyButtonView.swift */; };
 		C85F272A286F4C2B00D0A4E5 /* ScoreWindApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2729286F4C2B00D0A4E5 /* ScoreWindApp.swift */; };
 		C85F272E286F4C2C00D0A4E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */; };
 		C85F2731286F4C2C00D0A4E5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C85F2730286F4C2C00D0A4E5 /* Preview Assets.xcassets */; };
@@ -111,6 +112,7 @@
 		87352E67846310649E0B1D07 /* Pods_ScoreWindTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScoreWindTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C810183829D2FB7400B54AFD /* DownloadSpinnerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadSpinnerView.swift; sourceTree = "<group>"; };
 		C821817E29BEC68800F8180E /* Orientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Orientation.swift; sourceTree = "<group>"; };
+		C8285E3C2A25033600D4D917 /* BuyButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyButtonView.swift; sourceTree = "<group>"; };
 		C85F2726286F4C2B00D0A4E5 /* ScoreWind.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScoreWind.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C85F2729286F4C2B00D0A4E5 /* ScoreWindApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreWindApp.swift; sourceTree = "<group>"; };
 		C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -313,6 +315,7 @@
 				C85F272F286F4C2C00D0A4E5 /* Preview Content */,
 				C897D4C729AEEF6B00A21603 /* Styles */,
 				C85F2798286F5A4E00D0A4E5 /* Types */,
+				C8285E3C2A25033600D4D917 /* BuyButtonView.swift */,
 			);
 			path = ScoreWind;
 			sourceTree = "<group>";
@@ -645,6 +648,7 @@
 				C878276028F404320007DDC1 /* WizardInstrumentView.swift in Sources */,
 				C85F277D286F4F2E00D0A4E5 /* StudentData.swift in Sources */,
 				C86F881A2996166E0072504E /* WizardCalculationMode.swift in Sources */,
+				C8285E3D2A25033600D4D917 /* BuyButtonView.swift in Sources */,
 				C86F8820299AAE370072504E /* Store.swift in Sources */,
 				C87CF130297C4C9F00CDA215 /* WizardCalculatorHelper.swift in Sources */,
 				C85F2784286F4F2E00D0A4E5 /* DownloadManager.swift in Sources */,

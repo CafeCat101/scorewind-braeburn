@@ -16,7 +16,7 @@ struct StatusInfoView: View {
 			.multilineTextAlignment(.center)
 			.frame(maxWidth: .infinity, alignment: .center)*/
 		
-		VStack {
+		/*VStack {
 			(Text(product.displayPrice)+Text(" / ")+Text(getFriendlyPeriodName(product.subscription!, isIntroduction: false)))
 				.bold()
 				//.padding(.bottom, 20)
@@ -35,9 +35,9 @@ struct StatusInfoView: View {
 					Spacer()
 				}
 			}
-		}
+		}*/
 		
-		if status.state == .subscribed {
+		/*if status.state == .subscribed {
 			HStack {
 				if colorScheme == .light {
 					Text("Subscribed")
@@ -65,7 +65,7 @@ struct StatusInfoView: View {
 							.stroke(Color("Dynamic/DarkGray"), lineWidth: 1)
 					}
 			)
-		}
+		}*/
 		
 		Text(displayPurchaseInformation())
 			.foregroundColor(Color("Dynamic/MainBrown+6"))

@@ -19,6 +19,7 @@ struct StoreView: View {
 	@Environment(\.colorScheme) var colorScheme
 	@State private var showResotreWaiting = 0
 	@State private var offerIntroduction = false
+	@State private var enableBuyButton = true
 	
 	var availableSubscriptions: [Product] {
 		store.subscriptions.filter { $0.id != currentSubscription?.id }
@@ -169,53 +170,58 @@ struct StoreView: View {
 					Spacer()
 				}.padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
 				
+				VStack {
+					(Text(displayProductPrice())+Text(" / ")+Text(displaySubscriptionPeriod()))
+						.bold()
+						//.padding(.bottom, 20)
+
+					if offerIntroduction || isInTrial() {
+						HStack(spacing:0) {
+							Spacer()
+							if isInTrial() == false && offerIntroduction {
+								Image(systemName: "gift.fill")
+									.resizable()
+									.scaledToFit()
+									.frame(maxWidth: 25)
+									.padding(.trailing,5)
+							}
+							
+							Text("Plus 1-month free trial!")
+								.bold()
+								.padding([.top,.bottom], 5)
+								.multilineTextAlignment(.center)
+							Spacer()
+						}
+					}
+					
+					BuyButtonView(product: getProductForBuyButton(), purchasingEnabled: $enableBuyButton)
+						.padding([.leading, .trailing],15)
+						.padding([.top, .bottom], 10)
+						.frame(width: verticalSize == .regular ? UIScreen.main.bounds.size.width : UIScreen.main.bounds.size.width*0.9)
+					
+					
+					if let currentSubscription = currentSubscription {
+						if let status = status {
+							StatusInfoView(product: currentSubscription, status: status)
+						}
+					} else {
+						Text("Once you purchase, your 1-month free trial starts immediately. When your 1-month free trial ends, you will automatically be charged the monthly fee of \(availableSubscriptions[0].displayPrice). Your subscription will automatically renew 24 hours before each subscription period ends.")
+							.foregroundColor(Color("Dynamic/MainBrown+6"))
+							.bold()
+							.padding([.leading,.trailing,.top], 30)
+							.font(.subheadline)
+					}
+				}
+				
+				
+				/*
 				if let currentSubscription = currentSubscription {
 					if let status = status {
 						StatusInfoView(product: currentSubscription, status: status)
 					}
-					/*
-					HStack {
-						Text("My Current Subscription")
-							.font(.title2)
-							.foregroundColor(Color("Dynamic/StoreViewTitle"))
-						Spacer()
-					}.padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
-					
-					VStack {
-						VStack {
-							HStack{
-								Text(currentSubscription.displayName)
-									.foregroundColor(Color("Dynamic/MainBrown+6"))
-									.font(.footnote)
-									.bold()
-								Spacer()
-							}.padding([.bottom], 5)
-							if let status = status {
-								StatusInfoView(product: currentSubscription, status: status)
-							}
-						}
-						.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
-					}
-					.background(
-						RoundedRectangle(cornerRadius: CGFloat(17))
-							.foregroundColor(Color("Dynamic/StoreViewTextBackground"))
-							.opacity(0.20)
-							.shadow(color: Color("Dynamic/ShadowReverse"),radius: CGFloat(5))
-							.overlay(content: {
-								Image("play_any")
-									.resizable()
-									.scaledToFill()
-									.padding(30)
-									.opacity(0.25)
-							})
-					)
-					.modifier(buyItemPadding(isLastItem: true, isOnlyOne: true))
-					 */
 				}
 				
 				if availableSubscriptions.count > 0 {
-					
-					
 					/*ScrollView(.horizontal, showsIndicators: false) {
 						HStack {
 							ForEach(availableSubscriptions) { product in
@@ -233,7 +239,7 @@ struct StoreView: View {
 						.bold()
 						.padding([.leading,.trailing,.top], 30)
 						.font(.subheadline)
-				}
+				}*/
 				
 				Divider()
 					.padding([.leading,.trailing], 15)
@@ -370,7 +376,7 @@ struct StoreView: View {
 					continue
 				default:
 					let renewalInfo = try store.checkVerified(status.renewalInfo)
-					print("[debug] StoreView, updateSubscriptionStatus(), renewalInfo(\(String(describing: renewalInfo.currentProductID)) \(String(describing: renewalInfo.willAutoRenew))")
+					print("[debug] StoreView, updateSubscriptionStatus(), renewalInfo(\(String(describing: renewalInfo.currentProductID)) \(String(describing: renewalInfo.willAutoRenew)))")
 					//Find the first subscription product that matches the subscription status renewal info by comparing the product IDs.
 					guard let newSubscription = store.subscriptions.first(where: { $0.id == renewalInfo.currentProductID }) else {
 						continue
@@ -394,11 +400,11 @@ struct StoreView: View {
 			
 			status = highestStatus
 			currentSubscription = highestProduct
-			/*if await currentSubscription?.subscription?.isEligibleForIntroOffer != nil {
-				offerIntroduction = false
-			} else {
-				offerIntroduction = true
-			}*/
+			print("[debug] StoreView, updateSubscriptionStatus() status \(String(describing: status?.state))")
+			print("[debug] StoreView, updateSubscriptionStatus() currentSubscription \(String(describing: currentSubscription?.id))")
+			if status?.state == .subscribed {
+				enableBuyButton = false
+			}
 			offerIntroduction = await eligibleForIntro(product: product)
 			print("[debug] StoreView, updateSubscriptionStatus() eligibleForIntro \(offerIntroduction)")
 			//print("[debug] StoreView, updateSubscriptionStatus() offerIntroduction \(String(describing: await currentSubscription?.subscription?.isEligibleForIntroOffer))")
@@ -409,7 +415,43 @@ struct StoreView: View {
 		}
 	}
 	
-	func eligibleForIntro(product: Product) async -> Bool {
+	private func displayProductPrice() -> String {
+		if let currentSubscription = currentSubscription {
+			return currentSubscription.displayPrice
+		} else {
+			return availableSubscriptions.first?.displayPrice ?? "--"
+		}
+	}
+	
+	private func displaySubscriptionPeriod() -> String {
+		if let currentSubscription = currentSubscription {
+			return getFriendlyPeriodName(subscription: (currentSubscription.subscription)!)
+		} else {
+			return getFriendlyPeriodName(subscription: (availableSubscriptions.first?.subscription)!)
+		}
+	}
+	
+	private func getFriendlyPeriodName(subscription: Product.SubscriptionInfo) -> String {
+		let unit: String
+		
+		let plural = 1 < subscription.subscriptionPeriod.value
+		switch subscription.subscriptionPeriod.unit {
+		case .day:
+			unit = plural ? "\(subscription.subscriptionPeriod.value) days" : "day"
+		case .week:
+			unit = plural ? "\(subscription.subscriptionPeriod.value) weeks" : "week"
+		case .month:
+			unit = plural ? "\(subscription.subscriptionPeriod.value) months" : "month"
+		case .year:
+			unit = plural ? "\(subscription.subscriptionPeriod.value) years" : "year"
+		@unknown default:
+			unit = "period"
+		}
+		
+		return unit
+	}
+	
+	private func eligibleForIntro(product: Product) async -> Bool {
 			guard let renewableSubscription = product.subscription else {
 					// No renewable subscription is available for this product.
 					return false
@@ -420,6 +462,50 @@ struct StoreView: View {
 			}
 			return false
 	}
+	
+	private func isInTrial() -> Bool {
+		if let status = status {
+			guard case .verified(let transaction) = status.transaction else {
+				return false
+			}
+			
+			if transaction.offerType != nil {
+				print("[debug] StoreView, isInTrial true")
+				return true
+			}else {
+				return false
+			}
+		} else {
+			return false
+		}
+	}
+	
+	private func getProductForBuyButton() -> Product {
+		if let currentSubscription = currentSubscription {
+			return currentSubscription
+		} else {
+			return availableSubscriptions.first!
+		}
+	}
+	
+	/*private func enableBuyButton() -> Bool {
+		if let statusxx = status {
+			return false
+			/*if status.state == .subscribed {
+				return false
+			} else {
+				return true
+			}*/
+		} else {
+			return true
+		}
+	}*/
+	
+	/*private func getIntroductionLabelText(product: Product) -> String {
+		let value = product.subscription?.introductoryOffer?.period.value ?? 0
+		let unitFriendlyName = getFriendlyPeriodName(product.subscription!, isIntroduction: true)
+		return "+ \(value) \(unitFriendlyName) free trial"
+	}*/
 	
 	var infoTabPurchased: some View {
 		VStack {
