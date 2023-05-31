@@ -290,7 +290,7 @@ struct WizardResultPathView: View {
 			scorewindData.setCurrentTimestampRecs()
 			scorewindData.lastPlaybackTime = 0.0
 			
-			if !store.purchasedSubscriptions.isEmpty || (store.purchasedSubscriptions.isEmpty && scorewindData.wizardPickedLesson.id == theLesson.id) {
+			if store.enablePurchase == false || (store.enablePurchase && scorewindData.wizardPickedCourse.id == toCourseID) {
 				self.selectedTab = "TCourse"
 				withAnimation(Animation.linear(duration: 0.13)) {
 					showLessonView = true

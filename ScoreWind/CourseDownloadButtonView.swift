@@ -18,7 +18,7 @@ struct CourseDownloadButtonView: View {
 	
 	var body: some View {
 		Button(action: {
-			if store.purchasedSubscriptions.isEmpty {
+			if store.enablePurchase {
 				showStoreView = true
 			} else {
 				showDownloadAlert = true

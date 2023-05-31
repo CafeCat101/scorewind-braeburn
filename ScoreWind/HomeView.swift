@@ -172,13 +172,13 @@ struct HomeView: View {
 		studentData.wizardResult = studentData.getWizardResult()
 	}
 	
-	private func hasAccessToCourses() -> Bool {
+	/*private func hasAccessToCourses() -> Bool {
 		if !store.purchasedSubscriptions.isEmpty {
 			return true
 		} else {
 			return false
 		}
-	}
+	}*/
 }
 
 @ViewBuilder

@@ -33,8 +33,9 @@ class Store: ObservableObject {
 	@Published private(set) var subscriptionGroupStatus: RenewalState?
 	var updateListenerTask: Task<Void, Error>? = nil
 	private let productIDs:[String] = ["scorewind.standard"]//["scorewind.standard","scorewind.silver"]
-	@Published var isSubscriptionValid = false
+	//@Published var isSubscriptionValid = false
 	@Published var enablePurchase = true
+	@Published var offerIntroduction = false
 
 	init() {
 		//Initialize empty products, and then do a product request asynchronously to fill them in.
@@ -127,6 +128,7 @@ class Store: ObservableObject {
 				//Check the `productType` of the transaction and get the corresponding product from the store.
 				if transaction.productType == .autoRenewable {
 					if let subscription = subscriptions.first(where: { $0.id == transaction.productID }) {
+						print("[debug] Store, updateCustomerProductStatus(), \(transaction.id) \(String(describing: transaction.offerType?.rawValue))")
 						purchasedSubscriptions.append(subscription)
 						print("[debug] Store, updateCustomerProductStatus .autoRenewable corresponding product \(subscription.displayName)")
 					}
@@ -145,6 +147,12 @@ class Store: ObservableObject {
 		//group, so products in the subscriptions array all belong to the same group. The statuses that
 		//`product.subscription.status` returns apply to the entire subscription group.
 		subscriptionGroupStatus = try? await subscriptions.first?.subscription?.status.first?.state
+		
+		if await checkCurrentSubscriptionIsValid() {
+			self.enablePurchase = false
+		} else {
+			self.enablePurchase = true
+		}
 	}
 	
 	func purchase(_ product: Product) async throws -> Transaction? {
@@ -193,8 +201,8 @@ class Store: ObservableObject {
 	}
 	
 	@MainActor
-	func isCurrentSubscriptionValid() async -> Bool {
-		
+	private func checkCurrentSubscriptionIsValid() async -> Bool {
+		//::this function is copied from StoreView's updateSubscriptionStatus
 		do {
 			//var currentSubscription: Product?
 			//var status: Product.SubscriptionInfo.Status?
@@ -204,6 +212,7 @@ class Store: ObservableObject {
 			//`product.subscription.status` returns apply to the entire subscription group.
 			guard let product = self.subscriptions.first,
 						let statuses = try await product.subscription?.status else {
+				print("[debug] Store checkCurrentSubscriptionIsValid, no result for product and statuses ")
 				return false
 			}
 			
@@ -241,27 +250,40 @@ class Store: ObservableObject {
 					}
 				}
 			}
+			if highestProduct != nil {
+				self.offerIntroduction = await eligibleForIntro(product: highestProduct!)
+			} else {
+				self.offerIntroduction = await eligibleForIntro(product: product)
+			}
+			print("[debug] Store checkCurrentSubscriptionIsValid eligibleForIntro \(String(describing: self.offerIntroduction))")
 			
-			//status = highestStatus
-			//currentSubscription = highestProduct
+			print("[debug] Store checkCurrentSubscriptionIsValid highestStatus \(String(describing: highestStatus?.state))")
+			print("[debug] Store checkCurrentSubscriptionIsValid highestProduct \(String(describing: highestProduct?.id))")
 			
-			if let status = highestStatus {
-				guard case .verified(let renewalInfo) = status.renewalInfo else {
-					return false
-				}
-				print("[debug] Store, isCurrentSubscriptionValid() \(String(describing: renewalInfo.jsonRepresentation))")
-				if status.state == .subscribed {
-					return true
-				} else {
-					return false
-				}
+			if highestStatus?.state == .subscribed {
+				return true
 			} else {
 				return false
 			}
+			
+			
 		} catch {
 			print("Could not update subscription status \(error)")
 			return false
 		}
 		
+	}
+	
+	@MainActor
+	func eligibleForIntro(product: Product) async -> Bool {
+			guard let renewableSubscription = product.subscription else {
+					// No renewable subscription is available for this product.
+					return false
+			}
+			if await renewableSubscription.isEligibleForIntroOffer {
+					// The product is eligible for an introductory offer.
+					return true
+			}
+			return false
 	}
 }

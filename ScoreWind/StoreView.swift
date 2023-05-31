@@ -18,7 +18,7 @@ struct StoreView: View {
 	@Environment(\.verticalSizeClass) var verticalSize
 	@Environment(\.colorScheme) var colorScheme
 	@State private var showResotreWaiting = 0
-	@State private var offerIntroduction = false
+	//@State private var offerIntroduction = false
 	//@State private var enableBuyButton = true
 	
 	var availableSubscriptions: [Product] {
@@ -175,10 +175,10 @@ struct StoreView: View {
 						.bold()
 						//.padding(.bottom, 20)
 
-					if offerIntroduction || isInTrial() {
+					if store.offerIntroduction || isInTrial() {
 						HStack(spacing:0) {
 							Spacer()
-							if isInTrial() == false && offerIntroduction {
+							if isInTrial() == false && store.offerIntroduction {
 								Image(systemName: "gift.fill")
 									.resizable()
 									.scaledToFit()
@@ -186,10 +186,18 @@ struct StoreView: View {
 									.padding(.trailing,5)
 							}
 							
-							Text("Plus 1-month free trial!")
-								.bold()
-								.padding([.top,.bottom], 5)
-								.multilineTextAlignment(.center)
+							if isInTrial() {
+								Text("1-month free trial!")
+									.bold()
+									.padding([.top,.bottom], 5)
+									.multilineTextAlignment(.center)
+							} else {
+								Text("Plus 1-month free trial!")
+									.bold()
+									.padding([.top,.bottom], 5)
+									.multilineTextAlignment(.center)
+							}
+							
 							Spacer()
 						}
 					}
@@ -205,11 +213,20 @@ struct StoreView: View {
 							StatusInfoView(product: currentSubscription, status: status)
 						}
 					} else {
-						Text("Once you purchase, your 1-month free trial starts immediately. When your 1-month free trial ends, you will automatically be charged the monthly fee of \(availableSubscriptions[0].displayPrice). Your subscription will automatically renew 24 hours before each subscription period ends.")
-							.foregroundColor(Color("Dynamic/MainBrown+6"))
-							.bold()
-							.padding([.leading,.trailing,.top], 30)
-							.font(.subheadline)
+						if store.offerIntroduction {
+							Text("Once you purchase, your 1-month free trial starts immediately. When your 1-month free trial ends, you will automatically be charged the monthly fee of \(displayAvailableSubscriptionPrice()). Your subscription will automatically renew 24 hours before each subscription period ends.")
+								.foregroundColor(Color("Dynamic/MainBrown+6"))
+								.bold()
+								.padding([.leading,.trailing,.top], 30)
+								.font(.subheadline)
+						} else {
+							Text("Once you purchase you will automatically be charged the monthly fee of \(displayAvailableSubscriptionPrice()). Your subscription will automatically renew 24 hours before each subscription period ends.")
+								.foregroundColor(Color("Dynamic/MainBrown+6"))
+								.bold()
+								.padding([.leading,.trailing,.top], 30)
+								.font(.subheadline)
+						}
+						
 					}
 				}
 				
@@ -404,9 +421,19 @@ struct StoreView: View {
 			print("[debug] StoreView, updateSubscriptionStatus() currentSubscription \(String(describing: currentSubscription?.id))")
 			if status?.state == .subscribed {
 				store.enablePurchase = false
+			} else {
+				store.enablePurchase = true
 			}
-			offerIntroduction = await eligibleForIntro(product: product)
-			print("[debug] StoreView, updateSubscriptionStatus() eligibleForIntro \(offerIntroduction)")
+			
+			//store.offerIntroduction = await store.eligibleForIntro(product: product)
+			
+			if highestProduct != nil {
+				store.offerIntroduction = await store.eligibleForIntro(product: highestProduct!)
+			} else {
+				store.offerIntroduction = await store.eligibleForIntro(product: product)
+			}
+			
+			print("[debug] StoreView, updateSubscriptionStatus() eligibleForIntro \(store.offerIntroduction)")
 			//print("[debug] StoreView, updateSubscriptionStatus() offerIntroduction \(String(describing: await currentSubscription?.subscription?.isEligibleForIntroOffer))")
 			print("[debug] StoreView, updateSubscriptionStatus() store.purchasedSubscription.count \(store.purchasedSubscriptions.count)")
 			print("[debug] StoreView, updateSubscriptionStatus() availableSubscription.count \(availableSubscriptions.count)")
@@ -451,7 +478,7 @@ struct StoreView: View {
 		return unit
 	}
 	
-	private func eligibleForIntro(product: Product) async -> Bool {
+	/*private func eligibleForIntro(product: Product) async -> Bool {
 			guard let renewableSubscription = product.subscription else {
 					// No renewable subscription is available for this product.
 					return false
@@ -461,7 +488,7 @@ struct StoreView: View {
 					return true
 			}
 			return false
-	}
+	}*/
 	
 	private func isInTrial() -> Bool {
 		if let status = status {
@@ -486,6 +513,10 @@ struct StoreView: View {
 		} else {
 			return availableSubscriptions.first!
 		}
+	}
+	
+	private func displayAvailableSubscriptionPrice() -> String {
+		return availableSubscriptions.first?.displayPrice ?? "--"
 	}
 	
 	/*private func enableBuyButton() -> Bool {

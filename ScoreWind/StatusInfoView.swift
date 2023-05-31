@@ -154,7 +154,7 @@ struct StatusInfoView: View {
 		
 		if status.state == .subscribed && renewalInfo.willAutoRenew == false {
 			//:: no renew date but subscribed, user has cancelled.
-			description += "You can still access \(product.displayName) until \(transaction.expirationDate!.storeFormattedDate())."
+			description = "You can still access \(product.displayName) until \(transaction.expirationDate!.storeFormattedDate())."
 		}
 		return description
 	}

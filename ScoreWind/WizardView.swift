@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WizardView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
+	@EnvironmentObject var store: Store
 	@Binding var selectedTab:String
 	@State private var userRole:UserRole = .student
 	//@State private var stepName:Page = .wizardChooseInstrument
@@ -74,7 +75,7 @@ struct WizardView: View {
 					Button(action: {
 						showStore = true
 					}, label: {
-						Text("Start Your Free Trial")
+						Text(subscriptionMenuLabel())
 					})
 					
 				} label: {
@@ -174,6 +175,18 @@ struct WizardView: View {
 				.edgesIgnoringSafeArea(.all)
 		}
 	}*/
+	
+	private func subscriptionMenuLabel() -> String {
+		var label = "ScoreWind WizPack"
+		if store.enablePurchase {
+			if store.offerIntroduction {
+				label = "Start Your Free Trial"
+			} else {
+				label = "Start ScoreWind WizPack"
+			}
+		}
+		return label
+	}
 	
 	private func getVersionNumber() -> String {
 		//:: CFBundleVersion for build number

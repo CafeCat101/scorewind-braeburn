@@ -45,6 +45,7 @@ struct LessonView2: View {
 					.labelStyle(.iconOnly)
 					.font(verticalSize == .regular ? .title2 : .title3)
 					.onTapGesture {
+						print("[debug] LessonView2 store, Back.onTapGesture")
 						let totalCompleted:Double = Double(studentData.getTotalCompletedLessonCount())
 						let checkCompletedLessonStatus:Double = totalCompleted/5
 						if (checkCompletedLessonStatus - checkCompletedLessonStatus.rounded(.down)) == 0 && checkCompletedLessonStatus > 0.0  {
@@ -504,7 +505,7 @@ struct LessonView2: View {
 		}
 		
 		Button(action: {
-			if store.purchasedSubscriptions.isEmpty {
+			if store.enablePurchase {
 				if scorewindData.currentLesson.videoMP4.isEmpty == false {
 					viewModel.videoPlayer!.pause()
 				}

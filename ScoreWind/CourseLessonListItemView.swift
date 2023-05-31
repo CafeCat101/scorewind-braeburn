@@ -109,12 +109,9 @@ struct CourseLessonListItemView: View {
 				.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
 		)
 		.onTapGesture {
-			Task {
-				let isSubscriptionValid = await store.isCurrentSubscriptionValid()
-				print("[debug] CourseLessonListItemView, onTapGesture, isSubscriptionValid \(String(describing: isSubscriptionValid))")
-			}
+			print("[debug] CourseLessonListItemView, onTapGesture, store.enablePurchase \(String(describing: store.enablePurchase))")
 			
-			if store.purchasedSubscriptions.isEmpty && scorewindData.wizardPickedLesson.id != lesson.id {
+			if store.enablePurchase && scorewindData.wizardPickedCourse.id != scorewindData.currentCourse.id {
 				scorewindData.currentLesson = lesson
 				scorewindData.setCurrentTimestampRecs()
 				scorewindData.lastPlaybackTime = 0.0
