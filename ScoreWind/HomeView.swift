@@ -56,6 +56,7 @@ struct HomeView: View {
 		.onAppear{
 			//UITabBar.appearance().backgroundColor = UIColor(Color("AppBackground"))
 			//;UITabBar.appearance().isTranslucent = true
+			store.isPublicUserVersion = scorewindData.isPublicUserVersion
 			UITabBar.appearance().unselectedItemTintColor = UIColor(Color("Dynamic/TabUnselected"))
 			//==>>>> app is launched...
 			print("[debug] HomeView, onAppear")

@@ -47,15 +47,17 @@ struct WizardView: View {
 				}
 				Spacer()
 				Menu {
-					Button(action: {
-						if userRole == .student {
-							userRole = .teacher
-						} else {
-							userRole = .student
-						}
-					}, label: {
-						Text(userRole == .student ? "Internal Tester Only" : "Back to Normal User's View")
-					})
+					if scorewindData.isPublicUserVersion == false {
+						Button(action: {
+							if userRole == .student {
+								userRole = .teacher
+							} else {
+								userRole = .student
+							}
+						}, label: {
+							Text(userRole == .student ? "··Internal Tester Only··" : "··Back to Normal User's View··")
+						})
+					}
 					
 					Button(action: {
 						showAboutScorewindAlert = true

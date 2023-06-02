@@ -138,7 +138,7 @@ struct StatusInfoView: View {
 		case .revoked:
 			print("[debug] StatusInfoView, statusDescription() status.state .revoked")
 			if let revokedDate = transaction.revocationDate {
-				description = "The App Store refunded your subscription to \(product.displayName) on \(revokedDate.storeFormattedDate())."
+				description = "The App Store refunded your subscription to \(product.displayName) on \(revokedDate.storeFormattedDate(showTime: store.isPublicUserVersion ? false : true ))."
 			}
 		case .inGracePeriod:
 			description = gracePeriodDescription(renewalInfo)
@@ -154,7 +154,7 @@ struct StatusInfoView: View {
 		
 		if status.state == .subscribed && renewalInfo.willAutoRenew == false {
 			//:: no renew date but subscribed, user has cancelled.
-			description = "You can still access \(product.displayName) until \(transaction.expirationDate!.storeFormattedDate())."
+			description = "You can still access \(product.displayName) until \(transaction.expirationDate!.storeFormattedDate(showTime: store.isPublicUserVersion ? false : true ))."
 		}
 		return description
 	}
@@ -205,7 +205,7 @@ struct StatusInfoView: View {
 	fileprivate func gracePeriodDescription(_ renewalInfo: RenewalInfo) -> String {
 		var description = "The App Store could not confirm your billing information for \(product.displayName)."
 		if let untilDate = renewalInfo.gracePeriodExpirationDate {
-			description += " Please verify your billing information to continue service after \(untilDate.storeFormattedDate())"
+			description += " Please verify your billing information to continue service after \(untilDate.storeFormattedDate(showTime: store.isPublicUserVersion ? false : true ))"
 		}
 		
 		return description
@@ -222,10 +222,10 @@ struct StatusInfoView: View {
 			if let newProduct = store.subscriptions.first(where: { $0.id == newProductID }) {
 				//description += "\nYour subscription to \(newProduct.displayName)"
 				//description += " will begin when your current subscription expires on \(expirationDate.storeFormattedDate())."
-				description += "\(newProduct.displayName) renews \(expirationDate.storeFormattedDate())"
+				description += "\(newProduct.displayName) renews \(expirationDate.storeFormattedDate(showTime: store.isPublicUserVersion ? false : true ))"
 			}
 		} else if renewalInfo.willAutoRenew {
-			description += "\nNext billing date: \(expirationDate.storeFormattedDate())."
+			description += "\nNext billing date: \(expirationDate.storeFormattedDate(showTime: store.isPublicUserVersion ? false : true ))."
 		}
 		
 		return description
@@ -238,9 +238,9 @@ struct StatusInfoView: View {
 		switch expirationReason {
 		case .autoRenewDisabled:
 			if expirationDate > Date() {
-				description += "Your subscription to \(product.displayName) will expire on \(expirationDate.storeFormattedDate())."
+				description += "Your subscription to \(product.displayName) will expire on \(expirationDate.storeFormattedDate(showTime: store.isPublicUserVersion ? false : true ))."
 			} else {
-				description += "Your subscription to \(product.displayName) expired on \(expirationDate.storeFormattedDate())."
+				description += "Your subscription to \(product.displayName) expired on \(expirationDate.storeFormattedDate(showTime: store.isPublicUserVersion ? false : true ))."
 			}
 		case .billingError:
 			description = "Your subscription to \(product.displayName) was not renewed due to a billing error."
@@ -279,9 +279,15 @@ struct StatusInfoView_Previews: PreviewProvider {
 }
 
 extension Date {
-	func storeFormattedDate() -> String {
+	func storeFormattedDate(showTime:Bool = false) -> String {
 		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "MMM dd, yyyy h:mm a"
+		if showTime {
+			dateFormatter.dateFormat = "MMM dd, yyyy h:mm a"
+		} else {
+			dateFormatter.dateFormat = "MMM dd, yyyy"
+		}
+		
+		//dateFormatter.dateFormat = "MMM dd, yyyy"//<==use this on production version
 		return dateFormatter.string(from: self)
 	}
 }

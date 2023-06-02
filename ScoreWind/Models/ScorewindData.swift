@@ -35,6 +35,8 @@ class ScorewindData: ObservableObject {
 	@Published var wizardPickedLesson:Lesson = Lesson()
 	@Published var wizardPickedTimestamps:[TimestampRec] = []
 	
+	var isPublicUserVersion = false
+	
 	init() {
 		print(docsUrl!.path)
 		dataVersion = userDefaults.object(forKey: "dataVersion") as? Int ?? 0

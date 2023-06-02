@@ -36,6 +36,7 @@ class Store: ObservableObject {
 	//@Published var isSubscriptionValid = false
 	@Published var enablePurchase = true
 	@Published var offerIntroduction = false
+	var isPublicUserVersion = false
 
 	init() {
 		//Initialize empty products, and then do a product request asynchronously to fill them in.
