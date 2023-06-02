@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "teacher-ricardo_x1.jpg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "teacher-ricardo_x2.jpg",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "teacher-ricardo_x3.jpg",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

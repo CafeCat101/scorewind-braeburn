@@ -12,6 +12,7 @@
 		C810183929D2FB7400B54AFD /* DownloadSpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C810183829D2FB7400B54AFD /* DownloadSpinnerView.swift */; };
 		C821817F29BEC68800F8180E /* Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C821817E29BEC68800F8180E /* Orientation.swift */; };
 		C8285E3D2A25033600D4D917 /* BuyButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8285E3C2A25033600D4D917 /* BuyButtonView.swift */; };
+		C8285E3F2A289A7400D4D917 /* AbouSupportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8285E3E2A289A7400D4D917 /* AbouSupportView.swift */; };
 		C85F272A286F4C2B00D0A4E5 /* ScoreWindApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2729286F4C2B00D0A4E5 /* ScoreWindApp.swift */; };
 		C85F272E286F4C2C00D0A4E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */; };
 		C85F2731286F4C2C00D0A4E5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C85F2730286F4C2C00D0A4E5 /* Preview Assets.xcassets */; };
@@ -113,6 +114,7 @@
 		C810183829D2FB7400B54AFD /* DownloadSpinnerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadSpinnerView.swift; sourceTree = "<group>"; };
 		C821817E29BEC68800F8180E /* Orientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Orientation.swift; sourceTree = "<group>"; };
 		C8285E3C2A25033600D4D917 /* BuyButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyButtonView.swift; sourceTree = "<group>"; };
+		C8285E3E2A289A7400D4D917 /* AbouSupportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbouSupportView.swift; sourceTree = "<group>"; };
 		C85F2726286F4C2B00D0A4E5 /* ScoreWind.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScoreWind.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C85F2729286F4C2B00D0A4E5 /* ScoreWindApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreWindApp.swift; sourceTree = "<group>"; };
 		C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -271,13 +273,14 @@
 		C85F2728286F4C2B00D0A4E5 /* ScoreWind */ = {
 			isa = PBXGroup;
 			children = (
-				C8DD45F529EAB43B0096CA41 /* scorewind_ios_xml.zip */,
 				C85F275A286F4EF900D0A4E5 /* www */,
 				C85F2753286F4CF200D0A4E5 /* ScoreWind.entitlements */,
 				C85F2758286F4EEE00D0A4E5 /* data_version.json */,
 				C85F27A9287A7C9C00D0A4E5 /* Info.plist */,
+				C8285E3E2A289A7400D4D917 /* AbouSupportView.swift */,
 				C87CF1232978365400CDA215 /* BackgroundTransparentView.swift */,
 				C85F279B2871846200D0A4E5 /* BlankTabView.swift */,
+				C8285E3C2A25033600D4D917 /* BuyButtonView.swift */,
 				C86F8823299DF34A0072504E /* BuyItemView.swift */,
 				C897D4CA29B03F2F00A21603 /* Carousel.swift */,
 				C878275828E88B8E0007DDC1 /* CourseDownloadButtonView.swift */,
@@ -310,12 +313,12 @@
 				C878275D28F1A04E0007DDC1 /* WizardTeacherView.swift */,
 				C85F2771286F4F2E00D0A4E5 /* WizardView.swift */,
 				C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */,
+				C8DD45F529EAB43B0096CA41 /* scorewind_ios_xml.zip */,
 				C8E063EA28AE06B7000B3D67 /* DataModel */,
 				C878276F290511430007DDC1 /* Models */,
 				C85F272F286F4C2C00D0A4E5 /* Preview Content */,
 				C897D4C729AEEF6B00A21603 /* Styles */,
 				C85F2798286F5A4E00D0A4E5 /* Types */,
-				C8285E3C2A25033600D4D917 /* BuyButtonView.swift */,
 			);
 			path = ScoreWind;
 			sourceTree = "<group>";
@@ -618,6 +621,7 @@
 				C87CF1242978365400CDA215 /* BackgroundTransparentView.swift in Sources */,
 				C85F2779286F4F2E00D0A4E5 /* WebView.swift in Sources */,
 				C85F2782286F4F2E00D0A4E5 /* LessonView.swift in Sources */,
+				C8285E3F2A289A7400D4D917 /* AbouSupportView.swift in Sources */,
 				C85F277E286F4F2E00D0A4E5 /* LessonSheetView.swift in Sources */,
 				C878275E28F1A04E0007DDC1 /* WizardTeacherView.swift in Sources */,
 				C85F2796286F59BC00D0A4E5 /* InstrumentType.swift in Sources */,

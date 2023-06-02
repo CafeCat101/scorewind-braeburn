@@ -60,7 +60,7 @@ struct WizardView: View {
 					Button(action: {
 						showAboutScorewindAlert = true
 					}, label: {
-						Text("About ScoreWind")
+						Text("Support & About")
 					})
 					
 					if (UserDefaults.standard.object(forKey: "hideTips") as? [String] ?? []).count > 0 {
@@ -155,7 +155,10 @@ struct WizardView: View {
 		}
 		.background(colorScheme == .light ? appBackgroundImage(colorMode: colorScheme) : appBackgroundImage(colorMode: colorScheme))
 		.alert("All the tips will be shown again now.", isPresented: $showRevealAllTipsAlert, actions:{})
-		.alert("ScoreWind\n\n\(getVersionNumber())", isPresented: $showAboutScorewindAlert,actions:{})
+		//.alert("ScoreWind\n\n\(getVersionNumber())", isPresented: $showAboutScorewindAlert,actions:{})
+		.fullScreenCover(isPresented: $showAboutScorewindAlert, content: {
+			AbouSupportView(showSupportAbout: $showAboutScorewindAlert)
+		})
 		.sheet(isPresented: $showStore, content: {
 			StoreView(showStore: $showStore)
 		})
