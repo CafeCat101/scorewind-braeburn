@@ -327,7 +327,7 @@ struct CourseView: View {
 						}
 						HStack {
 							Spacer()
-							Text("This is the course you are viewing currently.")
+							Text("The Course")
 							.font(.headline)
 							.padding(.bottom, 15)
 							.multilineTextAlignment(.center)

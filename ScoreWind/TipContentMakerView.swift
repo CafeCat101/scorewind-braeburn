@@ -76,7 +76,7 @@ struct TipContentMakerView: View {
 	@ViewBuilder
 	private func displayHideButton() -> some View {
 		
-			Label("Don't show me again", systemImage: "doc.plaintext")
+			Label("Hide this tip", systemImage: "doc.plaintext")
 				.frame(maxHeight:20)
 				.labelStyle(.titleOnly)
 				.padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))

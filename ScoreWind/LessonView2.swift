@@ -679,15 +679,24 @@ struct LessonView2: View {
 						VStack(spacing: 0) {
 							HStack {
 								Spacer()
-								Label("Lesson", systemImage: "headphones")
+								Label(title: {Text("Lesson")}, icon: {
+									Image(scorewindData.currentCourse.instrument)
+										.resizable()
+										.scaledToFit()
+										.rotationEffect(Angle(degrees: 45))
+										.frame(maxHeight: 80)
+								})
+								.labelStyle(.iconOnly)
+								.padding(.bottom, 5)
+								/*Label("Lesson", systemImage: "headphones")
 									.labelStyle(.iconOnly)
 									.font(.title)
-									.padding(.bottom, 5)
+									.padding(.bottom, 5)*/
 								Spacer()
 							}
 							HStack {
 								Spacer()
-								Text("This is the lesson you are viewing currently.")
+								Text("The Lesson")
 								.font(.headline)
 								.padding(.bottom, 15)
 								.multilineTextAlignment(.center)
@@ -695,12 +704,12 @@ struct LessonView2: View {
 								Spacer()
 							}
 						}
-						.background(alignment: .topLeading, content:{
+						/*.background(alignment: .topLeading, content:{
 							Image("animal_play_\(studentData.getInstrumentChoice())")
 								.resizable()
 								.scaledToFit()
 								.padding(.leading, -30)
-						})
+						})*/
 						Group {
 							Divider().padding(.bottom, 20)
 							Text("When the lesson has a musical score, don't forget to use your headphone to listen and play together with the teacher. \n\nLeave one of your ears open when you are playing.").padding(.bottom, 15)

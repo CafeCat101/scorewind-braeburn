@@ -59,7 +59,7 @@ struct AbouSupportView: View {
 							.multilineTextAlignment(.center)
 							.padding(.top, 5)
 							.foregroundColor(Color("Dynamic/MainBrown+6"))
-							
+						
 						Link(destination: URL(string: "mailto:scorewind@support.com")!, label: {
 							Text("scorewind@support.com")
 								.underline()
@@ -70,10 +70,30 @@ struct AbouSupportView: View {
 								/*.background(Color("ListDivider"))
 								.clipShape(Capsule())*/
 						})
-						
-						
 					}
 					.padding(EdgeInsets(top: 10, leading: 15, bottom: 40, trailing: 15))
+					
+					Divider()
+					
+					Link(destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!, label: {
+						Text("Terms & Conditions")
+							.underline()
+							.bold()
+							.multilineTextAlignment(.center)
+							.padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 15))
+							.tint(Color("Dynamic/StoreViewTitle"))
+							.font(.subheadline)
+					})
+					
+					Link(destination: URL(string: "https://scorewind.com/privacy.html")!, label: {
+						Text("Privacy Policy")
+							.underline()
+							.bold()
+							.multilineTextAlignment(.center)
+							.padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 15))
+							.tint(Color("Dynamic/StoreViewTitle"))
+							.font(.subheadline)
+					})
 					
 					Divider()
 					
