@@ -20,6 +20,8 @@ struct StoreView: View {
 	@State private var showResotreWaiting = 0
 	//@State private var offerIntroduction = false
 	//@State private var enableBuyButton = true
+	@State private var studentCouponCode:String = ""
+	@State private var showCouponWaiting = 0
 	
 	var availableSubscriptions: [Product] {
 		store.subscriptions.filter { $0.id != currentSubscription?.id }
@@ -274,7 +276,60 @@ struct StoreView: View {
 								 .stroke(Color("Dynamic/DarkGray"), lineWidth: 1)
 						 }
 				 )
-				 .padding(.bottom, 50)
+
+				
+				Divider()
+					.padding([.leading,.trailing], 15)
+					.padding([.top,.bottom], 30)
+				
+				VStack {
+					Text("I Have ScoreWind Student Coupon")
+						.font(.title2)
+						.foregroundColor(Color("Dynamic/StoreViewTitle"))
+						.padding([.bottom],10)
+					VStack(alignment: .leading){
+						HStack {
+							TextField(
+								"Write your coupon code here",
+								text: $studentCouponCode
+							)
+							.textFieldStyle(DefaultTextFieldStyle())
+							.onSubmit {
+								print(studentCouponCode)
+							}
+							
+							Label("Send", systemImage: "paperplane.circle")
+								.frame(maxWidth: 35, maxHeight:20)
+								.labelStyle(.iconOnly)
+								.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
+								.foregroundColor(Color("Dynamic/MainBrown+6"))
+								.background(
+									RoundedRectangle(cornerRadius: CGFloat(17))
+										.foregroundColor(Color("Dynamic/MainBrown"))
+										.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+										.opacity(0.25)
+										.overlay {
+											RoundedRectangle(cornerRadius: 17)
+												.stroke(Color("Dynamic/DarkGray"), lineWidth: 1)
+										}
+								)
+								.onTapGesture {
+									print(studentCouponCode)
+								}
+						}
+						.padding(15)
+					}
+					.background(
+						RoundedRectangle(cornerRadius: CGFloat(17))
+							.foregroundColor(Color("Dynamic/StoreViewTextBackground"))
+							.opacity(0.25)
+							.shadow(color: Color("Dynamic/ShadowReverse"),radius: CGFloat(5))
+					)
+					.padding([.leading,.trailing],30)
+					Spacer()
+				}
+				.foregroundColor(Color("Dynamic/MainBrown+6"))
+				.padding(.bottom, 50)
 			 }
 		}
 		.background(colorScheme == .light ? appBackgroundImage(colorMode: colorScheme) : appBackgroundImage(colorMode: colorScheme))
