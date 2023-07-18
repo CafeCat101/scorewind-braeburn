@@ -21,7 +21,7 @@ struct StoreView: View {
 	//@State private var offerIntroduction = false
 	//@State private var enableBuyButton = true
 	@State private var studentCouponCode:String = ""
-	@State private var showCouponWaiting = 0
+	@State private var showCouponWaiting = 0 //test
 	
 	var availableSubscriptions: [Product] {
 		store.subscriptions.filter { $0.id != currentSubscription?.id }
