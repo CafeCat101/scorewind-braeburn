@@ -298,7 +298,7 @@ struct StoreView: View {
 								print(studentCouponCode)
 							}
 							
-							Label("Send", systemImage: "paperplane.circle")
+							Label("Send", systemImage: getCouponSendButtonIconName(couponState: store.couponState) )
 								.frame(maxWidth: 35, maxHeight:20)
 								.labelStyle(.iconOnly)
 								.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
@@ -314,7 +314,19 @@ struct StoreView: View {
 										}
 								)
 								.onTapGesture {
-									print(studentCouponCode)
+									print("use coupon code:\(studentCouponCode)")
+									Task {
+										await store.validateCoupon(couponCode: studentCouponCode)
+										//showResotreWaiting = 2
+										if store.couponState == .valid {
+											print("[debug] StoreView, use coupon, .valid")
+										} else if store.couponState == .expired {
+											print("[debug] StoreView, use coupon, .expired")
+										} else {
+											print("[debug] StoreView, use coupon, \(store.couponState.rawValue)")
+										}
+									}
+									
 								}
 						}
 						.padding(15)
@@ -609,6 +621,15 @@ struct StoreView: View {
 		}
 	}
 	
+	private func getCouponSendButtonIconName(couponState: CouponState) -> String{
+		if couponState == .valid {
+			return "checkmark.seal.fill"
+		} else if couponState == .expired {
+			return "exclamationmark.transmission"
+		} else {
+			return "paperplane.circle"
+		}
+	}
 
 }
 /*
