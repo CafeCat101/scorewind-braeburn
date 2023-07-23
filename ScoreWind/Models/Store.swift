@@ -39,6 +39,7 @@ class Store: ObservableObject {
 	var isPublicUserVersion = false
 	@Published var couponState:CouponState = .notActivated
 	@Published var lastCouponError:String = ""
+	@Published var lastCouponErrorCode:Int = 0
 
 	init() {
 		//Initialize empty products, and then do a product request asynchronously to fill them in.
@@ -63,6 +64,7 @@ class Store: ObservableObject {
 		} else if readCouponState == CouponState.expired.rawValue {
 			couponState = .expired
 		}
+		lastCouponErrorCode = UserDefaults.standard.object(forKey: "CouponErrorCode") as? Int ?? 0
  	}
 	
 	deinit {
@@ -325,6 +327,7 @@ class Store: ObservableObject {
 					print("Success: \(successInfo.Success)")
 					print("CouponIsValid: \(successInfo.CouponIsValid)")
 					print("Error: \(successInfo.Error)")
+					
 					DispatchQueue.main.async {
 						if successInfo.CouponIsValid && successInfo.Success {
 							if self.couponState == .notActivated || self.couponState == .expired {
@@ -344,6 +347,11 @@ class Store: ObservableObject {
 						
 						if successInfo.Error.isEmpty == false {
 							self.lastCouponError = successInfo.Error
+						}
+						
+						if successInfo.CouponIsValid == false {
+							self.lastCouponErrorCode = successInfo.ErrorCode
+							UserDefaults.standard.set(self.lastCouponErrorCode, forKey: "CouponErrorCode")
 						}
 					}
 					
@@ -366,4 +374,5 @@ struct responseInfo: Decodable {
 	let Success: Bool
 	let CouponIsValid: Bool
 	let Error: String
+	let ErrorCode: Int
 }

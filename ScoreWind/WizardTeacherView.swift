@@ -327,6 +327,8 @@ struct WizardTeacherView: View {
 		
 		userDefaults.removeObject(forKey: "IsCouponValid")
 		store.couponState = .notActivated
+		userDefaults.removeObject(forKey: "CouponErrorCode")
+		store.lastCouponErrorCode = 0
 		
 		//studentData.updateMyCourses(allCourses: scorewindData.allCourses)
 		//studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)

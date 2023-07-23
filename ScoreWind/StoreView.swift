@@ -667,10 +667,11 @@ struct StoreView: View {
 	}
 	
 	private func couponCodePlaceHolder(couponState: CouponState) -> String {
-		if couponState == .valid {
+		if couponState != .notActivated {
 			let useriCloudKeyValueStore = NSUbiquitousKeyValueStore.default
 			let couponCodeinCloud = useriCloudKeyValueStore.string(forKey: "ScoreWindCouponCode") ?? ""
-			if couponCodeinCloud.isEmpty == false {
+			if couponCodeinCloud.isEmpty == false && (store.couponState == .valid || store.lastCouponErrorCode == 1) {
+				//only display coupon code if the code is valid or expired.
 				return couponCodeinCloud
 			} else {
 				return "Write your coupon code here"
@@ -685,12 +686,17 @@ struct StoreView: View {
 			return "Coupon is activated and valid. You have unlimited access to all courses and lessons."
 		} else if couponState == .expired {
 			let useriCloudKeyValueStore = NSUbiquitousKeyValueStore.default
-			//let couponCodeinCloud = useriCloudKeyValueStore.string(forKey: "ScoreWindCouponCode") ?? ""
-			if store.lastCouponError.isEmpty == false {
-				return store.lastCouponError
+			let couponCodeinCloud = useriCloudKeyValueStore.string(forKey: "ScoreWindCouponCode") ?? ""
+			if store.lastCouponErrorCode == 1 {
+				return "Coupon \(couponCodeinCloud) is expired."
 			} else {
-				return ""
+				if store.lastCouponError.isEmpty == false {
+					return store.lastCouponError
+				} else {
+					return ""
+				}
 			}
+			
 		} else {
 			return ""
 		}
