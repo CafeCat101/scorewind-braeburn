@@ -21,7 +21,7 @@ struct StoreView: View {
 	//@State private var offerIntroduction = false
 	//@State private var enableBuyButton = true
 	@State private var studentCouponCode:String = ""
-	@State private var showCouponWaiting = 0
+	@State private var showCouponWaiting = false
 	
 	var availableSubscriptions: [Product] {
 		store.subscriptions.filter { $0.id != currentSubscription?.id }
@@ -287,21 +287,59 @@ struct StoreView: View {
 						.font(.title2)
 						.foregroundColor(Color("Dynamic/StoreViewTitle"))
 						.padding([.bottom],10)
+					
 					VStack(alignment: .leading){
 						HStack {
 							TextField(
-								"Write your coupon code here",
+								couponCodePlaceHolder(couponState: store.couponState),
 								text: $studentCouponCode
 							)
 							.textFieldStyle(DefaultTextFieldStyle())
 							.onSubmit {
 								print(studentCouponCode)
 							}
+							.disabled(store.couponState == .valid ? true : false)
 							
-							Label("Send", systemImage: getCouponSendButtonIconName(couponState: store.couponState) )
-								.frame(maxWidth: 35, maxHeight:20)
-								.labelStyle(.iconOnly)
-								.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
+							Button(action: {
+								print("use coupon code:\(studentCouponCode)")
+								showCouponWaiting = true;
+								Task {
+									store.lastCouponError = ""
+									await store.validateCoupon(couponCode: studentCouponCode, setAppName:"scorewind-guitar-violin")
+									//showResotreWaiting = 2
+									if store.couponState == .valid {
+										print("[debug] StoreView, use coupon, .valid")
+									} else if store.couponState == .expired {
+										print("[debug] StoreView, use coupon, .expired")
+									} else {
+										print("[debug] StoreView, use coupon, \(store.couponState.rawValue)")
+									}
+									
+									DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+										showCouponWaiting = false
+									}
+								}
+							}) {
+								HStack {
+									Spacer()
+									if showCouponWaiting {
+										DownloadSpinnerView(iconColor: Color("Dynamic/MainBrown+6"), spinnerColor: Color("Dynamic/IconHighlighted"), iconSystemImage: "music.note")
+									} else {
+										if store.couponState == .valid {
+											Label("Send", systemImage: "checkmark.seal.fill")
+												.labelStyle(.iconOnly)
+										} else {
+											Label("Send", systemImage: "paperplane.circle")
+												.labelStyle(.iconOnly)
+										}
+									}
+									
+									Spacer()
+								}
+							}
+							.disabled(store.couponState == .valid ? true : false)
+							.frame(maxWidth: 35, maxHeight:20)
+							.padding(EdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20))
 								.foregroundColor(Color("Dynamic/MainBrown+6"))
 								.background(
 									RoundedRectangle(cornerRadius: CGFloat(17))
@@ -313,21 +351,6 @@ struct StoreView: View {
 												.stroke(Color("Dynamic/DarkGray"), lineWidth: 1)
 										}
 								)
-								.onTapGesture {
-									print("use coupon code:\(studentCouponCode)")
-									Task {
-										await store.validateCoupon(couponCode: studentCouponCode)
-										//showResotreWaiting = 2
-										if store.couponState == .valid {
-											print("[debug] StoreView, use coupon, .valid")
-										} else if store.couponState == .expired {
-											print("[debug] StoreView, use coupon, .expired")
-										} else {
-											print("[debug] StoreView, use coupon, \(store.couponState.rawValue)")
-										}
-									}
-									
-								}
 						}
 						.padding(15)
 					}
@@ -338,10 +361,20 @@ struct StoreView: View {
 							.shadow(color: Color("Dynamic/ShadowReverse"),radius: CGFloat(5))
 					)
 					.padding([.leading,.trailing],30)
+					
+					if store.lastCouponError.isEmpty {
+						Text(couponInfo(couponState: store.couponState))
+							.padding([.leading, .trailing], 15)
+					} else {
+						Text("\(Image(systemName: "exclamationmark.triangle")) \(couponInfo(couponState: store.couponState))")
+							.padding([.leading, .trailing], 15)
+					}
+					
 					Spacer()
 				}
 				.foregroundColor(Color("Dynamic/MainBrown+6"))
-				.padding(.bottom, 50)
+				
+				Spacer().frame(height: 50)
 			 }
 		}
 		.background(colorScheme == .light ? appBackgroundImage(colorMode: colorScheme) : appBackgroundImage(colorMode: colorScheme))
@@ -351,6 +384,8 @@ struct StoreView: View {
 				//When this view appears, get the latest subscription status.
 				await updateSubscriptionStatus()
 			}
+			
+			store.lastCouponError = ""
 		}
 		.onChange(of: store.purchasedSubscriptions) { _ in
 			Task {
@@ -628,6 +663,36 @@ struct StoreView: View {
 			return "exclamationmark.transmission"
 		} else {
 			return "paperplane.circle"
+		}
+	}
+	
+	private func couponCodePlaceHolder(couponState: CouponState) -> String {
+		if couponState == .valid {
+			let useriCloudKeyValueStore = NSUbiquitousKeyValueStore.default
+			let couponCodeinCloud = useriCloudKeyValueStore.string(forKey: "ScoreWindCouponCode") ?? ""
+			if couponCodeinCloud.isEmpty == false {
+				return couponCodeinCloud
+			} else {
+				return "Write your coupon code here"
+			}
+		} else {
+			return "Write your coupon code here"
+		}
+	}
+	
+	private func couponInfo(couponState: CouponState) -> String {
+		if couponState == .valid {
+			return "Coupon is activated and valid. You have unlimited access to all courses and lessons."
+		} else if couponState == .expired {
+			let useriCloudKeyValueStore = NSUbiquitousKeyValueStore.default
+			//let couponCodeinCloud = useriCloudKeyValueStore.string(forKey: "ScoreWindCouponCode") ?? ""
+			if store.lastCouponError.isEmpty == false {
+				return store.lastCouponError
+			} else {
+				return ""
+			}
+		} else {
+			return ""
 		}
 	}
 

@@ -505,7 +505,7 @@ struct LessonView2: View {
 		}
 		
 		Button(action: {
-			if store.enablePurchase {
+			if store.enablePurchase || store.couponState != .valid {
 				if scorewindData.currentLesson.videoMP4.isEmpty == false {
 					viewModel.videoPlayer!.pause()
 				}

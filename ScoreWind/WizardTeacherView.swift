@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WizardTeacherView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
+	@EnvironmentObject var store: Store
 	@Binding var selectedTab:String
 	@ObservedObject var studentData:StudentData
 	@ObservedObject var downloadManager:DownloadManager
@@ -324,6 +325,9 @@ struct WizardTeacherView: View {
 		studentData.removeAUserDefaultKey(keyName: "courseOfflineDate")
 		studentData.removeAUserDefaultKey(keyName: "dataVersion")
 		
+		userDefaults.removeObject(forKey: "IsCouponValid")
+		store.couponState = .notActivated
+		
 		//studentData.updateMyCourses(allCourses: scorewindData.allCourses)
 		//studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 	}
@@ -338,6 +342,10 @@ struct WizardTeacherView: View {
 		studentData.removeAKey(keyName: "doYouKnow")
 		studentData.removeAKey(keyName: "playable")
 		studentData.removeAKey(keyName: "wizardResult")
+		
+		let useriCloudKeyValueStore = NSUbiquitousKeyValueStore.default
+		useriCloudKeyValueStore.removeObject(forKey: "ScoreWindCouponCode")
+		useriCloudKeyValueStore.synchronize()
 		
 		//studentData.updateMyCourses(allCourses: scorewindData.allCourses)
 		//studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)

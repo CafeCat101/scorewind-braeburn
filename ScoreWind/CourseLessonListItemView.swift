@@ -110,8 +110,9 @@ struct CourseLessonListItemView: View {
 		)
 		.onTapGesture {
 			print("[debug] CourseLessonListItemView, onTapGesture, store.enablePurchase \(String(describing: store.enablePurchase))")
+			print("[debug] CourseLessonListItemView, onTapGesture, store.couponState \(String(describing: store.couponState.rawValue))")
 			
-			if store.enablePurchase && scorewindData.wizardPickedCourse.id != scorewindData.currentCourse.id {
+			if (store.enablePurchase && scorewindData.wizardPickedCourse.id != scorewindData.currentCourse.id) && (store.couponState == .notActivated || store.couponState == .expired) {
 				scorewindData.currentLesson = lesson
 				scorewindData.setCurrentTimestampRecs()
 				scorewindData.lastPlaybackTime = 0.0

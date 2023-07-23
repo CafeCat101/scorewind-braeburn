@@ -38,6 +38,7 @@ class Store: ObservableObject {
 	@Published var offerIntroduction = false
 	var isPublicUserVersion = false
 	@Published var couponState:CouponState = .notActivated
+	@Published var lastCouponError:String = ""
 
 	init() {
 		//Initialize empty products, and then do a product request asynchronously to fill them in.
@@ -298,12 +299,12 @@ class Store: ObservableObject {
 			return false
 	}
 	
-	func validateCoupon(couponCode: String = "") async {
+	func validateCoupon(couponCode: String = "", setAppName: String = "") async {
 		print("[debug] Store, validateCoupon, couponCode \(couponCode)")
-		if couponState == .notActivated && couponCode.isEmpty == false {
-			//send post request to activate
-			let mySendJsonObject = sendJsonObject(AppName: "scorewind-guitar-violin", CouponCode: couponCode)
-			
+		
+		if couponCode.isEmpty == false {
+			//send post request to activate or validate
+			let mySendJsonObject = sendJsonObject(AppName: setAppName, CouponCode: couponCode)
 			
 			Task {
 				do {
@@ -313,44 +314,6 @@ class Store: ObservableObject {
 					urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 					urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
 					urlRequest.httpMethod = "POST"
-					//let useAppName = "scorewind-guitar-violin"
-					//urlRequest.httpBody = payload
-					
-					/*URLSession.shared.dataTask(with: urlRequest) { data, response, error in
-						guard error == nil else {
-							print("Error: error calling POST")
-							print(error!)
-							return
-						}
-						guard let data = data else {
-							print("Error: Did not receive data")
-							return
-						}
-						guard let response = response as? HTTPURLResponse, (200 ..< 299) ~= response.statusCode else {
-							print("Error: HTTP request failed")
-							return
-						}
-						do {
-							guard let jsonObject = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-								print("Error: Cannot convert data to JSON object")
-								return
-							}
-							guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted) else {
-								print("Error: Cannot convert JSON object to Pretty JSON data")
-								return
-							}
-							guard let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) else {
-								print("Error: Couldn't print JSON in String")
-								return
-							}
-							
-							print(prettyPrintedJson)
-						} catch {
-							print("Error: Trying to convert JSON data to string")
-							return
-						}
-					}.resume()*/
-					
 					
 					let (data, response) = try await URLSession.shared.upload(for: urlRequest, from: payload)
 					
@@ -363,21 +326,33 @@ class Store: ObservableObject {
 					print("CouponIsValid: \(successInfo.CouponIsValid)")
 					print("Error: \(successInfo.Error)")
 					DispatchQueue.main.async {
-						if successInfo.CouponIsValid {
+						if successInfo.CouponIsValid && successInfo.Success {
+							if self.couponState == .notActivated || self.couponState == .expired {
+								let useriCloudKeyValueStore = NSUbiquitousKeyValueStore.default
+								//var couponCodeinCloud = useriCloudKeyValueStore.string(forKey: "ScoreWindCouponCode") ?? ""
+								useriCloudKeyValueStore.set(couponCode, forKey: "ScoreWindCouponCode")
+								useriCloudKeyValueStore.synchronize()
+							}
+							
 							self.couponState = .valid
-						} else if successInfo.CouponIsValid == false {
+							UserDefaults.standard.set(self.couponState.rawValue, forKey: "IsCouponValid")
+							
+						} else if successInfo.CouponIsValid == false && successInfo.Success  {
 							self.couponState = .expired
+							UserDefaults.standard.set(self.couponState.rawValue, forKey: "IsCouponValid")
+						}
+						
+						if successInfo.Error.isEmpty == false {
+							self.lastCouponError = successInfo.Error
 						}
 					}
 					
 				} catch {
 					print(error)
+					lastCouponError = "Unable to validate coupon."
 				}
 				
 			}
-		} else {
-			//check couponCode exists or not to make sure the coupon is being used from the device. if it is, send post request to validate it
-			//if unable to validate it(ex: no internet), just leave it be, it's fine. The CouponIsValid mark is redding from device, the last value will be used.
 		}
 	}
 }

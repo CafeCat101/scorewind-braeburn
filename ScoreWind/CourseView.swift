@@ -472,7 +472,7 @@ struct CourseView: View {
 						.foregroundColor(Color("MyCourseItem"))
 				}
 				.onTapGesture {
-					if store.enablePurchase {
+					if store.enablePurchase || store.couponState != .valid {
 						showSubscriberOnlyAlert = true
 					} else {
 						switchCourse(order: order)
@@ -488,7 +488,7 @@ struct CourseView: View {
 						.foregroundColor(Color("MyCourseItem"))
 				}
 				.onTapGesture {
-					if store.enablePurchase {
+					if store.enablePurchase || store.couponState != .valid {
 						showSubscriberOnlyAlert = true
 					} else {
 						switchCourse(order: order)

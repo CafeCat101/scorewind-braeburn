@@ -18,7 +18,7 @@ struct CourseDownloadButtonView: View {
 	
 	var body: some View {
 		Button(action: {
-			if store.enablePurchase {
+			if store.enablePurchase || store.couponState != .valid {
 				showStoreView = true
 			} else {
 				showDownloadAlert = true

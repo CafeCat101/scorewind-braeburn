@@ -106,6 +106,17 @@ struct HomeView: View {
 					activateDownloadVideoXML()
 					studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 				}
+				
+				print("[deubg] HomeView, store.couponState \(store.couponState)")
+				if store.couponState == .valid {
+					Task {
+						let useriCloudKeyValueStore = NSUbiquitousKeyValueStore.default
+						let couponCodeinCloud = useriCloudKeyValueStore.string(forKey: "ScoreWindCouponCode") ?? ""
+						store.lastCouponError = ""
+						await store.validateCoupon(couponCode: couponCodeinCloud)
+					}
+				}
+				
 				downloadManager.appState = .active
 			} else if newPhase == .inactive {
 				print("[debug] HomeView, appp is inactive")
