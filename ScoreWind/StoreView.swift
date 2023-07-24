@@ -401,7 +401,11 @@ struct StoreView: View {
 		@Environment(\.verticalSizeClass) var verticalSize
 		
 		func body(content: Content) -> some View {
-			if isOnlyOne {
+			content
+				.padding([.leading, .trailing],15)
+				.padding([.top, .bottom], 10)
+				.frame(width: verticalSize == .regular ? UIScreen.main.bounds.size.width : UIScreen.main.bounds.size.width*0.9)
+			/*if isOnlyOne {
 				content
 					.padding([.leading, .trailing],15)
 					.padding([.top, .bottom], 10)
@@ -418,7 +422,7 @@ struct StoreView: View {
 						.padding([.top, .bottom], 10)
 						.frame(width: verticalSize == .regular ? UIScreen.main.bounds.size.width*0.9 : UIScreen.main.bounds.size.width*0.8)
 				}
-			}
+			}*/
 		}
 	}
 	

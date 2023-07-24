@@ -102,12 +102,15 @@ struct WizardView: View {
 							DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
 								withAnimation{
 									showViewTitle = false
-									showProgress = true
+									//showProgress = true
 								}
 							}
 						})
 				} else if stepName == .wizardExperience {
 					WizardExperienceView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
+						.onAppear(perform: {
+							showProgress = false
+						})
 				} else if stepName == .wizardDoYouKnow {
 					WizardDoYouKnowView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
 				} else if stepName == .wizardPlayable {
