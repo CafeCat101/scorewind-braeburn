@@ -116,13 +116,30 @@ struct HomeView: View {
 						await store.validateCoupon(couponCode: couponCodeinCloud)
 					}
 				}
-				
 				downloadManager.appState = .active
+				
+				/*Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { timer in
+					print("[debug] HomeView, Timer fired!")
+					timer.tolerance = 1
+					if studentData.userUsageTimerCount == -1 || (studentData.userUsageTimerCount >= 1200 && studentData.getUserUsageActionTotalCount() == 0) {
+						timer.invalidate()
+					}
+					studentData.userUsageTimerCount = studentData.userUsageTimerCount + 5
+					print("[debug] HomeView, Timer count \(studentData.userUsageTimerCount)")
+				}*/
+				startUsageTracker(userStudentData: studentData)				
+				studentData.updateUsageActionCount(actionName: .launchApp)
+				Task {
+					await studentData.sendUserUsageActionCount()
+				}
 			} else if newPhase == .inactive {
 				print("[debug] HomeView, appp is inactive")
 			} else if newPhase == .background {
 				print("[debug] HomeView, app is in the background")
+				studentData.userUsageTimerCount = -1
+				
 				downloadManager.appState = .background
+				
 				if (scorewindData.currentLesson.scorewindID > 0) && (scorewindData.lastPlaybackTime >= 10) {
 					print("[debug] HomeView.onChange, .background lastPlayBackTime>=10")
 					studentData.updateWatchedLessons(courseID: scorewindData.currentCourse.id, lessonID: scorewindData.currentLesson.scorewindID, addWatched: true)
@@ -202,6 +219,18 @@ func appBackgroundImage(colorMode: ColorScheme) -> some View {
 			.resizable()
 			.aspectRatio(contentMode: .fill)
 			.edgesIgnoringSafeArea(.all)
+	}
+}
+
+func startUsageTracker(userStudentData: StudentData) {
+	Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { timer in
+		print("[debug] HomeView, Timer fired!")
+		timer.tolerance = 1
+		if userStudentData.userUsageTimerCount == -1 || (userStudentData.userUsageTimerCount >= 1200 && userStudentData.getUserUsageActionTotalCount() == 0) {
+			timer.invalidate()
+		}
+		userStudentData.userUsageTimerCount = userStudentData.userUsageTimerCount + 5
+		print("[debug] HomeView, Timer count \(userStudentData.userUsageTimerCount)")
 	}
 }
 

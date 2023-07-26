@@ -22,6 +22,7 @@ struct StoreView: View {
 	//@State private var enableBuyButton = true
 	@State private var studentCouponCode:String = ""
 	@State private var showCouponWaiting = false
+	@ObservedObject var studentData:StudentData
 	
 	var availableSubscriptions: [Product] {
 		store.subscriptions.filter { $0.id != currentSubscription?.id }
@@ -386,6 +387,11 @@ struct StoreView: View {
 			}
 			
 			store.lastCouponError = ""
+			
+			studentData.updateUsageActionCount(actionName: .viewPayWall)
+			Task {
+				await studentData.sendUserUsageActionCount()
+			}
 		}
 		.onChange(of: store.purchasedSubscriptions) { _ in
 			Task {

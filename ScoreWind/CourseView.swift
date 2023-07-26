@@ -242,7 +242,7 @@ struct CourseView: View {
 		} message: { Text("Subscription is required") }*/
 		//.modifier(storeViewCover(showStore: $showStore, selectedTab: $selectedTab))
 		.sheet(isPresented: $showStore, content: {
-			StoreView(showStore: $showStore)
+			StoreView(showStore: $showStore, studentData: studentData)
 		})
 		.onAppear(perform: {
 			print("[debug] CourseView, onAppear, dragOffset \(dragOffset)")
@@ -274,6 +274,13 @@ struct CourseView: View {
 				Task {
 					//When this view appears, get the latest subscription status.
 					await store.updateCustomerProductStatus()
+				}
+				
+				if showLessonView == false {
+					studentData.updateUsageActionCount(actionName: .viewCourse)
+					Task {
+						await studentData.sendUserUsageActionCount()
+					}
 				}
 			}
 		})

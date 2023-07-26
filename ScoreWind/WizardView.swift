@@ -165,10 +165,11 @@ struct WizardView: View {
 			AbouSupportView(showSupportAbout: $showAboutScorewindAlert)
 		})
 		.sheet(isPresented: $showStore, content: {
-			StoreView(showStore: $showStore)
+			StoreView(showStore: $showStore, studentData: studentData)
 		})
 		.onAppear(perform: {			
-			print("[debug] WizardView, onAppear studentData.wizardResult.learningPath.count \(studentData.wizardResult.learningPath.count)")
+			//print("[debug] WizardView, onAppear studentData.wizardResult.learningPath.count \(studentData.wizardResult.learningPath.count)")
+			studentData.showSavedActionCount()
 		})
 	}
 	

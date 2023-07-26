@@ -363,16 +363,18 @@ class Store: ObservableObject {
 			}
 		}
 	}
+	
+	struct sendJsonObject: Encodable {
+		let AppName:String
+		let CouponCode: String
+	}
+
+	struct responseInfo: Decodable {
+		let Success: Bool
+		let CouponIsValid: Bool
+		let Error: String
+		let ErrorCode: Int
+	}
 }
 
-struct sendJsonObject: Encodable {
-	let AppName:String
-	let CouponCode: String
-}
 
-struct responseInfo: Decodable {
-	let Success: Bool
-	let CouponIsValid: Bool
-	let Error: String
-	let ErrorCode: Int
-}

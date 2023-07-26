@@ -71,10 +71,9 @@ struct WizardResultView: View {
 					animate = false
 				})
 				.onAppear(perform: {
-					//print("[debug] WizardResultView, onAppear, icloud wizardResult \(studentData.getWizardResult())")
-					print("[debug] WizardResultView, onAppear, local wizardResult \(studentData.wizardResult)")
-					print("[debug] WizardResultView, onAppear, studentData.wizardRange.count \(studentData.wizardRange.count)")
-					print("[debug] WizardResultView, onAppear, studentData.getWizardResult().learningPath.count \(studentData.getWizardResult().learningPath.count)")
+					//print("[debug] WizardResultView, onAppear, local wizardResult \(studentData.wizardResult)")
+					//print("[debug] WizardResultView, onAppear, studentData.wizardRange.count \(studentData.wizardRange.count)")
+					//print("[debug] WizardResultView, onAppear, studentData.getWizardResult().learningPath.count \(studentData.getWizardResult().learningPath.count)")
 					
 					DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
 						withAnimation(Animation.spring(response: 0.2, dampingFraction: 0.4, blendDuration: 0.8).speed(0.3)) {

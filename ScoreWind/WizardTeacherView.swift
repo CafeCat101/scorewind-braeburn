@@ -330,6 +330,10 @@ struct WizardTeacherView: View {
 		userDefaults.removeObject(forKey: "CouponErrorCode")
 		store.lastCouponErrorCode = 0
 		
+		for usageAction in UsageActions.allCases {
+			userDefaults.removeObject(forKey: usageAction.rawValue)
+		}
+		
 		//studentData.updateMyCourses(allCourses: scorewindData.allCourses)
 		//studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 	}

@@ -22,6 +22,7 @@ class StudentData: ObservableObject {
 	private var wizardExperienceChoice: String = ""
 	private var wizardDoYouKnowChoice:[String:Any] = [:]
 	private var wizardPlayableChoice:[String:Any] = [:]
+	var userUsageTimerCount = 0
 	
 	/*
 	 DATA FOR MY COURSES
@@ -423,6 +424,100 @@ class StudentData: ObservableObject {
 	
 	func updateWizardMode(wizardMode: WizardCalculationMode) {
 		userDefaults.set(wizardMode.rawValue, forKey: "wizardCalculationMode")
+	}
+	
+	func showSavedActionCount() {
+		for usageAction in UsageActions.allCases {
+			let getActionCount = userDefaults.object(forKey: usageAction.rawValue) as? Int ?? 0
+			print("== \(usageAction.rawValue) : \(getActionCount) == ")
+		}
+	}
+	
+	func updateUsageActionCount(actionName: UsageActions) {
+		var actionCount:Int = userDefaults.object(forKey: actionName.rawValue) as? Int ?? 0
+		actionCount = actionCount + 1
+		userDefaults.set(actionCount, forKey: actionName.rawValue)
+	}
+	
+	func getUserUsageActionTotalCount() -> Int {
+		var totalActionCount = 0
+		for usageAction in UsageActions.allCases {
+			let getActionCount = userDefaults.object(forKey: usageAction.rawValue) as? Int ?? 0
+			totalActionCount = totalActionCount + getActionCount
+		}
+		return totalActionCount
+	}
+	
+	func sendUserUsageActionCount() async {
+		print("[debug]StudentData, totalUsageCount \(getUserUsageActionTotalCount())")
+		if userUsageTimerCount >= 120 || getUserUsageActionTotalCount() >= 10 {
+			Task {
+				var mySendJsonObject:sendJsonObject = sendJsonObject(actionCounts: [])
+				for usageAction in UsageActions.allCases {
+					let getActionCount = userDefaults.object(forKey: usageAction.rawValue) as? Int ?? 0
+					mySendJsonObject.actionCounts.append(sendActionCountObject(ActionName: usageAction.rawValue, Count: getActionCount))
+				}
+				print("[debug]StudentData, mySendJsonObject \(mySendJsonObject)")
+				userUsageTimerCount = 0
+				for usageAction in UsageActions.allCases {
+					userDefaults.removeObject(forKey: usageAction.rawValue)
+				}
+				
+				//reset no matter what, in case the timer never stopped or run
+				/*DispatchQueue.main.async {
+					self.userUsageTimerCount = 0
+					for usageAction in UsageActions.allCases {
+						self.userDefaults.removeObject(forKey: usageAction.rawValue)
+					}
+				}*/
+				
+				do {
+					let payload = try JSONEncoder().encode(mySendJsonObject)
+					guard let url = URL(string: "https://music.scorewind.com/mobileapp_update_usage_action_count.php") else { fatalError("Missing URL") }
+					var urlRequest = URLRequest(url: url)
+					urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+					urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
+					urlRequest.httpMethod = "POST"
+					
+					let (data, response) = try await URLSession.shared.upload(for: urlRequest, from: payload)
+					
+					//guard (response as? HTTPURLResponse)?.statusCode == 200 else { fatalError("Error while fetching data") }
+					
+					if (response as? HTTPURLResponse)?.statusCode == 200 {
+						let successInfo = try JSONDecoder().decode(responseInfo.self, from: data)
+						
+						print(String(data: data, encoding: .utf8) ?? "default value")
+						print("Success: \(successInfo.Success)")
+						print("CouponIsValid: \(successInfo.CouponIsValid)")
+						print("Error: \(successInfo.Error)")
+					} else {
+						print("httpurl response statusCode is not 200")
+					}
+					
+					
+					
+				} catch {
+					print(error)
+				}
+				
+			}
+		}
+	}
+	
+	struct sendJsonObject: Encodable {
+		var actionCounts:[sendActionCountObject]
+	}
+	
+	struct sendActionCountObject: Encodable {
+		let ActionName:String
+		let Count: Int
+	}
+
+	struct responseInfo: Decodable {
+		let Success: Bool
+		let CouponIsValid: Bool
+		let Error: String
+		let ErrorCode: Int
 	}
 	
 }

@@ -85,6 +85,7 @@
 		C897D4C929AEEF9C00A21603 /* RoundedCornerShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = C897D4C829AEEF9C00A21603 /* RoundedCornerShape.swift */; };
 		C897D4CB29B03F2F00A21603 /* Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C897D4CA29B03F2F00A21603 /* Carousel.swift */; };
 		C8A651F42A66DF69009A3500 /* CouponState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A651F32A66DF69009A3500 /* CouponState.swift */; };
+		C8A651F62A6E8765009A3500 /* UsageActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A651F52A6E8765009A3500 /* UsageActions.swift */; };
 		C8CA57A42936F8D90097AE07 /* WizardPicked.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CA57A32936F8D90097AE07 /* WizardPicked.swift */; };
 		C8DD45F629EAB43B0096CA41 /* scorewind_ios_xml.zip in Resources */ = {isa = PBXBuildFile; fileRef = C8DD45F529EAB43B0096CA41 /* scorewind_ios_xml.zip */; };
 		C8E063F028B0E20E000B3D67 /* MyCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E063EF28B0E20E000B3D67 /* MyCourse.swift */; };
@@ -193,6 +194,7 @@
 		C897D4C829AEEF9C00A21603 /* RoundedCornerShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCornerShape.swift; sourceTree = "<group>"; };
 		C897D4CA29B03F2F00A21603 /* Carousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Carousel.swift; sourceTree = "<group>"; };
 		C8A651F32A66DF69009A3500 /* CouponState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CouponState.swift; sourceTree = "<group>"; };
+		C8A651F52A6E8765009A3500 /* UsageActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageActions.swift; sourceTree = "<group>"; };
 		C8CA57A32936F8D90097AE07 /* WizardPicked.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardPicked.swift; sourceTree = "<group>"; };
 		C8DD45F529EAB43B0096CA41 /* scorewind_ios_xml.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = scorewind_ios_xml.zip; sourceTree = "<group>"; };
 		C8E063EF28B0E20E000B3D67 /* MyCourse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCourse.swift; sourceTree = "<group>"; };
@@ -369,6 +371,7 @@
 				C85F27A7287A775E00D0A4E5 /* TipLimit.swift */,
 				C86F88192996166E0072504E /* WizardCalculationMode.swift */,
 				C8A651F32A66DF69009A3500 /* CouponState.swift */,
+				C8A651F52A6E8765009A3500 /* UsageActions.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -663,6 +666,7 @@
 				C87CF12A297B969200CDA215 /* WizardResultPathView.swift in Sources */,
 				C85F2777286F4F2E00D0A4E5 /* ScorewindTimestamp.swift in Sources */,
 				C85F27A228795A8E00D0A4E5 /* Tip.swift in Sources */,
+				C8A651F62A6E8765009A3500 /* UsageActions.swift in Sources */,
 				C87CF12C297C42A700CDA215 /* WizardLearningPathItem.swift in Sources */,
 				C85F2780286F4F2E00D0A4E5 /* DownloadItem.swift in Sources */,
 				C85F2783286F4F2E00D0A4E5 /* FileManager.swift in Sources */,

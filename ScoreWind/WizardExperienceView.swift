@@ -69,57 +69,13 @@ struct WizardExperienceView: View {
 			})
 			
 			Spacer()
-			
-			//original buttons
-			/*
-			Text(ExperienceFeedback.starterKit.getLabel())
-				.multilineTextAlignment(.center)
-				.frame(width:screenSize.width*0.7)
-				.modifier(FeedbackOptionsModifier())
-				.padding(.bottom,20)
-				.onTapGesture {
-					print("choose \(ExperienceFeedback.starterKit.rawValue)")
-					gotFeedback(selectedFeedback: .starterKit)
-				}
-			
-			Text(ExperienceFeedback.continueLearning.getLabel())
-				.multilineTextAlignment(.center)
-				.frame(width:screenSize.width*0.7)
-				.modifier(FeedbackOptionsModifier())
-				.onTapGesture {
-					print("choose \(ExperienceFeedback.continueLearning.rawValue)")
-					
-					/*if studentData.getWizardResult().learningPath.count == 0 || scorewindData.wizardPickedCourse.id == 0 || scorewindData.wizardPickedLesson.id == 0 {
-						//:: never done the wizard before, set the picked course and lesson to the very first one
-						let sortedCourses = scorewindData.allCourses.filter({$0.instrument == studentData.getInstrumentChoice()}).sorted(by: {Int($0.sortValue)! < Int($1.sortValue)!})
-						scorewindData.wizardPickedCourse = sortedCourses[0]
-						scorewindData.wizardPickedLesson = scorewindData.wizardPickedCourse.lessons[0]
-						scorewindData.wizardPickedTimestamps = (scorewindData.allTimestamps.first(where: {$0.id == scorewindData.wizardPickedCourse.id})?.lessons.first(where: {$0.id == scorewindData.wizardPickedLesson.id})!.timestamps) ?? []
-					}*/
-					gotFeedback(selectedFeedback: .continueLearning)
-				}
-				.padding(.bottom,20)
-			
-			Text(ExperienceFeedback.experienced.getLabel())
-				.multilineTextAlignment(.center)
-				.frame(width:screenSize.width*0.7)
-				.modifier(FeedbackOptionsModifier())
-				.onTapGesture {
-					print("choose \(ExperienceFeedback.experienced.rawValue)")
-					gotFeedback(selectedFeedback: .experienced)
-
-				}
-			
-			Spacer()*/
 		}
-		//.background(Color("AppBackground"))
 		.onAppear(perform: {
-			print("[debug] WizardExperienceView.onAppear")
-			//userDefaults.removeObject(forKey: "hideTips")
-			print("[debug] WizardExperienceView.onAppear, userDefaults hideTips \(userDefaults.object(forKey: "hideTips") as? [String] ?? [])")
+			//print("[debug] WizardExperienceView.onAppear")
+			//print("[debug] WizardExperienceView.onAppear, userDefaults hideTips \(userDefaults.object(forKey: "hideTips") as? [String] ?? [])")
 		})
 		.fullScreenCover(isPresented: $showStepTip, onDismiss: {
-			//goToNextStep()
+			
 		}, content: {
 			TipTransparentModalView(showStepTip: $showStepTip, tipContent: $tipContent)
 		})
@@ -272,14 +228,18 @@ struct WizardExperienceView: View {
 	private func gotFeedback(selectedFeedback: ExperienceFeedback) {
 		studentData.updateExperience(experience: selectedFeedback)
 		goToNextStep()
-		//:: use Help icon to see the tip here instead
-		/*let hideTips:[String] = userDefaults.object(forKey: "hideTips") as? [String] ?? []
-		if hideTips.contains(Tip.wizardExperience.rawValue) == false {
-			tipContent = AnyView(TipContentMakerView(showStepTip: $showStepTip, hideTipValue: Tip.wizardExperience.rawValue, tipMainContent: AnyView(tipHere(choise: selectedFeedback))))
-			showStepTip = true
-		} else {
-			goToNextStep()
-		}*/
+		
+		if selectedFeedback == ExperienceFeedback.starterKit {
+			studentData.updateUsageActionCount(actionName: .selectJourney)
+		} else if selectedFeedback == ExperienceFeedback.continueLearning {
+			studentData.updateUsageActionCount(actionName: .selectExplore)
+		} else if selectedFeedback == ExperienceFeedback.experienced {
+			studentData.updateUsageActionCount(actionName: .selectAdvancing)
+		}
+		
+		Task {
+			await studentData.sendUserUsageActionCount()
+		}
 	}
 	
 	@ViewBuilder

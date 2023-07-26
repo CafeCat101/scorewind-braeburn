@@ -237,6 +237,11 @@ struct LessonView2: View {
 			}
 			userDefaults.set(scorewindData.currentLesson.id,forKey: "lastViewedLesson")
 			print("[debug] LessonView onAppear,showLessonSheet \(scorewindData.showLessonTextOverlay)")
+			
+			studentData.updateUsageActionCount(actionName: .viewLesson)
+			Task {
+				await studentData.sendUserUsageActionCount()
+			}
 		})
 		.onDisappear(perform: {
 			print("[debug] LessonView onDisappear")
@@ -248,7 +253,7 @@ struct LessonView2: View {
 				LessonTextView(studentData: studentData, isCurrentLessonCompleted: $isCurrentLessonCompleted)
 			})
 		.sheet(isPresented: $showStoreView, content: {
-				StoreView(showStore: $showStoreView)
+				StoreView(showStore: $showStoreView, studentData: studentData)
 			})
 		.fullScreenCover(isPresented: $showLessonViewTip, onDismiss:{
 			if scorewindData.currentLesson.videoMP4.isEmpty == false {

@@ -174,6 +174,10 @@ struct MyCoursesView: View {
 		.onAppear(perform: {
 			print("[debug] MyCourseView, onAppear")
 			handleTip()
+			studentData.updateUsageActionCount(actionName: .viewMyCourse)
+			Task {
+				await studentData.sendUserUsageActionCount()
+			}
 		})
 	}
 	
