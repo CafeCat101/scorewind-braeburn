@@ -449,27 +449,21 @@ class StudentData: ObservableObject {
 	}
 	
 	func sendUserUsageActionCount() async {
-		print("[debug]StudentData, totalUsageCount \(getUserUsageActionTotalCount())")
-		if userUsageTimerCount >= 120 || getUserUsageActionTotalCount() >= 10 {
+		print("[debug]StudentData-Track Action, totalUsageCount \(getUserUsageActionTotalCount())")
+		print("[debug]StudentData-Track Action, userUsageTimerCount \(userUsageTimerCount)")
+		if userUsageTimerCount >= 120 || getUserUsageActionTotalCount() >= 5 {
 			Task {
-				var mySendJsonObject:sendJsonObject = sendJsonObject(actionCounts: [])
+				var mySendJsonObject:sendJsonObject = sendJsonObject(ActionCounts: [])
 				for usageAction in UsageActions.allCases {
 					let getActionCount = userDefaults.object(forKey: usageAction.rawValue) as? Int ?? 0
-					mySendJsonObject.actionCounts.append(sendActionCountObject(ActionName: usageAction.rawValue, Count: getActionCount))
+					mySendJsonObject.ActionCounts.append(sendActionCountObject(ActionName: usageAction.rawValue, Count: getActionCount))
 				}
-				print("[debug]StudentData, mySendJsonObject \(mySendJsonObject)")
+				print("[debug]StudentData-Track Action, mySendJsonObject \(mySendJsonObject)")
 				userUsageTimerCount = 0
 				for usageAction in UsageActions.allCases {
 					userDefaults.removeObject(forKey: usageAction.rawValue)
 				}
 				
-				//reset no matter what, in case the timer never stopped or run
-				/*DispatchQueue.main.async {
-					self.userUsageTimerCount = 0
-					for usageAction in UsageActions.allCases {
-						self.userDefaults.removeObject(forKey: usageAction.rawValue)
-					}
-				}*/
 				
 				do {
 					let payload = try JSONEncoder().encode(mySendJsonObject)
@@ -480,24 +474,21 @@ class StudentData: ObservableObject {
 					urlRequest.httpMethod = "POST"
 					
 					let (data, response) = try await URLSession.shared.upload(for: urlRequest, from: payload)
+					//print("[debug]StudentData, payload \(payload)")
 					
 					//guard (response as? HTTPURLResponse)?.statusCode == 200 else { fatalError("Error while fetching data") }
 					
 					if (response as? HTTPURLResponse)?.statusCode == 200 {
 						let successInfo = try JSONDecoder().decode(responseInfo.self, from: data)
 						
-						print(String(data: data, encoding: .utf8) ?? "default value")
-						print("Success: \(successInfo.Success)")
-						print("CouponIsValid: \(successInfo.CouponIsValid)")
-						print("Error: \(successInfo.Error)")
+						print("-Track Action \(String(data: data, encoding: .utf8) ?? "default value")")
+						print("-Track Action Success: \(successInfo.Success)")
+						print("-Track Action Error: \(successInfo.Error)")
 					} else {
-						print("httpurl response statusCode is not 200")
+						print("-Track Action httpurl response statusCode is not 200")
 					}
-					
-					
-					
 				} catch {
-					print(error)
+					print("-Track Action \(error)")
 				}
 				
 			}
@@ -505,7 +496,7 @@ class StudentData: ObservableObject {
 	}
 	
 	struct sendJsonObject: Encodable {
-		var actionCounts:[sendActionCountObject]
+		var ActionCounts:[sendActionCountObject]
 	}
 	
 	struct sendActionCountObject: Encodable {
@@ -515,7 +506,6 @@ class StudentData: ObservableObject {
 
 	struct responseInfo: Decodable {
 		let Success: Bool
-		let CouponIsValid: Bool
 		let Error: String
 		let ErrorCode: Int
 	}

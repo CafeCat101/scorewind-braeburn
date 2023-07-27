@@ -236,10 +236,6 @@ struct WizardExperienceView: View {
 		} else if selectedFeedback == ExperienceFeedback.experienced {
 			studentData.updateUsageActionCount(actionName: .selectAdvancing)
 		}
-		
-		Task {
-			await studentData.sendUserUsageActionCount()
-		}
 	}
 	
 	@ViewBuilder

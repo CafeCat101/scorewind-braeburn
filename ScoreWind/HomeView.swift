@@ -118,20 +118,10 @@ struct HomeView: View {
 				}
 				downloadManager.appState = .active
 				
-				/*Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { timer in
-					print("[debug] HomeView, Timer fired!")
-					timer.tolerance = 1
-					if studentData.userUsageTimerCount == -1 || (studentData.userUsageTimerCount >= 1200 && studentData.getUserUsageActionTotalCount() == 0) {
-						timer.invalidate()
-					}
-					studentData.userUsageTimerCount = studentData.userUsageTimerCount + 5
-					print("[debug] HomeView, Timer count \(studentData.userUsageTimerCount)")
-				}*/
-				startUsageTracker(userStudentData: studentData)				
+				studentData.userUsageTimerCount = 0
 				studentData.updateUsageActionCount(actionName: .launchApp)
-				Task {
-					await studentData.sendUserUsageActionCount()
-				}
+				startUsageTracker(userStudentData: studentData)				
+				
 			} else if newPhase == .inactive {
 				print("[debug] HomeView, appp is inactive")
 			} else if newPhase == .background {
@@ -224,13 +214,23 @@ func appBackgroundImage(colorMode: ColorScheme) -> some View {
 
 func startUsageTracker(userStudentData: StudentData) {
 	Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { timer in
-		print("[debug] HomeView, Timer fired!")
+		print("[debug] HomeView-Track Action, Timer fired!")
 		timer.tolerance = 1
+		
+		print("[debug] HomeView-Track Action, Timer count \(userStudentData.userUsageTimerCount)")
 		if userStudentData.userUsageTimerCount == -1 || (userStudentData.userUsageTimerCount >= 1200 && userStudentData.getUserUsageActionTotalCount() == 0) {
 			timer.invalidate()
+		} else {
+			Task {
+				if userStudentData.userUsageTimerCount == 0 {
+					await userStudentData.sendUserUsageActionCount()
+				} else {
+					await userStudentData.sendUserUsageActionCount()
+				}
+				
+			}
 		}
 		userStudentData.userUsageTimerCount = userStudentData.userUsageTimerCount + 5
-		print("[debug] HomeView, Timer count \(userStudentData.userUsageTimerCount)")
 	}
 }
 

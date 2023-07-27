@@ -239,9 +239,6 @@ struct LessonView2: View {
 			print("[debug] LessonView onAppear,showLessonSheet \(scorewindData.showLessonTextOverlay)")
 			
 			studentData.updateUsageActionCount(actionName: .viewLesson)
-			Task {
-				await studentData.sendUserUsageActionCount()
-			}
 		})
 		.onDisappear(perform: {
 			print("[debug] LessonView onDisappear")

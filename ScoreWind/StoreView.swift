@@ -389,9 +389,6 @@ struct StoreView: View {
 			store.lastCouponError = ""
 			
 			studentData.updateUsageActionCount(actionName: .viewPayWall)
-			Task {
-				await studentData.sendUserUsageActionCount()
-			}
 		}
 		.onChange(of: store.purchasedSubscriptions) { _ in
 			Task {

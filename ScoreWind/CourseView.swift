@@ -278,9 +278,6 @@ struct CourseView: View {
 				
 				if showLessonView == false {
 					studentData.updateUsageActionCount(actionName: .viewCourse)
-					Task {
-						await studentData.sendUserUsageActionCount()
-					}
 				}
 			}
 		})
