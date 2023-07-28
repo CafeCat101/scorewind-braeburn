@@ -120,6 +120,9 @@ struct HomeView: View {
 				
 				studentData.userUsageTimerCount = 0
 				studentData.updateUsageActionCount(actionName: .launchApp)
+				Task {
+					await studentData.sendUserUsageActionCount(runNow: true)
+				}
 				startUsageTracker(userStudentData: studentData)				
 				
 			} else if newPhase == .inactive {
@@ -222,12 +225,7 @@ func startUsageTracker(userStudentData: StudentData) {
 			timer.invalidate()
 		} else {
 			Task {
-				if userStudentData.userUsageTimerCount == 0 {
-					await userStudentData.sendUserUsageActionCount()
-				} else {
-					await userStudentData.sendUserUsageActionCount()
-				}
-				
+				await userStudentData.sendUserUsageActionCount()
 			}
 		}
 		userStudentData.userUsageTimerCount = userStudentData.userUsageTimerCount + 5

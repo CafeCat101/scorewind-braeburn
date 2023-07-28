@@ -448,7 +448,7 @@ class StudentData: ObservableObject {
 		return totalActionCount
 	}
 	
-	func sendUserUsageActionCount() async {
+	func sendUserUsageActionCount(runNow:Bool = false) async {
 		print("[debug]StudentData-Track Action, totalUsageCount \(getUserUsageActionTotalCount())")
 		print("[debug]StudentData-Track Action, userUsageTimerCount \(userUsageTimerCount)")
 		if userUsageTimerCount >= 120 || getUserUsageActionTotalCount() >= 5 {
