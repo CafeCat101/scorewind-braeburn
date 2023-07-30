@@ -339,14 +339,16 @@ struct CourseView: View {
 						}
 
 						Divider().padding(.bottom, 20)
-						Text("Let's check out what lessons this course has here and start learning!").padding(.bottom, 15)
-						(Text("You can track your learning progress from the progress bar or inspect which lesson you've ")+Text(Image(systemName: "eye.circle.fill"))+Text(" watched or ")+Text(Image(systemName: "checkmark.circle.fill"))+Text(" completed from the lesson list.")).padding(.bottom, 15)
 						
-						Divider().padding(.bottom, 20)
+						CourseTipContent(instrument: .piano)
+						/*Text("Let's check out what lessons this course has here and start learning!").padding(.bottom, 15)
+						(Text("You can track your learning progress from the progress bar or inspect which lesson you've ")+Text(Image(systemName: "eye.circle.fill"))+Text(" watched or ")+Text(Image(systemName: "checkmark.circle.fill"))+Text(" completed from the lesson list.")).padding(.bottom, 15)*/
+						
+						/*Divider().padding(.bottom, 20)
 						Text("Use features in the course to improve your learning experience.").padding(.bottom, 15)
 						(Text("Click ")+Text(Image(systemName: "doc.plaintext"))+Text(" to learn what this course is about in detail.")).padding(.bottom, 8)
 						(Text(Image(systemName: "suit.heart"))+Text(" Mark this course as your favorite for revisiting in the future.")).padding(.bottom, 8)
-						(Text(Image(systemName: "arrow.down.circle"))+Text(" Download the course videos for your offline moments.")).padding(.bottom, 15)
+						(Text(Image(systemName: "arrow.down.circle"))+Text(" Download the course videos for your offline moments.")).padding(.bottom, 15)*/
 						
 						//(Text("Click ")+Text(Image(systemName: "doc.plaintext"))+Text(" to learn what this course is about in details. ")+Text(Image(systemName: "suit.heart"))+Text(" Mark this course as your favorite for revisiting in the future. ")+Text(Image(systemName: "arrow.down.circle"))+Text(" Download the course videos for your offline moments.")).padding(.bottom,15)
 					}
