@@ -23,6 +23,7 @@ struct StoreView: View {
 	@State private var studentCouponCode:String = ""
 	@State private var showCouponWaiting = false
 	@ObservedObject var studentData:StudentData
+	@EnvironmentObject var scorewindData:ScorewindData
 	
 	var availableSubscriptions: [Product] {
 		store.subscriptions.filter { $0.id != currentSubscription?.id }
@@ -387,8 +388,9 @@ struct StoreView: View {
 			}
 			
 			store.lastCouponError = ""
-			
-			studentData.updateUsageActionCount(actionName: .viewPayWall)
+			if scorewindData.isPublicUserVersion {
+				studentData.updateUsageActionCount(actionName: .viewPayWall)
+			}
 		}
 		.onChange(of: store.purchasedSubscriptions) { _ in
 			Task {
@@ -606,9 +608,8 @@ struct StoreView: View {
 				.foregroundColor(Color("Dynamic/StoreViewTitle"))
 				.padding([.bottom],10)
 			VStack(alignment: .leading){
-				Text("· Go to ScoreWind \(Image(systemName: "music.note.house")) Home.").padding(.bottom,3)
-				Text("· Tap \(Image(systemName: "gear")) menu in the right top corner.").padding(.bottom,3)
-				Text("· Tap ScoreWind WizPack").padding(.bottom,3)
+				Text("· Go to ScoreWind \(Image(systemName: "point.filled.topleft.down.curvedto.point.bottomright.up")) Learning Path.").padding(.bottom,3)
+				Text("· Tap \(Image(systemName: "lock.open")) menu in the right top corner.").padding(.bottom,3)
 			}
 			Spacer()
 		}

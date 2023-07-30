@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WizardResultView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
+	@EnvironmentObject var store: Store
 	@Binding var selectedTab:String
 	@Binding var stepName:Page
 	@ObservedObject var studentData:StudentData
@@ -28,6 +29,7 @@ struct WizardResultView: View {
 	@State private var showOtherCourses = false
 	let transition = AnyTransition.asymmetric(insertion: .slide, removal: .scale).combined(with: .opacity)
 	@State private var showNotification = false
+	@State private var showSubscriptionNotice = false
 	
 	var body: some View {
 		VStack(spacing:0) {
@@ -91,7 +93,15 @@ struct WizardResultView: View {
 						handleTip()
 					}
 				})
-				.fullScreenCover(isPresented: $showStepTip, content: {
+				.fullScreenCover(isPresented: $showStepTip, onDismiss: {
+					if (store.enablePurchase == false || store.couponState == .valid) == false {
+						DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+							withAnimation(Animation.spring(response: 0.15, dampingFraction: 0.4, blendDuration: 0.4).speed(0.3)) {
+								showSubscriptionNotice = true
+							}
+						}
+					}
+				},content: {
 					TipTransparentModalView(showStepTip: $showStepTip, tipContent: $tipContent)
 				})
 				.coordinateSpace(name: "scroll")
@@ -124,6 +134,81 @@ struct WizardResultView: View {
 					.opacity(0.90)
 			)
 			.offset(y: showNotification ? 10 : -200)
+		})
+		.overlay(alignment: .top ,content: {
+			ZStack {
+				VStack {
+					Label("Get unlimited access to all the lessons and features.", systemImage: "bell.badge")
+						.labelStyle(.iconOnly)
+						.multilineTextAlignment(.center)
+						.padding(EdgeInsets(top: 20, leading: 15, bottom: 10, trailing: 15))
+					Text("Get unlimited access to all the lessons and features.")
+						.bold()
+						.multilineTextAlignment(.center)
+						.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
+					if store.offerIntroduction {
+						Text("Start your 1-month free trial.")
+							.bold()
+							.font(.title2)
+							.italic()
+							.foregroundColor(uiColor == .light ? Color("Dynamic/ShadowReverse") : Color("Dynamic/Shadow"))
+							.multilineTextAlignment(.center)
+							.padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
+							.background(uiColor == .light ? Color("Dynamic/DarkGray") : Color("AppYellow"))
+							.cornerRadius(20)
+							.padding(EdgeInsets(top: 10, leading: 15, bottom: 20, trailing: 15))
+							.onTapGesture {
+								withAnimation(Animation.spring(response: 0.15, dampingFraction: 0.4, blendDuration: 0.4).speed(0.3)) {
+									if showSubscriptionNotice {
+										showSubscriptionNotice = false
+									}
+								}
+								showStore = true
+							}
+					} else {
+						Text("Subscribe to ScoreWind WizPack.")
+							.bold()
+							.font(.title2)
+							.italic()
+							.foregroundColor(uiColor == .light ? Color("Dynamic/ShadowReverse") : Color("Dynamic/Shadow"))
+							.multilineTextAlignment(.center)
+							.padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
+							.background(uiColor == .light ? Color("Dynamic/DarkGray") : Color("AppYellow"))
+							.padding(EdgeInsets(top: 10, leading: 15, bottom: 20, trailing: 15))
+							.onTapGesture {
+								withAnimation(Animation.spring(response: 0.15, dampingFraction: 0.4, blendDuration: 0.4).speed(0.3)) {
+									if showSubscriptionNotice {
+										showSubscriptionNotice = false
+									}
+								}
+								showStore = true
+							}
+					}
+				}
+				.foregroundColor(Color("AppYellow"))
+				.font(.title2)
+				.overlay(alignment: .topTrailing,content: {
+					Label("Get unlimited access to all the lessons and features.", systemImage: "xmark.circle")
+						.foregroundColor(Color("AppYellow"))
+						.labelStyle(.iconOnly)
+						.multilineTextAlignment(.center)
+						.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
+						.onTapGesture {
+							withAnimation(Animation.spring(response: 0.15, dampingFraction: 0.4, blendDuration: 0.4).speed(0.3)) {
+								if showSubscriptionNotice {
+									showSubscriptionNotice = false
+								}
+							}
+						}
+				})
+			}
+			.frame(width:UIScreen.main.bounds.size.width*0.85)
+			.background(
+				RoundedRectangle(cornerRadius: CGFloat(17))
+					.foregroundColor(.black)
+					.opacity(0.90)
+			)
+			.offset(y: showSubscriptionNotice ? 10 : -350)
 		})
 	}
 	
@@ -217,7 +302,7 @@ struct WizardResultView: View {
 					VStack(alignment: .leading) {
 						HStack {
 							Spacer()
-							Label("Home", systemImage: "music.note.house.fill")
+							Label("Learning Path", systemImage: "point.filled.topleft.down.curvedto.point.bottomright.up")//music.note.house.fill
 								.labelStyle(.iconOnly)
 								.font(.title)
 								.padding(.bottom, 5)
@@ -234,8 +319,19 @@ struct WizardResultView: View {
 						
 						
 						Divider().padding(.bottom, 20)
-						Text("Reset and configure a new Learning Path by clicking the \(Image(systemName: "goforward")) button in the top left corner.").padding(.bottom, 15)
+						HStack {
+							Image(systemName: "magnifyingglass")
+								.resizable()
+								.scaledToFit()
+								.frame(width:100)
+							Text("To find a new Learning Path.").font(.title3)
+						}.padding(.bottom, 15)
 						Text("You can revisit your current learning path here whenever you like.").padding(.bottom, 15)
+						
+						
+							
+						/*Text("Reset and configure a new Learning Path by clicking the \(Image(systemName: "goforward")) button in the top left corner.").padding(.bottom, 15)
+						Text("You can revisit your current learning path here whenever you like.").padding(.bottom, 15)*/
 					}
 					.foregroundColor(Color("MainBrown+6"))
 					.padding(EdgeInsets(top: 18, leading: 40, bottom: 18, trailing: 40))

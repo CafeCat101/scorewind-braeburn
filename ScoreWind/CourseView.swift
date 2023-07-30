@@ -276,7 +276,7 @@ struct CourseView: View {
 					await store.updateCustomerProductStatus()
 				}
 				
-				if showLessonView == false {
+				if showLessonView == false && scorewindData.isPublicUserVersion {
 					studentData.updateUsageActionCount(actionName: .viewCourse)
 				}
 			}

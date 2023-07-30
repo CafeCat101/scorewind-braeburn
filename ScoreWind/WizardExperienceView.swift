@@ -229,12 +229,14 @@ struct WizardExperienceView: View {
 		studentData.updateExperience(experience: selectedFeedback)
 		goToNextStep()
 		
-		if selectedFeedback == ExperienceFeedback.starterKit {
-			studentData.updateUsageActionCount(actionName: .selectJourney)
-		} else if selectedFeedback == ExperienceFeedback.continueLearning {
-			studentData.updateUsageActionCount(actionName: .selectExplore)
-		} else if selectedFeedback == ExperienceFeedback.experienced {
-			studentData.updateUsageActionCount(actionName: .selectAdvancing)
+		if scorewindData.isPublicUserVersion {
+			if selectedFeedback == ExperienceFeedback.starterKit {
+				studentData.updateUsageActionCount(actionName: .selectJourney)
+			} else if selectedFeedback == ExperienceFeedback.continueLearning {
+				studentData.updateUsageActionCount(actionName: .selectExplore)
+			} else if selectedFeedback == ExperienceFeedback.experienced {
+				studentData.updateUsageActionCount(actionName: .selectAdvancing)
+			}
 		}
 	}
 	

@@ -28,7 +28,7 @@ struct WizardView: View {
 		VStack(spacing:0) {
 			HStack {
 				if (stepName != .wizardChooseInstrument || stepName == .wizardResult) && userRole == .student {
-					Label("Restart", systemImage: "goforward")
+					Label("Restart", systemImage: "magnifyingglass")//goforward
 						.font(.title3)
 						.labelStyle(.iconOnly)
 						.foregroundColor(Color("AppBlackDynamic"))
@@ -46,6 +46,26 @@ struct WizardView: View {
 						})
 				}
 				Spacer()
+				/*if (store.enablePurchase == false || store.couponState == .valid) == false {
+					Label("Subscription", systemImage: getSubscriptionMenuIcon())
+						.font(.title3)
+						.labelStyle(.iconOnly)
+						.foregroundColor(Color("AppBlackDynamic"))
+						.padding(.bottom,5)
+						.padding(.trailing, 15)
+						.onTapGesture {
+							showStore = true
+						}
+				}*/
+				Label("Subscription", systemImage: getSubscriptionMenuIcon())
+					.font(.title3)
+					.labelStyle(.iconOnly)
+					.foregroundColor(Color("AppBlackDynamic"))
+					.padding(.bottom,5)
+					.padding(.trailing, 15)
+					.onTapGesture {
+						showStore = true
+					}
 				Menu {
 					if scorewindData.isPublicUserVersion == false {
 						Button(action: {
@@ -73,12 +93,6 @@ struct WizardView: View {
 							Text("Show Me All Tips")
 						})
 					}
-					
-					Button(action: {
-						showStore = true
-					}, label: {
-						Text(subscriptionMenuLabel())
-					})
 					
 				} label: {
 					Label("ScoreWind", systemImage: "gear")
@@ -195,6 +209,15 @@ struct WizardView: View {
 			}
 		}
 		return label
+	}
+	
+	private func getSubscriptionMenuIcon() -> String {
+		if store.enablePurchase == false || store.couponState == .valid {
+			//already unlocked
+			return "lock.open"
+		} else {
+			return "bell.badge"
+		}
 	}
 	
 	private func getVersionNumber() -> String {

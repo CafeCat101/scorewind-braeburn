@@ -22,7 +22,8 @@ struct HomeView: View {
 		TabView(selection: $selectedTab) {
 			WizardView(selectedTab: $selectedTab, studentData: studentData, showLessonView: $showLessonView, downloadManager: downloadManager, stepName: $stepName)
 				.tabItem {
-					Label("Home", systemImage: "music.note.house")
+					//Label("Home", systemImage: "music.note.house")
+					Label("Learning Path", systemImage: "point.filled.topleft.down.curvedto.point.bottomright.up")
 				}
 				.tag("THome")
 			
@@ -118,20 +119,24 @@ struct HomeView: View {
 				}
 				downloadManager.appState = .active
 				
-				studentData.userUsageTimerCount = 0
-				studentData.updateUsageActionCount(actionName: .launchApp)
-				Task {
-					await studentData.sendUserUsageActionCount(runNow: true)
+				if scorewindData.isPublicUserVersion {
+					studentData.userUsageTimerCount = 0
+					studentData.updateUsageActionCount(actionName: .launchApp)
+					Task {
+						await studentData.sendUserUsageActionCount(runNow: true)
+					}
+					startUsageTracker(userStudentData: studentData)
 				}
-				startUsageTracker(userStudentData: studentData)				
 				
 			} else if newPhase == .inactive {
 				print("[debug] HomeView, appp is inactive")
 			} else if newPhase == .background {
 				print("[debug] HomeView, app is in the background")
-				studentData.userUsageTimerCount = -1
-				
 				downloadManager.appState = .background
+				
+				if scorewindData.isPublicUserVersion {
+					studentData.userUsageTimerCount = -1
+				}
 				
 				if (scorewindData.currentLesson.scorewindID > 0) && (scorewindData.lastPlaybackTime >= 10) {
 					print("[debug] HomeView.onChange, .background lastPlayBackTime>=10")

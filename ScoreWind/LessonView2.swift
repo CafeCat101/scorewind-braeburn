@@ -238,7 +238,9 @@ struct LessonView2: View {
 			userDefaults.set(scorewindData.currentLesson.id,forKey: "lastViewedLesson")
 			print("[debug] LessonView onAppear,showLessonSheet \(scorewindData.showLessonTextOverlay)")
 			
-			studentData.updateUsageActionCount(actionName: .viewLesson)
+			if scorewindData.isPublicUserVersion {
+				studentData.updateUsageActionCount(actionName: .viewLesson)
+			}
 		})
 		.onDisappear(perform: {
 			print("[debug] LessonView onDisappear")

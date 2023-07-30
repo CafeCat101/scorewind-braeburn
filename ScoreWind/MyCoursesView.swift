@@ -174,7 +174,9 @@ struct MyCoursesView: View {
 		.onAppear(perform: {
 			print("[debug] MyCourseView, onAppear")
 			handleTip()
-			studentData.updateUsageActionCount(actionName: .viewMyCourse)
+			if scorewindData.isPublicUserVersion {
+				studentData.updateUsageActionCount(actionName: .viewMyCourse)
+			}
 		})
 	}
 	
