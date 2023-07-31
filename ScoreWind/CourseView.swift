@@ -340,7 +340,7 @@ struct CourseView: View {
 
 						Divider().padding(.bottom, 20)
 						
-						CourseTipContent(instrument: .piano)
+						CourseTipContent(instrument: scorewindData.currentCourse.instrument)
 						/*Text("Let's check out what lessons this course has here and start learning!").padding(.bottom, 15)
 						(Text("You can track your learning progress from the progress bar or inspect which lesson you've ")+Text(Image(systemName: "eye.circle.fill"))+Text(" watched or ")+Text(Image(systemName: "checkmark.circle.fill"))+Text(" completed from the lesson list.")).padding(.bottom, 15)*/
 						

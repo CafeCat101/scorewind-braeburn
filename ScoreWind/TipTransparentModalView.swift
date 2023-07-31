@@ -61,7 +61,7 @@ struct TipTransparentModalView: View {
 				 }*/
 			 })
 			 .onTapGesture {
-				 showStepTip = false
+				 //showStepTip = false
 			 }
 		}.background(BackgroundTransparentView())
 	}

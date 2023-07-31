@@ -36,6 +36,7 @@ struct LessonView2: View {
 	@Environment(\.colorScheme) var colorScheme
 	@State private var revealAVPlayer = false
 	@State private var showVideoLoader = false
+	@State private var tipVideo = AVPlayer(url: URL(fileURLWithPath: "DIY_Notestannd_HD", relativeTo: Bundle.main.resourceURL!.appendingPathComponent("sub")).appendingPathExtension("mp4"))
 	
 	var body: some View {
 		VStack {
@@ -656,6 +657,7 @@ struct LessonView2: View {
 		if hideTips.contains(Tip.lessonView.rawValue) == false {
 			tipContent = AnyView(TipContentMakerView(showStepTip: $showLessonViewTip, hideTipValue: Tip.lessonView.rawValue, tipMainContent: AnyView(tipHere())))
 			showLessonViewTip = true
+			tipVideo.play()
 		}
 	}
 	
@@ -716,10 +718,63 @@ struct LessonView2: View {
 						})*/
 						Group {
 							Divider().padding(.bottom, 20)
+							VStack(alignment: .center) {
+								HStack {
+									Spacer()
+									if scorewindData.currentTimestampRecs.count == 0 {
+										Text("Lesson is About to Start").font(.title2).bold()
+									} else{
+										Text("Watch and Practice").font(.title2).bold()
+									}
+									
+									Spacer()
+								}.padding([.bottom],15)
+								
+								if scorewindData.currentTimestampRecs.count == 0 {
+									Text("Use the Headset")
+										.font(.headline)
+									if scorewindData.currentCourse.instrument == InstrumentType.guitar.rawValue {
+										VideoLoopView(videoURL:URL(fileURLWithPath: "Ricardo_Headset_UltraHD_720", relativeTo: Bundle.main.resourceURL!.appendingPathComponent("sub")).appendingPathExtension("mp4")).frame(width: UIScreen.main.bounds.width*0.6, height: UIScreen.main.bounds.width*0.6)
+											.padding([.bottom], 15)
+									} else {
+										VideoLoopView(videoURL:URL(fileURLWithPath: "Esin_Headset_UltraHD", relativeTo: Bundle.main.resourceURL!.appendingPathComponent("sub")).appendingPathExtension("mp4")).frame(width: UIScreen.main.bounds.width*0.6, height: UIScreen.main.bounds.width*0.6)
+											.padding([.bottom], 15)
+									}
+									
+									Text("Find a position at eye level for yor device.")
+										.font(.headline)
+									VideoLoopView(videoURL:URL(fileURLWithPath: "DIY_Notestannd_HD", relativeTo: Bundle.main.resourceURL!.appendingPathComponent("sub")).appendingPathExtension("mp4")).frame(width: UIScreen.main.bounds.width*0.6, height: UIScreen.main.bounds.width*0.6)
+										.padding([.bottom], 15)
+								} else {
+									Text("Control the video playback by tapping the bar.")
+										.font(.headline)
+									VideoLoopView(videoURL:URL(fileURLWithPath: scorewindData.currentCourse.instrument == InstrumentType.guitar.rawValue ? "Ricardo_Notestand_TapA_UltraHD" : "Esin_Notestand_TapA_UltraHD", relativeTo: Bundle.main.resourceURL!.appendingPathComponent("sub")).appendingPathExtension("mp4")).frame(width: UIScreen.main.bounds.width*0.6, height: UIScreen.main.bounds.width*0.6)
+										.padding([.bottom], 15)
+									
+									Text("Use the Headset")
+										.font(.headline)
+									if scorewindData.currentCourse.instrument == InstrumentType.guitar.rawValue {
+										VideoLoopView(videoURL:URL(fileURLWithPath: "Ricardo_Headset_UltraHD_720", relativeTo: Bundle.main.resourceURL!.appendingPathComponent("sub")).appendingPathExtension("mp4")).frame(width: UIScreen.main.bounds.width*0.6, height: UIScreen.main.bounds.width*0.6)
+											.padding([.bottom], 15)
+									} else {
+										VideoLoopView(videoURL:URL(fileURLWithPath: "Esin_Headset_UltraHD", relativeTo: Bundle.main.resourceURL!.appendingPathComponent("sub")).appendingPathExtension("mp4")).frame(width: UIScreen.main.bounds.width*0.6, height: UIScreen.main.bounds.width*0.6)
+											.padding([.bottom], 15)
+									}
+								}
+							}
+						}
+						
+						Group {
+							/*Divider().padding(.bottom, 20)
 							Text("When the lesson has a musical score, don't forget to use your headphone to listen and play together with the teacher. \n\nLeave one of your ears open when you are playing.").padding(.bottom, 15)
-							Text("It would be ideal for placing your phone at eye level while learning and playing.").padding(.bottom, 15)
+							Text("It would be ideal for placing your phone at eye level while learning and playing.").padding(.bottom, 15)*/
 							
 							Divider().padding(.bottom, 20)
+							HStack {
+								Spacer()
+								Text("While Learning").font(.title2).bold()
+								Spacer()
+							}.padding(.bottom, 15)
 							(Text("Use features in the ")+Text(Image(systemName: "list.bullet.circle"))+Text(" lesson menu to improve your learning experience.")).padding(.bottom, 15)
 							(Text("Click ")+Text(Image(systemName: "doc.plaintext"))+Text(" to learn what this lesson is about in detail.")).padding(.bottom, 8)
 							(Text(Image(systemName: "checkmark.circle"))+Text(" Mark this lesson as completed to track your learning progress.")).padding(.bottom, 8)
