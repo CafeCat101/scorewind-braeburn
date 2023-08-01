@@ -449,8 +449,8 @@ class StudentData: ObservableObject {
 	}
 	
 	func sendUserUsageActionCount(runNow:Bool = false) async {
-		print("[debug]StudentData-Track Action, totalUsageCount \(getUserUsageActionTotalCount())")
-		print("[debug]StudentData-Track Action, userUsageTimerCount \(userUsageTimerCount)")
+		//print("[debug]StudentData-Track Action, totalUsageCount \(getUserUsageActionTotalCount())")
+		//print("[debug]StudentData-Track Action, userUsageTimerCount \(userUsageTimerCount)")
 		if userUsageTimerCount >= 120 || getUserUsageActionTotalCount() >= 5 {
 			Task {
 				var mySendJsonObject:sendJsonObject = sendJsonObject(ActionCounts: [])
@@ -458,7 +458,7 @@ class StudentData: ObservableObject {
 					let getActionCount = userDefaults.object(forKey: usageAction.rawValue) as? Int ?? 0
 					mySendJsonObject.ActionCounts.append(sendActionCountObject(ActionName: usageAction.rawValue, Count: getActionCount))
 				}
-				print("[debug]StudentData-Track Action, mySendJsonObject \(mySendJsonObject)")
+				//print("[debug]StudentData-Track Action, mySendJsonObject \(mySendJsonObject)")
 				userUsageTimerCount = 0
 				for usageAction in UsageActions.allCases {
 					userDefaults.removeObject(forKey: usageAction.rawValue)
@@ -476,14 +476,12 @@ class StudentData: ObservableObject {
 					let (data, response) = try await URLSession.shared.upload(for: urlRequest, from: payload)
 					//print("[debug]StudentData, payload \(payload)")
 					
-					//guard (response as? HTTPURLResponse)?.statusCode == 200 else { fatalError("Error while fetching data") }
-					
 					if (response as? HTTPURLResponse)?.statusCode == 200 {
 						let successInfo = try JSONDecoder().decode(responseInfo.self, from: data)
 						
-						print("-Track Action \(String(data: data, encoding: .utf8) ?? "default value")")
-						print("-Track Action Success: \(successInfo.Success)")
-						print("-Track Action Error: \(successInfo.Error)")
+						//print("-Track Action \(String(data: data, encoding: .utf8) ?? "default value")")
+						//print("-Track Action Success: \(successInfo.Success)")
+						//print("-Track Action Error: \(successInfo.Error)")
 					} else {
 						print("-Track Action httpurl response statusCode is not 200")
 					}

@@ -16,4 +16,7 @@ enum UsageActions: String, CaseIterable {
 	case viewLesson = "viewLesson"
 	case viewMyCourse = "viewMyCourse"
 	case viewPayWall = "viewPayWall"
+	case lessonNoScore = "lessonNoScore"
+	case lessonHasScore = "lessonHasScore"
+	case viewLearningPath = "viewLearningPath"
 }

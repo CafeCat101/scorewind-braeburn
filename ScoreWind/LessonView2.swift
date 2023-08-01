@@ -241,6 +241,11 @@ struct LessonView2: View {
 			
 			if scorewindData.isPublicUserVersion {
 				studentData.updateUsageActionCount(actionName: .viewLesson)
+				if scorewindData.currentTimestampRecs.count == 0 {
+					studentData.updateUsageActionCount(actionName: .lessonNoScore)
+				} else {
+					studentData.updateUsageActionCount(actionName: .lessonHasScore)
+				}
 			}
 		})
 		.onDisappear(perform: {

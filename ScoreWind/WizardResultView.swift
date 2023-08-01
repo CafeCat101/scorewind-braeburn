@@ -92,6 +92,10 @@ struct WizardResultView: View {
 					if scorewindData.wizardPickedCourse.id > 0 && scorewindData.wizardPickedLesson.id > 0 && showStore == false {
 						handleTip()
 					}
+					
+					if scorewindData.isPublicUserVersion {
+						studentData.updateUsageActionCount(actionName: .viewLearningPath)
+					}
 				})
 				.fullScreenCover(isPresented: $showStepTip, onDismiss: {
 					if (store.enablePurchase == false || store.couponState == .valid) == false {
