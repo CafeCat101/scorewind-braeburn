@@ -98,7 +98,7 @@ struct WizardResultView: View {
 					}
 				})
 				.fullScreenCover(isPresented: $showStepTip, onDismiss: {
-					if (store.enablePurchase == false || store.couponState == .valid) == false {
+					if (store.enablePurchase == false || store.couponState == .valid || store.offerIntroduction == false) == false {
 						DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
 							withAnimation(Animation.spring(response: 0.15, dampingFraction: 0.4, blendDuration: 0.4).speed(0.3)) {
 								showSubscriptionNotice = true

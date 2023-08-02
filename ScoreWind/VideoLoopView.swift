@@ -17,6 +17,7 @@ struct VideoLoopView: View {
 	
 	var body: some View {
 		VideoPlayer(player: videoPlayer)
+			.clipShape(Circle())
 			.clipShape(RoundedRectangle(cornerRadius: 17, style: .continuous))
 			.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
 		//.edgesIgnoringSafeArea(.all)
