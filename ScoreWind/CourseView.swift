@@ -277,7 +277,8 @@ struct CourseView: View {
 				}
 				
 				if showLessonView == false && scorewindData.isPublicUserVersion {
-					studentData.updateUsageActionCount(actionName: .viewCourse)
+					//studentData.updateUsageActionCount(actionName: .viewCourse)
+					studentData.updateLogs(title: .viewCourse, content: scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentCourse.title))
 				}
 			}
 		})

@@ -94,7 +94,8 @@ struct WizardResultView: View {
 					}
 					
 					if scorewindData.isPublicUserVersion {
-						studentData.updateUsageActionCount(actionName: .viewLearningPath)
+						//studentData.updateUsageActionCount(actionName: .viewLearningPath)
+						studentData.updateLogs(title: .viewLearningPath, content: viewLearningPathLogContent())
 					}
 				})
 				.fullScreenCover(isPresented: $showStepTip, onDismiss: {
@@ -214,6 +215,13 @@ struct WizardResultView: View {
 			)
 			.offset(y: showSubscriptionNotice ? 10 : -350)
 		})
+	}
+	
+	private func viewLearningPathLogContent() -> String {
+		var content = ""
+		let startLesson = studentData.wizardResult.learningPath.first(where: {$0.startHere}) ?? WizardLearningPathItem()
+		content = "picked course: \(startLesson.courseTitle), picked lesson:\(startLesson.lessonTitle)"
+		return content
 	}
 	
 	private func getIconTitleName(instrument: String) -> String {

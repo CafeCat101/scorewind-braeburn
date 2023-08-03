@@ -121,7 +121,9 @@ struct HomeView: View {
 				
 				if scorewindData.isPublicUserVersion {
 					studentData.userUsageTimerCount = 0
-					studentData.updateUsageActionCount(actionName: .launchApp)
+					//studentData.updateUsageActionCount(actionName: .launchApp)
+					studentData.setLaunchUUID()
+					studentData.updateLogs(title: .launchApp , content: "app is active")
 					Task {
 						await studentData.sendUserUsageActionCount(runNow: true)
 					}

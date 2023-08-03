@@ -334,6 +334,8 @@ struct WizardTeacherView: View {
 			userDefaults.removeObject(forKey: usageAction.rawValue)
 		}
 		
+		userDefaults.removeObject(forKey: "eventLogs")
+		
 		//studentData.updateMyCourses(allCourses: scorewindData.allCourses)
 		//studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 	}

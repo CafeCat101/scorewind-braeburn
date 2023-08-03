@@ -23,6 +23,7 @@ class StudentData: ObservableObject {
 	private var wizardDoYouKnowChoice:[String:Any] = [:]
 	private var wizardPlayableChoice:[String:Any] = [:]
 	var userUsageTimerCount = 0
+	private var launchUUID:UUID?
 	
 	/*
 	 DATA FOR MY COURSES
@@ -453,17 +454,23 @@ class StudentData: ObservableObject {
 		//print("[debug]StudentData-Track Action, userUsageTimerCount \(userUsageTimerCount)")
 		if userUsageTimerCount >= 120 || getUserUsageActionTotalCount() >= 5 {
 			Task {
+				/* :::::::::::;>
 				var mySendJsonObject:sendJsonObject = sendJsonObject(ActionCounts: [])
 				for usageAction in UsageActions.allCases {
 					let getActionCount = userDefaults.object(forKey: usageAction.rawValue) as? Int ?? 0
 					mySendJsonObject.ActionCounts.append(sendActionCountObject(ActionName: usageAction.rawValue, Count: getActionCount))
 				}
-				//print("[debug]StudentData-Track Action, mySendJsonObject \(mySendJsonObject)")
+				 < :::::::::::::*/
+				var mySendJsonObject:sendLogObjects = sendLogObjects(Logs: [])
+				mySendJsonObject.Logs = getLogs()
+				print("[debug]StudentData-Track Action, mySendJsonObject \(mySendJsonObject)")
 				userUsageTimerCount = 0
+				/* :::::::::::;>
 				for usageAction in UsageActions.allCases {
 					userDefaults.removeObject(forKey: usageAction.rawValue)
 				}
-				
+				 < :::::::::::::*/
+				userDefaults.removeObject(forKey: "eventLogs")
 				
 				do {
 					let payload = try JSONEncoder().encode(mySendJsonObject)
@@ -479,9 +486,9 @@ class StudentData: ObservableObject {
 					if (response as? HTTPURLResponse)?.statusCode == 200 {
 						let successInfo = try JSONDecoder().decode(responseInfo.self, from: data)
 						
-						//print("-Track Action \(String(data: data, encoding: .utf8) ?? "default value")")
-						//print("-Track Action Success: \(successInfo.Success)")
-						//print("-Track Action Error: \(successInfo.Error)")
+						print("-Track Action \(String(data: data, encoding: .utf8) ?? "default value")")
+						print("-Track Action Success: \(successInfo.Success)")
+						print("-Track Action Error: \(successInfo.Error)")
 					} else {
 						print("-Track Action httpurl response statusCode is not 200")
 					}
@@ -493,6 +500,32 @@ class StudentData: ObservableObject {
 		}
 	}
 	
+	func setLaunchUUID() {
+		launchUUID = UUID()
+	}
+	
+	func getLogs() -> [String] {
+		let lastLogs = userDefaults.object(forKey: "eventLogs") as? [String] ?? []
+		return lastLogs
+	}
+	
+	func updateLogs(title: UsageActions, content: String) {
+		//the post format
+		//uuid[datetime]: log content
+		//format of log content, scope is seperated by |
+		var theLogs = getLogs()
+		var newLog:String = launchUUID?.uuidString ?? ""
+		
+		let myTodayFormatter = DateFormatter()
+		myTodayFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+		myTodayFormatter.timeZone = TimeZone(identifier: "UTC")
+		let nowString = myTodayFormatter.string(from: Date())
+		
+		newLog = "\(newLog)[\(nowString)]: \(title)|\(content)"
+		theLogs.append(newLog)
+		userDefaults.set(theLogs, forKey: "eventLogs")
+	}
+	
 	struct sendJsonObject: Encodable {
 		var ActionCounts:[sendActionCountObject]
 	}
@@ -500,6 +533,10 @@ class StudentData: ObservableObject {
 	struct sendActionCountObject: Encodable {
 		let ActionName:String
 		let Count: Int
+	}
+	
+	struct sendLogObjects: Encodable {
+		var Logs:[String]
 	}
 
 	struct responseInfo: Decodable {

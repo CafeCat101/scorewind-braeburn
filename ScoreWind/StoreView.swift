@@ -389,7 +389,8 @@ struct StoreView: View {
 			
 			store.lastCouponError = ""
 			if scorewindData.isPublicUserVersion {
-				studentData.updateUsageActionCount(actionName: .viewPayWall)
+				//studentData.updateUsageActionCount(actionName: .viewPayWall)
+				studentData.updateLogs(title: .viewPayWall, content: viewPayWallLogContent())
 			}
 		}
 		.onChange(of: store.purchasedSubscriptions) { _ in
@@ -398,6 +399,24 @@ struct StoreView: View {
 				await updateSubscriptionStatus()
 			}
 		}
+	}
+	
+	private func viewPayWallLogContent() -> String {
+		var content = ""
+		if store.offerIntroduction {
+			content = "introduction offer:no"
+		} else {
+			content = "introduction offer:yes"
+		}
+		
+		if store.couponState == .valid {
+			content = "\(content)#coupon:valid"
+		} else if store.couponState == .expired {
+			content = "\(content)#coupon:expired"
+		} else {
+			content = "\(content)#coupon:not activated"
+		}
+		return content
 	}
 	
 	struct buyItemPadding: ViewModifier {

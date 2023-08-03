@@ -37,6 +37,7 @@ struct LessonView2: View {
 	@State private var revealAVPlayer = false
 	@State private var showVideoLoader = false
 	@State private var tipVideo = AVPlayer(url: URL(fileURLWithPath: "DIY_Notestannd_HD", relativeTo: Bundle.main.resourceURL!.appendingPathComponent("sub")).appendingPathExtension("mp4"))
+	@State private var logVideoPlaybackTime: String = ""
 	
 	var body: some View {
 		VStack {
@@ -240,12 +241,13 @@ struct LessonView2: View {
 			print("[debug] LessonView onAppear,showLessonSheet \(scorewindData.showLessonTextOverlay)")
 			
 			if scorewindData.isPublicUserVersion {
-				studentData.updateUsageActionCount(actionName: .viewLesson)
+				studentData.updateLogs(title: .viewLesson, content: viewLessonLogContent())
+				/*studentData.updateUsageActionCount(actionName: .viewLesson)
 				if scorewindData.currentTimestampRecs.count == 0 {
 					studentData.updateUsageActionCount(actionName: .lessonNoScore)
 				} else {
 					studentData.updateUsageActionCount(actionName: .lessonHasScore)
-				}
+				}*/
 			}
 		})
 		.onDisappear(perform: {
@@ -315,6 +317,7 @@ struct LessonView2: View {
 						.onAppear(perform: {
 							//VideoPlayer onAppear when comeing from anohter tab view, not when the sheet disappears
 							print("[debug] VideoPlayer onAppear")
+							logVideoPlaybackTime = ""
 						})
 						.onDisappear(perform: {
 							//VideoPlayer disappears when go to another tab view, not when sheet appears
@@ -326,6 +329,7 @@ struct LessonView2: View {
 								studentData.updateMyCourses(allCourses: scorewindData.allCourses)
 								studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 							}
+							studentData.updateLogs(title: .streamLessonVideo, content: "\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title)) (\(logVideoPlaybackTime)")
 						})
 				}
 			}
@@ -436,6 +440,7 @@ struct LessonView2: View {
 				
 				print("[debug] LessonView, setupPlayer, catchTime:"+String(catchTime))
 				print("[debug] LessonView, setupPlayer, lastPlaybackTime:"+String(scorewindData.lastPlaybackTime))
+				logVideoPlaybackTime = "\(logVideoPlaybackTime)-\(String(format: "%.3f", Float(catchTime))))"
 				if showVideoLoader {
 					if scorewindData.lastPlaybackTime > 0.01 && catchTime > scorewindData.lastPlaybackTime {
 						showVideoLoader = false
@@ -870,6 +875,12 @@ struct LessonView2: View {
 			.padding(15)
 		}
 		.padding(EdgeInsets(top: 0, leading: 0, bottom: 15, trailing: 0))
+	}
+	
+	private func viewLessonLogContent() -> String {
+		var logContent = scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title)
+		logContent = "\(logContent), \(scorewindData.currentTimestampRecs.count) timestamps"
+		return logContent
 	}
 	
 }

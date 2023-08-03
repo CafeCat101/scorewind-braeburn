@@ -19,4 +19,6 @@ enum UsageActions: String, CaseIterable {
 	case lessonNoScore = "lessonNoScore"
 	case lessonHasScore = "lessonHasScore"
 	case viewLearningPath = "viewLearningPath"
+	case error = "error"
+	case streamLessonVideo = "streamLessonVideo"
 }

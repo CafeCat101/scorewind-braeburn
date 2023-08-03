@@ -175,7 +175,8 @@ struct MyCoursesView: View {
 			print("[debug] MyCourseView, onAppear")
 			handleTip()
 			if scorewindData.isPublicUserVersion {
-				studentData.updateUsageActionCount(actionName: .viewMyCourse)
+				//studentData.updateUsageActionCount(actionName: .viewMyCourse)
+				studentData.updateLogs(title: .viewMyCourse, content: "my course count \(studentData.myCourses.count)")
 			}
 		})
 	}

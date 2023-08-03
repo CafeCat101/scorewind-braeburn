@@ -231,11 +231,14 @@ struct WizardExperienceView: View {
 		
 		if scorewindData.isPublicUserVersion {
 			if selectedFeedback == ExperienceFeedback.starterKit {
-				studentData.updateUsageActionCount(actionName: .selectJourney)
+				//studentData.updateUsageActionCount(actionName: .selectJourney)
+				studentData.updateLogs(title: .selectJourney, content: "")
 			} else if selectedFeedback == ExperienceFeedback.continueLearning {
-				studentData.updateUsageActionCount(actionName: .selectExplore)
+				//studentData.updateUsageActionCount(actionName: .selectExplore)
+				studentData.updateLogs(title: .selectExplore, content: "")
 			} else if selectedFeedback == ExperienceFeedback.experienced {
-				studentData.updateUsageActionCount(actionName: .selectAdvancing)
+				//studentData.updateUsageActionCount(actionName: .selectAdvancing)
+				studentData.updateLogs(title: .selectAdvancing, content: "")
 			}
 		}
 	}
