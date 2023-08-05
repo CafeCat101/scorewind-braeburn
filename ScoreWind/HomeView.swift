@@ -136,6 +136,11 @@ struct HomeView: View {
 				print("[debug] HomeView, app is in the background")
 				downloadManager.appState = .background
 				
+				if scorewindData.isPublicUserVersion && (studentData.logVideoPlaybackTime.count > 0) {
+					studentData.updateLogs(title: .streamLessonVideo, content: "\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title)) (\(studentData.logVideoPlaybackTime.joined(separator: "->")))exit app")
+					studentData.logVideoPlaybackTime = []
+				}
+				
 				if scorewindData.isPublicUserVersion {
 					studentData.userUsageTimerCount = -1
 				}
@@ -223,7 +228,7 @@ func appBackgroundImage(colorMode: ColorScheme) -> some View {
 }
 
 func startUsageTracker(userStudentData: StudentData) {
-	Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { timer in
+	Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
 		print("[debug] HomeView-Track Action, Timer fired!")
 		timer.tolerance = 1
 		
@@ -235,7 +240,7 @@ func startUsageTracker(userStudentData: StudentData) {
 				await userStudentData.sendUserUsageActionCount()
 			}
 		}
-		userStudentData.userUsageTimerCount = userStudentData.userUsageTimerCount + 5
+		userStudentData.userUsageTimerCount = userStudentData.userUsageTimerCount + 1
 	}
 }
 

@@ -24,6 +24,7 @@ class StudentData: ObservableObject {
 	private var wizardPlayableChoice:[String:Any] = [:]
 	var userUsageTimerCount = 0
 	private var launchUUID:UUID?
+	var logVideoPlaybackTime:[String] = []
 	
 	/*
 	 DATA FOR MY COURSES
@@ -449,10 +450,17 @@ class StudentData: ObservableObject {
 		return totalActionCount
 	}
 	
+	private func getLogsCount() -> Int {
+		let logs = getLogs()
+		return logs.count
+	}
+	
 	func sendUserUsageActionCount(runNow:Bool = false) async {
 		//print("[debug]StudentData-Track Action, totalUsageCount \(getUserUsageActionTotalCount())")
-		//print("[debug]StudentData-Track Action, userUsageTimerCount \(userUsageTimerCount)")
-		if userUsageTimerCount >= 120 || getUserUsageActionTotalCount() >= 5 {
+		print("[debug]StudentData-Track Action, userUsageTimerCount \(userUsageTimerCount)")
+		print("[debug]StudentData-Track Action, getLogsCount \(getLogsCount())")
+		//if userUsageTimerCount >= 120 || getUserUsageActionTotalCount() >= 5 {
+		if userUsageTimerCount >= 120 || getLogsCount() >= 6 {
 			Task {
 				/* :::::::::::;>
 				var mySendJsonObject:sendJsonObject = sendJsonObject(ActionCounts: [])
@@ -474,7 +482,8 @@ class StudentData: ObservableObject {
 				
 				do {
 					let payload = try JSONEncoder().encode(mySendJsonObject)
-					guard let url = URL(string: "https://music.scorewind.com/mobileapp_update_usage_action_count.php") else { fatalError("Missing URL") }
+					//guard let url = URL(string: "https://music.scorewind.com/mobileapp_update_usage_action_count.php") else { fatalError("Missing URL") }
+					guard let url = URL(string: "https://music.scorewind.com/mobileapp_iOS_event_log.php") else { fatalError("Missing URL") }
 					var urlRequest = URLRequest(url: url)
 					urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 					urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -504,7 +513,7 @@ class StudentData: ObservableObject {
 		launchUUID = UUID()
 	}
 	
-	func getLogs() -> [String] {
+	private func getLogs() -> [String] {
 		let lastLogs = userDefaults.object(forKey: "eventLogs") as? [String] ?? []
 		return lastLogs
 	}

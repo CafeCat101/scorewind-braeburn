@@ -37,7 +37,8 @@ struct LessonView2: View {
 	@State private var revealAVPlayer = false
 	@State private var showVideoLoader = false
 	@State private var tipVideo = AVPlayer(url: URL(fileURLWithPath: "DIY_Notestannd_HD", relativeTo: Bundle.main.resourceURL!.appendingPathComponent("sub")).appendingPathExtension("mp4"))
-	@State private var logVideoPlaybackTime: String = ""
+	//@State private var logVideoPlaybackTime: [String] = []
+	@State private var lastUserUsageTimerCount = 0
 	
 	var body: some View {
 		VStack {
@@ -317,7 +318,8 @@ struct LessonView2: View {
 						.onAppear(perform: {
 							//VideoPlayer onAppear when comeing from anohter tab view, not when the sheet disappears
 							print("[debug] VideoPlayer onAppear")
-							logVideoPlaybackTime = ""
+							studentData.logVideoPlaybackTime = []
+							lastUserUsageTimerCount = studentData.userUsageTimerCount
 						})
 						.onDisappear(perform: {
 							//VideoPlayer disappears when go to another tab view, not when sheet appears
@@ -329,7 +331,12 @@ struct LessonView2: View {
 								studentData.updateMyCourses(allCourses: scorewindData.allCourses)
 								studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)
 							}
-							studentData.updateLogs(title: .streamLessonVideo, content: "\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title)) (\(logVideoPlaybackTime)")
+							
+							if scorewindData.isPublicUserVersion && (studentData.logVideoPlaybackTime.count > 0) {
+								studentData.updateLogs(title: .streamLessonVideo, content: "\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title)) (\(studentData.logVideoPlaybackTime.joined(separator: "->")))view changed")
+								studentData.updateLogs(title: .streamLessonVideo, content: "\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title)) (\(studentData.logVideoPlaybackTime.joined(separator: "->")))view changed")
+								studentData.logVideoPlaybackTime = []
+							}
 						})
 				}
 			}
@@ -440,7 +447,24 @@ struct LessonView2: View {
 				
 				print("[debug] LessonView, setupPlayer, catchTime:"+String(catchTime))
 				print("[debug] LessonView, setupPlayer, lastPlaybackTime:"+String(scorewindData.lastPlaybackTime))
-				logVideoPlaybackTime = "\(logVideoPlaybackTime)-\(String(format: "%.3f", Float(catchTime))))"
+				
+				print("[debug] LessonView, setupPlayer, student.timerCount/self.timerCount:\(studentData.userUsageTimerCount):\(lastUserUsageTimerCount)")
+				if (studentData.userUsageTimerCount - lastUserUsageTimerCount) > 2 {
+					studentData.logVideoPlaybackTime.append(String(format: "%.3f", Float(catchTime)))
+					lastUserUsageTimerCount = studentData.userUsageTimerCount
+					print("[debug] LessonView, setupPlayer, logVideoPlaybackTime \(studentData.logVideoPlaybackTime)")
+				}
+				if scorewindData.isPublicUserVersion {
+					if studentData.logVideoPlaybackTime.count >= 10 || (studentData.userUsageTimerCount>=60 && studentData.logVideoPlaybackTime.count>0) {
+						//:: log the playback time either when finishing collecting 10 items or wait for the timeer count hits 60(user now may be pausing the video so this timer in PeriodicTimerObserver is on hold)
+						studentData.updateLogs(title: .streamLessonVideo, content: "\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title)) (\(studentData.logVideoPlaybackTime.joined(separator: "->")))continue")
+						studentData.logVideoPlaybackTime = []
+					}
+				}
+				if (studentData.logVideoPlaybackTime.count >= 10 || studentData.userUsageTimerCount>=60) && scorewindData.isPublicUserVersion {
+					
+				}
+				
 				if showVideoLoader {
 					if scorewindData.lastPlaybackTime > 0.01 && catchTime > scorewindData.lastPlaybackTime {
 						showVideoLoader = false

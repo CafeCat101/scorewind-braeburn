@@ -410,11 +410,11 @@ struct StoreView: View {
 		}
 		
 		if store.couponState == .valid {
-			content = "\(content)#coupon:valid"
+			content = "\(content),coupon:valid"
 		} else if store.couponState == .expired {
-			content = "\(content)#coupon:expired"
+			content = "\(content),coupon:expired"
 		} else {
-			content = "\(content)#coupon:not activated"
+			content = "\(content),coupon:not activated"
 		}
 		return content
 	}
