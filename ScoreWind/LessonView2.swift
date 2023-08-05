@@ -334,7 +334,6 @@ struct LessonView2: View {
 							
 							if scorewindData.isPublicUserVersion && (studentData.logVideoPlaybackTime.count > 0) {
 								studentData.updateLogs(title: .streamLessonVideo, content: "\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title)) (\(studentData.logVideoPlaybackTime.joined(separator: "->")))view changed")
-								studentData.updateLogs(title: .streamLessonVideo, content: "\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title)) (\(studentData.logVideoPlaybackTime.joined(separator: "->")))view changed")
 								studentData.logVideoPlaybackTime = []
 							}
 						})

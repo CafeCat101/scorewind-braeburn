@@ -122,7 +122,6 @@ struct HomeView: View {
 				if scorewindData.isPublicUserVersion {
 					studentData.userUsageTimerCount = 0
 					//studentData.updateUsageActionCount(actionName: .launchApp)
-					studentData.setLaunchUUID()
 					studentData.updateLogs(title: .launchApp , content: "app is active")
 					Task {
 						await studentData.sendUserUsageActionCount(runNow: true)
@@ -135,11 +134,11 @@ struct HomeView: View {
 			} else if newPhase == .background {
 				print("[debug] HomeView, app is in the background")
 				downloadManager.appState = .background
-
+				studentData.userUsageTimerCount = -1
+				
 				if scorewindData.isPublicUserVersion {
-					studentData.userUsageTimerCount = -1
 					if studentData.logVideoPlaybackTime.count > 0 {
-						studentData.updateLogs(title: .streamLessonVideo, content: "\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title)) (\(studentData.logVideoPlaybackTime.joined(separator: "->")))exit app")
+						studentData.updateLogs(title: .streamLessonVideo, content: "\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title)) (\(studentData.logVideoPlaybackTime.joined(separator: "->")))stop video")
 						studentData.logVideoPlaybackTime = []
 					}
 					

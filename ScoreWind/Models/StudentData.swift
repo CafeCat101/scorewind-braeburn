@@ -490,14 +490,19 @@ class StudentData: ObservableObject {
 					urlRequest.httpMethod = "POST"
 					
 					let (data, response) = try await URLSession.shared.upload(for: urlRequest, from: payload)
-					//print("[debug]StudentData, payload \(payload)")
+					print("[debug]StudentData, upload payload \(payload)")
 					
 					if (response as? HTTPURLResponse)?.statusCode == 200 {
-						let successInfo = try JSONDecoder().decode(responseInfo.self, from: data)
+						if userUsageTimerCount != -1 {
+							let successInfo = try JSONDecoder().decode(responseInfo.self, from: data)
+							
+							print("-Track Action \(String(data: data, encoding: .utf8) ?? "default value")")
+							print("-Track Action Success: \(successInfo.Success)")
+							print("-Track Action Error: \(successInfo.Error)")
+						} else {
+							print("-Track Action: probably gone background")
+						}
 						
-						print("-Track Action \(String(data: data, encoding: .utf8) ?? "default value")")
-						print("-Track Action Success: \(successInfo.Success)")
-						print("-Track Action Error: \(successInfo.Error)")
 					} else {
 						print("-Track Action httpurl response statusCode is not 200")
 					}
@@ -525,7 +530,12 @@ class StudentData: ObservableObject {
 		var theLogs = getLogs()
 		var newLog:[String] = [] //= launchUUID?.uuidString ?? ""
 		
-		newLog.append(launchUUID?.uuidString ?? "")
+		var setSessionID = launchUUID?.uuidString ?? ""
+		if setSessionID.isEmpty {
+			setLaunchUUID()
+			setSessionID = launchUUID?.uuidString ?? ""
+		}
+		newLog.append(setSessionID)
 		
 		let myTodayFormatter = DateFormatter()
 		myTodayFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
