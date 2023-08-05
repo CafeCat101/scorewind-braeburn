@@ -17,6 +17,7 @@ struct HomeView: View {
 	@State private var showLessonView = false
 	@EnvironmentObject var store:Store
 	@State private var stepName:Page = .wizardChooseInstrument
+	@Environment(\.colorScheme) var colorScheme
 	
 	var body: some View {
 		TabView(selection: $selectedTab) {
@@ -117,12 +118,19 @@ struct HomeView: View {
 						await store.validateCoupon(couponCode: couponCodeinCloud)
 					}
 				}
+				
+				
 				downloadManager.appState = .active
 				
 				if scorewindData.isPublicUserVersion {
 					studentData.userUsageTimerCount = 0
+					studentData.userUsageTimerCountTotal = 0
 					//studentData.updateUsageActionCount(actionName: .launchApp)
-					studentData.updateLogs(title: .launchApp , content: "app is active")
+					if colorScheme == .light {
+						studentData.updateLogs(title: .launchApp , content: "app is active(light mode)")
+					} else {
+						studentData.updateLogs(title: .launchApp , content: "app is active(dark mode)")
+					}
 					Task {
 						await studentData.sendUserUsageActionCount(runNow: true)
 					}
@@ -135,14 +143,12 @@ struct HomeView: View {
 				print("[debug] HomeView, app is in the background")
 				downloadManager.appState = .background
 				studentData.userUsageTimerCount = -1
+				studentData.userUsageTimerCountTotal = 0
 				
-				if scorewindData.isPublicUserVersion {
-					if studentData.logVideoPlaybackTime.count > 0 {
-						studentData.updateLogs(title: .streamLessonVideo, content: "\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title)) (\(studentData.logVideoPlaybackTime.joined(separator: "->")))stop video")
-						studentData.logVideoPlaybackTime = []
-					}
-					
-					studentData.updateLogs(title: .exitApp, content: "to background")
+				if scorewindData.isPublicUserVersion && studentData.logVideoPlaybackTime.count > 0 {
+					//this part of the code will only work when app goes to background while the lesson video is playing
+					studentData.updateLogs(title: .streamLessonVideo, content: "\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title)) (\(studentData.logVideoPlaybackTime.joined(separator: "->")))stop video-exit app")
+					studentData.logVideoPlaybackTime = []
 					if studentData.getLogs().count > 0 {
 						Task {
 							await studentData.sendUserUsageActionCount(runNow: true)
@@ -238,7 +244,8 @@ func startUsageTracker(userStudentData: StudentData) {
 		timer.tolerance = 1
 		
 		print("[debug] HomeView-Track Action, Timer count \(userStudentData.userUsageTimerCount)")
-		if userStudentData.userUsageTimerCount == -1 || (userStudentData.userUsageTimerCount >= 1200 && userStudentData.getUserUsageActionTotalCount() == 0) {
+		print("[debug] HomeView-Track Action, Timer count total \(userStudentData.userUsageTimerCountTotal)")
+		if userStudentData.userUsageTimerCount == -1 || (userStudentData.userUsageTimerCountTotal >= 1200 && userStudentData.getUserUsageActionTotalCount() == 0) {
 			timer.invalidate()
 		} else {
 			Task {
@@ -246,6 +253,7 @@ func startUsageTracker(userStudentData: StudentData) {
 			}
 		}
 		userStudentData.userUsageTimerCount = userStudentData.userUsageTimerCount + 1
+		userStudentData.userUsageTimerCountTotal = userStudentData.userUsageTimerCountTotal + 1
 	}
 }
 

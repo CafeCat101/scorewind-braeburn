@@ -23,6 +23,7 @@ class StudentData: ObservableObject {
 	private var wizardDoYouKnowChoice:[String:Any] = [:]
 	private var wizardPlayableChoice:[String:Any] = [:]
 	var userUsageTimerCount = 0
+	var userUsageTimerCountTotal = 0
 	private var launchUUID:UUID?
 	var logVideoPlaybackTime:[String] = []
 	
@@ -457,10 +458,10 @@ class StudentData: ObservableObject {
 	
 	func sendUserUsageActionCount(runNow:Bool = false) async {
 		//print("[debug]StudentData-Track Action, totalUsageCount \(getUserUsageActionTotalCount())")
-		print("[debug]StudentData-Track Action, userUsageTimerCount \(userUsageTimerCount)")
+		print("[debug]StudentData-Track Action, userUsageTimerCount/total \(userUsageTimerCount)/\(userUsageTimerCountTotal)")
 		print("[debug]StudentData-Track Action, getLogsCount \(getLogsCount())")
 		//if userUsageTimerCount >= 120 || getUserUsageActionTotalCount() >= 5 {
-		if userUsageTimerCount >= 120 || getLogsCount() >= 5 || runNow {
+		if userUsageTimerCount >= 120 || getLogsCount() >= 5 || runNow || (userUsageTimerCountTotal<=20&&getLogsCount()>0) {
 			Task {
 				/* :::::::::::;>
 				var mySendJsonObject:sendJsonObject = sendJsonObject(ActionCounts: [])
