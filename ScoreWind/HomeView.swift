@@ -135,14 +135,20 @@ struct HomeView: View {
 			} else if newPhase == .background {
 				print("[debug] HomeView, app is in the background")
 				downloadManager.appState = .background
-				
-				if scorewindData.isPublicUserVersion && (studentData.logVideoPlaybackTime.count > 0) {
-					studentData.updateLogs(title: .streamLessonVideo, content: "\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title)) (\(studentData.logVideoPlaybackTime.joined(separator: "->")))exit app")
-					studentData.logVideoPlaybackTime = []
-				}
-				
+
 				if scorewindData.isPublicUserVersion {
 					studentData.userUsageTimerCount = -1
+					if studentData.logVideoPlaybackTime.count > 0 {
+						studentData.updateLogs(title: .streamLessonVideo, content: "\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title)) (\(studentData.logVideoPlaybackTime.joined(separator: "->")))exit app")
+						studentData.logVideoPlaybackTime = []
+					}
+					
+					studentData.updateLogs(title: .exitApp, content: "to background")
+					if studentData.getLogs().count > 0 {
+						Task {
+							await studentData.sendUserUsageActionCount(runNow: true)
+						}
+					}
 				}
 				
 				if (scorewindData.currentLesson.scorewindID > 0) && (scorewindData.lastPlaybackTime >= 10) {

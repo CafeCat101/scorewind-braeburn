@@ -460,7 +460,7 @@ class StudentData: ObservableObject {
 		print("[debug]StudentData-Track Action, userUsageTimerCount \(userUsageTimerCount)")
 		print("[debug]StudentData-Track Action, getLogsCount \(getLogsCount())")
 		//if userUsageTimerCount >= 120 || getUserUsageActionTotalCount() >= 5 {
-		if userUsageTimerCount >= 120 || getLogsCount() >= 6 {
+		if userUsageTimerCount >= 120 || getLogsCount() >= 5 || runNow {
 			Task {
 				/* :::::::::::;>
 				var mySendJsonObject:sendJsonObject = sendJsonObject(ActionCounts: [])
@@ -513,7 +513,7 @@ class StudentData: ObservableObject {
 		launchUUID = UUID()
 	}
 	
-	private func getLogs() -> [String] {
+	func getLogs() -> [String] {
 		let lastLogs = userDefaults.object(forKey: "eventLogs") as? [String] ?? []
 		return lastLogs
 	}
@@ -523,15 +523,20 @@ class StudentData: ObservableObject {
 		//uuid[datetime]: log content
 		//format of log content, scope is seperated by |
 		var theLogs = getLogs()
-		var newLog:String = launchUUID?.uuidString ?? ""
+		var newLog:[String] = [] //= launchUUID?.uuidString ?? ""
+		
+		newLog.append(launchUUID?.uuidString ?? "")
 		
 		let myTodayFormatter = DateFormatter()
 		myTodayFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
 		myTodayFormatter.timeZone = TimeZone(identifier: "UTC")
 		let nowString = myTodayFormatter.string(from: Date())
+		newLog.append(nowString)
 		
-		newLog = "\(newLog)[\(nowString)]: \(title)|\(content)"
-		theLogs.append(newLog)
+		newLog.append(title.rawValue)
+		newLog.append(content)
+		
+		theLogs.append(newLog.joined(separator: "|"))
 		userDefaults.set(theLogs, forKey: "eventLogs")
 	}
 	

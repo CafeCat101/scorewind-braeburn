@@ -9,6 +9,7 @@ import Foundation
 
 enum UsageActions: String, CaseIterable {
 	case launchApp = "launchApp"
+	case exitApp = "exitApp"
 	case selectJourney = "selectJourney"
 	case selectExplore = "selectExplore"
 	case selectAdvancing = "selectAdvancing"

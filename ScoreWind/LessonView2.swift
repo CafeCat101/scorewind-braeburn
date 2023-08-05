@@ -448,21 +448,22 @@ struct LessonView2: View {
 				print("[debug] LessonView, setupPlayer, catchTime:"+String(catchTime))
 				print("[debug] LessonView, setupPlayer, lastPlaybackTime:"+String(scorewindData.lastPlaybackTime))
 				
-				print("[debug] LessonView, setupPlayer, student.timerCount/self.timerCount:\(studentData.userUsageTimerCount):\(lastUserUsageTimerCount)")
-				if (studentData.userUsageTimerCount - lastUserUsageTimerCount) > 2 {
+				print("[debug] LessonView, setupPlayer, track student.timerCount/self.timerCount:\(studentData.userUsageTimerCount):\(lastUserUsageTimerCount)")
+				if (studentData.userUsageTimerCount - lastUserUsageTimerCount) > 1 {
 					studentData.logVideoPlaybackTime.append(String(format: "%.3f", Float(catchTime)))
 					lastUserUsageTimerCount = studentData.userUsageTimerCount
 					print("[debug] LessonView, setupPlayer, logVideoPlaybackTime \(studentData.logVideoPlaybackTime)")
+				} else {
+					if studentData.userUsageTimerCount <= 1 {
+						lastUserUsageTimerCount = studentData.userUsageTimerCount
+					}
 				}
 				if scorewindData.isPublicUserVersion {
-					if studentData.logVideoPlaybackTime.count >= 10 || (studentData.userUsageTimerCount>=60 && studentData.logVideoPlaybackTime.count>0) {
+					if studentData.logVideoPlaybackTime.count >= 4 || (studentData.userUsageTimerCount>=60 && studentData.logVideoPlaybackTime.count>0) {
 						//:: log the playback time either when finishing collecting 10 items or wait for the timeer count hits 60(user now may be pausing the video so this timer in PeriodicTimerObserver is on hold)
 						studentData.updateLogs(title: .streamLessonVideo, content: "\(scorewindData.replaceCommonHTMLNumber(htmlString: scorewindData.currentLesson.title)) (\(studentData.logVideoPlaybackTime.joined(separator: "->")))continue")
 						studentData.logVideoPlaybackTime = []
 					}
-				}
-				if (studentData.logVideoPlaybackTime.count >= 10 || studentData.userUsageTimerCount>=60) && scorewindData.isPublicUserVersion {
-					
 				}
 				
 				if showVideoLoader {
