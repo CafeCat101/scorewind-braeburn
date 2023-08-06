@@ -348,20 +348,92 @@ struct WizardResultView: View {
 								Text("The Music Program").font(.title2).bold()
 								Spacer()
 							}.padding(.bottom, 15)
-							Text("101 Courses")
-								.fontWeight(Font.Weight.bold)
-								.foregroundColor(Color("LightGray"))
-								.font(verticalSize == .regular ? .title3 : .subheadline)
-								.padding(EdgeInsets(top: 6, leading: 17, bottom: 6, trailing: 17))
-								.background(Color("CourseCategoryTag"))
-								.cornerRadius(20)
-								.padding(EdgeInsets(top: 3, leading: 5, bottom: 6, trailing: 2))
-							Text("Know your instrument.")
-								.font(.headline)
-								.padding([.bottom],18)
-								.padding([.leading],10)
+							VStack(alignment: .center) {
+								HStack {
+									Spacer()
+									Text("101 Courses")
+										.fontWeight(Font.Weight.heavy)
+										//.foregroundColor(Color("LightGray"))
+										//.foregroundColor(Color("CourseCategoryTag"))
+										.font(verticalSize == .regular ? .title2 : .subheadline)
+										//.padding(EdgeInsets(top: 6, leading: 10, bottom: 6, trailing: 17))
+										//.background(Color("CourseCategoryTag"))
+										//.cornerRadius(20)
+										.padding(EdgeInsets(top: 18, leading: 10, bottom: 6, trailing: 10))
+									Spacer()
+								}
+								Text("Know your instrument.")
+									.font(.headline)
+									.padding([.bottom],18)
+									.padding([.leading,.trailing],10)
+							}
+							.background(
+								RoundedRectangle(cornerRadius: CGFloat(17))
+									.foregroundColor(Color("Dynamic/MainBrown"))
+									.opacity(uiColor == .light ? 0.25 : 0.08)
+							)
 							
-							Text("102 Courses")
+							VStack(alignment: .center) {
+								HStack {
+									Spacer()
+									Text("102 Courses")
+										.fontWeight(Font.Weight.heavy)
+										.font(verticalSize == .regular ? .title2 : .subheadline)
+										.padding(EdgeInsets(top: 18, leading: 10, bottom: 6, trailing: 10))
+									Spacer()
+								}
+								Text("Make sounds and learn how to read notes.")
+									.font(.headline)
+									.padding([.bottom],18)
+									.padding([.leading,.trailing],10)
+							}
+							.background(
+								RoundedRectangle(cornerRadius: CGFloat(17))
+									.foregroundColor(Color("Dynamic/MainBrown"))
+									.opacity(uiColor == .light ? 0.25 : 0.08)
+							)
+							
+							VStack(alignment: .center) {
+								HStack {
+									Spacer()
+									Text("103 Courses")
+										.fontWeight(Font.Weight.heavy)
+										.font(verticalSize == .regular ? .title2 : .subheadline)
+										.padding(EdgeInsets(top: 18, leading: 10, bottom: 6, trailing: 10))
+									Spacer()
+								}
+								Text("Play simple melodies. Learn new notes while playing.")
+									.font(.headline)
+									.padding([.bottom],18)
+									.padding([.leading,.trailing],10)
+							}
+							.background(
+								RoundedRectangle(cornerRadius: CGFloat(17))
+									.foregroundColor(Color("Dynamic/MainBrown"))
+									.opacity(uiColor == .light ? 0.25 : 0.08)
+							)
+							
+							VStack(alignment: .center) {
+								HStack {
+									Spacer()
+									Text("104 Courses and more")
+										.fontWeight(Font.Weight.heavy)
+										.font(verticalSize == .regular ? .title2 : .subheadline)
+										.padding(EdgeInsets(top: 18, leading: 10, bottom: 6, trailing: 10))
+									Spacer()
+								}
+								Text("Develop your techniques and play more music.")
+									.font(.headline)
+									.padding([.bottom],18)
+									.padding([.leading,.trailing],10)
+							}
+							.background(
+								RoundedRectangle(cornerRadius: CGFloat(17))
+									.foregroundColor(Color("Dynamic/MainBrown"))
+									.opacity(uiColor == .light ? 0.25 : 0.08)
+							)
+							
+							/*Text("102 Courses")
 								.fontWeight(Font.Weight.bold)
 								.foregroundColor(Color("LightGray"))
 								.font(verticalSize == .regular ? .title3 : .subheadline)
@@ -371,9 +443,9 @@ struct WizardResultView: View {
 								.padding(EdgeInsets(top: 3, leading: 5, bottom: 6, trailing: 2))
 							Text("Make sounds and explore notations.")
 								.font(.headline)
-								.padding([.bottom],18).padding([.leading],10)
+								.padding([.bottom],18).padding([.leading],10)*/
 							
-							Text("103 Courses")
+							/*Text("103 Courses")
 								.fontWeight(Font.Weight.bold)
 								.foregroundColor(Color("LightGray"))
 								.font(verticalSize == .regular ? .title3 : .subheadline)
@@ -383,9 +455,9 @@ struct WizardResultView: View {
 								.padding(EdgeInsets(top: 3, leading: 5, bottom: 6, trailing: 2))
 							Text("Play simple melodies. Learn notations while playing.")
 								.font(.headline)
-								.padding([.bottom],18).padding([.leading],10)
+								.padding([.bottom],18).padding([.leading],10)*/
 							
-							Text("104 Courses and more")
+							/*Text("104 Courses and more")
 								.fontWeight(Font.Weight.bold)
 								.foregroundColor(Color("LightGray"))
 								.font(verticalSize == .regular ? .title3 : .subheadline)
@@ -395,7 +467,7 @@ struct WizardResultView: View {
 								.padding(EdgeInsets(top: 3, leading: 5, bottom: 6, trailing: 2))
 							Text("Advance your techniques and get more practices.")
 								.font(.headline)
-								.padding([.bottom],18).padding([.leading],10)
+								.padding([.bottom],18).padding([.leading],10)*/
 						}
 						
 						Divider().padding(.bottom, 20)
@@ -405,7 +477,7 @@ struct WizardResultView: View {
 						Text("You can revisit your current learning path here whenever you like.").padding(.bottom, 15)*/
 					}
 					.foregroundColor(Color("MainBrown+6"))
-					.padding(EdgeInsets(top: 18, leading: 40, bottom: 18, trailing: 40))
+					.padding(EdgeInsets(top: 18, leading: 20, bottom: 18, trailing: 20))
 				}
 			}
 			.background(

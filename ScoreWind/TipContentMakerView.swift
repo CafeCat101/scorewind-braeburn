@@ -20,7 +20,7 @@ struct TipContentMakerView: View {
 			Spacer()
 			//tip content ==>
 			if verticalSize == .regular {
-				tipMainContent.frame(height: UIScreen.main.bounds.height*0.6)
+				tipMainContent.frame(height: UIScreen.main.bounds.height*0.70)
 			} else {
 				tipMainContent
 			}
