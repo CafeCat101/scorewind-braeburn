@@ -8,9 +8,12 @@
 import SwiftUI
 
 struct AbouSupportView: View {
+	@EnvironmentObject var scorewindData:ScorewindData
 	@Environment(\.verticalSizeClass) var verticalSize
 	@Binding var showSupportAbout:Bool
 	@Environment(\.colorScheme) var colorScheme
+	@ObservedObject var studentData:StudentData
+	@State private var switchToInternalUser = false
 	
 	var body: some View {
 		VStack {
@@ -47,6 +50,12 @@ struct AbouSupportView: View {
 						.foregroundColor(Color("Dynamic/MainBrown+6"))
 						.fontWeight(Font.Weight.bold)
 						.multilineTextAlignment(.center)
+						.onTapGesture(count: 5, perform: {
+							scorewindData.isPublicUserVersion = false
+							studentData.userUsageTimerCount = -1
+							studentData.userUsageTimerCountTotal = 0
+							switchToInternalUser = true
+						})
 					
 					VStack(alignment:.center) {
 						Text(getVersionNumber())
@@ -157,6 +166,13 @@ struct AbouSupportView: View {
 					}
 					Spacer()
 				}
+				.alert("Hello! Internal user!", isPresented: $switchToInternalUser, actions: {
+					Button("ok", action:{
+						switchToInternalUser = false
+					})
+				}, message: {
+					Text("The App is in INTERNAL USER mode now. \n\nTo switch back to PUBLIC USER mode, you'll need to close the app(not just into background) and reopen it again.")
+				})
 			}
 
 		}
@@ -224,10 +240,10 @@ struct AbouSupportView: View {
 struct AbouSupportView_Previews: PreviewProvider {
 	static var previews: some View {
 		Group {
-			AbouSupportView(showSupportAbout: .constant(false))
+			AbouSupportView(showSupportAbout: .constant(false), studentData: StudentData())
 				.environment(\.colorScheme, .light)
 				.previewDisplayName("Light Portrait")
-			AbouSupportView(showSupportAbout: .constant(false))
+			AbouSupportView(showSupportAbout: .constant(false), studentData: StudentData())
 				.environment(\.colorScheme, .dark)
 				.previewDisplayName("Dark Portrait")
 		}

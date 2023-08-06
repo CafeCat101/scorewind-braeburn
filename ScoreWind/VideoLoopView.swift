@@ -32,5 +32,6 @@ struct VideoLoopView: View {
 			.onDisappear(perform: {
 				videoPlayer = nil
 			})
+			.overlay(Circle().fill(Color.black).opacity(0.05))
 	}
 }

@@ -88,7 +88,6 @@
 		C8A651F62A6E8765009A3500 /* UsageActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A651F52A6E8765009A3500 /* UsageActions.swift */; };
 		C8A651F82A7636D0009A3500 /* CourseTipContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A651F72A7636D0009A3500 /* CourseTipContent.swift */; };
 		C8A651FB2A76901E009A3500 /* DIY_Notestannd_HD.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = C8A651FA2A76901E009A3500 /* DIY_Notestannd_HD.mp4 */; };
-		C8A651FF2A76DDB9009A3500 /* VideoClipLoopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A651FE2A76DDB9009A3500 /* VideoClipLoopView.swift */; };
 		C8A652022A76E3F7009A3500 /* Ricardo_Notestand_TapA_UltraHD.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = C8A652002A76E3F7009A3500 /* Ricardo_Notestand_TapA_UltraHD.mp4 */; };
 		C8A652032A76E3F7009A3500 /* Esin_Notestand_TapA_UltraHD.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = C8A652012A76E3F7009A3500 /* Esin_Notestand_TapA_UltraHD.mp4 */; };
 		C8A652062A77829B009A3500 /* Esin_Headset_UltraHD.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = C8A652042A77829B009A3500 /* Esin_Headset_UltraHD.mp4 */; };
@@ -207,7 +206,6 @@
 		C8A651F52A6E8765009A3500 /* UsageActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageActions.swift; sourceTree = "<group>"; };
 		C8A651F72A7636D0009A3500 /* CourseTipContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseTipContent.swift; sourceTree = "<group>"; };
 		C8A651FA2A76901E009A3500 /* DIY_Notestannd_HD.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = DIY_Notestannd_HD.mp4; sourceTree = "<group>"; };
-		C8A651FE2A76DDB9009A3500 /* VideoClipLoopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoClipLoopView.swift; sourceTree = "<group>"; };
 		C8A652002A76E3F7009A3500 /* Ricardo_Notestand_TapA_UltraHD.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ricardo_Notestand_TapA_UltraHD.mp4; sourceTree = "<group>"; };
 		C8A652012A76E3F7009A3500 /* Esin_Notestand_TapA_UltraHD.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Esin_Notestand_TapA_UltraHD.mp4; sourceTree = "<group>"; };
 		C8A652042A77829B009A3500 /* Esin_Headset_UltraHD.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Esin_Headset_UltraHD.mp4; sourceTree = "<group>"; };
@@ -345,7 +343,6 @@
 				C897D4C729AEEF6B00A21603 /* Styles */,
 				C85F2798286F5A4E00D0A4E5 /* Types */,
 				C8A651F72A7636D0009A3500 /* CourseTipContent.swift */,
-				C8A651FE2A76DDB9009A3500 /* VideoClipLoopView.swift */,
 				C8A6520A2A77F68F009A3500 /* VideoLoopView.swift */,
 			);
 			path = ScoreWind;
@@ -676,7 +673,6 @@
 				C8A651F42A66DF69009A3500 /* CouponState.swift in Sources */,
 				C85F277E286F4F2E00D0A4E5 /* LessonSheetView.swift in Sources */,
 				C878275E28F1A04E0007DDC1 /* WizardTeacherView.swift in Sources */,
-				C8A651FF2A76DDB9009A3500 /* VideoClipLoopView.swift in Sources */,
 				C85F2796286F59BC00D0A4E5 /* InstrumentType.swift in Sources */,
 				C86F8822299B8A560072504E /* StoreView.swift in Sources */,
 				C897D4C929AEEF9C00A21603 /* RoundedCornerShape.swift in Sources */,
@@ -893,7 +889,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = ScoreWind/ScoreWind.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.11.2;
+				CURRENT_PROJECT_VERSION = 3.11.4;
 				DEVELOPMENT_ASSET_PATHS = "\"ScoreWind/Preview Content\"";
 				DEVELOPMENT_TEAM = 23BXR5AUUB;
 				ENABLE_PREVIEWS = YES;
@@ -911,7 +907,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.elosoft.ScoreWind;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -932,7 +928,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = ScoreWind/ScoreWind.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.11.2;
+				CURRENT_PROJECT_VERSION = 3.11.4;
 				DEVELOPMENT_ASSET_PATHS = "\"ScoreWind/Preview Content\"";
 				DEVELOPMENT_TEAM = 23BXR5AUUB;
 				ENABLE_PREVIEWS = YES;
@@ -950,7 +946,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.elosoft.ScoreWind;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

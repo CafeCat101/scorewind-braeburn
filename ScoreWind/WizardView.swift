@@ -176,7 +176,7 @@ struct WizardView: View {
 		.alert("All the tips will be shown again now.", isPresented: $showRevealAllTipsAlert, actions:{})
 		//.alert("ScoreWind\n\n\(getVersionNumber())", isPresented: $showAboutScorewindAlert,actions:{})
 		.fullScreenCover(isPresented: $showAboutScorewindAlert, content: {
-			AbouSupportView(showSupportAbout: $showAboutScorewindAlert)
+			AbouSupportView(showSupportAbout: $showAboutScorewindAlert, studentData: studentData)
 		})
 		.sheet(isPresented: $showStore, content: {
 			StoreView(showStore: $showStore, studentData: studentData)
