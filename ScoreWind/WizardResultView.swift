@@ -250,6 +250,14 @@ struct WizardResultView: View {
 			} else {
 				showStepTip = true
 			}*/
+		} else {
+			if (store.enablePurchase == false || store.couponState == .valid || store.offerIntroduction == false) == false {
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+					withAnimation(Animation.spring(response: 0.15, dampingFraction: 0.4, blendDuration: 0.4).speed(0.3)) {
+						showSubscriptionNotice = true
+					}
+				}
+			}
 		}
 	}
 	
@@ -332,14 +340,42 @@ struct WizardResultView: View {
 						
 						Divider().padding(.bottom, 20)
 						HStack {
-							Image(systemName: "magnifyingglass")
+							Spacer()
+							Text("Navigate the Path").font(.title2).bold()
+							Spacer()
+						}.padding(.bottom, 15)
+						/*HStack {
+							/*Image(systemName: "magnifyingglass")
 								.resizable()
 								.scaledToFit()
-								.frame(width:60)
+								.frame(width:60)*/
+							Label("Finder", systemImage: "magnifyingglass")
+								.labelStyle(.iconOnly)
+								.font(.title)
 							Spacer()
 							Text("To find a new Learning Path.").font(.title2).bold().multilineTextAlignment(.center)
 							Spacer()
-						}.padding(.bottom, 15)
+						}.padding(.bottom, 15)*/
+						HStack {
+							Label("Finder", systemImage: "magnifyingglass")
+								.labelStyle(.iconOnly)
+								.font(.title)
+							Text("Find a New Learning Path")
+							.font(.headline)
+						}.padding(.bottom, 8)
+						HStack {
+							Label(title: {Text("")}, icon: {
+								Image("resultFound")
+									.resizable()
+									.scaledToFit()
+									.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+									.frame(maxHeight: 32)
+							})
+								.labelStyle(.iconOnly)
+								.font(.title)
+							Text("The Lesson to Start Based on Your Feedbacks")
+							.font(.headline)
+						}.padding(.bottom, 8)
 						
 						Group {
 							Divider().padding(.bottom, 20)

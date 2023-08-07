@@ -124,6 +124,13 @@ struct LessonTipContent: View {
 						.font(.headline)
 					}.padding(.bottom, 8)
 					HStack {
+						Label("Note size", systemImage: "music.note")//music.note.house.fill
+							.labelStyle(.iconOnly)
+							.font(.title)
+						Text("Change the Note Size in the Score")
+						.font(.headline)
+					}.padding(.bottom, 8)
+					HStack {
 						Label("Complete", systemImage: "checkmark.circle")//music.note.house.fill
 							.labelStyle(.iconOnly)
 							.font(.title)

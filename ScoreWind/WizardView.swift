@@ -57,12 +57,37 @@ struct WizardView: View {
 							showStore = true
 						}
 				}*/
-				Label("Subscription", systemImage: getSubscriptionMenuIcon())
+				/*Label("WizPack", systemImage: getSubscriptionMenuIcon())
 					.font(.title3)
 					.labelStyle(.iconOnly)
 					.foregroundColor(Color("AppBlackDynamic"))
 					.padding(.bottom,5)
 					.padding(.trailing, 15)
+					.onTapGesture {
+						showStore = true
+					}*/
+				Label(title:{
+					Text("WizPack")
+						.font(.caption)
+				}, icon: {
+					Image(systemName: getSubscriptionMenuIcon())
+				})
+					.frame(maxHeight:20)
+					.labelStyle(.titleAndIcon)
+					.padding(EdgeInsets(top: 4, leading: 15, bottom: 4, trailing: 15))
+					.foregroundColor(Color("Dynamic/MainBrown+6"))
+					.background(
+						RoundedRectangle(cornerRadius: CGFloat(17))
+							.foregroundColor(Color("Dynamic/MainBrown"))
+							.shadow(color: Color("Dynamic/Shadow"),radius: CGFloat(5))
+							.opacity(0.25)
+							.overlay {
+								RoundedRectangle(cornerRadius: 17)
+									.stroke(Color("Dynamic/DarkGray"), lineWidth: 1)
+							}
+					)
+					.padding([.bottom],4)
+					.padding([.trailing],4)
 					.onTapGesture {
 						showStore = true
 					}
