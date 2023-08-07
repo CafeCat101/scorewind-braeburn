@@ -84,6 +84,8 @@
 		C897D4C629A76BC700A21603 /* StatusInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C897D4C529A76BC700A21603 /* StatusInfoView.swift */; };
 		C897D4C929AEEF9C00A21603 /* RoundedCornerShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = C897D4C829AEEF9C00A21603 /* RoundedCornerShape.swift */; };
 		C897D4CB29B03F2F00A21603 /* Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C897D4CA29B03F2F00A21603 /* Carousel.swift */; };
+		C8A387A42A80D4C40092B277 /* LessonTipContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A387A32A80D4C40092B277 /* LessonTipContent.swift */; };
+		C8A387A62A80E0BD0092B277 /* alpha-phone-rotation.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = C8A387A52A80E0BD0092B277 /* alpha-phone-rotation.mp4 */; };
 		C8A651F42A66DF69009A3500 /* CouponState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A651F32A66DF69009A3500 /* CouponState.swift */; };
 		C8A651F62A6E8765009A3500 /* UsageActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A651F52A6E8765009A3500 /* UsageActions.swift */; };
 		C8A651F82A7636D0009A3500 /* CourseTipContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A651F72A7636D0009A3500 /* CourseTipContent.swift */; };
@@ -202,6 +204,8 @@
 		C897D4C529A76BC700A21603 /* StatusInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusInfoView.swift; sourceTree = "<group>"; };
 		C897D4C829AEEF9C00A21603 /* RoundedCornerShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCornerShape.swift; sourceTree = "<group>"; };
 		C897D4CA29B03F2F00A21603 /* Carousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Carousel.swift; sourceTree = "<group>"; };
+		C8A387A32A80D4C40092B277 /* LessonTipContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonTipContent.swift; sourceTree = "<group>"; };
+		C8A387A52A80E0BD0092B277 /* alpha-phone-rotation.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "alpha-phone-rotation.mp4"; sourceTree = "<group>"; };
 		C8A651F32A66DF69009A3500 /* CouponState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CouponState.swift; sourceTree = "<group>"; };
 		C8A651F52A6E8765009A3500 /* UsageActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageActions.swift; sourceTree = "<group>"; };
 		C8A651F72A7636D0009A3500 /* CourseTipContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseTipContent.swift; sourceTree = "<group>"; };
@@ -344,6 +348,7 @@
 				C85F2798286F5A4E00D0A4E5 /* Types */,
 				C8A651F72A7636D0009A3500 /* CourseTipContent.swift */,
 				C8A6520A2A77F68F009A3500 /* VideoLoopView.swift */,
+				C8A387A32A80D4C40092B277 /* LessonTipContent.swift */,
 			);
 			path = ScoreWind;
 			sourceTree = "<group>";
@@ -428,6 +433,7 @@
 		C8A651F92A768FDB009A3500 /* materials */ = {
 			isa = PBXGroup;
 			children = (
+				C8A387A52A80E0BD0092B277 /* alpha-phone-rotation.mp4 */,
 				C8A6520C2A7828DE009A3500 /* Esin_Violin_Full_Body_UltraHD.mp4 */,
 				C8A6520D2A7828DE009A3500 /* Ricardo_Guitar_Full_Body_HD.mp4 */,
 				C8A652002A76E3F7009A3500 /* Ricardo_Notestand_TapA_UltraHD.mp4 */,
@@ -557,6 +563,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C8A652022A76E3F7009A3500 /* Ricardo_Notestand_TapA_UltraHD.mp4 in Resources */,
+				C8A387A62A80E0BD0092B277 /* alpha-phone-rotation.mp4 in Resources */,
 				C86F881C299A3F390072504E /* Products.storekit in Resources */,
 				C8A652092A778A22009A3500 /* Ricardo_Headset_UltraHD_720.mp4 in Resources */,
 				C85F275B286F4EF900D0A4E5 /* www in Resources */,
@@ -668,6 +675,7 @@
 				C8782773290586590007DDC1 /* WizardExperienceView.swift in Sources */,
 				C87CF1242978365400CDA215 /* BackgroundTransparentView.swift in Sources */,
 				C85F2779286F4F2E00D0A4E5 /* WebView.swift in Sources */,
+				C8A387A42A80D4C40092B277 /* LessonTipContent.swift in Sources */,
 				C85F2782286F4F2E00D0A4E5 /* LessonView.swift in Sources */,
 				C8285E3F2A289A7400D4D917 /* AbouSupportView.swift in Sources */,
 				C8A651F42A66DF69009A3500 /* CouponState.swift in Sources */,
