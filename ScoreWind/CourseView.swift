@@ -354,7 +354,7 @@ struct CourseView: View {
 						//(Text("Click ")+Text(Image(systemName: "doc.plaintext"))+Text(" to learn what this course is about in details. ")+Text(Image(systemName: "suit.heart"))+Text(" Mark this course as your favorite for revisiting in the future. ")+Text(Image(systemName: "arrow.down.circle"))+Text(" Download the course videos for your offline moments.")).padding(.bottom,15)
 					}
 					.foregroundColor(Color("MainBrown+6"))
-					.padding(EdgeInsets(top: 18, leading: 40, bottom: 18, trailing: 40))
+					.padding(EdgeInsets(top: 18, leading: 20, bottom: 18, trailing: 20))
 				}
 			}
 			.background(
