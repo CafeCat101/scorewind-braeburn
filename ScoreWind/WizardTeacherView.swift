@@ -335,6 +335,7 @@ struct WizardTeacherView: View {
 		}
 		
 		userDefaults.removeObject(forKey: "eventLogs")
+		userDefaults.removeObject(forKey: "showSubscriptionNotice")
 		
 		//studentData.updateMyCourses(allCourses: scorewindData.allCourses)
 		//studentData.updateMyCoursesDownloadStatus(allCourses: scorewindData.allCourses, downloadManager: downloadManager)

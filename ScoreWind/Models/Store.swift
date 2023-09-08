@@ -40,6 +40,7 @@ class Store: ObservableObject {
 	@Published var couponState:CouponState = .notActivated
 	@Published var lastCouponError:String = ""
 	@Published var lastCouponErrorCode:Int = 0
+	private var userDefaults = UserDefaults.standard
 
 	init() {
 		//Initialize empty products, and then do a product request asynchronously to fill them in.
@@ -374,6 +375,21 @@ class Store: ObservableObject {
 		let CouponIsValid: Bool
 		let Error: String
 		let ErrorCode: Int
+	}
+	
+	func validateSubscriptionNoticeCount() -> Bool {
+		var getNoticeCount = userDefaults.object(forKey: "showSubscriptionNotice") as? Int ?? 1
+		if getNoticeCount <= 2 {
+			getNoticeCount = getNoticeCount + 1
+			userDefaults.set(getNoticeCount, forKey: "showSubscriptionNotice")
+			return true
+		} else {
+			return false
+		}
+	}
+	
+	func resetSubscriptionNoticeCount() {
+		userDefaults.set(1, forKey: "showSubscriptionNotice")
 	}
 }
 

@@ -404,9 +404,9 @@ struct StoreView: View {
 	private func viewPayWallLogContent() -> String {
 		var content = ""
 		if store.offerIntroduction {
-			content = "introduction offer:no"
-		} else {
 			content = "introduction offer:yes"
+		} else {
+			content = "introduction offer:no"
 		}
 		
 		if store.couponState == .valid {

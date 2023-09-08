@@ -137,6 +137,8 @@ struct HomeView: View {
 					startUsageTracker(userStudentData: studentData)
 				}
 				
+				store.resetSubscriptionNoticeCount()
+				
 			} else if newPhase == .inactive {
 				print("[debug] HomeView, appp is inactive")
 			} else if newPhase == .background {

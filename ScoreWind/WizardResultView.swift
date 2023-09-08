@@ -102,7 +102,9 @@ struct WizardResultView: View {
 					if (store.enablePurchase == false || store.couponState == .valid || store.offerIntroduction == false) == false {
 						DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
 							withAnimation(Animation.spring(response: 0.15, dampingFraction: 0.4, blendDuration: 0.4).speed(0.3)) {
-								showSubscriptionNotice = true
+								if showSubscriptionNotice == false && store.validateSubscriptionNoticeCount() {
+									showSubscriptionNotice = true
+								}
 							}
 						}
 					}
@@ -213,7 +215,7 @@ struct WizardResultView: View {
 					.foregroundColor(.black)
 					.opacity(0.90)
 			)
-			.offset(y: showSubscriptionNotice ? 10 : -350)
+			.offset(y: showSubscriptionNotice ? 10 : -400)
 		})
 	}
 	
@@ -252,9 +254,11 @@ struct WizardResultView: View {
 			}*/
 		} else {
 			if (store.enablePurchase == false || store.couponState == .valid || store.offerIntroduction == false) == false {
-				DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+				DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
 					withAnimation(Animation.spring(response: 0.15, dampingFraction: 0.4, blendDuration: 0.4).speed(0.3)) {
-						showSubscriptionNotice = true
+						if showSubscriptionNotice == false && store.validateSubscriptionNoticeCount() {
+							showSubscriptionNotice = true
+						}
 					}
 				}
 			}
