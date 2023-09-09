@@ -470,7 +470,7 @@ class StudentData: ObservableObject {
 					mySendJsonObject.ActionCounts.append(sendActionCountObject(ActionName: usageAction.rawValue, Count: getActionCount))
 				}
 				 < :::::::::::::*/
-				var mySendJsonObject:sendLogObjects = sendLogObjects(Logs: [])
+				var mySendJsonObject:sendLogObjects = sendLogObjects(InstallID:getInstallID(), Logs: [])
 				mySendJsonObject.Logs = getLogs()
 				print("[debug]StudentData-Track Action, mySendJsonObject \(mySendJsonObject)")
 				userUsageTimerCount = 0
@@ -536,17 +536,17 @@ class StudentData: ObservableObject {
 			setLaunchUUID()
 			setSessionID = launchUUID?.uuidString ?? ""
 		}
-		newLog.append(getInstallID()) //0
-		newLog.append(setSessionID) //1
+		//newLog.append(getInstallID()) //0
+		newLog.append(setSessionID) //0
 		
 		let myTodayFormatter = DateFormatter()
 		myTodayFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
 		myTodayFormatter.timeZone = TimeZone(identifier: "UTC")
 		let nowString = myTodayFormatter.string(from: Date())
-		newLog.append(nowString) //2
+		newLog.append(nowString) //1
 		
-		newLog.append(title.rawValue) //3
-		newLog.append(content) //4
+		newLog.append(title.rawValue) //2
+		newLog.append(content) //3
 		
 		theLogs.append(newLog.joined(separator: "|"))
 		userDefaults.set(theLogs, forKey: "eventLogs")
@@ -562,6 +562,7 @@ class StudentData: ObservableObject {
 	}
 	
 	struct sendLogObjects: Encodable {
+		var InstallID:String
 		var Logs:[String]
 	}
 
