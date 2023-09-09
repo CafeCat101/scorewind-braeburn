@@ -484,7 +484,7 @@ class StudentData: ObservableObject {
 				do {
 					let payload = try JSONEncoder().encode(mySendJsonObject)
 					//guard let url = URL(string: "https://music.scorewind.com/mobileapp_update_usage_action_count.php") else { fatalError("Missing URL") }
-					guard let url = URL(string: "https://music.scorewind.com/mobileapp_iOS_event_log.php") else { fatalError("Missing URL") }
+					guard let url = URL(string: "https://music.scorewind.com/test_mobileapp_iOS_event_log.php") else { fatalError("Missing URL") }
 					var urlRequest = URLRequest(url: url)
 					urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 					urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -536,16 +536,17 @@ class StudentData: ObservableObject {
 			setLaunchUUID()
 			setSessionID = launchUUID?.uuidString ?? ""
 		}
-		newLog.append(setSessionID)
+		newLog.append(getInstallID()) //0
+		newLog.append(setSessionID) //1
 		
 		let myTodayFormatter = DateFormatter()
 		myTodayFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
 		myTodayFormatter.timeZone = TimeZone(identifier: "UTC")
 		let nowString = myTodayFormatter.string(from: Date())
-		newLog.append(nowString)
+		newLog.append(nowString) //2
 		
-		newLog.append(title.rawValue)
-		newLog.append(content)
+		newLog.append(title.rawValue) //3
+		newLog.append(content) //4
 		
 		theLogs.append(newLog.joined(separator: "|"))
 		userDefaults.set(theLogs, forKey: "eventLogs")
@@ -568,6 +569,16 @@ class StudentData: ObservableObject {
 		let Success: Bool
 		let Error: String
 		let ErrorCode: Int
+	}
+	
+	func getInstallID() -> String {
+		let userLaunchID = userDefaults.object(forKey: "installID") as? String ?? ""
+		return userLaunchID
+	}
+	
+	func setInstallID() {
+		var newInstallID = UUID().uuidString ?? ""
+		userDefaults.set(newInstallID, forKey: "installID")
 	}
 	
 }

@@ -123,6 +123,12 @@ struct HomeView: View {
 				downloadManager.appState = .active
 				
 				if scorewindData.isPublicUserVersion {
+					studentData.setLaunchUUID()
+					
+					if studentData.getInstallID().isEmpty {
+						studentData.setInstallID()
+					}
+					
 					studentData.userUsageTimerCount = 0
 					studentData.userUsageTimerCountTotal = 0
 					//studentData.updateUsageActionCount(actionName: .launchApp)
