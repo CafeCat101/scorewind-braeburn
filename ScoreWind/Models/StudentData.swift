@@ -470,8 +470,9 @@ class StudentData: ObservableObject {
 					mySendJsonObject.ActionCounts.append(sendActionCountObject(ActionName: usageAction.rawValue, Count: getActionCount))
 				}
 				 < :::::::::::::*/
-				var mySendJsonObject:sendLogObjects = sendLogObjects(InstallID:getInstallID(), Logs: [])
+				var mySendJsonObject:sendLogObjects = sendLogObjects(InstallID:getInstallID(), Logs: [], Locale: "")
 				mySendJsonObject.Logs = getLogs()
+				mySendJsonObject.Locale = Locale.current.description
 				print("[debug]StudentData-Track Action, mySendJsonObject \(mySendJsonObject)")
 				userUsageTimerCount = 0
 				/* :::::::::::;>
@@ -564,6 +565,7 @@ class StudentData: ObservableObject {
 	struct sendLogObjects: Encodable {
 		var InstallID:String
 		var Logs:[String]
+		var Locale: String
 	}
 
 	struct responseInfo: Decodable {
