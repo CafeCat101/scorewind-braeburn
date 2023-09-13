@@ -10,6 +10,8 @@
 		920D483E5E05884202824DE3 /* Pods_ScoreWind.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3441470A2546CDD3AD7E6C9 /* Pods_ScoreWind.framework */; };
 		B54FC1429AC896AD280E77F4 /* Pods_ScoreWindTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87352E67846310649E0B1D07 /* Pods_ScoreWindTests.framework */; };
 		C810183929D2FB7400B54AFD /* DownloadSpinnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C810183829D2FB7400B54AFD /* DownloadSpinnerView.swift */; };
+		C818C65D2AB1737E0030C5BD /* LearningPathView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = C818C65C2AB1737E0030C5BD /* LearningPathView2.swift */; };
+		C81ABFF02AAE39360057768A /* LearningPathView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C81ABFEF2AAE39360057768A /* LearningPathView.swift */; };
 		C821817F29BEC68800F8180E /* Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C821817E29BEC68800F8180E /* Orientation.swift */; };
 		C8285E3D2A25033600D4D917 /* BuyButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8285E3C2A25033600D4D917 /* BuyButtonView.swift */; };
 		C8285E3F2A289A7400D4D917 /* AbouSupportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8285E3E2A289A7400D4D917 /* AbouSupportView.swift */; };
@@ -125,6 +127,8 @@
 		5019C0DCB3C67F469026BFEA /* Pods-ScoreWind.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScoreWind.debug.xcconfig"; path = "Target Support Files/Pods-ScoreWind/Pods-ScoreWind.debug.xcconfig"; sourceTree = "<group>"; };
 		87352E67846310649E0B1D07 /* Pods_ScoreWindTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScoreWindTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C810183829D2FB7400B54AFD /* DownloadSpinnerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadSpinnerView.swift; sourceTree = "<group>"; };
+		C818C65C2AB1737E0030C5BD /* LearningPathView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningPathView2.swift; sourceTree = "<group>"; };
+		C81ABFEF2AAE39360057768A /* LearningPathView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningPathView.swift; sourceTree = "<group>"; };
 		C821817E29BEC68800F8180E /* Orientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Orientation.swift; sourceTree = "<group>"; };
 		C8285E3C2A25033600D4D917 /* BuyButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyButtonView.swift; sourceTree = "<group>"; };
 		C8285E3E2A289A7400D4D917 /* AbouSupportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbouSupportView.swift; sourceTree = "<group>"; };
@@ -349,6 +353,8 @@
 				C8A651F72A7636D0009A3500 /* CourseTipContent.swift */,
 				C8A6520A2A77F68F009A3500 /* VideoLoopView.swift */,
 				C8A387A32A80D4C40092B277 /* LessonTipContent.swift */,
+				C81ABFEF2AAE39360057768A /* LearningPathView.swift */,
+				C818C65C2AB1737E0030C5BD /* LearningPathView2.swift */,
 			);
 			path = ScoreWind;
 			sourceTree = "<group>";
@@ -686,6 +692,7 @@
 				C897D4C929AEEF9C00A21603 /* RoundedCornerShape.swift in Sources */,
 				C897D4C629A76BC700A21603 /* StatusInfoView.swift in Sources */,
 				C85F277F286F4F2E00D0A4E5 /* LessonTextView.swift in Sources */,
+				C81ABFF02AAE39360057768A /* LearningPathView.swift in Sources */,
 				C8CA57A42936F8D90097AE07 /* WizardPicked.swift in Sources */,
 				C878276C29044C790007DDC1 /* ListInCourse.swift in Sources */,
 				C85F2785286F4F2E00D0A4E5 /* WizardView.swift in Sources */,
@@ -701,6 +708,7 @@
 				C868CA09298BB64B00724D2D /* LessonView2.swift in Sources */,
 				C85F2774286F4F2E00D0A4E5 /* MyCoursesView.swift in Sources */,
 				C85F277A286F4F2E00D0A4E5 /* ScorewindCourse.swift in Sources */,
+				C818C65D2AB1737E0030C5BD /* LearningPathView2.swift in Sources */,
 				C85F272A286F4C2B00D0A4E5 /* ScoreWindApp.swift in Sources */,
 				C897D4CB29B03F2F00A21603 /* Carousel.swift in Sources */,
 				C86F8824299DF34A0072504E /* BuyItemView.swift in Sources */,

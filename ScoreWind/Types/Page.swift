@@ -18,4 +18,6 @@ enum Page:String {
 	case wizardDoYouKnow = "wizardDoYouKnow"
 	case wizardPlayable = "wizardPlayable"
 	case wizardResult = "wizardResult"
+	case learningPath = "learningPath"
+	case learningPath2 = "learningPath2"
 }

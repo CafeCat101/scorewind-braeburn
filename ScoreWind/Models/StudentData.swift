@@ -485,7 +485,7 @@ class StudentData: ObservableObject {
 				do {
 					let payload = try JSONEncoder().encode(mySendJsonObject)
 					//guard let url = URL(string: "https://music.scorewind.com/mobileapp_update_usage_action_count.php") else { fatalError("Missing URL") }
-					guard let url = URL(string: "https://music.scorewind.com/test_mobileapp_iOS_event_log.php") else { fatalError("Missing URL") }
+					guard let url = URL(string: "https://music.scorewind.com/mobileapp_iOS_event_log.php") else { fatalError("Missing URL") }
 					var urlRequest = URLRequest(url: url)
 					urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 					urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -580,7 +580,7 @@ class StudentData: ObservableObject {
 	}
 	
 	func setInstallID() {
-		var newInstallID = UUID().uuidString ?? ""
+		let newInstallID = UUID().uuidString
 		userDefaults.set(newInstallID, forKey: "installID")
 	}
 	

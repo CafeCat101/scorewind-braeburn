@@ -119,6 +119,18 @@ struct WizardView: View {
 						})
 					}
 					
+					Button(action: {
+						stepName = .learningPath
+					}, label: {
+						Text("Test LearningPath View")
+					})
+					
+					Button(action: {
+						stepName = .learningPath2
+					}, label: {
+						Text("Test LearningPath View2")
+					})
+					
 				} label: {
 					Label("ScoreWind", systemImage: "gear")
 						.font(.title3)
@@ -167,6 +179,10 @@ struct WizardView: View {
 						}
 					}
 					
+				} else if stepName == .learningPath {
+					LearningPathView()
+				} else if stepName == .learningPath2 {
+					LearningPathView2()
 				}
 			}
 			

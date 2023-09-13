@@ -24,32 +24,31 @@ struct WizardInstrumentView: View {
 		VStack {
 			Spacer()
 			
-			HStack {
-				Spacer()
-				Text("Choose your instrument")
-					.font(verticalSize == .regular ? .title : .title2)
-					.foregroundColor(Color("Dynamic/MainBrown+6"))
-					.bold()
-				Spacer()
+			if verticalSize == .regular && horizontalSize == .compact {
+				VStack {
+					displayInstrument(instrument: InstrumentType.guitar.rawValue)
+					displayInstrument(instrument: InstrumentType.violin.rawValue)
+				}
+				.frame(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height*0.60 )
+			} else {
+				HStack {
+					Spacer()
+					displayInstrument(instrument: InstrumentType.guitar.rawValue)
+					displayInstrument(instrument: InstrumentType.violin.rawValue)
+					Spacer()
+				}.padding([.top,.bottom],30)
 			}
 			
-			Spacer()
 			
-			VStack {
-				TabView(selection: $selectedInstrumentTab) {
-					displayInstrument(instrument: InstrumentType.guitar.rawValue)
-						.tag(InstrumentType.guitar.rawValue)
-					displayInstrument(instrument: InstrumentType.violin.rawValue)
-						.tag(InstrumentType.violin.rawValue)
-				}
-				.tabViewStyle(.page)
+			/*VStack {
+				displayInstrument(instrument: InstrumentType.guitar.rawValue)
+				displayInstrument(instrument: InstrumentType.violin.rawValue)
 			}
 			.frame(width: verticalSize == .regular ? UIScreen.main.bounds.size.width : UIScreen.main.bounds.size.width*0.60, height: verticalSize == .regular ? UIScreen.main.bounds.size.height*0.60 : UIScreen.main.bounds.size.height*0.5 )
 			.onChange(of: verticalSize, perform: { info in
 				print("info \(String(describing: info))")
 				print("info w:\(UIScreen.main.bounds.size.width)/h:\(UIScreen.main.bounds.size.height)")
-				selectedInstrumentTab = InstrumentType.guitar.rawValue
-			})
+			})*/
 
 			Spacer()
 		}
@@ -73,7 +72,7 @@ struct WizardInstrumentView: View {
 						HStack {
 							Spacer()
 							getChoiceIcon(instrumentImage: instrument, isSelected: isInstrumentSelected(askInstrument: instrument == InstrumentType.guitar.rawValue ? .guitar : .violin))
-								.frame(width:proxy.size.width*0.7, height:proxy.size.width*0.7)
+								//.frame(width:proxy.size.width*0.7, height:proxy.size.width*0.7)
 								.shadow(color: Color("Dynamic/OuterGlow"), radius: CGFloat(15))
 							Spacer()
 						}
@@ -89,6 +88,7 @@ struct WizardInstrumentView: View {
 							Text(instrument.uppercased())
 								.font(.headline)
 								.foregroundColor(Color("Dynamic/MainBrown+6"))
+								.padding([.bottom],15)
 							Spacer()
 						}
 					} else {
@@ -98,8 +98,8 @@ struct WizardInstrumentView: View {
 							HStack {
 								Spacer()
 								getChoiceIcon(instrumentImage: instrument, isSelected: isInstrumentSelected(askInstrument: instrument == InstrumentType.guitar.rawValue ? .guitar : .violin))
-									.rotationEffect(Angle(degrees: 30.0))
-									.frame(width:proxy.size.height*0.7, height:proxy.size.height*0.7)
+									.frame(height:proxy.size.height*0.7)
+									//.frame(width:proxy.size.height*0.7, height:proxy.size.height*0.7)
 									.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(15))
 								Spacer()
 							}
@@ -123,7 +123,8 @@ struct WizardInstrumentView: View {
 					
 					Spacer()
 				}
-				.frame(width: proxy.size.width*0.85, height:proxy.size.height-55)
+				.frame(width: proxy.size.width*0.85)
+				//.frame(width: proxy.size.width*0.85, height:proxy.size.height-55)
 				.background(
 					RoundedRectangle(cornerRadius: CGFloat(28))
 						.foregroundColor(Color("Dynamic/LightGray"))
@@ -147,6 +148,7 @@ struct WizardInstrumentView: View {
 		Image(instrumentImage)
 			.resizable()
 			.scaledToFit()
+			.rotationEffect(Angle(degrees: 45.0))
 	}
 	
 	private func isInstrumentSelected(askInstrument: InstrumentType) -> Bool {
