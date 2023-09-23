@@ -180,7 +180,11 @@ struct WizardView: View {
 					}
 					
 				} else if stepName == .learningPath {
-					LearningPathView()
+					LearningPathView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData, showLessonView: $showLessonView, showStore: $showStore)
+						.onAppear(perform: {
+							showViewTitle = false
+							showProgress = false
+						})
 				} else if stepName == .learningPath2 {
 					LearningPathView2()
 				}

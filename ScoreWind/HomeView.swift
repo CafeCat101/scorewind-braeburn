@@ -16,7 +16,7 @@ struct HomeView: View {
 	@State private var userDefaults = UserDefaults.standard
 	@State private var showLessonView = false
 	@EnvironmentObject var store:Store
-	@State private var stepName:Page = .wizardChooseInstrument
+	@State private var stepName:Page = .learningPath
 	@Environment(\.colorScheme) var colorScheme
 	
 	var body: some View {
@@ -94,9 +94,9 @@ struct HomeView: View {
 						scorewindData.wizardPickedTimestamps = (scorewindData.allTimestamps.first(where: {$0.id == getPickedItem.courseID})?.lessons.first(where: {$0.id == getPickedItem.lessonID})!.timestamps) ?? []
 					}
 				}
-				stepName = .wizardResult
+				//stepName = .wizardResult
 			} else {
-				stepName = .wizardChooseInstrument
+				//stepName = .wizardChooseInstrument
 			}
 			//<<<<==
 		}

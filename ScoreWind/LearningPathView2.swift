@@ -11,6 +11,7 @@ struct LearningPathView2: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@Environment(\.verticalSizeClass) var verticalSize
 	@Environment(\.colorScheme) var colorScheme
+	
 	@State private var showDemoLesson = false
 	
 	var body: some View {

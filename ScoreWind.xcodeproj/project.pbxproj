@@ -15,6 +15,7 @@
 		C821817F29BEC68800F8180E /* Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C821817E29BEC68800F8180E /* Orientation.swift */; };
 		C8285E3D2A25033600D4D917 /* BuyButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8285E3C2A25033600D4D917 /* BuyButtonView.swift */; };
 		C8285E3F2A289A7400D4D917 /* AbouSupportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8285E3E2A289A7400D4D917 /* AbouSupportView.swift */; };
+		C834DB6D2AB3002500897901 /* LearningPathView1.swift in Sources */ = {isa = PBXBuildFile; fileRef = C834DB6C2AB3002500897901 /* LearningPathView1.swift */; };
 		C85F272A286F4C2B00D0A4E5 /* ScoreWindApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85F2729286F4C2B00D0A4E5 /* ScoreWindApp.swift */; };
 		C85F272E286F4C2C00D0A4E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */; };
 		C85F2731286F4C2C00D0A4E5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C85F2730286F4C2C00D0A4E5 /* Preview Assets.xcassets */; };
@@ -132,6 +133,7 @@
 		C821817E29BEC68800F8180E /* Orientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Orientation.swift; sourceTree = "<group>"; };
 		C8285E3C2A25033600D4D917 /* BuyButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyButtonView.swift; sourceTree = "<group>"; };
 		C8285E3E2A289A7400D4D917 /* AbouSupportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbouSupportView.swift; sourceTree = "<group>"; };
+		C834DB6C2AB3002500897901 /* LearningPathView1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningPathView1.swift; sourceTree = "<group>"; };
 		C85F2726286F4C2B00D0A4E5 /* ScoreWind.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScoreWind.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C85F2729286F4C2B00D0A4E5 /* ScoreWindApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreWindApp.swift; sourceTree = "<group>"; };
 		C85F272D286F4C2C00D0A4E5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -355,6 +357,7 @@
 				C8A387A32A80D4C40092B277 /* LessonTipContent.swift */,
 				C81ABFEF2AAE39360057768A /* LearningPathView.swift */,
 				C818C65C2AB1737E0030C5BD /* LearningPathView2.swift */,
+				C834DB6C2AB3002500897901 /* LearningPathView1.swift */,
 			);
 			path = ScoreWind;
 			sourceTree = "<group>";
@@ -708,6 +711,7 @@
 				C868CA09298BB64B00724D2D /* LessonView2.swift in Sources */,
 				C85F2774286F4F2E00D0A4E5 /* MyCoursesView.swift in Sources */,
 				C85F277A286F4F2E00D0A4E5 /* ScorewindCourse.swift in Sources */,
+				C834DB6D2AB3002500897901 /* LearningPathView1.swift in Sources */,
 				C818C65D2AB1737E0030C5BD /* LearningPathView2.swift in Sources */,
 				C85F272A286F4C2B00D0A4E5 /* ScoreWindApp.swift in Sources */,
 				C897D4CB29B03F2F00A21603 /* Carousel.swift in Sources */,
