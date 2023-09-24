@@ -17,34 +17,41 @@ struct WizardView: View {
 	@State private var showProgress = true
 	@Binding var showLessonView:Bool
 	@ObservedObject var downloadManager:DownloadManager
-	@State private var showViewTitle = true
+	@State private var showViewTitle = false
 	@State private var showStore = false
-	@Binding var stepName:Page
+	//@Binding var stepName:Page
 	@Environment(\.colorScheme) var colorScheme
 	@State private var showRevealAllTipsAlert = false
 	@State private var showAboutScorewindAlert = false
+	@State private var showPathFinder = false
+	@State private var showStarterPath = true
 	
 	var body: some View {
 		VStack(spacing:0) {
 			HStack {
-				if (stepName != .wizardChooseInstrument || stepName == .wizardResult) && userRole == .student {
-					Label("Restart", systemImage: "magnifyingglass")//goforward
-						.font(.title3)
-						.labelStyle(.iconOnly)
-						.foregroundColor(Color("AppBlackDynamic"))
-						.onTapGesture(perform: {
-							//:: restart learning path configuration
-							studentData.resetWizrdChoice()
-							studentData.wizardRange.removeAll()
-							studentData.removeAKey(keyName: "wizardResult")
-							studentData.wizardResult = WizardResult()
-							scorewindData.wizardPickedCourse = Course()
-							scorewindData.wizardPickedLesson = Lesson()
-							scorewindData.wizardPickedTimestamps.removeAll()
-							studentData.wizardStepNames.removeAll()
-							stepName = Page.wizardChooseInstrument
-						})
-				}
+				Label("Starter Path", systemImage: "map.circle")//goforward
+					.font(.title3)
+					.labelStyle(.iconOnly)
+					.foregroundColor(Color("AppBlackDynamic"))
+					.onTapGesture(perform: {
+						showStarterPath = true
+					})
+				Label("Path Finder", systemImage: "magnifyingglass")//goforward
+					.font(.title3)
+					.labelStyle(.iconOnly)
+					.foregroundColor(Color("AppBlackDynamic"))
+					.onTapGesture(perform: {
+						//:: restart learning path configuration
+						studentData.resetWizrdChoice()
+						studentData.wizardRange.removeAll()
+						studentData.removeAKey(keyName: "wizardResult")
+						studentData.wizardResult = WizardResult()
+						scorewindData.wizardPickedCourse = Course()
+						scorewindData.wizardPickedLesson = Lesson()
+						scorewindData.wizardPickedTimestamps.removeAll()
+						studentData.wizardStepNames.removeAll()
+						showPathFinder = true
+					})
 				Spacer()
 				/*if (store.enablePurchase == false || store.couponState == .valid) == false {
 					Label("Subscription", systemImage: getSubscriptionMenuIcon())
@@ -119,18 +126,6 @@ struct WizardView: View {
 						})
 					}
 					
-					Button(action: {
-						stepName = .learningPath
-					}, label: {
-						Text("Test LearningPath View")
-					})
-					
-					Button(action: {
-						stepName = .learningPath2
-					}, label: {
-						Text("Test LearningPath View2")
-					})
-					
 				} label: {
 					Label("ScoreWind", systemImage: "gear")
 						.font(.title3)
@@ -145,7 +140,7 @@ struct WizardView: View {
 			if userRole == .teacher {
 				WizardTeacherView(selectedTab: $selectedTab, studentData: studentData, downloadManager: downloadManager)
 			} else {
-				if stepName == .wizardChooseInstrument {
+				/*if stepName == .wizardChooseInstrument {
 					WizardInstrumentView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
 						.onAppear(perform: {
 							showProgress = false
@@ -166,27 +161,13 @@ struct WizardView: View {
 					WizardDoYouKnowView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData)
 				} else if stepName == .wizardPlayable {
 					WizardPlayableView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData, showProgress: $showProgress)
-				} else if stepName == .wizardResult {
-					WizardResultView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData, showLessonView: $showLessonView, showStore: $showStore)
-						.onAppear{
-						DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-							withAnimation{
-								showViewTitle = false
-								if stepName == .wizardResult {
-									showProgress = false
-								}
-							}
-						}
-					}
-					
-				} else if stepName == .learningPath {
-					LearningPathView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData, showLessonView: $showLessonView, showStore: $showStore)
-						.onAppear(perform: {
-							showViewTitle = false
-							showProgress = false
-						})
-				} else if stepName == .learningPath2 {
-					LearningPathView2()
+				} else */
+				
+				
+				if showStarterPath == false {
+					WizardResultView(selectedTab: $selectedTab, showStarterPath: $showStarterPath, studentData: studentData, showLessonView: $showLessonView, showStore: $showStore)
+				} else  {
+					LearningPathView(selectedTab: $selectedTab, studentData: studentData, showLessonView: $showLessonView, showStore: $showStore)
 				}
 			}
 			
@@ -198,7 +179,7 @@ struct WizardView: View {
 							.font(.footnote)
 							.foregroundColor(Color("AppBlackDynamic"))
 					}
-					if showProgress {
+					/*if showProgress {
 						GeometryReader { (proxy: GeometryProxy) in
 							HStack {
 								Spacer()
@@ -209,7 +190,7 @@ struct WizardView: View {
 								//print("[debug] showProgress, proxy.size.width \(proxy.size.width)")
 							})
 						}.frame(height:10)
-					}
+					}*/
 				}
 				.padding([.top,.bottom], 10)
 				.padding([.leading,.trailing], 15)
@@ -226,7 +207,10 @@ struct WizardView: View {
 		.sheet(isPresented: $showStore, content: {
 			StoreView(showStore: $showStore, studentData: studentData)
 		})
-		.onAppear(perform: {			
+		.sheet(isPresented: $showPathFinder, content: {
+			LearningPathFinder(studentData: studentData, showStarterPath: $showStarterPath)
+		})
+		.onAppear(perform: {
 			//print("[debug] WizardView, onAppear studentData.wizardResult.learningPath.count \(studentData.wizardResult.learningPath.count)")
 			studentData.showSavedActionCount()
 		})
@@ -271,7 +255,7 @@ struct WizardView: View {
 		//return UIApplication.appVer
 	}
 	
-	private func getWizardViewTitle() -> String {
+	/*private func getWizardViewTitle() -> String {
 		let findStepIndex = studentData.wizardStepNames.firstIndex(where: {$0.self == stepName}) ?? 0
 		
 		if userRole == .student {
@@ -283,8 +267,9 @@ struct WizardView: View {
 		} else {
 			return "Wizard (Teachers only)"
 		}
-	}
+	}*/
 	
+	/*
 	@ViewBuilder
 	private func wizardProgressView(barWidth: CGFloat, barHeight: CGFloat) -> some View {
 		let totalWidth = barWidth
@@ -313,7 +298,7 @@ struct WizardView: View {
 				}
 			})
 	}
-
+	 */
 }
 
 struct StepExplainingText: ViewModifier {
@@ -346,24 +331,22 @@ struct FeedbackOptionsModifier: ViewModifier {
 			.fixedSize()
 	}
 }
-
+/*
 struct WizardView_Previews: PreviewProvider {
 	@State static var tab = "THome"
 	@State static var stepName:Page = .wizardPlayable
 	
 	static var previews: some View {
-		let previewOrientation = InterfaceOrientation.portrait
-		let previewLandscape = InterfaceOrientation.landscapeLeft
 		
 		Group {
-			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), stepName: $stepName)
+			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager())
 				.environmentObject(ScorewindData())
 				.environment(\.colorScheme, .light)
 				.environmentObject(Store())
-				.previewInterfaceOrientation(previewOrientation)
+				//.previewInterfaceOrientation(InterfaceOrientation.portrait)
 			
 			WizardView(selectedTab: $tab, studentData: StudentData(), showLessonView: .constant(false), downloadManager: DownloadManager(), stepName: $stepName).environmentObject(ScorewindData()).environment(\.colorScheme, .dark).environmentObject(Store())
-				.previewInterfaceOrientation(previewOrientation)
+				//.previewInterfaceOrientation(InterfaceOrientation.portrait)
 		}
 		
 		Group {
@@ -371,13 +354,13 @@ struct WizardView_Previews: PreviewProvider {
 				.environmentObject(ScorewindData())
 				.environment(\.colorScheme, .light)
 				.environmentObject(Store())
-				.previewInterfaceOrientation(previewLandscape)
+				//.previewInterfaceOrientation(InterfaceOrientation.landscapeLeft)
 				.previewDisplayName("Light Landscape")
 		}
 		
 	}
 }
-
+*/
 enum UserRole {
 	case teacher
 	case student

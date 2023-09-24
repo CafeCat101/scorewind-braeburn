@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WizardDoYouKnowView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
-	@Binding var selectedTab:String
+	//@Binding var selectedTab:String
 	@Binding var stepName:Page
 	@ObservedObject var studentData:StudentData
 	@StateObject var viewModel = ViewModel()
@@ -210,17 +210,17 @@ struct WizardDoYouKnow_Previews: PreviewProvider {
 	@State static var step:Page = .wizardDoYouKnow
 	
 	static var previews: some View {
-		WizardDoYouKnowView(selectedTab: $tab, stepName: $step, studentData: StudentData())
+		WizardDoYouKnowView(stepName: $step, studentData: StudentData())
 			.environmentObject(scorewindData)
 			.environment(\.colorScheme, .light)
 		
-		WizardDoYouKnowView(selectedTab: $tab, stepName: $step, studentData: StudentData())
+		WizardDoYouKnowView(stepName: $step, studentData: StudentData())
 			.environmentObject(scorewindData)
 			.environment(\.colorScheme, .light)
 			.previewInterfaceOrientation(InterfaceOrientation.landscapeLeft)
 			.previewDisplayName("Light LandscapeLeft")
 		
-		WizardDoYouKnowView(selectedTab: $tab, stepName: $step, studentData: StudentData())
+		WizardDoYouKnowView(stepName: $step, studentData: StudentData())
 			.environmentObject(scorewindData)
 			.environment(\.colorScheme, .dark)
 	}

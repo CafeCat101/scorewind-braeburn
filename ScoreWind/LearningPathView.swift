@@ -11,7 +11,6 @@ struct LearningPathView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@EnvironmentObject var store: Store
 	@Binding var selectedTab:String
-	@Binding var stepName:Page
 	@ObservedObject var studentData:StudentData
 	@State private var dummyLearningPath:[String] = ["Course1","Course2","Course3"]
 	@State private var showMeMore:Bool = false

@@ -10,10 +10,10 @@ import AVKit
 
 struct WizardPlayableView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
-	@Binding var selectedTab:String
+	//@Binding var selectedTab:String
 	@Binding var stepName:Page
 	@ObservedObject var studentData:StudentData
-	@Binding var showProgress: Bool
+	//@Binding var showProgress: Bool //::don't want to show progress anymore
 	@StateObject var viewModel = ViewModel()
 	//let screenSize: CGRect = UIScreen.main.bounds
 	@State private var rememberPlaybackTime:Double = 0.0
@@ -156,22 +156,22 @@ struct WizardPlayableView: View {
 		.onAppear(perform: {
 			print("[debug] WizardPlayableView, wizardPickedCourse \(scorewindData.wizardPickedCourse.title)")
 			print("[debug] WizardPlayableView, wizardPickedLesson \(scorewindData.wizardPickedLesson.title)")
-			if verticalSize == .compact {
+			/*if verticalSize == .compact {
 				feedbackItemMaxHeight = 50.0
 				showProgress = false
 			} else {
 				feedbackItemMaxHeight = 60.0
 				showProgress = true
-			}
+			}*/
 		})
 		.onChange(of: verticalSize, perform: { info in
-			if info == .compact {
+			/*if info == .compact {
 				feedbackItemMaxHeight = 50.0
 				showProgress = false
 			} else {
 				feedbackItemMaxHeight = 60.0
 				showProgress = true
-			}
+			}*/
 			
 			if studentData.playableViewVideoOnly == false {
 				viewModel.videoPlayer!.pause()
@@ -222,9 +222,9 @@ struct WizardPlayableView: View {
 				viewModel.playerGoTo(timestamp: findFirstPlayableTimestamp())
 			}
 			
-			if nextStep != .wizardPlayable && nextStep != .wizardResult {
+			/*if nextStep != .wizardPlayable && nextStep != .wizardResult {
 				showProgress = true
-			}
+			}*/
 		}
 	}
 	
@@ -933,12 +933,12 @@ struct WizardPlayable_Previews: PreviewProvider {
 	
 	static var previews: some View {
 		
-		WizardPlayableView(selectedTab: $tab, stepName: $step, studentData: studentData, showProgress: .constant(true))
+		WizardPlayableView(stepName: $step, studentData: studentData)
 			.environmentObject(scorewindData)
 			.environment(\.colorScheme, .light)
 			.previewInterfaceOrientation(InterfaceOrientation.portrait)
 			.previewDisplayName("Light Portrait")
-		WizardPlayableView(selectedTab: $tab, stepName: $step, studentData: studentData, showProgress: .constant(false))
+		WizardPlayableView(stepName: $step, studentData: studentData)
 			.environmentObject(scorewindData)
 			.environment(\.colorScheme, .light)
 			.previewInterfaceOrientation(InterfaceOrientation.landscapeLeft)

@@ -10,7 +10,7 @@ import AVFoundation
 
 struct WizardInstrumentView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
-	@Binding var selectedTab:String
+	//@Binding var selectedTab:String
 	@Binding var stepName:Page
 	@ObservedObject var studentData:StudentData
 	let feedback = UIImpactFeedbackGenerator(style: .heavy)
@@ -169,19 +169,19 @@ struct WizardInstrument_Previews: PreviewProvider {
 		let previewOrientation = InterfaceOrientation.portrait
 		
 		Group {
-			WizardInstrumentView(selectedTab: $tab, stepName: $step, studentData: StudentData())
+			WizardInstrumentView(stepName: $step, studentData: StudentData())
 				.environmentObject(ScorewindData())
 				.environment(\.colorScheme, .light)
 				.previewInterfaceOrientation(previewOrientation)
 			
-			WizardInstrumentView(selectedTab: $tab, stepName: $step, studentData: StudentData())
+			WizardInstrumentView(stepName: $step, studentData: StudentData())
 				.environmentObject(ScorewindData())
 				.environment(\.colorScheme, .dark)
 				.previewInterfaceOrientation(previewOrientation)
 		}
 		
 		Group {
-			WizardInstrumentView(selectedTab: $tab, stepName: $step, studentData: StudentData())
+			WizardInstrumentView(stepName: $step, studentData: StudentData())
 				.environmentObject(ScorewindData())
 				.environment(\.colorScheme, .light)
 				.previewInterfaceOrientation(InterfaceOrientation.landscapeLeft)

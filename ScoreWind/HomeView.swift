@@ -16,12 +16,12 @@ struct HomeView: View {
 	@State private var userDefaults = UserDefaults.standard
 	@State private var showLessonView = false
 	@EnvironmentObject var store:Store
-	@State private var stepName:Page = .learningPath
+	//@State private var stepName:Page = .learningPath
 	@Environment(\.colorScheme) var colorScheme
 	
 	var body: some View {
 		TabView(selection: $selectedTab) {
-			WizardView(selectedTab: $selectedTab, studentData: studentData, showLessonView: $showLessonView, downloadManager: downloadManager, stepName: $stepName)
+			WizardView(selectedTab: $selectedTab, studentData: studentData, showLessonView: $showLessonView, downloadManager: downloadManager)
 				.tabItem {
 					//Label("Home", systemImage: "music.note.house")
 					Label("Learning Path", systemImage: "point.filled.topleft.down.curvedto.point.bottomright.up")

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WizardExperienceView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
-	@Binding var selectedTab:String
+	//@Binding var selectedTab:String
 	@Binding var stepName:Page
 	@ObservedObject var studentData:StudentData
 	//let screenSize: CGRect = UIScreen.main.bounds
@@ -318,15 +318,15 @@ struct WizardExperienceView_Previews: PreviewProvider {
 	@State static var step:Page = .wizardExperience
 	static var previews: some View {
 		Group {
-			WizardExperienceView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
+			WizardExperienceView(stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
 				.environment(\.colorScheme, .light)
 			
-			WizardExperienceView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
+			WizardExperienceView(stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
 				.environment(\.colorScheme, .light)
 				.previewInterfaceOrientation(InterfaceOrientation.landscapeLeft)
 				.previewDisplayName("Light Landscape")
 			
-			WizardExperienceView(selectedTab: $tab, stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
+			WizardExperienceView(stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
 			.environment(\.colorScheme, .dark)
 		}
 		

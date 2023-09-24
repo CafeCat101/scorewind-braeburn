@@ -11,7 +11,7 @@ struct WizardResultView: View {
 	@EnvironmentObject var scorewindData:ScorewindData
 	@EnvironmentObject var store: Store
 	@Binding var selectedTab:String
-	@Binding var stepName:Page
+	@Binding var showStarterPath:Bool
 	@ObservedObject var studentData:StudentData
 	@State private var dummyLearningPath:[String] = ["Course1","Course2","Course3"]
 	@State private var showMeMore:Bool = false
@@ -663,7 +663,7 @@ struct WizardResultView: View {
 			Text(studentData.wizardResult.learningPathExplaination).foregroundColor(Color("Dynamic/MainBrown+6"))
 				.padding([.bottom],15)
 			
-			WizardResultPathView(selectedTab: $selectedTab, stepName: $stepName, studentData: studentData, showLessonView: $showLessonView, showStore: $showStore)
+			WizardResultPathView(selectedTab: $selectedTab, studentData: studentData, showLessonView: $showLessonView, showStore: $showStore)
 			
 		}
 		.padding(EdgeInsets(top: 30, leading: 15, bottom: 30, trailing: 15))
@@ -871,7 +871,7 @@ struct WizardResult_Previews: PreviewProvider {
 	@StateObject static var scorewindData = ScorewindData()
 	
 	static var previews: some View {
-		WizardResultView(selectedTab: $tab, stepName: $step, studentData: studentData, showLessonView: .constant(false), showStore: .constant(false)).environmentObject(scorewindData)
+		WizardResultView(selectedTab: $tab, showStarterPath: .constant(false), studentData: studentData, showLessonView: .constant(false), showStore: .constant(false)).environmentObject(scorewindData)
 			.environment(\.colorScheme, .light)
 			.background {
 				Image("WelcomeViewBg")
@@ -879,7 +879,7 @@ struct WizardResult_Previews: PreviewProvider {
 			.previewInterfaceOrientation(InterfaceOrientation.portrait)
 			.previewDisplayName("Light Portrait")
 		
-		WizardResultView(selectedTab: $tab, stepName: $step, studentData: studentData, showLessonView: .constant(false), showStore: .constant(false)).environmentObject(scorewindData)
+		WizardResultView(selectedTab: $tab, showStarterPath: .constant(false), studentData: studentData, showLessonView: .constant(false), showStore: .constant(false)).environmentObject(scorewindData)
 			.environment(\.colorScheme, .light)
 			.background {
 				Image("WelcomeViewBg")
@@ -887,7 +887,7 @@ struct WizardResult_Previews: PreviewProvider {
 			.previewInterfaceOrientation(InterfaceOrientation.landscapeLeft)
 			.previewDisplayName("Light LandscapeLeft")
 		
-		WizardResultView(selectedTab: $tab, stepName: $step, studentData: StudentData(), showLessonView: .constant(false), showStore: .constant(false)).environmentObject(ScorewindData())
+		WizardResultView(selectedTab: $tab, showStarterPath: .constant(false), studentData: StudentData(), showLessonView: .constant(false), showStore: .constant(false)).environmentObject(ScorewindData())
 			.environment(\.colorScheme, .dark)
 			.background(
 				Image("DarkPolygonBg2")
