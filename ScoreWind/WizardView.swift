@@ -25,33 +25,58 @@ struct WizardView: View {
 	@State private var showAboutScorewindAlert = false
 	@State private var showPathFinder = false
 	@State private var showStarterPath = true
+	@State private var currentInstrument:InstrumentType = .guitar
 	
 	var body: some View {
 		VStack(spacing:0) {
 			HStack {
-				Label("Starter Path", systemImage: "map.circle")//goforward
-					.font(.title3)
-					.labelStyle(.iconOnly)
-					.foregroundColor(Color("AppBlackDynamic"))
-					.onTapGesture(perform: {
-						showStarterPath = true
-					})
-				Label("Path Finder", systemImage: "magnifyingglass")//goforward
-					.font(.title3)
-					.labelStyle(.iconOnly)
-					.foregroundColor(Color("AppBlackDynamic"))
-					.onTapGesture(perform: {
-						//:: restart learning path configuration
-						studentData.resetWizrdChoice()
-						studentData.wizardRange.removeAll()
-						studentData.removeAKey(keyName: "wizardResult")
-						studentData.wizardResult = WizardResult()
-						scorewindData.wizardPickedCourse = Course()
-						scorewindData.wizardPickedLesson = Lesson()
-						scorewindData.wizardPickedTimestamps.removeAll()
-						studentData.wizardStepNames.removeAll()
-						showPathFinder = true
-					})
+				if userRole == .student {
+					if showStarterPath {
+						Image(getIconTitleName())
+							.resizable()
+							.scaledToFit()
+							.shadow(color: Color("Dynamic/ShadowReverse"), radius: CGFloat(3))
+							.frame(maxHeight: 33)
+							.padding([.trailing],4)
+							.onTapGesture {
+								if currentInstrument == .guitar {
+									studentData.updateInstrumentChoice(instrument: .violin)
+									currentInstrument = .violin
+								} else {
+									studentData.updateInstrumentChoice(instrument: .guitar)
+									currentInstrument = .guitar
+								}
+								print("[debug] WizardView, switch instrument studentData. \(studentData.getInstrumentChoice())")
+							}
+					}
+					
+					Label("Starter Path", systemImage: showStarterPath ? "point.topleft.down.curvedto.point.bottomright.up.fill" : "map")//goforward
+						.font(.title3)
+						.labelStyle(.iconOnly)
+						.foregroundColor(Color("AppBlackDynamic"))
+						.onTapGesture(perform: {
+							showStarterPath.toggle()
+						})
+						.padding([.trailing],4)
+					Label("Path Finder", systemImage: "magnifyingglass")//goforward
+						.font(.title3)
+						.labelStyle(.iconOnly)
+						.foregroundColor(Color("AppBlackDynamic"))
+						.onTapGesture(perform: {
+							print("[debug] WizardView, Path Finder, onTabGesture")
+							//:: restart learning path configuration
+							studentData.resetWizrdChoice()
+							studentData.wizardRange.removeAll()
+							studentData.removeAKey(keyName: "wizardResult")
+							studentData.wizardResult = WizardResult()
+							scorewindData.wizardPickedCourse = Course()
+							scorewindData.wizardPickedLesson = Lesson()
+							scorewindData.wizardPickedTimestamps.removeAll()
+							studentData.wizardStepNames.removeAll()
+							showPathFinder = true
+						})
+				}
+				
 				Spacer()
 				/*if (store.enablePurchase == false || store.couponState == .valid) == false {
 					Label("Subscription", systemImage: getSubscriptionMenuIcon())
@@ -208,11 +233,17 @@ struct WizardView: View {
 			StoreView(showStore: $showStore, studentData: studentData)
 		})
 		.sheet(isPresented: $showPathFinder, content: {
-			LearningPathFinder(studentData: studentData, showStarterPath: $showStarterPath)
+			LearningPathFinder(studentData: studentData, showPathFinder: $showPathFinder, showStarterPath: $showStarterPath)
 		})
 		.onAppear(perform: {
 			//print("[debug] WizardView, onAppear studentData.wizardResult.learningPath.count \(studentData.wizardResult.learningPath.count)")
 			studentData.showSavedActionCount()
+			if studentData.getInstrumentChoice() == InstrumentType.guitar.rawValue {
+				currentInstrument = .guitar
+			} else if studentData.getInstrumentChoice() == InstrumentType.violin.rawValue {
+				currentInstrument = .violin
+			}
+			print("[debug] WizardView, onAppear, student.instrumentChoise \(studentData.getInstrumentChoice())")
 		})
 	}
 	
@@ -227,6 +258,16 @@ struct WizardView: View {
 				.edgesIgnoringSafeArea(.all)
 		}
 	}*/
+	
+	private func getIconTitleName() -> String {
+		if currentInstrument == .guitar {
+			return "instrument-guitar-icon" //"iconGuitar"
+		} else if currentInstrument == .violin {
+			return "instrument-violin-icon"//"iconViolin"
+		} else {
+			return ""
+		}
+	}
 	
 	private func subscriptionMenuLabel() -> String {
 		var label = "ScoreWind WizPack"

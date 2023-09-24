@@ -359,11 +359,17 @@ struct LearningPathView: View {
 					}
 					
 					if scorewindData.wizardPickedCourse.id > 0 && scorewindData.wizardPickedLesson.id > 0 && showStore == false {
+						//::make this information correct when I have tip view for the starter path
 						//handleTip()
 					}
 					
 					if scorewindData.isPublicUserVersion {
+						//::make this information correct later
 						//studentData.updateLogs(title: .viewLearningPath, content: viewLearningPathLogContent())
+					}
+					
+					if studentData.getInstrumentChoice().isEmpty {
+						studentData.updateInstrumentChoice(instrument: .guitar)//:: use a screen to ask the user later
 					}
 				})
 				.fullScreenCover(isPresented: $showStepTip, onDismiss: {

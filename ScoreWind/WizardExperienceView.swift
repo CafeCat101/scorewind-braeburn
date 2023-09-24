@@ -20,6 +20,8 @@ struct WizardExperienceView: View {
 	@Environment(\.horizontalSizeClass) var horizontalSize
 	@Environment(\.verticalSizeClass) var verticalSize
 	@State private var selectedExpTab = ExperienceFeedback.starterKit.rawValue
+	@Binding var showPathFinder:Bool
+	@Binding var showStarterPath:Bool
 	//@Environment(\.mainWindowSize) var windowSize
 	//@State private var screenSize = UIScreen.main.bounds.size
 	
@@ -222,6 +224,10 @@ struct WizardExperienceView: View {
 		if nextStepPage != .wizardChooseInstrument {
 			stepName = nextStepPage
 			studentData.wizardStepNames.append(nextStepPage)
+			if stepName == .wizardResult {
+				showStarterPath = false
+				showPathFinder = false
+			}
 		}
 	}
 	
@@ -317,16 +323,17 @@ struct WizardExperienceView_Previews: PreviewProvider {
 	@State static var tab = "THome"
 	@State static var step:Page = .wizardExperience
 	static var previews: some View {
-		Group {
-			WizardExperienceView(stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
+		VStack {
+			WizardExperienceView(stepName: $step, studentData: StudentData(), showPathFinder: .constant(true), showStarterPath: .constant(false))
+				.environmentObject(ScorewindData())
 				.environment(\.colorScheme, .light)
 			
-			WizardExperienceView(stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
+			WizardExperienceView(stepName: $step, studentData: StudentData(), showPathFinder: .constant(true), showStarterPath: .constant(false)).environmentObject(ScorewindData())
 				.environment(\.colorScheme, .light)
 				.previewInterfaceOrientation(InterfaceOrientation.landscapeLeft)
 				.previewDisplayName("Light Landscape")
 			
-			WizardExperienceView(stepName: $step, studentData: StudentData()).environmentObject(ScorewindData())
+			WizardExperienceView(stepName: $step, studentData: StudentData(), showPathFinder: .constant(true), showStarterPath: .constant(false)).environmentObject(ScorewindData())
 			.environment(\.colorScheme, .dark)
 		}
 		

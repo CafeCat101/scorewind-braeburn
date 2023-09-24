@@ -12,6 +12,7 @@ struct LearningPathFinder: View {
 	@ObservedObject var studentData:StudentData
 	@Environment(\.colorScheme) var colorScheme
 	@State private var showRevealAllTipsAlert = false
+	@Binding var showPathFinder:Bool
 	@Binding var showStarterPath:Bool
 	@State private var stepName:Page = .wizardChooseInstrument
 	
@@ -20,7 +21,7 @@ struct LearningPathFinder: View {
 			if stepName == .wizardChooseInstrument {
 				WizardInstrumentView(stepName: $stepName, studentData: studentData)
 			} else if stepName == .wizardExperience {
-				WizardExperienceView(stepName: $stepName, studentData: studentData)
+				WizardExperienceView(stepName: $stepName, studentData: studentData, showPathFinder: $showPathFinder, showStarterPath: $showStarterPath)
 			} else if stepName == .wizardDoYouKnow {
 				WizardDoYouKnowView(stepName: $stepName, studentData: studentData)
 			} else if stepName == .wizardPlayable {
@@ -29,11 +30,19 @@ struct LearningPathFinder: View {
 		}
 		.background(colorScheme == .light ? appBackgroundImage(colorMode: colorScheme) : appBackgroundImage(colorMode: colorScheme))
 		.onAppear(perform: {
-			if studentData.getInstrumentChoice().isEmpty {
+			/*if studentData.getInstrumentChoice().isEmpty {
 				stepName = .wizardChooseInstrument
 			} else {
+				print("[debug] LearningPathFinderView, onAppear, \(studentData.getInstrumentChoice())")
+				studentData.wizardStepNames = [.wizardChooseInstrument]
 				stepName = .wizardExperience
-			}
+				studentData.removeAKey(keyName: "experience")
+				studentData.wizardStepNames.append(stepName)
+				
+				
+				
+				
+			}*/
 		})
 	}
 }

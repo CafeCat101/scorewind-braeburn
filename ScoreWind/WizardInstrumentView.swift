@@ -56,6 +56,12 @@ struct WizardInstrumentView: View {
 			//:: start over, reset everything
 			studentData.wizardStepNames = [.wizardChooseInstrument]
 			print("[debug] InstrumentView, onAppear, screenSize info w：\(UIScreen.main.bounds.size.width)/h:\(UIScreen.main.bounds.size.height)")
+			if studentData.getInstrumentChoice().isEmpty == false {
+				stepName = .wizardExperience
+				
+				studentData.removeAKey(keyName: "experience")
+				studentData.wizardStepNames.append(stepName)
+			}
 		})
 		
 	}
